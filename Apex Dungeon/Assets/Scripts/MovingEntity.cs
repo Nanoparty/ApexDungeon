@@ -10,6 +10,7 @@ public abstract class MovingEntity : MonoBehaviour
     protected int mp;
     protected int defense;
     protected int damage;
+    protected bool dead;
 
     public float moveTime = 0.1f;
     public float speed = 3f;
@@ -33,6 +34,7 @@ public abstract class MovingEntity : MonoBehaviour
     
     protected virtual void Start()
     {
+        dead = false;
         boxCollider = GetComponent<BoxCollider2D>();
         row = (int)transform.position.y;
         col = (int)transform.position.x;
@@ -208,6 +210,10 @@ public abstract class MovingEntity : MonoBehaviour
     {
         hp += (int)change;
         moving = false;
+        if(hp <= 0)
+        {
+            dead = true;
+        }
     }
 
     public void addMP(float change)

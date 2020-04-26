@@ -74,6 +74,11 @@ public class GameManager : MonoBehaviour
         
     }
 
+    public void removeEnemy(Enemy e)
+    {
+        enemies.Remove(e);
+    }
+
     public Enemy getEnemyAtLoc(int r, int c)
     {
         if (enemies.Count == 0)

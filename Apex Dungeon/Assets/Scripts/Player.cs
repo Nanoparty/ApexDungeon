@@ -10,6 +10,7 @@ public class Player : MovingEntity
     public Image mpbar;
     public GameObject inventory;
     public Button bag;
+    
 
     //Components
     Animator animator;
@@ -25,6 +26,7 @@ public class Player : MovingEntity
         maxHp = 100;
         type = 1;
         damage = 10;
+        
 
         //GameObjects
         animator = GetComponent<Animator>();
@@ -47,6 +49,11 @@ public class Player : MovingEntity
 
     protected override void Update()
     {
+        //check dead
+        if (dead)
+        {
+            Destroy(this.gameObject);
+        }
         //checkInventory();
         
         base.Update();

@@ -49,6 +49,13 @@ public class Enemy : MovingEntity
 
     public void MoveEnemy()
     {
+        if (dead)
+        {
+            MapGenerator.tileMap[row, col].occupied = 0;
+            GameManager.gmInstance.removeEnemy(this);
+            Destroy(this.gameObject);
+            
+        }
         if (agro)
         {
             //ATTACKING
