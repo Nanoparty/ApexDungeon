@@ -478,6 +478,7 @@ public class MapGenerator : MonoBehaviour
                 {
                     InstantiateRandom(Furniture, row, col);
                     tileMap[row, col].occupied = 3;
+
                 }
             }
         }

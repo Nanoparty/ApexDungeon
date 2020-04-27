@@ -69,10 +69,36 @@ public class Player : MovingEntity
             int clickRow = (int)GameManager.gmInstance.mRow;
             int clickCol = (int)GameManager.gmInstance.mCol;
             //check attack
-            attackController(clickRow, clickCol);
+
+            //
+            if (isAdjacent(clickRow, clickCol))
+            {
+                if(isFurniture(clickRow, clickCol))
+                {
+                    return;
+                }
+                else
+                {
+                    attackController(clickRow, clickCol);
+                }
+                
+            }
+                
 
             moveController(clickRow, clickCol);
         }
+    }
+
+    bool isFurniture(int row, int col)
+    {
+        Furniture f = GameManager.gmInstance.getFurnitureAtLoc(row, col);
+        if (f != null)
+        {
+            f.setDamage(-1);
+            GameManager.gmInstance.playersTurn = false;
+            return true;
+        }
+        else return false;
     }
 
     void bagListener()
@@ -105,8 +131,7 @@ public class Player : MovingEntity
 
     void attackController(int clickRow, int clickCol)
     {
-        if (isAdjacent(clickRow, clickCol))
-        {
+        
             Enemy enemy = GameManager.gmInstance.getEnemyAtLoc(clickRow, clickCol);
             if (enemy != null)
             {
@@ -114,7 +139,7 @@ public class Player : MovingEntity
                 GameManager.gmInstance.playersTurn = false;
                 return;
             }
-        }
+        
     }
 
     bool isAdjacent(int r, int c)

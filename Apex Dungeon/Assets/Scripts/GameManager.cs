@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
 
     private int floor = 1;
     private List<Enemy> enemies;
+    private List<Furniture> furniture;
     private bool enemiesTurn;
     private bool doingSetup = false;
 
@@ -30,6 +31,7 @@ public class GameManager : MonoBehaviour
         }
         DontDestroyOnLoad(gameObject);
         enemies = new List<Enemy>();
+        furniture = new List<Furniture>();
         Setup();
 
         Vector3 position = new Vector3(0f, 0f, 0f);
@@ -78,6 +80,10 @@ public class GameManager : MonoBehaviour
     {
         enemies.Remove(e);
     }
+    public void removeFurniture(Furniture e)
+    {
+        furniture.Remove(e);
+    }
 
     public Enemy getEnemyAtLoc(int r, int c)
     {
@@ -101,6 +107,30 @@ public class GameManager : MonoBehaviour
     public void AddEnemyToList(Enemy script)
     {
         enemies.Add(script);
+    }
+
+    public void AddFurnitureToList(Furniture f)
+    {
+        furniture.Add(f);
+    }
+
+    public Furniture getFurnitureAtLoc(int r, int c)
+    {
+        if (furniture.Count == 0)
+        {
+            return null;
+        }
+        for (int i = 0; i < furniture.Count; i++)
+        {
+            int er = furniture[i].getRow();
+            int ec = furniture[i].getCol();
+            if (r == er && c == ec)
+            {
+                return furniture[i];
+            }
+
+        }
+        return null;
     }
 
     void MoveEnemies()
