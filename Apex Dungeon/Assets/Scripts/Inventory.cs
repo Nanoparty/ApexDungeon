@@ -17,6 +17,7 @@ public class Inventory
     Button use;
     Button trash;
     Button close;
+    int gold = 0;
 
     bool closed = false;
 
@@ -179,6 +180,9 @@ public class Inventory
         trash = panelObject.transform.GetChild(0).gameObject.transform.GetChild(5).gameObject.GetComponent<Button>();
         close = panelObject.transform.GetChild(2).gameObject.GetComponent<Button>();
 
+        GameObject goldText = panelObject.transform.GetChild(3).gameObject.transform.GetChild(0).gameObject;
+        goldText.GetComponent<Text>().text = "Gold: " + gold;
+
         use.onClick.AddListener(useListener);
         trash.onClick.AddListener(trashListener);
         close.onClick.AddListener(closeListener);
@@ -213,6 +217,13 @@ public class Inventory
             }
         }
         setInfo();
+    }
+
+    public void setGold(int i)
+    {
+        gold = i;
+        GameObject goldText = panelObject.transform.GetChild(3).gameObject.transform.GetChild(0).gameObject;
+        goldText.GetComponent<Text>().text = "Gold: " + gold;
     }
     
     public void closeInventory()

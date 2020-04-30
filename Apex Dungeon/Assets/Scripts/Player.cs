@@ -13,6 +13,8 @@ public class Player : MovingEntity
     public GameObject slot;
 
     private Inventory inventory;
+
+    private int gold;
     //Components
     Animator animator;
 
@@ -24,10 +26,11 @@ public class Player : MovingEntity
         defense = 10;
         hp = 100;
         mp = 50;
+        maxMp = 50;
         maxHp = 100;
         type = 1;
         damage = 10;
-        
+        gold = 0;
 
         //GameObjects
         animator = GetComponent<Animator>();
@@ -56,6 +59,11 @@ public class Player : MovingEntity
             hp = 0;
         if (hp > maxHp)
             hp = maxHp;
+
+        if (mp < 0)
+            mp = 0;
+        if (mp > maxMp)
+            mp = maxMp;
 
         updateUI();
 
@@ -138,6 +146,24 @@ public class Player : MovingEntity
             inventory.addItem(other.GetComponent<Item>());
             //takeDamage(10);
             Destroy(other.gameObject);
+        }
+        if (other.gameObject.tag == "Gold")
+        {
+            Destroy(other.gameObject);
+            gold += 100;
+            inventory.setGold(gold);
+        }
+        if (other.gameObject.tag == "Silver")
+        {
+            Destroy(other.gameObject);
+            gold += 50;
+            inventory.setGold(gold);
+        }
+        if (other.gameObject.tag == "Copper")
+        {
+            Destroy(other.gameObject);
+            gold += 25;
+            inventory.setGold(gold);
         }
     }
 
@@ -222,12 +248,16 @@ public class Player : MovingEntity
         //INTERACTION
     }
 
-    
+    public void addMP(int i)
+    {
+        mp += i;
+    }
     
 
     void updateUI()
     {
         hpbar.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, (float)hp / (float)maxHp * 400f);
+        mpbar.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, (float)mp / (float)maxMp * 400f);
     }
 
     public bool getInventory()
