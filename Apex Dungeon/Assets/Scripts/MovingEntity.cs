@@ -16,6 +16,8 @@ public abstract class MovingEntity : MonoBehaviour
     public float speed = 3f;
     public LayerMask blockingLayer;
 
+    public ParticleSystem blood;
+
     protected BoxCollider2D boxCollider;
 
     private Vector2 target;
@@ -206,7 +208,7 @@ public abstract class MovingEntity : MonoBehaviour
         return netDamage;
     }
 
-    public void takeDamage(float change)
+    public virtual void takeDamage(float change)
     {
         hp += (int)change;
         moving = false;
@@ -214,6 +216,16 @@ public abstract class MovingEntity : MonoBehaviour
         {
             dead = true;
         }
+        if (change < 0)
+        {
+            SpawnBlood();
+        }
+    }
+
+    void SpawnBlood()
+    {
+        Vector3 position = new Vector3(col, row, 0f);
+        Instantiate(blood, position, Quaternion.identity);
     }
 
     public void addMP(float change)

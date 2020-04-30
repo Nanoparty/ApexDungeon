@@ -9,17 +9,19 @@ public class MapGenerator : MonoBehaviour
     public static int width = 50;
     public static int height = 50;
 
-    public int maxWidth;
-    public int minWidth;
-    public int maxHeight;
-    public int minHeight;
-    public int numRooms;
+    public int maxWidth = 10;
+    public int minWidth = 5;
+    public int maxHeight = 10;
+    public int minHeight = 5;
+    public int numRooms = 30;
     public List<Room> rooms;
 
     private Transform dungeon;
 
     public GameObject Player;
+    public GameObject Stairs;
     public GameObject[] Enemy;
+    public GameObject[] Items;
 
     public GameObject[] floor;
     public GameObject[] wallH;
@@ -30,11 +32,11 @@ public class MapGenerator : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        maxWidth = 10;
-        minWidth = 5;
-        maxHeight = 10;
-        minHeight = 5;
-        numRooms = 30;
+        maxWidth = 20;
+        minWidth = 10;
+        maxHeight = 20;
+        minHeight = 10;
+        numRooms = 10;
 
         rooms = new List<Room>();
         
@@ -42,27 +44,37 @@ public class MapGenerator : MonoBehaviour
         dungeon = new GameObject("Dungeon").transform;
 
         InitializeTileMap();
-        //rooms.Add(new Room(1, 1, 5, 5));
-        //rooms.Add(new Room(10, 10, 5, 5));
+        
 
         GenerateRooms();
 
-        //CreateVerticleHallway(2, 10, 5);
-        //CreateVerticleHallway(10, 1, 10);
-        //CreateHorizontalHallway(1, 10, 13);
-        //CreateHorizontalHallway(10, 1, 17);
-        //Debug.Log(rooms.Count);
+       
         ConvertRoomsToTileMap();
-        for(int i = 1; i < rooms.Count; i++)
+        if (rooms != null || rooms.Count > 0)
         {
-            connectRooms(i-1, i);
+            for (int i = 1; i < rooms.Count; i++)
+            {
+                connectRooms(i - 1, i);
+            }
         }
-        //connectRooms(0, 1);
+       
         //GenerateMap();
         SpawnMap();
         SpawnPlayer();
+        SpawnStairs();
         SpawnEnemies();
         SpawnFurniture();
+        SpawnItems();
+    }
+
+    public void Reset()
+    {
+        Debug.Log("CLEARING");
+        Destroy(dungeon.gameObject);
+        GameManager.gmInstance.clearEnemies();
+        GameManager.gmInstance.clearFurniture();
+        Debug.Log("RESET");
+        Start();
     }
 
     void InitializeTileMap()
@@ -414,13 +426,9 @@ public class MapGenerator : MonoBehaviour
     {
         int r = Random.Range(0, rooms.Count - 1);
         Room room = rooms[r];
-        
-        
 
         int row = Random.Range(room.row + 1, room.row + room.height - 2);
         int col = Random.Range(room.col + 1, room.col + room.width - 2);
-
-        
 
         InstantiateSingle(Player, row, col);
         tileMap[row, col].occupied = 1; 
@@ -437,6 +445,7 @@ public class MapGenerator : MonoBehaviour
             int col = 0;
             while(!valid && tries < 10)
             {
+                tries++;
                 row = Random.Range(room.row + 1, room.row + room.height - 2);
                 col = Random.Range(room.col + 1, room.col + room.width - 2);
                 if (!tileMap[row, col].getOccupied())
@@ -467,9 +476,10 @@ public class MapGenerator : MonoBehaviour
                 int col = 0;
                 while (!valid && tries < 10)
                 {
+                    tries++;
                     row = Random.Range(room.row + 1, room.row + room.height - 2);
                     col = Random.Range(room.col + 1, room.col + room.width - 2);
-                    if (!tileMap[row, col].getOccupied())
+                    if (!tileMap[row, col].getOccupied() && !tileMap[row,col].stairs)
                     {
                         valid = true;
                     }
@@ -478,6 +488,68 @@ public class MapGenerator : MonoBehaviour
                 {
                     InstantiateRandom(Furniture, row, col);
                     tileMap[row, col].occupied = 3;
+
+                }
+            }
+        }
+    }
+
+    void SpawnStairs()
+    {
+        int r = Random.Range(0, rooms.Count - 1);
+        Room room = rooms[r];
+        int row = 0;
+        int col = 0;
+        bool valid = false;
+        int tries = 0;
+        while (!valid && tries < 10)
+        {
+            
+            tries++;
+            row = Random.Range(room.row + 1, room.row + room.height - 2);
+            col = Random.Range(room.col + 1, room.col + room.width - 2);
+            if (!tileMap[row, col].getOccupied())
+            {
+                valid = true;
+            }
+        }
+        if (valid)
+        {
+            InstantiateSingle(Stairs, row, col);
+            tileMap[row, col].stairs = true;
+        }
+        else
+        {
+            Debug.Log("STAIRS FAILED");
+        }
+        
+    }
+
+    void SpawnItems()
+    {
+        for (int i = 0; i < rooms.Count; i++)
+        {
+            for (int j = 0; j < 2; j++)
+            {
+                Room room = rooms[i];
+                bool valid = false;
+                int tries = 0;
+                int row = 0;
+                int col = 0;
+                while (!valid && tries < 10)
+                {
+                    tries++;
+                    row = Random.Range(room.row + 1, room.row + room.height - 2);
+                    col = Random.Range(room.col + 1, room.col + room.width - 2);
+                    if (!tileMap[row, col].getOccupied() && !tileMap[row, col].stairs)
+                    {
+                        valid = true;
+                    }
+                }
+                if (valid)
+                {
+                    InstantiateRandom(Items, row, col);
+                    //tileMap[row, col].occupied = 3;
 
                 }
             }

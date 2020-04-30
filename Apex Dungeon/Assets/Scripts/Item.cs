@@ -1,18 +1,29 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class Item : MonoBehaviour
+public abstract class Item : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public Sprite img;
+    protected int hp;
+    protected int mp;
+    protected int defense;
+    protected int damage;
+
+    public Item()
     {
-        
+
+    }
+    public Item(Sprite img)
+    {
+        this.img = img;
     }
 
-    // Update is called once per frame
-    void Update()
+    public Sprite getImage()
     {
-        
+        return img;
     }
+
+    public abstract void useItem();
 }

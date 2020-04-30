@@ -11,6 +11,8 @@ public class Enemy : MovingEntity
     private int pRow;
     private int pCol;
 
+  
+
     Player player;
 
     bool agro = false;
@@ -46,6 +48,10 @@ public class Enemy : MovingEntity
     {
         return base.AttemptMove<T>(r, c);
     }
+
+    
+
+    
 
     public void MoveEnemy()
     {

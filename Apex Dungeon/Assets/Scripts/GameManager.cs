@@ -66,7 +66,7 @@ public class GameManager : MonoBehaviour
         //Debug.Log("hi");
         if (!enemiesTurn)
         {
-            Debug.Log("Enemies start");
+            //Debug.Log("Enemies start");
             enemiesTurn = true;
             MoveEnemies();
         }
@@ -80,6 +80,17 @@ public class GameManager : MonoBehaviour
     {
         enemies.Remove(e);
     }
+
+    public void clearEnemies()
+    {
+        enemies.Clear();
+    }
+
+    public void clearFurniture()
+    {
+        furniture.Clear();
+    }
+
     public void removeFurniture(Furniture e)
     {
         furniture.Remove(e);

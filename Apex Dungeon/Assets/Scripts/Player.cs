@@ -8,10 +8,11 @@ public class Player : MovingEntity
     //UI Elements
     public Image hpbar;
     public Image mpbar;
-    public GameObject inventory;
     public Button bag;
-    
+    public GameObject panel;
+    public GameObject slot;
 
+    public Inventory inventory;
     //Components
     Animator animator;
 
@@ -30,10 +31,11 @@ public class Player : MovingEntity
 
         //GameObjects
         animator = GetComponent<Animator>();
+        inventory = new Inventory(panel, slot);
+
         hpbar = GameObject.FindGameObjectWithTag("hpbar").GetComponent<Image>();
         mpbar = GameObject.FindGameObjectWithTag("mpbar").GetComponent<Image>();
-        inventory = GameObject.FindGameObjectWithTag("Inventory");
-        inventory.SetActive(false);
+        
         bag = GameObject.FindGameObjectWithTag("bag").GetComponent<Button>();
         bag.onClick.AddListener(bagListener);
 
@@ -49,6 +51,27 @@ public class Player : MovingEntity
 
     protected override void Update()
     {
+
+        if (hp < 0)
+            hp = 0;
+        if (hp > maxHp)
+            hp = maxHp;
+
+        if (Input.GetKeyDown("space"))
+        {
+            if (!openInventory)
+            {
+                openInventory = true;
+                inventory.openInventory();
+            }
+            else
+            {
+                openInventory = false;
+                inventory.closeInventory();
+            }
+            //GameObject.FindGameObjectWithTag("DunGen").GetComponent<MapGenerator>().Reset();
+
+        }
         //check dead
         if (dead)
         {
@@ -89,6 +112,20 @@ public class Player : MovingEntity
         }
     }
 
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if(other.gameObject.tag == "Stairs")
+        {
+            Debug.Log("Stairs");
+        }
+        if(other.gameObject.tag == "Potion")
+        {
+            inventory.addItem(other.GetComponent<Item>());
+            //takeDamage(10);
+            Destroy(other.gameObject);
+        }
+    }
+
     bool isFurniture(int row, int col)
     {
         Furniture f = GameManager.gmInstance.getFurnitureAtLoc(row, col);
@@ -103,9 +140,10 @@ public class Player : MovingEntity
 
     void bagListener()
     {
-        openInventory = !openInventory;
-        inventory.SetActive(openInventory);
+        
     }
+
+    
 
     void checkInventory()
     {
@@ -168,6 +206,9 @@ public class Player : MovingEntity
     {
         //INTERACTION
     }
+
+    
+    
 
     void updateUI()
     {
