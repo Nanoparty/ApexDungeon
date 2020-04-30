@@ -4,10 +4,17 @@ using UnityEngine;
 
 public class HealthPotion :  Item
 {
-    public HealthPotion()
-    {
 
+
+
+    private void Start()
+    {
+        name = "Health Potion";
+        flavor = "Tastes like cherry!";
+        details = "Instantly recovers 20 hp";
     }
+
+
 
     public HealthPotion(Sprite s)
     {
@@ -17,5 +24,7 @@ public class HealthPotion :  Item
     public override void useItem()
     {
         Debug.Log("USE HEALTH POTION");
+        Player p = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+        p.takeDamage(20);
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Inventory : MonoBehaviour
+public class Inventory 
 {
     public List<Item> items;
     public List<GameObject> itemSlots;
@@ -17,6 +17,8 @@ public class Inventory : MonoBehaviour
     Button use;
     Button trash;
     Button close;
+
+    bool closed = false;
 
     public Inventory(GameObject panel, GameObject slot)
     {
@@ -56,10 +58,10 @@ public class Inventory : MonoBehaviour
         if(selected >= 0)
         {
             icon.SetActive(true);
-            icon.GetComponent<Image>().sprite = sprite;
-            Name.GetComponent<Text>().text = "Name";
-            Flavor.GetComponent<Text>().text = "falvor";
-            Detail.GetComponent<Text>().text = "details";
+            icon.GetComponent<Image>().sprite = items[selected].getImage();
+            Name.GetComponent<Text>().text = items[selected].getName();
+            Flavor.GetComponent<Text>().text = items[selected].getFlavor();
+            Detail.GetComponent<Text>().text = items[selected].getDetails();
             //selected = -1;
         }
         else
@@ -86,6 +88,7 @@ public class Inventory : MonoBehaviour
 
     void trashListener()
     {
+        Debug.Log("TRASH LISTENER");
         if(selected >= 0)
         {
             items.RemoveAt(selected);
@@ -98,12 +101,13 @@ public class Inventory : MonoBehaviour
     void closeListener()
     {
         closeInventory();
+        closed = true;
     }
 
-    private void Update()
+    public void Update()
     {
-        /*
-        if (Input.GetKeyDown("space"))
+        
+        if (Input.GetKeyDown("b"))
         {
             //closeInventory();
             addItem(new HealthPotion(sprite));
@@ -115,7 +119,7 @@ public class Inventory : MonoBehaviour
             items.RemoveAt(0);
             updateInventory();
         }
-        */
+        
 
         if (Input.GetMouseButtonDown(0))
         {
@@ -132,6 +136,15 @@ public class Inventory : MonoBehaviour
         }
 
        
+    }
+
+    public bool getClosed()
+    {
+        return closed;
+    }
+    public void setClosed(bool b)
+    {
+        closed = b;
     }
 
     void updateInventory()
@@ -158,7 +171,7 @@ public class Inventory : MonoBehaviour
     public void openInventory()
     {
         GameObject parent = GameObject.FindGameObjectWithTag("Inventory");
-        panelObject = Instantiate(panel, Vector3.zero, Quaternion.identity);
+        panelObject = GameObject.Instantiate(panel, Vector3.zero, Quaternion.identity);
         panelObject.transform.SetParent(GameObject.FindGameObjectWithTag("Inventory").transform, false);
         //panelObject.transform.parent = parent.transform;
 
@@ -178,7 +191,7 @@ public class Inventory : MonoBehaviour
         for(int i = 0; i < maxItems; i++)
         {
             Vector3 pos = new Vector3(xOff + x * cellSize,yOff + -1*y * cellSize, 0);
-            GameObject itemslot = Instantiate(slot, pos, Quaternion.identity);
+            GameObject itemslot = GameObject.Instantiate(slot, pos, Quaternion.identity);
             itemslot.transform.SetParent(panelObject.transform, false);
             Debug.Log("TEST:" + itemslot + ":" + itemSlots);
             itemSlots.Add(itemslot);
@@ -204,6 +217,7 @@ public class Inventory : MonoBehaviour
     
     public void closeInventory()
     {
-        Destroy(panelObject);
+        GameObject.Destroy(panelObject);
+        itemSlots.Clear();
     }
 }

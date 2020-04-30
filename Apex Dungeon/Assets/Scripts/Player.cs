@@ -12,11 +12,11 @@ public class Player : MovingEntity
     public GameObject panel;
     public GameObject slot;
 
-    public Inventory inventory;
+    private Inventory inventory;
     //Components
     Animator animator;
 
-    public bool openInventory = false;
+    private bool openInventory = false;
 
     protected override void Start()
     {
@@ -57,6 +57,8 @@ public class Player : MovingEntity
         if (hp > maxHp)
             hp = maxHp;
 
+        updateUI();
+
         if (Input.GetKeyDown("space"))
         {
             if (!openInventory)
@@ -71,7 +73,20 @@ public class Player : MovingEntity
             }
             //GameObject.FindGameObjectWithTag("DunGen").GetComponent<MapGenerator>().Reset();
 
+
         }
+
+        if (openInventory)
+        {
+            if (inventory.getClosed())
+            {
+                openInventory = false;
+                inventory.setClosed(false);
+            }
+            inventory.Update();
+            return;
+        }
+
         //check dead
         if (dead)
         {
@@ -81,7 +96,7 @@ public class Player : MovingEntity
         
         base.Update();
 
-        updateUI();
+        
 
         checkMoving();
         
