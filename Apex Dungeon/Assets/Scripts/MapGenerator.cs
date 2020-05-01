@@ -342,6 +342,16 @@ public class MapGenerator : MonoBehaviour
         return new Vector2(row, col);
     }
 
+    public static bool isPlayer(int r, int c)
+    {
+        
+        if(tileMap[r,c].occupied == 1)
+        {
+            return true;
+        }
+        return false;
+    }
+
     bool checkRoomCollision(int r, int c, int w, int h)
     {
         bool collide = false;

@@ -11,8 +11,12 @@ public class Player : MovingEntity
     public Button bag;
     public GameObject panel;
     public GameObject slot;
+    public GameObject block;
+    public GameObject pblock;
+    public GameObject mapHolder;
 
     private Inventory inventory;
+    private MiniMap mini;
 
     private int gold;
     //Components
@@ -35,6 +39,7 @@ public class Player : MovingEntity
         //GameObjects
         animator = GetComponent<Animator>();
         inventory = new Inventory(panel, slot);
+        mini = new MiniMap(mapHolder, block, pblock);
 
         hpbar = GameObject.FindGameObjectWithTag("hpbar").GetComponent<Image>();
         mpbar = GameObject.FindGameObjectWithTag("mpbar").GetComponent<Image>();
@@ -93,6 +98,11 @@ public class Player : MovingEntity
             }
             inventory.Update();
             return;
+        }
+
+        if (Input.GetKeyDown("t"))
+        {
+            mini.buildMiniMap();
         }
 
         //check dead
