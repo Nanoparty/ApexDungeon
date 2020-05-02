@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class Player : MovingEntity
@@ -9,20 +10,30 @@ public class Player : MovingEntity
     public Image hpbar;
     public Image mpbar;
     public Button bag;
+    public Button map;
     public GameObject panel;
     public GameObject slot;
     public GameObject block;
     public GameObject pblock;
     public GameObject mapHolder;
+    public GameObject OpeningScreen;
 
     private Inventory inventory;
     private MiniMap mini;
+
 
     private int gold;
     //Components
     Animator animator;
 
     private bool openInventory = false;
+    private bool openMap = false;
+
+    private bool opening = true;
+    private bool fadeIn = false;
+
+    private Time time;
+    private float start;
 
     protected override void Start()
     {
@@ -35,17 +46,36 @@ public class Player : MovingEntity
         type = 1;
         damage = 10;
         gold = 0;
+        start = 0;
+
+        
+     
 
         //GameObjects
         animator = GetComponent<Animator>();
+        
         inventory = new Inventory(panel, slot);
+
+        if (GameManager.gmInstance.level > 1)
+        {
+            hp = Data.hp;
+            mp = Data.mp;
+            gold = Data.gold;
+            inventory = Data.i;
+        }
+
         mini = new MiniMap(mapHolder, block, pblock);
 
         hpbar = GameObject.FindGameObjectWithTag("hpbar").GetComponent<Image>();
         mpbar = GameObject.FindGameObjectWithTag("mpbar").GetComponent<Image>();
+        OpeningScreen = GameObject.FindGameObjectWithTag("Opening");
+        
         
         bag = GameObject.FindGameObjectWithTag("bag").GetComponent<Button>();
+        map = GameObject.FindGameObjectWithTag("mapButton").GetComponent<Button>();
+
         bag.onClick.AddListener(bagListener);
+        map.onClick.AddListener(mapListener);
 
         base.Start();
     }
@@ -57,76 +87,77 @@ public class Player : MovingEntity
         GameManager.gmInstance.playersTurn = false;
     }
 
-    protected override void Update()
+    void checkDead()
+    {
+        if (dead)
+        {
+            //Destroy(this.gameObject);
+        }
+    }
+
+    void setFadeIn()
     {
 
-        if (hp < 0)
-            hp = 0;
-        if (hp > maxHp)
-            hp = maxHp;
+    }
 
-        if (mp < 0)
-            mp = 0;
-        if (mp > maxMp)
-            mp = maxMp;
+    protected override void Update()
+    {
+        if (!GameManager.gmInstance.playersTurn) return;
+
 
         updateUI();
 
-        if (Input.GetKeyDown("space"))
-        {
-            if (!openInventory)
-            {
-                openInventory = true;
-                inventory.openInventory();
-            }
-            else
-            {
-                openInventory = false;
-                inventory.closeInventory();
-            }
-            //GameObject.FindGameObjectWithTag("DunGen").GetComponent<MapGenerator>().Reset();
-
-
-        }
-
         if (openInventory)
         {
+            inventory.Update();
             if (inventory.getClosed())
             {
-                openInventory = false;
                 inventory.setClosed(false);
+                openInventory = false;
             }
-            inventory.Update();
             return;
         }
+
+        if (openMap)
+        {
+            //mini.Update();
+            if (mini.getClosed())
+            {
+                mini.setClosed(false);
+                openMap = false;
+            }
+            return;
+        }
+
+        //reset code
+        //GameObject.FindGameObjectWithTag("DunGen").GetComponent<MapGenerator>().Reset();
+
 
         if (Input.GetKeyDown("t"))
         {
             mini.buildMiniMap();
         }
 
-        //check dead
-        if (dead)
-        {
-            Destroy(this.gameObject);
-        }
-        //checkInventory();
+        checkDead();
         
         base.Update();
 
-        
-
         checkMoving();
         
-        if (!GameManager.gmInstance.playersTurn) return;
+        
 
         if (Input.GetButtonDown("Fire1"))
         {
+            if (EventSystem.current.IsPointerOverGameObject())
+            {
+                Debug.Log("Clicked on the UI");
+                return;
+            }
+
             int clickRow = (int)GameManager.gmInstance.mRow;
             int clickCol = (int)GameManager.gmInstance.mCol;
-            //check attack
 
-            //
+            //attack or interact
             if (isAdjacent(clickRow, clickCol))
             {
                 if(isFurniture(clickRow, clickCol))
@@ -137,19 +168,26 @@ public class Player : MovingEntity
                 {
                     attackController(clickRow, clickCol);
                 }
-                
             }
-                
 
+            //move
             moveController(clickRow, clickCol);
         }
     }
+
+    
 
     void OnTriggerEnter2D(Collider2D other)
     {
         if(other.gameObject.tag == "Stairs")
         {
             Debug.Log("Stairs");
+            GameManager.gmInstance.level++;
+            Data.i = inventory;
+            Data.hp = hp;
+            Data.mp = mp;
+            Data.gold = gold;
+            GameObject.FindGameObjectWithTag("DunGen").GetComponent<MapGenerator>().Reset();
         }
         if(other.gameObject.tag == "Potion")
         {
@@ -191,10 +229,21 @@ public class Player : MovingEntity
 
     void bagListener()
     {
-        
+        if (!openInventory && !openMap)
+        {
+            inventory.openInventory();
+            openInventory = true;
+        }
     }
 
-    
+    void mapListener()
+    {
+        if (!openMap && !openInventory)
+        {
+            mini.buildMiniMap();
+            openMap = true;
+        }
+    }
 
     void checkInventory()
     {
@@ -266,6 +315,16 @@ public class Player : MovingEntity
 
     void updateUI()
     {
+        if (hp < 0)
+            hp = 0;
+        if (hp > maxHp)
+            hp = maxHp;
+
+        if (mp < 0)
+            mp = 0;
+        if (mp > maxMp)
+            mp = maxMp;
+
         hpbar.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, (float)hp / (float)maxHp * 400f);
         mpbar.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, (float)mp / (float)maxMp * 400f);
     }

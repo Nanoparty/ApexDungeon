@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MapGenerator : MonoBehaviour
 {
@@ -18,6 +19,8 @@ public class MapGenerator : MonoBehaviour
 
     private Transform dungeon;
 
+    public GameObject Opening;
+
     public GameObject Player;
     public GameObject Stairs;
     public GameObject[] Enemy;
@@ -32,16 +35,21 @@ public class MapGenerator : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        maxWidth = 20;
-        minWidth = 10;
-        maxHeight = 20;
-        minHeight = 10;
+        maxWidth = 15;
+        minWidth = 8;
+        maxHeight = 15;
+        minHeight = 8;
         numRooms = 10;
 
         rooms = new List<Room>();
         
 
         dungeon = new GameObject("Dungeon").transform;
+
+        GameObject op = GameObject.Instantiate(Opening, new Vector3(0, 0, 0), Quaternion.identity);
+        op.transform.GetChild(0).gameObject.GetComponent<Text>().text = GameManager.gmInstance.DungeonName;
+        op.transform.GetChild(1).gameObject.GetComponent<Text>().text = "Floor " + GameManager.gmInstance.level;
+        op.transform.SetParent(GameObject.FindGameObjectWithTag("Canvas").transform, false);
 
         InitializeTileMap();
         
@@ -346,6 +354,16 @@ public class MapGenerator : MonoBehaviour
     {
         
         if(tileMap[r,c].occupied == 1)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public static bool isEnemy(int r, int c)
+    {
+
+        if (tileMap[r, c].occupied == 2)
         {
             return true;
         }

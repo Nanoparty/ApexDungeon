@@ -222,8 +222,8 @@ public class Inventory
     public void setGold(int i)
     {
         gold = i;
-        GameObject goldText = panelObject.transform.GetChild(3).gameObject.transform.GetChild(0).gameObject;
-        goldText.GetComponent<Text>().text = "Gold: " + gold;
+        //GameObject goldText = panelObject.transform.GetChild(3).gameObject.transform.GetChild(0).gameObject;
+        //goldText.GetComponent<Text>().text = "Gold: " + gold;
     }
     
     public void closeInventory()

@@ -17,7 +17,7 @@ public class ManaPotion : Item
     {
         Debug.Log("USE MANA POTION");
         Player p = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
-        p.takeDamage(20);
+        //p.takeDamage(20);
         p.addMP(20);
     }
 }

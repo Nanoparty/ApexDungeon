@@ -14,6 +14,11 @@ public class MiniMap
     Button close;
     GameObject mapRoot;
 
+    bool closed = false;
+
+    public Sprite[] icons;
+    public Sprite s;
+
     public MiniMap(GameObject mm, GameObject block, GameObject pb)
     {
         this.block = block;
@@ -26,6 +31,15 @@ public class MiniMap
 
         width = MapGenerator.width;
         height = MapGenerator.height;
+        loadSprites();
+
+        
+    }
+
+    void loadSprites()
+    {
+        icons = Resources.LoadAll<Sprite>("mapIcons");
+
     }
 
     // Start is called before the first frame update
@@ -61,13 +75,24 @@ public class MiniMap
 
     void closeListener()
     {
-        Debug.Log("CLOSE MAP");
+        //Debug.Log("CLOSE MAP");
         closeMiniMap();
+        closed = true;
     }
 
     public void closeMiniMap()
     {
         GameObject.Destroy(mapRoot);
+    }
+
+    public bool getClosed()
+    {
+        return closed;
+    }
+
+    public void setClosed(bool b)
+    {
+        closed = b;
     }
 
     public void buildMiniMap()
@@ -94,14 +119,31 @@ public class MiniMap
                 {
                     Vector3 pos = new Vector3(xOff + j * size,yOff + i * size, 0f);
                     GameObject b = GameObject.Instantiate(block, pos, Quaternion.identity);
+                    b.GetComponent<Image>().sprite = icons[4];
                     b.transform.SetParent(mapHolder.transform, false);
                 }
-                else if (MapGenerator.isPlayer(i, j))
+                if (MapGenerator.tileMap[i, j].type == 1 || MapGenerator.tileMap[i, j].type == 3)
                 {
                     Vector3 pos = new Vector3(xOff + j * size, yOff + i * size, 0f);
-                    GameObject b = GameObject.Instantiate(pBlock, pos, Quaternion.identity);
+                    GameObject b = GameObject.Instantiate(block, pos, Quaternion.identity);
+                    b.GetComponent<Image>().sprite = icons[0];
                     b.transform.SetParent(mapHolder.transform, false);
                 }
+                if (MapGenerator.isPlayer(i, j))
+                {
+                    Vector3 pos = new Vector3(xOff + j * size, yOff + i * size, 0f);
+                    GameObject b = GameObject.Instantiate(block, pos, Quaternion.identity);
+                    b.GetComponent<Image>().sprite = icons[1];
+                    b.transform.SetParent(mapHolder.transform, false);
+                }
+                if (MapGenerator.isEnemy(i, j))
+                {
+                    Vector3 pos = new Vector3(xOff + j * size, yOff + i * size, 0f);
+                    GameObject b = GameObject.Instantiate(block, pos, Quaternion.identity);
+                    b.GetComponent<Image>().sprite = icons[2];
+                    b.transform.SetParent(mapHolder.transform, false);
+                }
+                
             }
         }
     }

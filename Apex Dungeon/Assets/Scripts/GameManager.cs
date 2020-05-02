@@ -6,22 +6,26 @@ public class GameManager : MonoBehaviour
 {
 
     public static GameManager gmInstance = null;
-    public bool playersTurn = true;
+    public bool playersTurn = false;
     
 
-    private int floor = 1;
     private List<Enemy> enemies;
     private List<Furniture> furniture;
     private bool enemiesTurn;
-    private bool doingSetup = false;
+    public bool doingSetup = true;
 
     public GameObject tileCursor;
     GameObject cursor;
     public float mRow;
     public float mCol;
 
+    public string DungeonName = "Misty Dungeon";
+    public int floor = 72;
+    public int level;
+
     private void Awake()
     {
+        level = 1;
         if(gmInstance == null)
         {
             gmInstance = this;
@@ -40,7 +44,7 @@ public class GameManager : MonoBehaviour
 
     void Setup()
     {
-        //create level
+        
     }
 
 
