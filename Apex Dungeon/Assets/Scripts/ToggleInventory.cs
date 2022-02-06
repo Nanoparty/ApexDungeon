@@ -6,9 +6,9 @@ public class ToggleInventory : MonoBehaviour
 {
     public void triggerInventory()
     {
-        Debug.Log("CLICK");
         Player p = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         bool open = p.getInventory();
+        Debug.Log("Toggle Inventory:"+ !open);
         if (open)
         {
             p.setInventory(false);

@@ -62,6 +62,7 @@ public class GameManager : MonoBehaviour
 
         if (playersTurn || enemiesTurn || doingSetup)
         {
+            
             return;
         }
         //StartCoroutine(MoveEnemies());

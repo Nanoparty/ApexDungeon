@@ -14,6 +14,7 @@ public class scrollHorizontal : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //GameObject cloud = GetComponent().rect.width;
         transform.position = new Vector3(transform.position.x + speed, transform.position.y, 0);
         if (transform.position.x > 1280*1.5f)
         {
