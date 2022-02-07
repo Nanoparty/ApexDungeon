@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class HealthPotion :  Item
 {
-
-
-
     private void Start()
     {
         name = "Health Potion";
@@ -14,11 +11,12 @@ public class HealthPotion :  Item
         details = "Instantly recovers 20 hp";
     }
 
-
-
     public HealthPotion(Sprite s)
     {
         img = s;
+        name = "Health Potion";
+        flavor = "Tastes like cherry!";
+        details = "Instantly recovers 20 hp";
     }
 
     public override void useItem()

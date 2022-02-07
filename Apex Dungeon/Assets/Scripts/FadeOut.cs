@@ -27,7 +27,7 @@ public class FadeOut : MonoBehaviour
     {
         if (begin)
         {
-            Debug.Log("update");
+            //Debug.Log("update");
             Color curColor = this.image.color;
             float alphaDiff = Mathf.Abs(curColor.a - this.targetAlpha);
             if (curColor.a > 0)

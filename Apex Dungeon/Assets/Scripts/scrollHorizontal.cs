@@ -5,10 +5,12 @@ using UnityEngine;
 public class scrollHorizontal : MonoBehaviour
 {
     public float speed = 1;
+    public Vector3 resetPosition;
+    public float endPosition = 1280;
     
     void Start()
     {
-        
+        resetPosition = transform.position;
     }
 
     // Update is called once per frame
@@ -16,9 +18,9 @@ public class scrollHorizontal : MonoBehaviour
     {
         //GameObject cloud = GetComponent().rect.width;
         transform.position = new Vector3(transform.position.x + speed, transform.position.y, 0);
-        if (transform.position.x > 1280*1.5f)
+        if (transform.position.x > endPosition*1.5f)
         {
-            transform.position = new Vector3(0 - (1280/2), transform.position.y, 0);
+            transform.position = resetPosition;
         }
     }
 }

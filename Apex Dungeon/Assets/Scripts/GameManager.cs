@@ -56,13 +56,14 @@ public class GameManager : MonoBehaviour
 
         mRow = Mathf.Round(pz.y);
         mCol = Mathf.Round(pz.x);
-        //Debug.Log(pz);
+        //Debug.Log(mRow + " " + mCol);
+
+        //updating grid cursor image
         cursor.transform.position = new Vector3(mCol, mRow, 0f);
 
 
         if (playersTurn || enemiesTurn || doingSetup)
         {
-            
             return;
         }
         //StartCoroutine(MoveEnemies());
@@ -71,7 +72,7 @@ public class GameManager : MonoBehaviour
         //Debug.Log("hi");
         if (!enemiesTurn)
         {
-            //Debug.Log("Enemies start");
+            Debug.Log("Enemies start");
             enemiesTurn = true;
             MoveEnemies();
         }
