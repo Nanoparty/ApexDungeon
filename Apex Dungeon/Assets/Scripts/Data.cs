@@ -6,6 +6,7 @@ public static class Data
 {
     public static Inventory i;
     public static Bank b;
+    public static ShopInventory s;
 
 
     public static int gold;

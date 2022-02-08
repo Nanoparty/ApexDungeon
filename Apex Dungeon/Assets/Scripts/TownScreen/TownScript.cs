@@ -53,5 +53,10 @@ public class TownScript : MonoBehaviour
         SceneManager.LoadScene("test");
     }
 
+    public void toStore()
+    {
+        SceneManager.LoadScene("Store");
+    }
+
 
 }

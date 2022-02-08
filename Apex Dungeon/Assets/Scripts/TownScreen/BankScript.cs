@@ -61,8 +61,8 @@ public class BankScript : MonoBehaviour
         //Debugging Purposes
         playerItems.Add(new HealthPotion(healthPotion));
         bankItems.Add(new HealthPotion(manaPotion));
-        playerBank.gold = 100;
-        playerInventory.gold = 500;
+        playerBank.gold += 100;
+        playerInventory.gold += 500;
 
         GoldPopUp.SetActive(false);
 
