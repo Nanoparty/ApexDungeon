@@ -6,6 +6,9 @@ using UnityEngine.UI;
 public class MapGenerator : MonoBehaviour
 {
     public static Tile[,] tileMap;
+    public static GameObject[,] shadowMap;
+    public static List<GameObject> activeShadows;
+    public static List<Vector2> visibleTiles;
 
     public static int width = 50;
     public static int height = 50;
@@ -15,11 +18,14 @@ public class MapGenerator : MonoBehaviour
     public int maxHeight = 10;
     public int minHeight = 5;
     public int numRooms = 30;
-    public List<Room> rooms;
+
+    public static List<Room> rooms;
 
     private Transform dungeon;
 
     public GameObject Opening;
+
+    public GameObject Shadow;
 
     public GameObject Player;
     public GameObject Stairs;
@@ -42,7 +48,9 @@ public class MapGenerator : MonoBehaviour
         numRooms = 10;
 
         rooms = new List<Room>();
-        
+
+        activeShadows = new List<GameObject>();
+        visibleTiles = new List<Vector2>();
 
         dungeon = new GameObject("Dungeon").transform;
 
@@ -52,12 +60,12 @@ public class MapGenerator : MonoBehaviour
         op.transform.SetParent(GameObject.FindGameObjectWithTag("Canvas").transform, false);
 
         InitializeTileMap();
-        
+        InitializeShadowMap();
 
         GenerateRooms();
 
-       
         ConvertRoomsToTileMap();
+
         if (rooms != null || rooms.Count > 0)
         {
             for (int i = 1; i < rooms.Count; i++)
@@ -73,6 +81,8 @@ public class MapGenerator : MonoBehaviour
         SpawnEnemies();
         SpawnFurniture();
         SpawnItems();
+
+        InstantiateShadowMap();
     }
 
     public void Reset()
@@ -93,6 +103,18 @@ public class MapGenerator : MonoBehaviour
             for(int j = 0; j < height; j++)
             {
                 tileMap[j, i] = new Tile(j, i, 0);
+            }
+        }
+    }
+
+    void InitializeShadowMap()
+    {
+        shadowMap = new GameObject[height, width];
+        for (int i = 0; i < width; i++)
+        {
+            for (int j = 0; j < height; j++)
+            {
+                shadowMap[j, i] = new GameObject();
             }
         }
     }
@@ -330,6 +352,90 @@ public class MapGenerator : MonoBehaviour
                 }
             }
         }
+    }
+
+    private void InstantiateShadowMap()
+    {
+        for (int i = 0; i < height; i++)
+        {
+            for (int j = 0; j < width; j++)
+            {
+                float row = dungeon.position.y + i;
+                float col = dungeon.position.x + j;
+
+                shadowMap[i,j] = InstantiateSingle(Shadow, row, col);
+            }
+        }
+    }
+
+    public static void UpdateShadows(int r, int c)
+    {
+        SetShadowsDark();
+        //hallway
+        bool hallway = tileMap[r, c].type == 3;
+        if (hallway)
+        {
+            //only update top, bottom, left, right
+            tileMap[r, c].visible = true;
+            tileMap[r + 1, c].visible = true;
+            tileMap[r - 1, c].visible = true;
+            tileMap[r, c + 1].visible = true;
+            tileMap[r, c - 1].visible = true;
+
+            SetShadowVisible(r, c);
+            SetShadowVisible(r + 1, c);
+            SetShadowVisible(r - 1, c);
+            SetShadowVisible(r, c + 1);
+            SetShadowVisible(r, c - 1);
+        }
+        else
+        {
+            Room curRoom = getRoom(r, c);
+            if (curRoom == null) return;
+
+            int startRow = curRoom.row;
+            int startCol = curRoom.col;
+            int rWidth = curRoom.width;
+            int rHeight = curRoom.height;
+
+            //Debug.Log(startRow + " " + startCol + " " + rWidth + " " + rHeight);
+
+            SetShadowVisible(r, c);
+
+            for(int i = startCol; i < startCol + rWidth; i++)
+            {
+                for(int j = startRow; j < startRow + rHeight; j++)
+                {
+                    SetShadowVisible(j, i);
+                    //Debug.Log("Set Visible " + j + " " + i);
+                }
+            }
+        }
+    }
+
+    static void SetShadowVisible(int r, int c)
+    {
+        GameObject o = shadowMap[r, c];
+        o.SetActive(false);
+        activeShadows.Add(o);
+        tileMap[r, c].visible = true;
+        visibleTiles.Add(new Vector2(r, c));
+        tileMap[r, c].explored = true;
+    }
+
+    static void SetShadowsDark()
+    {
+        foreach(GameObject o in activeShadows)
+        {
+            o.SetActive(true);
+            
+        }
+        activeShadows.Clear();
+        foreach(Vector2 v in visibleTiles)
+        {
+            tileMap[(int)v.x, (int)v.y].visible = false;
+        }
+        visibleTiles.Clear();
     }
 
     Vector2 findValidLocation(int w, int h)
@@ -584,11 +690,12 @@ public class MapGenerator : MonoBehaviour
         }
     }
 
-    void InstantiateSingle(GameObject prefab, float row, float col)
+    GameObject InstantiateSingle(GameObject prefab, float row, float col)
     {
         Vector3 position = new Vector3(col, row, 0f);
         GameObject tileInstance = Instantiate(prefab, position, Quaternion.identity) as GameObject;
         tileInstance.transform.parent = dungeon.transform;
+        return tileInstance;
     }
 
     void InstantiateRandom(GameObject[] tileArray, float row, float col)
@@ -601,6 +708,16 @@ public class MapGenerator : MonoBehaviour
     {
         GameObject tileChoice = tileArray[Random.Range(0, tileArray.Length)];
         return tileChoice;
+    }
+
+    static Room getRoom(int r, int c)
+    {
+        foreach(Room room in rooms)
+        {
+            if (room.containsPos(r, c))
+                return room;
+        }
+        return null;
     }
 
     GameObject getWall(int r, int c)

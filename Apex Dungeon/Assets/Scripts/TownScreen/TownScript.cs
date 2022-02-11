@@ -20,10 +20,9 @@ public class TownScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if(Data.i == null)
-        {
-            Data.i = new Inventory(inventoryPanel, inventorySlot);
-        }
+        if (Data.i == null) Data.i = new Inventory(inventoryPanel, inventorySlot);
+        if (Data.b == null) Data.b = new Bank();
+        if (Data.s == null) Data.s = new ShopInventory();
 
         inventory = Data.i;
     }

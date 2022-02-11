@@ -115,6 +115,7 @@ public class MiniMap
         {
             for(int j = 0;j < width; j++)
             {
+                if (MapGenerator.tileMap[i, j].explored == false) continue;
                 if(MapGenerator.tileMap[i,j].type == 2)
                 {
                     Vector3 pos = new Vector3(xOff + j * size,yOff + i * size, 0f);

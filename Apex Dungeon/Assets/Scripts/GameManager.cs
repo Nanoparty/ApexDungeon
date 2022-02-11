@@ -72,7 +72,7 @@ public class GameManager : MonoBehaviour
         //Debug.Log("hi");
         if (!enemiesTurn)
         {
-            Debug.Log("Enemies start");
+            //Debug.Log("Enemies start");
             enemiesTurn = true;
             MoveEnemies();
         }

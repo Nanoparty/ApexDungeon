@@ -17,6 +17,8 @@ public class Tile
     3 = hallway
     */
     public int type;
+    public bool visible;
+    public bool explored;
 
     public List<Item> contents = new List<Item>();
 
@@ -32,6 +34,8 @@ public class Tile
         this.row = row;
         this.col = col;
         this.type = type;
+        this.visible = false;
+        this.explored = false;
     }
     //0 = empty
     //1 = player

@@ -36,4 +36,16 @@ public class Room
     {
         return (row + (row + height)) / 2;
     }
+
+    public bool containsPos(int r, int c)
+    {
+        if (r >= row && r <= row + height)
+        {
+            if(c >= col && c <= col + width)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 }

@@ -46,8 +46,7 @@ public abstract class MovingEntity : MonoBehaviour
     {
         if (path == null || (path.nodes.Count == 0))
         {
-            atTarget = true;
-            moving = false;
+            doneMoving();
             return false;
         }
         return true;
@@ -57,8 +56,7 @@ public abstract class MovingEntity : MonoBehaviour
     {
         if (MapGenerator.tileMap[(int)next.y, (int)next.x].getBlocked())
         {
-            moving = false;
-            atTarget = true;
+            doneMoving();
             return false;
 
         }
@@ -140,8 +138,7 @@ public abstract class MovingEntity : MonoBehaviour
                 }
                 else
                 {//Interupt Path
-                    atTarget = true;
-                    moving = false;
+                    doneMoving();
                     return;
                 }
             }
@@ -181,10 +178,11 @@ public abstract class MovingEntity : MonoBehaviour
         if (Mathf.Abs(distancex) < 0.1 && Mathf.Abs(distancey) < 0.1)
         {
             atTarget = true;
+            //UpdateShadows()
             transform.position = new Vector2(target.x, target.y);
             if ((path.nodes.Count == 0))
             {
-                moving = false; 
+                moving = false;
             }
         }
     }
@@ -261,6 +259,19 @@ public abstract class MovingEntity : MonoBehaviour
     public int getMaxMP()
     {
         return maxMp;
+    }
+
+    private void doneMoving()
+    {
+        moving = false;
+        atTarget = true;
+        //UpdateShadows(r, c);
+        //Debug.Log("Path done");
+    }
+
+    private void UpdateShadows(int r, int c)
+    {
+        MapGenerator.UpdateShadows(r, c);
     }
 
 

@@ -11,6 +11,9 @@ public abstract class Item : MonoBehaviour
     protected int defense;
     protected int damage;
 
+    protected string type;
+    protected string modifier;
+
     protected string name = "UNNAMED";
     protected string flavor = "Vanilla";
     protected string details = "Nothing";
@@ -22,6 +25,11 @@ public abstract class Item : MonoBehaviour
     public Item(Sprite img)
     {
         this.img = img;
+    }
+
+    public void Update()
+    {
+        
     }
 
     public Sprite getImage()

@@ -12,7 +12,9 @@ public class Player : MovingEntity
     public Image mpbar;
     public Button bag;
     public Button map;
+    public Button character;
     public GameObject panel;
+    public GameObject characterPanel;
     public GameObject slot;
     public GameObject block;
     public GameObject pblock;
@@ -21,6 +23,7 @@ public class Player : MovingEntity
 
     private Inventory inventory;
     private MiniMap mini;
+    private Character characterStats;
 
 
     private int gold;
@@ -29,6 +32,7 @@ public class Player : MovingEntity
 
     private bool openInventory = false;
     private bool openMap = false;
+    private bool openCharacter = false;
 
     private bool opening = true;
     private bool fadeIn = false;
@@ -56,6 +60,7 @@ public class Player : MovingEntity
         animator = GetComponent<Animator>();
         
         inventory = new Inventory(panel, slot);
+        characterStats = new Character(characterPanel);
 
         if(Data.i != null)
         {
@@ -78,9 +83,11 @@ public class Player : MovingEntity
         
         bag = GameObject.FindGameObjectWithTag("bag").GetComponent<Button>();
         map = GameObject.FindGameObjectWithTag("mapButton").GetComponent<Button>();
+        character = GameObject.FindGameObjectWithTag("characterButton").GetComponent<Button>();
 
         bag.onClick.AddListener(bagListener);
         map.onClick.AddListener(mapListener);
+        character.onClick.AddListener(characterListener);
 
         base.Start();
     }
@@ -118,6 +125,8 @@ public class Player : MovingEntity
 
         updateUI();
 
+        MapGenerator.UpdateShadows(row, col);
+
         if (openInventory)
         {
             inventory.Update();
@@ -136,6 +145,16 @@ public class Player : MovingEntity
             {
                 mini.setClosed(false);
                 openMap = false;
+            }
+            return;
+        }
+
+        if (openCharacter)
+        {
+            if (characterStats.getClosed())
+            {
+                characterStats.setClosed(false);
+                openCharacter = false;
             }
             return;
         }
@@ -223,6 +242,11 @@ public class Player : MovingEntity
             gold += 25;
             inventory.setGold(gold);
         }
+        if (other.gameObject.tag == "Equipment")
+        {
+            inventory.addItem(other.GetComponent<Item>());
+            Destroy(other.gameObject);
+        }
     }
 
     bool isFurniture(int row, int col)
@@ -239,7 +263,7 @@ public class Player : MovingEntity
 
     void bagListener()
     {
-        if (!openInventory && !openMap)
+        if (!openInventory && !openMap && !openCharacter)
         {
             inventory.openInventory();
             openInventory = true;
@@ -248,10 +272,19 @@ public class Player : MovingEntity
 
     void mapListener()
     {
-        if (!openMap && !openInventory)
+        if (!openMap && !openInventory && !openCharacter)
         {
             mini.buildMiniMap();
             openMap = true;
+        }
+    }
+
+    void characterListener()
+    {
+        if (!openMap && !openInventory && !openCharacter)
+        {
+            characterStats.openStats();
+            openCharacter = true;
         }
     }
 

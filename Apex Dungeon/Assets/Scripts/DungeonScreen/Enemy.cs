@@ -5,13 +5,13 @@ using UnityEngine;
 public class Enemy : MovingEntity
 {
     Animator animator;
+    SpriteRenderer sr;
+    SpriteRenderer healthBar;
 
     int agroRange;
 
     private int pRow;
     private int pCol;
-
-  
 
     Player player;
 
@@ -33,6 +33,8 @@ public class Enemy : MovingEntity
         //Objects
         GameManager.gmInstance.AddEnemyToList(this);
         animator = GetComponent<Animator>();
+        sr = GetComponent<SpriteRenderer>();
+        healthBar = this.transform.GetChild(0).GetComponent<SpriteRenderer>();
         path = new Path();
         finder = new Pathfinder();
         
@@ -42,6 +44,18 @@ public class Enemy : MovingEntity
     protected override void Update()
     {
         base.Update();
+        if (!MapGenerator.tileMap[row, col].visible)
+        {
+            animator.enabled = false;
+            sr.enabled = false;
+            healthBar.enabled = false;
+        }
+        else
+        {
+            animator.enabled = true;
+            sr.enabled = true;
+            healthBar.enabled = true;
+        }
     }
 
     protected override bool AttemptMove<T>(int r, int c)
