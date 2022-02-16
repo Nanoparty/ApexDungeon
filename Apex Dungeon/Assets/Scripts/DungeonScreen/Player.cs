@@ -245,6 +245,7 @@ public class Player : MovingEntity
         if (other.gameObject.tag == "Equipment")
         {
             inventory.addItem(other.GetComponent<Item>());
+            Debug.Log("ADD TO INVENTORY:" + other.gameObject.GetComponent<Equipment>().getName());
             Destroy(other.gameObject);
         }
     }

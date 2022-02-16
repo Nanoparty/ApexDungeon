@@ -6,30 +6,27 @@ using UnityEngine.UI;
 public abstract class Item : MonoBehaviour
 {
     public Sprite img;
-    protected int hp;
-    protected int mp;
-    protected int defense;
-    protected int damage;
-
-    protected string type;
-    protected string modifier;
 
     protected string name = "UNNAMED";
     protected string flavor = "Vanilla";
     protected string details = "Nothing";
 
-    public Item()
+    public Item(Sprite img, string name, string flavor, string details)
     {
-
+        this.img = img;
+        this.name = name;
+        this.flavor = flavor;
+        this.details = details;
     }
+
     public Item(Sprite img)
     {
         this.img = img;
     }
 
-    public void Update()
+    public Item()
     {
-        
+
     }
 
     public Sprite getImage()

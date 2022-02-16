@@ -64,11 +64,14 @@ public class Inventory
 
         if(selected >= 0)
         {
+            Equipment item = items[selected] as Equipment;
             icon.SetActive(true);
-            icon.GetComponent<Image>().sprite = items[selected].getImage();
-            Name.GetComponent<Text>().text = items[selected].getName();
-            Flavor.GetComponent<Text>().text = items[selected].getFlavor();
-            Detail.GetComponent<Text>().text = items[selected].getDetails();
+            icon.GetComponent<Image>().sprite = item.getImage();
+            Name.GetComponent<Text>().text = item.getName();
+            Flavor.GetComponent<Text>().text = item.getFlavor();
+            Detail.GetComponent<Text>().text = item.getDetails();
+
+            Debug.Log("Name:" + item.getName());
             //selected = -1;
         }
         else

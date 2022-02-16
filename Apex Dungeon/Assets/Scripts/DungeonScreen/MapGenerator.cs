@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class MapGenerator : MonoBehaviour
 {
+    ItemGenerator itemGen;
+
     public static Tile[,] tileMap;
     public static GameObject[,] shadowMap;
     public static List<GameObject> activeShadows;
@@ -41,6 +43,8 @@ public class MapGenerator : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        itemGen = this.GetComponent<ItemGenerator>();
+
         maxWidth = 15;
         minWidth = 8;
         maxHeight = 15;
@@ -682,9 +686,19 @@ public class MapGenerator : MonoBehaviour
                 }
                 if (valid)
                 {
-                    InstantiateRandom(Items, row, col);
+                    float coin = Random.Range(0f, 1f);
+                    //Debug.Log(coin);
+                    if(coin > 0.5)
+                    {
+                        GameObject item = itemGen.GenerateItem(1,"chestplate", 3);
+                        Debug.Log("CREATING:" + item.GetComponent<Equipment>().getName());
+                        InstantiateSingle(item, row, col);
+                    }
+                    else
+                    {
+                        InstantiateRandom(Items, row, col);
+                    }
                     //tileMap[row, col].occupied = 3;
-
                 }
             }
         }
