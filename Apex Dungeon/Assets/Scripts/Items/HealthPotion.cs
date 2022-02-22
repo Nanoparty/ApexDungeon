@@ -6,23 +6,30 @@ public class HealthPotion :  Item
 {
     private void Start()
     {
-        name = "Health Potion";
-        flavor = "Tastes like cherry!";
-        details = "Instantly recovers 20 hp";
+        itemName = "Health Potion";
+        flavorText = "Tastes like cherry!";
+        description = "Instantly recovers 20 hp";
     }
 
     public HealthPotion(Sprite s)
     {
-        img = s;
-        name = "Health Potion";
-        flavor = "Tastes like cherry!";
-        details = "Instantly recovers 20 hp";
+        image = s;
+        itemName = "Health Potion";
+        flavorText = "Tastes like cherry!";
+        description = "Instantly recovers 20 hp";
     }
 
-    public override void useItem()
+    public override void UseItem()
     {
         Debug.Log("USE HEALTH POTION");
         Player p = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         p.takeDamage(20);
     }
+
+    public override void Create()
+    {
+        throw new System.NotImplementedException();
+    }
+
+ 
 }

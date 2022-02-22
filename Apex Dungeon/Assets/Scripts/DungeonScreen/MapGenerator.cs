@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class MapGenerator : MonoBehaviour
 {
-    ItemGenerator itemGen;
+    EquipmentGenerator equipGen;
 
     public static Tile[,] tileMap;
     public static GameObject[,] shadowMap;
@@ -24,6 +24,11 @@ public class MapGenerator : MonoBehaviour
     public static List<Room> rooms;
 
     private Transform dungeon;
+    private Transform shadowContainer;
+    private Transform mapContainer;
+    private Transform itemContainer;
+    private Transform enemyContainer;
+    private Transform furnitureContainer;
 
     public GameObject Opening;
 
@@ -43,7 +48,7 @@ public class MapGenerator : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        itemGen = this.GetComponent<ItemGenerator>();
+        equipGen = this.GetComponent<EquipmentGenerator>();
 
         maxWidth = 15;
         minWidth = 8;
@@ -57,6 +62,17 @@ public class MapGenerator : MonoBehaviour
         visibleTiles = new List<Vector2>();
 
         dungeon = new GameObject("Dungeon").transform;
+        shadowContainer = new GameObject("ShadowContainer").transform;
+        mapContainer = new GameObject("MapContainer").transform;
+        itemContainer = new GameObject("ItemContainer").transform;
+        enemyContainer = new GameObject("EnemyContainer").transform;
+        furnitureContainer = new GameObject("FurnitureContainer").transform;
+
+        shadowContainer.parent = dungeon.transform;
+        mapContainer.parent = dungeon.transform;
+        itemContainer.parent = dungeon.transform;
+        enemyContainer.parent = dungeon.transform;
+        furnitureContainer.parent = dungeon.transform;
 
         GameObject op = GameObject.Instantiate(Opening, new Vector3(0, 0, 0), Quaternion.identity);
         op.transform.GetChild(0).gameObject.GetComponent<Text>().text = GameManager.gmInstance.DungeonName;
@@ -85,17 +101,15 @@ public class MapGenerator : MonoBehaviour
         SpawnEnemies();
         SpawnFurniture();
         SpawnItems();
-
         InstantiateShadowMap();
+
     }
 
     public void Reset()
     {
-        Debug.Log("CLEARING");
         Destroy(dungeon.gameObject);
         GameManager.gmInstance.clearEnemies();
         GameManager.gmInstance.clearFurniture();
-        Debug.Log("RESET");
         Start();
     }
 
@@ -114,13 +128,6 @@ public class MapGenerator : MonoBehaviour
     void InitializeShadowMap()
     {
         shadowMap = new GameObject[height, width];
-        for (int i = 0; i < width; i++)
-        {
-            for (int j = 0; j < height; j++)
-            {
-                shadowMap[j, i] = new GameObject();
-            }
-        }
     }
 
     int CreateVerticleHallway(int startR, int endR, int col)
@@ -338,7 +345,6 @@ public class MapGenerator : MonoBehaviour
             int c = room.col;
             int w = room.width;
             int h = room.height;
-            //Debug.Log(r + " " + " " + c + " " + w + " " + h);
             for(int j = 0; j < h; j++)
             {
                 for(int k = 0; k < w; k++)
@@ -367,7 +373,7 @@ public class MapGenerator : MonoBehaviour
                 float row = dungeon.position.y + i;
                 float col = dungeon.position.x + j;
 
-                shadowMap[i,j] = InstantiateSingle(Shadow, row, col);
+                shadowMap[i,j] = InstantiateSingle(Shadow, row, col, shadowContainer);
             }
         }
     }
@@ -402,7 +408,6 @@ public class MapGenerator : MonoBehaviour
             int rWidth = curRoom.width;
             int rHeight = curRoom.height;
 
-            //Debug.Log(startRow + " " + startCol + " " + rWidth + " " + rHeight);
 
             SetShadowVisible(r, c);
 
@@ -411,7 +416,6 @@ public class MapGenerator : MonoBehaviour
                 for(int j = startRow; j < startRow + rHeight; j++)
                 {
                     SetShadowVisible(j, i);
-                    //Debug.Log("Set Visible " + j + " " + i);
                 }
             }
         }
@@ -532,7 +536,6 @@ public class MapGenerator : MonoBehaviour
 
     void SpawnMap()
     {
-        //Debug.Log(tileMap[0, 0].type);
         for (int i = 0; i < height; i++)
         {
             for (int j = 0; j < width; j++)
@@ -544,18 +547,15 @@ public class MapGenerator : MonoBehaviour
                 switch (type)
                 {
                     case 1:
-                        InstantiateRandom(floor, row, col);
+                        InstantiateRandom(floor, row, col, mapContainer);
                         break;
                     case 2:
-                        InstantiateSingle(getWall((int)row,(int)col), row, col); 
+                        InstantiateSingle(getWall((int)row,(int)col), row, col, dungeon); 
                         break;
                     case 3:
-                        InstantiateRandom(floor, row, col);
+                        InstantiateRandom(floor, row, col, mapContainer);
                         break;
                 }
-                    
-
-
             }
         }
     }
@@ -568,7 +568,7 @@ public class MapGenerator : MonoBehaviour
         int row = Random.Range(room.row + 1, room.row + room.height - 2);
         int col = Random.Range(room.col + 1, room.col + room.width - 2);
 
-        InstantiateSingle(Player, row, col);
+        InstantiateSingle(Player, row, col, dungeon);
         tileMap[row, col].occupied = 1; 
     }
 
@@ -593,7 +593,7 @@ public class MapGenerator : MonoBehaviour
             }
             if (valid)
             {
-                InstantiateRandom(Enemy, row, col);
+                InstantiateRandom(Enemy, row, col, enemyContainer);
                 tileMap[row, col].occupied = 2;
             }
             
@@ -624,7 +624,7 @@ public class MapGenerator : MonoBehaviour
                 }
                 if (valid)
                 {
-                    InstantiateRandom(Furniture, row, col);
+                    InstantiateRandom(Furniture, row, col, furnitureContainer);
                     tileMap[row, col].occupied = 3;
 
                 }
@@ -653,12 +653,11 @@ public class MapGenerator : MonoBehaviour
         }
         if (valid)
         {
-            InstantiateSingle(Stairs, row, col);
+            InstantiateSingle(Stairs, row, col, dungeon);
             tileMap[row, col].stairs = true;
         }
         else
         {
-            Debug.Log("STAIRS FAILED");
         }
         
     }
@@ -687,35 +686,36 @@ public class MapGenerator : MonoBehaviour
                 if (valid)
                 {
                     float coin = Random.Range(0f, 1f);
-                    //Debug.Log(coin);
-                    if(coin > 0.5)
+                    Vector3 position = new Vector3(col, row, 0f);
+                    if (coin > 0.5)
                     {
-                        GameObject item = itemGen.GenerateItem(1,"chestplate", 3);
-                        Debug.Log("CREATING:" + item.GetComponent<Equipment>().getName());
-                        InstantiateSingle(item, row, col);
+                        GameObject item = equipGen.GenerateEquipment(1);
+                        item.transform.parent = itemContainer.transform;
+                        item.transform.position = position;
                     }
                     else
                     {
-                        InstantiateRandom(Items, row, col);
+                        GameObject item = ConsumableGenerator.CreateRandomConsumable();
+                        item.transform.parent = itemContainer.transform;
+                        item.transform.position = position;
                     }
-                    //tileMap[row, col].occupied = 3;
                 }
             }
         }
     }
 
-    GameObject InstantiateSingle(GameObject prefab, float row, float col)
+    GameObject InstantiateSingle(GameObject prefab, float row, float col, Transform parent)
     {
         Vector3 position = new Vector3(col, row, 0f);
         GameObject tileInstance = Instantiate(prefab, position, Quaternion.identity) as GameObject;
-        tileInstance.transform.parent = dungeon.transform;
+        tileInstance.transform.parent = parent.transform;
         return tileInstance;
     }
 
-    void InstantiateRandom(GameObject[] tileArray, float row, float col)
+    void InstantiateRandom(GameObject[] tileArray, float row, float col, Transform parent)
     {
         GameObject tileChoice = tileArray[Random.Range(0, tileArray.Length)];
-        InstantiateSingle(tileChoice, row, col);
+        InstantiateSingle(tileChoice, row, col, parent);
     }
 
     GameObject getRandom(GameObject[] tileArray, float row, float col)
