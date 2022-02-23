@@ -632,6 +632,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2254d18b36b0a6e4a9b30f9419b89cbc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DunGen: {fileID: 11400000, guid: 25e6f34c608624c95aa566080b2171fe, type: 2}
   playersTurn: 1
   doingSetup: 1
   tileCursor: {fileID: 6215670243773319783, guid: 456153ad376510b4aba28c4ee57cdfc4,
@@ -844,14 +845,13 @@ GameObject:
   m_Component:
   - component: {fileID: 1002488685}
   - component: {fileID: 1002488684}
-  - component: {fileID: 1002488686}
   m_Layer: 0
   m_Name: DungeonGenerator
   m_TagString: DunGen
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1002488684
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -864,6 +864,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 686596c629d72ed4196ac12a903e5d87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  equipmentGenerator: {fileID: 11400000, guid: a1b647160947a4bb0a02a45cd8bbf43a, type: 2}
+  consumableGenerator: {fileID: 11400000, guid: c1c853c89f8ce45a8889e9cc453a0359,
+    type: 2}
   maxWidth: 0
   minWidth: 0
   maxHeight: 0
@@ -931,60 +934,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1002488686
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1002488683}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1cd3fd74ed10b4e73aeb1448f8349360, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  LeatherHelm: {fileID: -2153233090722174620, guid: 74c35d4f0bb644b4e8a4704cfc886ee5,
-    type: 3}
-  LeatherChest: {fileID: 2122108237533440479, guid: 74c35d4f0bb644b4e8a4704cfc886ee5,
-    type: 3}
-  LeatherGloves: {fileID: -4546512319583743773, guid: 74c35d4f0bb644b4e8a4704cfc886ee5,
-    type: 3}
-  LeatherLegs: {fileID: 8008096877017460302, guid: 74c35d4f0bb644b4e8a4704cfc886ee5,
-    type: 3}
-  LeatherBoots: {fileID: -9027453835079351985, guid: 74c35d4f0bb644b4e8a4704cfc886ee5,
-    type: 3}
-  IronHelm: {fileID: -1641025930270569886, guid: 74c35d4f0bb644b4e8a4704cfc886ee5,
-    type: 3}
-  IronChest: {fileID: -4931262060024934661, guid: 74c35d4f0bb644b4e8a4704cfc886ee5,
-    type: 3}
-  IronGloves: {fileID: -3682030269140071588, guid: 74c35d4f0bb644b4e8a4704cfc886ee5,
-    type: 3}
-  IronLegs: {fileID: -4155313339634293907, guid: 74c35d4f0bb644b4e8a4704cfc886ee5,
-    type: 3}
-  IronBoots: {fileID: -936292847149207210, guid: 74c35d4f0bb644b4e8a4704cfc886ee5,
-    type: 3}
-  DiamondHelm: {fileID: 9197171650093113922, guid: 74c35d4f0bb644b4e8a4704cfc886ee5,
-    type: 3}
-  DiamondChest: {fileID: -8030652576010598226, guid: 74c35d4f0bb644b4e8a4704cfc886ee5,
-    type: 3}
-  DiamondGloves: {fileID: -790414702260015268, guid: 74c35d4f0bb644b4e8a4704cfc886ee5,
-    type: 3}
-  DiamondLegs: {fileID: 2176716467871476539, guid: 74c35d4f0bb644b4e8a4704cfc886ee5,
-    type: 3}
-  DiamondBoots: {fileID: -5736847442053134693, guid: 74c35d4f0bb644b4e8a4704cfc886ee5,
-    type: 3}
-  IronRing: {fileID: 3746595642125353674, guid: 74c35d4f0bb644b4e8a4704cfc886ee5,
-    type: 3}
-  GoldRing: {fileID: 5419218712787471922, guid: 74c35d4f0bb644b4e8a4704cfc886ee5,
-    type: 3}
-  DiamondRing: {fileID: 4940935424784061072, guid: 74c35d4f0bb644b4e8a4704cfc886ee5,
-    type: 3}
-  IronNecklace: {fileID: 7858502741530047102, guid: 74c35d4f0bb644b4e8a4704cfc886ee5,
-    type: 3}
-  GoldNecklace: {fileID: 8594560914532804309, guid: 74c35d4f0bb644b4e8a4704cfc886ee5,
-    type: 3}
-  DiamondNecklace: {fileID: -4424439043562724455, guid: 74c35d4f0bb644b4e8a4704cfc886ee5,
-    type: 3}
 --- !u!1 &1046310760
 GameObject:
   m_ObjectHideFlags: 0

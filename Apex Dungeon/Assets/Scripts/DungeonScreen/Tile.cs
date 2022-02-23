@@ -9,6 +9,7 @@ public class Tile
     public int col;
     public float x;
     public float y;
+    
 
     /*
     0 = void

@@ -5,8 +5,8 @@ using UnityEngine.UI;
 
 public class MapGenerator : MonoBehaviour
 {
-    EquipmentGenerator equipGen;
-
+    public EquipmentGenerator equipmentGenerator;
+    public ConsumableGenerator consumableGenerator;
     public static Tile[,] tileMap;
     public static GameObject[,] shadowMap;
     public static List<GameObject> activeShadows;
@@ -48,8 +48,6 @@ public class MapGenerator : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        equipGen = this.GetComponent<EquipmentGenerator>();
-
         maxWidth = 15;
         minWidth = 8;
         maxHeight = 15;
@@ -550,7 +548,7 @@ public class MapGenerator : MonoBehaviour
                         InstantiateRandom(floor, row, col, mapContainer);
                         break;
                     case 2:
-                        InstantiateSingle(getWall((int)row,(int)col), row, col, dungeon); 
+                        InstantiateSingle(getWall((int)row,(int)col), row, col, mapContainer); 
                         break;
                     case 3:
                         InstantiateRandom(floor, row, col, mapContainer);
@@ -689,13 +687,14 @@ public class MapGenerator : MonoBehaviour
                     Vector3 position = new Vector3(col, row, 0f);
                     if (coin > 0.5)
                     {
-                        GameObject item = equipGen.GenerateEquipment(1);
+                        GameObject item = equipmentGenerator.GenerateEquipment(1);
                         item.transform.parent = itemContainer.transform;
                         item.transform.position = position;
+
                     }
                     else
                     {
-                        GameObject item = ConsumableGenerator.CreateRandomConsumable();
+                        GameObject item = consumableGenerator.CreateRandomConsumable();
                         item.transform.parent = itemContainer.transform;
                         item.transform.position = position;
                     }

@@ -1,11 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
 
     public static GameManager gmInstance = null;
+    public static DungeonObject Dungeon;
+    public DungeonGenerator DunGen;
     public bool playersTurn = false;
     
 
@@ -44,7 +47,9 @@ public class GameManager : MonoBehaviour
 
     void Setup()
     {
-        
+        if(SceneManager.GetActiveScene().name == "test") {
+            //Dungeon = DunGen.Initalize();
+        }
     }
 
 

@@ -1,17 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+[CreateAssetMenu(fileName = "ConsumableGenerator", menuName = "ScriptableObjects/Consumable Generator")]
 public class ConsumableGenerator : ScriptableObject
 {
-    public static Sprite redPotion;
-    public static Sprite bluePotion;
+    public Sprite redPotion;
+    public Sprite bluePotion;
+    public Sprite greenPotion;
 
-    private void OnEnable()
-    {
-        Debug.Log("Enable Consumable Generator");
-    }
-
-    public static GameObject CreateHealthPotion()
+    public GameObject CreateHealthPotion()
     {
         GameObject item = new GameObject("HealthPotion");
 
@@ -30,7 +27,7 @@ public class ConsumableGenerator : ScriptableObject
         return item;
     }
 
-    public static GameObject CreateManaPotion()
+    public GameObject CreateManaPotion()
     {
         GameObject item = new GameObject("ManaPotion");
 
@@ -49,7 +46,7 @@ public class ConsumableGenerator : ScriptableObject
         return item;
     }
 
-    public static GameObject CreateRandomConsumable()
+    public GameObject CreateRandomConsumable()
     {
         GameObject consumable = null;
 

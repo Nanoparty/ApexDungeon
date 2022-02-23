@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EquipmentGenerator : MonoBehaviour
+[CreateAssetMenu(fileName = "EquipmentGenerator", menuName = "ScriptableObjects/Equipment Generator")]
+public class EquipmentGenerator : ScriptableObject
 {
     //Images
     public Sprite LeatherHelm;
@@ -45,11 +46,11 @@ public class EquipmentGenerator : MonoBehaviour
 
     string modifier;
 
-    public GameObject GenerateEquipment(int lvl, string type, int tier)
+    public GameObject GenerateEquipment(int inputLevel, string inputType, int inputTier)
     {
-        this.level = lvl;
-        this.type = type;
-        this.tier = tier;
+        level = inputLevel;
+        type = inputType;
+        tier = inputTier;
 
         switch (level)
         {
