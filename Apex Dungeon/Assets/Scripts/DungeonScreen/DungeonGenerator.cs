@@ -106,15 +106,18 @@ public class DungeonGenerator : ScriptableObject
         dungeonObject.shadowMap = shadowMap;
         dungeonObject.tileMap = tileMap;
         dungeonObject.visibleTiles = visibleTiles;
+        dungeonObject.rooms = rooms;
+        dungeonObject.width = width;
+        dungeonObject.height = height;
         return dungeonObject;
     }
 
-    public void Reset()
+    public DungeonObject Reset()
     {
         Destroy(dungeon.gameObject);
         GameManager.gmInstance.clearEnemies();
         GameManager.gmInstance.clearFurniture();
-        Initalize();
+        return Initalize();
     }
 
     void InitializeTileMap()

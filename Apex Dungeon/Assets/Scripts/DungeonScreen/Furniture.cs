@@ -29,7 +29,7 @@ public class Furniture : MonoBehaviour
         }
         if(health <= 0)
         {
-            MapGenerator.tileMap[row, col].occupied = 0;
+            GameManager.gmInstance.Dungeon.tileMap[row, col].occupied = 0;
             GameManager.gmInstance.removeFurniture(this);
             Destroy(this.gameObject);
         }

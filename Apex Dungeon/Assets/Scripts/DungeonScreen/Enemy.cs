@@ -44,7 +44,7 @@ public class Enemy : MovingEntity
     protected override void Update()
     {
         base.Update();
-        if (!MapGenerator.tileMap[row, col].visible)
+        if (!GameManager.gmInstance.Dungeon.tileMap[row, col].visible)
         {
             animator.enabled = false;
             sr.enabled = false;
@@ -71,7 +71,7 @@ public class Enemy : MovingEntity
     {
         if (dead)
         {
-            MapGenerator.tileMap[row, col].occupied = 0;
+            GameManager.gmInstance.Dungeon.tileMap[row, col].occupied = 0;
             GameManager.gmInstance.removeEnemy(this);
             Destroy(this.gameObject);
             

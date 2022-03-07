@@ -125,7 +125,7 @@ public class Player : MovingEntity
 
         updateUI();
 
-        MapGenerator.UpdateShadows(row, col);
+        GameManager.gmInstance.Dungeon.UpdateShadows(row, col);
 
         if (openInventory)
         {
@@ -217,7 +217,8 @@ public class Player : MovingEntity
             Data.hp = hp;
             Data.mp = mp;
             Data.gold = gold;
-            GameObject.FindGameObjectWithTag("DunGen").GetComponent<MapGenerator>().Reset();
+            GameManager.gmInstance.Reset();
+            //GameObject.FindGameObjectWithTag("DunGen").GetComponent<MapGenerator>().Reset();
         }
         if(other.gameObject.tag == "Potion")
         {

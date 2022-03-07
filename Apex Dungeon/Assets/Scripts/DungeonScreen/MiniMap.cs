@@ -29,8 +29,8 @@ public class MiniMap
         buildMap();
         //buildMiniMap();
 
-        width = MapGenerator.width;
-        height = MapGenerator.height;
+        width = GameManager.gmInstance.Dungeon.width;
+        height = GameManager.gmInstance.Dungeon.height;
         loadSprites();
 
         
@@ -115,29 +115,29 @@ public class MiniMap
         {
             for(int j = 0;j < width; j++)
             {
-                if (MapGenerator.tileMap[i, j].explored == false) continue;
-                if(MapGenerator.tileMap[i,j].type == 2)
+                if (GameManager.gmInstance.Dungeon.tileMap[i, j].explored == false) continue;
+                if(GameManager.gmInstance.Dungeon.tileMap[i,j].type == 2)
                 {
                     Vector3 pos = new Vector3(xOff + j * size,yOff + i * size, 0f);
                     GameObject b = GameObject.Instantiate(block, pos, Quaternion.identity);
                     b.GetComponent<Image>().sprite = icons[4];
                     b.transform.SetParent(mapHolder.transform, false);
                 }
-                if (MapGenerator.tileMap[i, j].type == 1 || MapGenerator.tileMap[i, j].type == 3)
+                if (GameManager.gmInstance.Dungeon.tileMap[i, j].type == 1 || MapGenerator.tileMap[i, j].type == 3)
                 {
                     Vector3 pos = new Vector3(xOff + j * size, yOff + i * size, 0f);
                     GameObject b = GameObject.Instantiate(block, pos, Quaternion.identity);
                     b.GetComponent<Image>().sprite = icons[0];
                     b.transform.SetParent(mapHolder.transform, false);
                 }
-                if (MapGenerator.isPlayer(i, j))
+                if (GameManager.gmInstance.Dungeon.isPlayer(i, j))
                 {
                     Vector3 pos = new Vector3(xOff + j * size, yOff + i * size, 0f);
                     GameObject b = GameObject.Instantiate(block, pos, Quaternion.identity);
                     b.GetComponent<Image>().sprite = icons[1];
                     b.transform.SetParent(mapHolder.transform, false);
                 }
-                if (MapGenerator.isEnemy(i, j))
+                if (GameManager.gmInstance.Dungeon.isEnemy(i, j))
                 {
                     Vector3 pos = new Vector3(xOff + j * size, yOff + i * size, 0f);
                     GameObject b = GameObject.Instantiate(block, pos, Quaternion.identity);

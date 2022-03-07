@@ -19,6 +19,10 @@ public class Consumable : Item
 
     public override void UseItem()
     {
-        
+        if(itemName == "Health Potion"){
+            Debug.Log("USE HEALTH POTION");
+            Player p = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+            p.takeDamage(20);
+        }
     }
 }

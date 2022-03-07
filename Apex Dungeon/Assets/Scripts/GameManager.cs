@@ -7,7 +7,7 @@ public class GameManager : MonoBehaviour
 {
 
     public static GameManager gmInstance = null;
-    public static DungeonObject Dungeon;
+    public DungeonObject Dungeon;
     public DungeonGenerator DunGen;
     public bool playersTurn = false;
     
@@ -48,10 +48,13 @@ public class GameManager : MonoBehaviour
     void Setup()
     {
         if(SceneManager.GetActiveScene().name == "test") {
-            //Dungeon = DunGen.Initalize();
+            Dungeon = DunGen.Initalize();
         }
     }
 
+    public void Reset(){
+        Dungeon = DunGen.Reset();
+    }
 
     void Update()
     {
