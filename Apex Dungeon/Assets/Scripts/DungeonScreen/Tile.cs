@@ -60,9 +60,13 @@ public class Tile
 
     public bool getWall()
     {
-        if(type == 2 || occupied == 2 || occupied == 3)
+        if(type == 2 || occupied == 3)
         {
             return true;
+        }
+        if(occupied == 2){
+            //check if visible
+            if (visible) return true;
         }
         return false;
     }

@@ -43,18 +43,26 @@ public class Player : MovingEntity
     protected override void Start()
     {
         //Values
-        defense = 10;
+        
         hp = 100;
         mp = 50;
         maxMp = 50;
         maxHp = 100;
-        type = 1;
+
+        expLevel = 5;
+        exp = 50;
+        maxExp = 100;
+
         damage = 10;
+        defense = 10;
+        intelligence = 5;
+        critical = 8;
+        evade = 15;
+        blockStat = 12;
+
+        type = 1;
         gold = 0;
         start = 0;
-
-        
-     
 
         //GameObjects
         animator = GetComponent<Animator>();
@@ -76,8 +84,8 @@ public class Player : MovingEntity
 
         mini = new MiniMap(mapHolder, block, pblock);
 
-        hpbar = GameObject.FindGameObjectWithTag("hpbar").GetComponent<Image>();
-        mpbar = GameObject.FindGameObjectWithTag("mpbar").GetComponent<Image>();
+        hpbar = GameObject.FindGameObjectWithTag("hpbar").transform.GetChild(1).gameObject.GetComponent<Image>();
+        mpbar = GameObject.FindGameObjectWithTag("mpbar").transform.GetChild(1).gameObject.GetComponent<Image>();
         OpeningScreen = GameObject.FindGameObjectWithTag("Opening");
         
         
@@ -370,8 +378,8 @@ public class Player : MovingEntity
         if (mp > maxMp)
             mp = maxMp;
 
-        hpbar.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, (float)hp / (float)maxHp * 400f);
-        mpbar.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, (float)mp / (float)maxMp * 400f);
+        hpbar.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, (float)hp / (float)maxHp * 367);
+        mpbar.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, (float)mp / (float)maxMp * 367);
     }
 
     public bool getInventory()
@@ -382,5 +390,36 @@ public class Player : MovingEntity
     public void setInventory(bool b)
     {
         openInventory = b;
+    }
+
+    public int getStrength(){
+        return damage;
+    }
+    public int getDefense(){
+        return defense;
+    }
+    public int getIntelligence(){
+        return intelligence;
+    }
+    public int getCritical(){
+        return critical;
+    }
+    public int getEvade(){
+        return evade;
+    }
+    public int getBlock(){
+        return blockStat;
+    }
+    public int getGold(){
+        return gold;
+    }
+    public int getExpLevel(){
+        return expLevel;
+    }
+    public int getExp(){
+        return exp;
+    }
+    public int getMaxExp(){
+        return maxExp;
     }
 }

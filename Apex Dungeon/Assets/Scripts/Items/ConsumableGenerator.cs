@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 [CreateAssetMenu(fileName = "ConsumableGenerator", menuName = "ScriptableObjects/Consumable Generator")]
@@ -20,7 +20,7 @@ public class ConsumableGenerator : ScriptableObject
         item.GetComponent<BoxCollider2D>().isTrigger = true;
 
         item.AddComponent<Consumable>();
-        item.GetComponent<Consumable>().SetStats("HealthPotion", "Cherry Flavor", "Heals 10 HP", redPotion);
+        item.GetComponent<Consumable>().SetStats("Health Potion", "Cherry Flavor", "Heals 10 HP", redPotion);
 
         item.tag = "Potion";
 

@@ -123,7 +123,7 @@ public class MiniMap
                     b.GetComponent<Image>().sprite = icons[4];
                     b.transform.SetParent(mapHolder.transform, false);
                 }
-                if (GameManager.gmInstance.Dungeon.tileMap[i, j].type == 1 || MapGenerator.tileMap[i, j].type == 3)
+                if (GameManager.gmInstance.Dungeon.tileMap[i, j].type == 1 || GameManager.gmInstance.Dungeon.tileMap[i, j].type == 3)
                 {
                     Vector3 pos = new Vector3(xOff + j * size, yOff + i * size, 0f);
                     GameObject b = GameObject.Instantiate(block, pos, Quaternion.identity);

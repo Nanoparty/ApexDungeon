@@ -8,8 +8,18 @@ public abstract class MovingEntity : MonoBehaviour
     protected int maxMp;
     protected int hp;
     protected int mp;
+
+    protected int expLevel;
+    protected int exp;
+    protected int maxExp;
+
     protected int defense;
     protected int damage;
+    protected int intelligence;
+    protected int critical;
+    protected int evade;
+    protected int blockStat;
+
     protected bool dead;
 
     public float moveTime = 0.1f;
