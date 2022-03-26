@@ -6,23 +6,28 @@ public class IronNecklace : Item
 {
     private void Start()
     {
-        name = "Iron Necklace";
-        flavor = "Almost Classy";
-        details = "Basic accessory that offers +10 Intelligence";
+        itemName = "Iron Necklace";
+        flavorText = "Almost Classy";
+        description = "Basic accessory that offers +10 Intelligence";
     }
 
     public IronNecklace(Sprite s)
     {
-        img = s;
-        name = "Iron Necklace";
-        flavor = "Almost Classy";
-        details = "Basic accessory that offers +10 Intelligence";
+        image = s;
+        itemName = "Iron Necklace";
+        flavorText = "Almost Classy";
+        description = "Basic accessory that offers +10 Intelligence";
     }
 
-    public override void useItem()
+    public override void UseItem()
     {
         Debug.Log("Equip Iron Necklace");
         Player p = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         //p.equip(this)
+    }
+
+    public override void Create()
+    {
+        throw new System.NotImplementedException();
     }
 }

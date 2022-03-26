@@ -6,23 +6,28 @@ public class IronChestplate : Item
 {
     private void Start()
     {
-        name = "Iron Chestplate";
-        flavor = "Gives the appearance of abs";
-        details = "Standard issue chestplate that offers +50 defense";
+        itemName = "Iron Chestplate";
+        flavorText = "Gives the appearance of abs";
+        description = "Standard issue chestplate that offers +50 defense";
     }
 
     public IronChestplate(Sprite s)
     {
-        img = s;
-        name = "Iron Chestplate";
-        flavor = "Gives the appearance of abs";
-        details = "Standard issue chestplate that offers +50 defense";
+        image = s;
+        itemName = "Iron Chestplate";
+        flavorText = "Gives the appearance of abs";
+        description = "Standard issue chestplate that offers +50 defense";
     }
 
-    public override void useItem()
+    public override void UseItem()
     {
         Debug.Log("Equip Iron Chestplate");
         Player p = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         //p.equip(this)
+    }
+
+    public override void Create()
+    {
+        throw new System.NotImplementedException();
     }
 }

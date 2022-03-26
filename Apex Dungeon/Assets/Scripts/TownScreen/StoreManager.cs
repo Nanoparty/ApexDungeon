@@ -141,7 +141,7 @@ public class StoreManager : MonoBehaviour
             salePopup = true;
 
             string type = purchaseItems ? "purchase" : "sell";
-            string itemName = items[selected].getName() ?? "item";
+            string itemName = items[selected].itemName ?? "item";
             string value = "100";
 
             SaleText.GetComponent<TMP_Text>().text = "Would you like to " + type + " " + itemName + " for " + value + " gold?";
@@ -234,7 +234,7 @@ public class StoreManager : MonoBehaviour
             if (i < items.Count)
             {
                 GameObject icon = itemslot.transform.GetChild(0).gameObject;
-                icon.GetComponent<Image>().sprite = items[i].getImage();
+                icon.GetComponent<Image>().sprite = items[i].image;
             }
             else
             {
@@ -260,7 +260,7 @@ public class StoreManager : MonoBehaviour
             {
                 Debug.Log("Item:" + i);
                 GameObject icon = itemSlots[i].transform.GetChild(0).gameObject;
-                icon.GetComponent<Image>().sprite = items[i].getImage();
+                icon.GetComponent<Image>().sprite = items[i].image;
                 icon.SetActive(true);
             }
             else
@@ -286,10 +286,10 @@ public class StoreManager : MonoBehaviour
         if (selected >= 0)
         {
             Icon.SetActive(true);
-            Icon.GetComponent<Image>().sprite = items[selected].getImage();
-            Name.GetComponent<TMP_Text>().text = items[selected].getName();
-            Flavor.GetComponent<TMP_Text>().text = items[selected].getFlavor();
-            Detail.GetComponent<TMP_Text>().text = items[selected].getDetails();
+            Icon.GetComponent<Image>().sprite = items[selected].image;
+            Name.GetComponent<TMP_Text>().text = items[selected].itemName;
+            Flavor.GetComponent<TMP_Text>().text = items[selected].flavorText;
+            Detail.GetComponent<TMP_Text>().text = items[selected].description;
         }
         else
         {

@@ -64,15 +64,14 @@ public class Inventory
 
         if(selected >= 0)
         {
-            Equipment item = items[selected] as Equipment;
+            Item item = items[selected];
             icon.SetActive(true);
-            icon.GetComponent<Image>().sprite = item.getImage();
-            Name.GetComponent<Text>().text = item.getName();
-            Flavor.GetComponent<Text>().text = item.getFlavor();
-            Detail.GetComponent<Text>().text = item.getDetails();
+            icon.GetComponent<Image>().sprite = item.image;
+            Name.GetComponent<Text>().text = item.itemName;
+            Flavor.GetComponent<Text>().text = item.flavorText;
+            Detail.GetComponent<Text>().text = item.description;
 
-            Debug.Log("Name:" + item.getName());
-            //selected = -1;
+            
         }
         else
         {
@@ -88,7 +87,7 @@ public class Inventory
     {
         if (selected >= 0)
         {
-            items[selected].useItem();
+            items[selected].UseItem();
             items.RemoveAt(selected);
             selected = -1;
             updateInventory();
@@ -167,7 +166,7 @@ public class Inventory
             {
                 Debug.Log("Update");
                 GameObject icon = itemslot.transform.GetChild(0).gameObject;
-                icon.GetComponent<Image>().sprite = items[i].getImage();
+                icon.GetComponent<Image>().sprite = items[i].image;
                 icon.SetActive(true);
             }
             else
@@ -210,7 +209,7 @@ public class Inventory
             if(i < items.Count)
             {
                 GameObject icon = itemslot.transform.GetChild(0).gameObject;
-                icon.GetComponent<Image>().sprite = items[i].getImage();
+                icon.GetComponent<Image>().sprite = items[i].image;
             }
             else
             {

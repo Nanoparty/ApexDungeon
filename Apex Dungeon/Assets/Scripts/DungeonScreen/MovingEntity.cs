@@ -8,8 +8,18 @@ public abstract class MovingEntity : MonoBehaviour
     protected int maxMp;
     protected int hp;
     protected int mp;
+
+    protected int expLevel;
+    protected int exp;
+    protected int maxExp;
+
     protected int defense;
     protected int damage;
+    protected int intelligence;
+    protected int critical;
+    protected int evade;
+    protected int blockStat;
+
     protected bool dead;
 
     public float moveTime = 0.1f;
@@ -54,7 +64,7 @@ public abstract class MovingEntity : MonoBehaviour
 
     bool checkValidTile(Vector2 next)
     {
-        if (MapGenerator.tileMap[(int)next.y, (int)next.x].getBlocked())
+        if (GameManager.gmInstance.Dungeon.tileMap[(int)next.y, (int)next.x].getBlocked())
         {
             doneMoving();
             return false;
@@ -65,8 +75,8 @@ public abstract class MovingEntity : MonoBehaviour
 
     void setMapOccupancy()
     {
-        MapGenerator.tileMap[row, col].occupied = 0;
-        MapGenerator.tileMap[(int)target.y, (int)target.x].occupied = type;
+        GameManager.gmInstance.Dungeon.tileMap[row, col].occupied = 0;
+        GameManager.gmInstance.Dungeon.tileMap[(int)target.y, (int)target.x].occupied = type;
     }
 
     void updateLocalPosition()
@@ -77,8 +87,8 @@ public abstract class MovingEntity : MonoBehaviour
 
     protected bool Move(int r, int c)
     {
-        Tile startTile = MapGenerator.tileMap[row, col];
-        Tile endTile = MapGenerator.tileMap[r, c];
+        Tile startTile = GameManager.gmInstance.Dungeon.tileMap[row, col];
+        Tile endTile = GameManager.gmInstance.Dungeon.tileMap[r, c];
         
         //If destination is current location
         if (row == r && col == c){
@@ -87,7 +97,7 @@ public abstract class MovingEntity : MonoBehaviour
 
         if (!moving && atTarget)
         {
-            if (MapGenerator.tileMap[r, c].getWall())
+            if (GameManager.gmInstance.Dungeon.tileMap[r, c].getWall())
             {
                 return false;
             }
@@ -128,7 +138,7 @@ public abstract class MovingEntity : MonoBehaviour
             {
                 target = path.nodes.Dequeue();
 
-                if (!MapGenerator.tileMap[(int)target.y, (int)target.x].getBlocked())
+                if (!GameManager.gmInstance.Dungeon.tileMap[(int)target.y, (int)target.x].getBlocked())
                 {
                     moving = true;
                     atTarget = false;
@@ -271,7 +281,7 @@ public abstract class MovingEntity : MonoBehaviour
 
     private void UpdateShadows(int r, int c)
     {
-        MapGenerator.UpdateShadows(r, c);
+        GameManager.gmInstance.Dungeon.UpdateShadows(r, c);
     }
 
 

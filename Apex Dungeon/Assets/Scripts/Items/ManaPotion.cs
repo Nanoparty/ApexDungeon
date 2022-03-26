@@ -7,17 +7,22 @@ public class ManaPotion : Item
 
     private void Start()
     {
-        name = "Mana Potion";
-        flavor = "Tastes like Blueberry!";
-        details = "Instantly recovers 20 mp";
+        itemName = "Mana Potion";
+        flavorText = "Tastes like Blueberry!";
+        description = "Instantly recovers 20 mp";
     }
 
 
-    public override void useItem()
+    public override void UseItem()
     {
         Debug.Log("USE MANA POTION");
         Player p = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         //p.takeDamage(20);
         p.addMP(20);
+    }
+
+    public override void Create()
+    {
+        throw new System.NotImplementedException();
     }
 }

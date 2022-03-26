@@ -6,23 +6,28 @@ public class IronBoots : Item
 {
     private void Start()
     {
-        name = "Iron Boots";
-        flavor = "Can't stub your toe";
-        details = "Standard issue boots that offers +15 defense";
+        itemName = "Iron Boots";
+        flavorText = "Can't stub your toe";
+        description = "Standard issue boots that offers +15 defense";
     }
 
     public IronBoots(Sprite s)
     {
-        img = s;
-        name = "Iron Boots";
-        flavor = "Can't stub your toe";
-        details = "Standard issue boots that offers +15 defense";
+        image = s;
+        itemName = "Iron Boots";
+        flavorText = "Can't stub your toe";
+        description = "Standard issue boots that offers +15 defense";
     }
 
-    public override void useItem()
+    public override void UseItem()
     {
         Debug.Log("Equip Iron Boots");
         Player p = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         //p.equip(this)
+    }
+
+    public override void Create()
+    {
+        throw new System.NotImplementedException();
     }
 }

@@ -72,16 +72,16 @@ public class Pathfinder
         Tile down = null;
 
         if (t.col > 0)
-            left = MapGenerator.tileMap[t.row, t.col - 1];
+            left = GameManager.gmInstance.Dungeon.tileMap[t.row, t.col - 1];
 
-        if (t.col < MapGenerator.width)
-            right = MapGenerator.tileMap[t.row, t.col + 1];
+        if (t.col < GameManager.gmInstance.Dungeon.width)
+            right = GameManager.gmInstance.Dungeon.tileMap[t.row, t.col + 1];
 
-        if(t.row < MapGenerator.height)
-            up = MapGenerator.tileMap[t.row+1, t.col];
+        if(t.row < GameManager.gmInstance.Dungeon.height)
+            up = GameManager.gmInstance.Dungeon.tileMap[t.row+1, t.col];
 
         if(t.row > 0)
-            down = MapGenerator.tileMap[t.row-1, t.col];
+            down = GameManager.gmInstance.Dungeon.tileMap[t.row-1, t.col];
 
         if(!left.getWall() && !visited.Contains(left))
         {

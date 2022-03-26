@@ -1,17 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 public class Equipment : Item
 {
-    //inherited
-
     //Parameters
     public int level;
+    public Article article;
     public string type;
     public int tier;
 
     //stats
-
     public int defense;
     public int attack;
     public int intelligence;
@@ -30,26 +29,53 @@ public class Equipment : Item
         this.crit = crit;
         this.modifier = mod;
 
+        string nameText = "";
+        if(tier == 1)
+        {
+            if (type == "helmet") nameText = "Leather Helmet";
+            else if (type == "chestplate") nameText = "Leather Chestplate";
+            else if (type == "gloves") nameText = "Leather Gloves";
+            else if (type == "legs") nameText = "Leather Greaves";
+            else if (type == "boots") nameText = "Leather Boots";
+        }
+        else if (tier == 2)
+        {
+            if (type == "helmet") nameText = "Iron Helmet";
+            else if (type == "chestplate") nameText = "Iron Chestplate";
+            else if (type == "gloves") nameText = "Iron Gloves";
+            else if (type == "legs") nameText = "Iron Greaves";
+            else if (type == "boots") nameText = "Iron Boots";
+        }
+        else if (tier == 3)
+        {
+            if (type == "helmet") nameText = "Diamond Helmet";
+            else if (type == "chestplate") nameText = "Diamond Chestplate";
+            else if (type == "gloves") nameText = "Diamond Gloves";
+            else if (type == "legs") nameText = "Diamond Greaves";
+            else if (type == "boots") nameText = "Diamond Boots";
+        }
+
+        string descriptionText = String.Format("Attack +{0} Defense +{1} Intelligence +{2} Crit Chance +{3}", atk, def, intel, crit);
+
+
+        itemName = nameText;
+        description = descriptionText;
+        flavorText = "Something Funny";
+        image = img;
+
         //setInfo(img, "name", "flavor", "details");
-        this.img = img;
-        this.name = "name";
-        this.flavor = "flavor";
-        this.details = "details";
+        //this.img = img;
+        //this.name = "name";
+        //this.flavor = "flavor";
+        //this.details = "details";
     }
 
-    public override void useItem()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    // Use this for initialization
-    void Start()
+    public override void Create()
     {
 
     }
 
-    public new string getName()
+    public override void UseItem()
     {
-        return name;
     }
 }
