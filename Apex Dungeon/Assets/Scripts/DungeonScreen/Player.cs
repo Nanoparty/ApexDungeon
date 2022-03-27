@@ -20,10 +20,13 @@ public class Player : MovingEntity
     public GameObject pblock;
     public GameObject mapHolder;
     public GameObject OpeningScreen;
+    public GameObject questLine;
+    public GameObject mapArea;
 
     private Inventory inventory;
     private MiniMap mini;
     private Character characterStats;
+    
 
 
     private int gold;
@@ -68,7 +71,7 @@ public class Player : MovingEntity
         animator = GetComponent<Animator>();
         
         inventory = new Inventory(panel, slot);
-        characterStats = new Character(characterPanel);
+        characterStats = new Character(characterPanel, slot, questLine, mapArea, block, pblock);
 
         if(Data.i != null)
         {
@@ -421,5 +424,8 @@ public class Player : MovingEntity
     }
     public int getMaxExp(){
         return maxExp;
+    }
+    public Inventory getInventoryObject(){
+        return inventory;
     }
 }
