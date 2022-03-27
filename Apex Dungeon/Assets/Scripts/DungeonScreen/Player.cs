@@ -7,11 +7,8 @@ using UnityEngine.UI;
 
 public class Player : MovingEntity
 {
-    //UI Elements
     public Image hpbar;
     public Image mpbar;
-    public Button bag;
-    public Button map;
     public Button character;
     public GameObject panel;
     public GameObject characterPanel;
@@ -23,30 +20,17 @@ public class Player : MovingEntity
     public GameObject questLine;
     public GameObject mapArea;
 
-    private Inventory inventory;
-    private MiniMap mini;
-    private Character characterStats;
-    
-
-
+    private CharacterMenu charMenu;
     private int gold;
-    //Components
     Animator animator;
-
-    private bool openInventory = false;
-    private bool openMap = false;
     private bool openCharacter = false;
-
     private bool opening = true;
     private bool fadeIn = false;
-
     private Time time;
     private float start;
 
     protected override void Start()
     {
-        //Values
-        
         hp = 100;
         mp = 50;
         maxMp = 50;
@@ -67,37 +51,19 @@ public class Player : MovingEntity
         gold = 0;
         start = 0;
 
-        //GameObjects
         animator = GetComponent<Animator>();
-        
-        inventory = new Inventory(panel, slot);
-        characterStats = new Character(characterPanel, slot, questLine, mapArea, block, pblock);
-
-        if(Data.i != null)
-        {
-            inventory = Data.i;
-        }
+        charMenu = new CharacterMenu(characterPanel, slot, questLine, mapArea, block, pblock);
 
         if (GameManager.gmInstance.level > 1)
         {
-            hp = Data.hp;
-            mp = Data.mp;
-            gold = Data.gold;
+            loadCharacterData();
         }
-
-        mini = new MiniMap(mapHolder, block, pblock);
 
         hpbar = GameObject.FindGameObjectWithTag("hpbar").transform.GetChild(1).gameObject.GetComponent<Image>();
         mpbar = GameObject.FindGameObjectWithTag("mpbar").transform.GetChild(1).gameObject.GetComponent<Image>();
         OpeningScreen = GameObject.FindGameObjectWithTag("Opening");
-        
-        
-        bag = GameObject.FindGameObjectWithTag("bag").GetComponent<Button>();
-        map = GameObject.FindGameObjectWithTag("mapButton").GetComponent<Button>();
         character = GameObject.FindGameObjectWithTag("characterButton").GetComponent<Button>();
 
-        bag.onClick.AddListener(bagListener);
-        map.onClick.AddListener(mapListener);
         character.onClick.AddListener(characterListener);
 
         base.Start();
@@ -114,13 +80,11 @@ public class Player : MovingEntity
     {
         if (dead)
         {
-            Destroy(GameObject.FindGameObjectWithTag("GameManager"));
-            Debug.Log("Dead");
-            Data.i = inventory;
-            Data.hp = hp;
-            Data.mp = mp;
-            Data.gold = gold;
-            SceneManager.LoadScene("Town");
+            //calculate and save score
+
+            //reset character stats
+
+            //load score screen
         }
     }
 
@@ -133,60 +97,30 @@ public class Player : MovingEntity
     {
         if (!GameManager.gmInstance.playersTurn) return;
 
-
         updateUI();
 
         GameManager.gmInstance.Dungeon.UpdateShadows(row, col);
 
-        if (openInventory)
-        {
-            inventory.Update();
-            if (inventory.getClosed())
-            {
-                inventory.setClosed(false);
-                openInventory = false;
-            }
-            return;
-        }
-
-        if (openMap)
-        {
-            //mini.Update();
-            if (mini.getClosed())
-            {
-                mini.setClosed(false);
-                openMap = false;
-            }
-            return;
-        }
-
         if (openCharacter)
         {
-            if (characterStats.getClosed())
+            if (charMenu.getClosed())
             {
-                characterStats.setClosed(false);
+                charMenu.setClosed(false);
                 openCharacter = false;
             }
             return;
         }
 
-        //reset code
-        //GameObject.FindGameObjectWithTag("DunGen").GetComponent<MapGenerator>().Reset();
-
-
+        //Debugging tool
         if (Input.GetKeyDown("t"))
         {
-            mini.buildMiniMap();
+            nextFloor();
         }
 
         checkDead();
-        
         base.Update();
-
         checkMoving();
         
-        
-
         if (Input.GetButtonDown("Fire1"))
         {
             if (EventSystem.current.IsPointerOverGameObject())
@@ -216,48 +150,77 @@ public class Player : MovingEntity
         }
     }
 
-    
+    public void saveCharacterData(){
+        Data.hp = hp;
+        Data.maxHp = maxHp;
+        Data.mp = mp;
+        Data.maxMp = maxMp;
+        Data.exp = exp;
+        Data.maxExp = maxExp;
+        Data.strength = damage;
+        Data.defense = defense;
+        Data.intelligence = intelligence;
+        Data.crit = critical;
+        Data.evade = evade;
+        Data.block = blockStat;
+        Data.gold = gold;
+
+        Data.charMenu = charMenu;
+    }
+
+    public void loadCharacterData(){
+        hp = Data.hp;
+        maxHp = Data.maxHp;
+        mp = Data.mp;
+        maxMp = Data.maxMp;
+        exp = Data.exp;
+        maxExp = Data.maxExp;
+        damage = Data.strength;
+        defense = Data.defense;
+        intelligence = Data.intelligence;
+        critical = Data.crit;
+        evade = Data.evade;
+        blockStat = Data.block;
+        gold = Data.gold;
+
+        charMenu = Data.charMenu;
+    }
+
+    private void nextFloor(){
+        GameManager.gmInstance.level++;
+        saveCharacterData();
+        GameManager.gmInstance.Reset();
+    }
 
     void OnTriggerEnter2D(Collider2D other)
     {
         if(other.gameObject.tag == "Stairs")
         {
-            Debug.Log("Stairs");
-            GameManager.gmInstance.level++;
-            Data.i = inventory;
-            Data.hp = hp;
-            Data.mp = mp;
-            Data.gold = gold;
-            GameManager.gmInstance.Reset();
-            //GameObject.FindGameObjectWithTag("DunGen").GetComponent<MapGenerator>().Reset();
+            nextFloor();
         }
         if(other.gameObject.tag == "Potion")
         {
-            inventory.addItem(other.GetComponent<Item>());
+            charMenu.addItem(other.GetComponent<Item>());
             Destroy(other.gameObject);
         }
         if (other.gameObject.tag == "Gold")
         {
             Destroy(other.gameObject);
             gold += 100;
-            inventory.setGold(gold);
         }
         if (other.gameObject.tag == "Silver")
         {
             Destroy(other.gameObject);
             gold += 50;
-            inventory.setGold(gold);
         }
         if (other.gameObject.tag == "Copper")
         {
             Destroy(other.gameObject);
             gold += 25;
-            inventory.setGold(gold);
         }
         if (other.gameObject.tag == "Equipment")
         {
-            inventory.addItem(other.GetComponent<Item>());
-            Debug.Log("ADD TO INVENTORY:" + other.gameObject.GetComponent<Equipment>().itemName);
+            charMenu.addEquipment(other.GetComponent<Item>());
             Destroy(other.gameObject);
         }
     }
@@ -274,38 +237,12 @@ public class Player : MovingEntity
         else return false;
     }
 
-    void bagListener()
-    {
-        if (!openInventory && !openMap && !openCharacter)
-        {
-            inventory.openInventory();
-            openInventory = true;
-        }
-    }
-
-    void mapListener()
-    {
-        if (!openMap && !openInventory && !openCharacter)
-        {
-            mini.buildMiniMap();
-            openMap = true;
-        }
-    }
-
     void characterListener()
     {
-        if (!openMap && !openInventory && !openCharacter)
+        if (!openCharacter)
         {
-            characterStats.openStats();
+            charMenu.openStats();
             openCharacter = true;
-        }
-    }
-
-    void checkInventory()
-    {
-        if (openInventory)
-        {
-            return;
         }
     }
 
@@ -367,6 +304,10 @@ public class Player : MovingEntity
     {
         mp += i;
     }
+    public void addHP(int i)
+    {
+        hp += i;
+    }
     
 
     void updateUI()
@@ -383,16 +324,6 @@ public class Player : MovingEntity
 
         hpbar.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, (float)hp / (float)maxHp * 367);
         mpbar.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, (float)mp / (float)maxMp * 367);
-    }
-
-    public bool getInventory()
-    {
-        return openInventory;
-    }
-
-    public void setInventory(bool b)
-    {
-        openInventory = b;
     }
 
     public int getStrength(){
@@ -424,8 +355,5 @@ public class Player : MovingEntity
     }
     public int getMaxExp(){
         return maxExp;
-    }
-    public Inventory getInventoryObject(){
-        return inventory;
     }
 }
