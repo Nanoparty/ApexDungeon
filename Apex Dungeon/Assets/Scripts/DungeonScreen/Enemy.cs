@@ -65,7 +65,9 @@ public class Enemy : MovingEntity
 
     
 
-    
+    int calculateExp(){
+        return 50;
+    }
 
     public void MoveEnemy()
     {
@@ -73,6 +75,8 @@ public class Enemy : MovingEntity
         {
             GameManager.gmInstance.Dungeon.tileMap[row, col].occupied = 0;
             GameManager.gmInstance.removeEnemy(this);
+            int givenExp = calculateExp();
+            player.addExp(givenExp);
             Destroy(this.gameObject);
             
         }

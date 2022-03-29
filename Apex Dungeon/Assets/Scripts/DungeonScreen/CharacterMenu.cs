@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
+using UnityEngine.EventSystems;
 
 public class CharacterMenu
 {
@@ -15,6 +16,12 @@ public class CharacterMenu
     GameObject block;
     GameObject pblock;
     GameObject minimap;
+    GameObject itemPopup;
+    GameObject popupArea;
+    GameObject useButton;
+    GameObject equipButton;
+    GameObject trashButton;
+    GameObject compareButton;
 
     public List<Item> items;
     public List<Item> equipment;
@@ -35,6 +42,9 @@ public class CharacterMenu
     GameObject mapRoot;
     public Sprite[] icons;
     public Sprite s;
+    int selected = -1;
+    bool popupOpen = false;
+    bool slotsLoaded = false;
 
     // Use this for initialization
     void Start()
@@ -43,12 +53,64 @@ public class CharacterMenu
     }
 
     // Update is called once per frame
-    void Update()
+    public void Update()
     {
+        if(popupOpen){
+            //close when click outside popup
+            if (Input.GetButtonDown("Fire1"))
+            {
+                if(popupArea.GetComponent<Clickable>().getClicked() 
+                     || useButton.GetComponent<Clickable>().getClicked() 
+                     || trashButton.GetComponent<Clickable>().getClicked() 
+                    // || compareButton.GetComponent<Clickable>().getClicked()
+                    )
+                {
+                    popupArea.GetComponent<Clickable>().setClicked(false);
+                    useButton.GetComponent<Clickable>().setClicked(false);
+                    trashButton.GetComponent<Clickable>().setClicked(false);
+                    // compareButton.GetComponent<Clickable>().setClicked(false);
+                }else{
+                    Debug.Log("DESTROY");
+                    GameObject.Destroy(popupArea);
+                    popupOpen = false;
+                }                
+            }
+            return;
+        }
 
+
+        if (Input.GetMouseButtonDown(0) && slotsLoaded)
+        {
+            if(tab == 0){
+                for(int i = 0; i < items.Count; i++)
+                {
+                    Debug.Log("Checking slot:" + i);
+                    if (inventorySlots[i].GetComponent<Clickable>().getClicked())
+                    {
+                        selected = i;
+                        inventorySlots[i].GetComponent<Clickable>().setClicked(false);
+                        popupOpen = true;
+                        createPopup();
+                    }
+                }
+            }
+            if(tab == 1){
+                for(int i = 0; i < equipment.Count; i++)
+                {
+                    if (equipmentSlots[i].GetComponent<Clickable>().getClicked())
+                    {
+                        selected = i;
+                        equipmentSlots[i].GetComponent<Clickable>().setClicked(false);
+                        popupOpen = true;
+                        createPopup();
+                    }
+                }
+            }
+            
+        }
     }
 
-    public CharacterMenu(GameObject panel, GameObject slot, GameObject questLine, GameObject minimap, GameObject block, GameObject pblock)
+    public CharacterMenu(GameObject panel, GameObject slot, GameObject questLine, GameObject minimap, GameObject block, GameObject pblock, GameObject itemPopup)
     {
         this.panel = panel;
         this.slot = slot;
@@ -56,6 +118,7 @@ public class CharacterMenu
         this.block = block;
         this.pblock = pblock;
         this.minimap = minimap;
+        this.itemPopup = itemPopup;
 
         items = new List<Item>();
         equipment = new List<Item>();
@@ -70,6 +133,7 @@ public class CharacterMenu
         width = GameManager.gmInstance.Dungeon.width;
         height = GameManager.gmInstance.Dungeon.height;
         loadSprites();
+        slotsLoaded = false;
     }
 
     public void openStats()
@@ -198,8 +262,10 @@ public class CharacterMenu
         float cellSize = 120;
         int xOff = 100;
         int yOff = -100;
+        Debug.Log("NumItems:"+ numItems);
         for(int i = 0; i < numItems; i++)
         {
+            Debug.Log("Adding new Item");
             Vector3 pos = new Vector3(xOff + x * cellSize, yOff + -1 * y * cellSize, 0);
 
             Item item = items[i];
@@ -216,7 +282,8 @@ public class CharacterMenu
                 y++;
             }
         }
-
+        Debug.Log("Num Item slots:" + inventorySlots.Count);
+        slotsLoaded = true;
     }
 
     void populateEquipment(){
@@ -249,6 +316,7 @@ public class CharacterMenu
                 y++;
             }
         }
+        slotsLoaded = true;
     }
 
     void populateQuests(){
@@ -332,6 +400,65 @@ public class CharacterMenu
         }
     }
 
+    private void createPopup(){
+        Debug.Log("Create Popup");
+        Vector3 pos = new Vector3(0, 0, 0);
+
+        GameObject popup = GameObject.Instantiate(itemPopup, pos, Quaternion.identity);
+        GameObject mainHolder = popup.transform.GetChild(0).gameObject;
+
+        GameObject modal1 = mainHolder.transform.GetChild(0).gameObject;
+        GameObject modal2 = mainHolder.transform.GetChild(1).gameObject;
+
+        GameObject itemName1 = modal1.transform.GetChild(0).gameObject;
+        GameObject itemFlavor1 = modal1.transform.GetChild(1).gameObject;
+        GameObject itemDesc1 = modal1.transform.GetChild(2).gameObject;
+
+        GameObject itemName2 = modal2.transform.GetChild(0).gameObject;
+        GameObject itemFlavor2 = modal2.transform.GetChild(1).gameObject;
+        GameObject itemDesc2 = modal2.transform.GetChild(2).gameObject;
+
+        GameObject buttonHolder = modal1.transform.GetChild(3).gameObject;
+        GameObject button1 = buttonHolder.transform.GetChild(0).gameObject;
+        GameObject button2 = buttonHolder.transform.GetChild(1).gameObject;
+        GameObject button3 = buttonHolder.transform.GetChild(2).gameObject;
+        
+        popup.transform.SetParent(topicPanel.transform, false);
+        popupArea = popup;
+
+        if(tab == 0){
+            Item i = items[selected];
+            itemName1.transform.gameObject.GetComponent<TMP_Text>().text = i.itemName;
+            itemFlavor1.transform.gameObject.GetComponent<TMP_Text>().text = i.flavorText;
+            itemDesc1.transform.gameObject.GetComponent<TMP_Text>().text = i.description;
+
+            modal2.SetActive(false);
+            button3.SetActive(false);
+
+            button1.GetComponent<Button>().onClick.AddListener(useListener);
+            button2.GetComponent<Button>().onClick.AddListener(trashListener);
+            useButton = button1;
+            trashButton = button2;
+            compareButton = button3;
+        }
+        if(tab == 1){
+            Item i = equipment[selected];
+            itemName1.transform.gameObject.GetComponent<TMP_Text>().text = i.itemName;
+            itemFlavor1.transform.gameObject.GetComponent<TMP_Text>().text = i.flavorText;
+            itemDesc1.transform.gameObject.GetComponent<TMP_Text>().text = i.description;
+
+            modal2.SetActive(false);
+            
+            button1.GetComponent<Button>().onClick.AddListener(useListener);
+            button2.GetComponent<Button>().onClick.AddListener(trashListener);
+            button3.GetComponent<Button>().onClick.AddListener(compareListener);
+            equipButton = button1;
+            trashButton = button2;
+            compareButton = button3;
+        }
+        
+    }
+
     void buildMap()
     {
         for(int i = 0; i < 100; i++)
@@ -389,8 +516,35 @@ public class CharacterMenu
         tab = 3;
         refreshTopicPanel();
     }
+    void useListener(){
+        Debug.Log("USE ITEM");
+        items[selected].UseItem();
+        items.RemoveAt(selected);
+        selected = -1;
+        refreshTopicPanel();
+    }
+    void equipListener(){
+
+    }
+    void trashListener(){
+        if(tab == 0){
+            items.RemoveAt(selected);
+        }
+        if(tab == 1){
+            equipment.RemoveAt(selected);
+        }
+        
+        selected = -1;
+        GameObject.Destroy(popupArea);
+        popupOpen = false;
+        refreshTopicPanel();
+    }
+    void compareListener(){
+
+    }
 
     void refreshTopicPanel(){
+        slotsLoaded = false;
         foreach(GameObject o in inventorySlots){
             GameObject.Destroy(o);
         }
