@@ -494,7 +494,10 @@ public class Player : MovingEntity
 
     void updateUI()
     {
-        charMenu.Update();
+        if(openCharacter){
+            charMenu.Update();
+        }
+        
 
         if (hp < 0)
             hp = 0;

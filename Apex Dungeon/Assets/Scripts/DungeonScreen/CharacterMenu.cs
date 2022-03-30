@@ -59,33 +59,47 @@ public class CharacterMenu
             //close when click outside popup
             if (Input.GetButtonDown("Fire1"))
             {
-                if(popupArea.GetComponent<Clickable>().getClicked() 
+                bool isClicked = false;
+                if(tab == 0){
+                    isClicked = popupArea.GetComponent<Clickable>().getClicked() 
                      || useButton.GetComponent<Clickable>().getClicked() 
-                     || trashButton.GetComponent<Clickable>().getClicked() 
-                    // || compareButton.GetComponent<Clickable>().getClicked()
-                    )
+                     || trashButton.GetComponent<Clickable>().getClicked();
+                }
+                if(tab == 1){
+                    isClicked = popupArea.GetComponent<Clickable>().getClicked() 
+                     || useButton.GetComponent<Clickable>().getClicked() 
+                     || trashButton.GetComponent<Clickable>().getClicked()
+                     || compareButton.GetComponent<Clickable>().getClicked();
+                }
+
+                if(isClicked)
                 {
                     popupArea.GetComponent<Clickable>().setClicked(false);
+
+                    if(tab == 1){
+                        compareButton.GetComponent<Clickable>().setClicked(false);
+                    }
                     useButton.GetComponent<Clickable>().setClicked(false);
                     trashButton.GetComponent<Clickable>().setClicked(false);
-                    // compareButton.GetComponent<Clickable>().setClicked(false);
                 }else{
                     Debug.Log("DESTROY");
                     GameObject.Destroy(popupArea);
                     popupOpen = false;
-                }                
+                }           
+                     
             }
             return;
         }
 
 
-        if (Input.GetMouseButtonDown(0) && slotsLoaded)
+        if (Input.GetMouseButtonDown(0))
         {
             if(tab == 0){
-                for(int i = 0; i < items.Count; i++)
+                for(int i = 0; i < inventorySlots.Count; i++)
                 {
                     Debug.Log("Checking slot:" + i);
-                    if (inventorySlots[i].GetComponent<Clickable>().getClicked())
+                    if (inventorySlots != null && inventorySlots.Count > 0 
+                        && inventorySlots[i].GetComponent<Clickable>().getClicked())
                     {
                         selected = i;
                         inventorySlots[i].GetComponent<Clickable>().setClicked(false);
@@ -95,9 +109,10 @@ public class CharacterMenu
                 }
             }
             if(tab == 1){
-                for(int i = 0; i < equipment.Count; i++)
+                for(int i = 0; i < equipmentSlots.Count; i++)
                 {
-                    if (equipmentSlots[i].GetComponent<Clickable>().getClicked())
+                    if (equipmentSlots != null && equipmentSlots.Count > 0 
+                        && equipmentSlots[i].GetComponent<Clickable>().getClicked())
                     {
                         selected = i;
                         equipmentSlots[i].GetComponent<Clickable>().setClicked(false);
@@ -133,11 +148,15 @@ public class CharacterMenu
         width = GameManager.gmInstance.Dungeon.width;
         height = GameManager.gmInstance.Dungeon.height;
         loadSprites();
-        slotsLoaded = false;
+        
     }
 
     public void openStats()
     {
+        slotsLoaded = false;
+        inventorySlots = new List<GameObject>();
+        equipmentSlots = new List<GameObject>();
+
         GameObject parent = GameObject.FindGameObjectWithTag("Character");
         panelObject = GameObject.Instantiate(panel, Vector3.zero, Quaternion.identity);
         panelObject.transform.SetParent(parent.transform, false);
@@ -452,7 +471,7 @@ public class CharacterMenu
             button1.GetComponent<Button>().onClick.AddListener(useListener);
             button2.GetComponent<Button>().onClick.AddListener(trashListener);
             button3.GetComponent<Button>().onClick.AddListener(compareListener);
-            equipButton = button1;
+            useButton = button1;
             trashButton = button2;
             compareButton = button3;
         }
@@ -521,10 +540,23 @@ public class CharacterMenu
         items[selected].UseItem();
         items.RemoveAt(selected);
         selected = -1;
+        Debug.Log("DESTROY");
+        GameObject.Destroy(popupArea);
+        popupOpen = false;
         refreshTopicPanel();
     }
     void equipListener(){
+        Debug.Log("EQUIP");
 
+        //equip armor
+
+        //add old armor to inventory
+
+        selected = -1;
+        Debug.Log("DESTROY");
+        GameObject.Destroy(popupArea);
+        popupOpen = false;
+        refreshTopicPanel();
     }
     void trashListener(){
         if(tab == 0){
@@ -540,7 +572,7 @@ public class CharacterMenu
         refreshTopicPanel();
     }
     void compareListener(){
-
+        Debug.Log("COMPARE");
     }
 
     void refreshTopicPanel(){
@@ -548,12 +580,15 @@ public class CharacterMenu
         foreach(GameObject o in inventorySlots){
             GameObject.Destroy(o);
         }
+        inventorySlots.Clear();
         foreach(GameObject o in equipmentSlots){
             GameObject.Destroy(o);
         }
+        equipmentSlots.Clear();
         foreach(GameObject o in questObjects){
             GameObject.Destroy(o);
         }
+        questObjects.Clear();
         GameObject.Destroy(mapRoot);
         updateTopicPanel();
         populateTopicArea();
