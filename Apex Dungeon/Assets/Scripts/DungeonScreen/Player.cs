@@ -36,6 +36,7 @@ public class Player : MovingEntity
     private float start;
     private int prevLevel;
     private string levelStat;
+    private PlayerGear gear;
     protected override void Start()
     {
         hp = 100;
@@ -59,6 +60,7 @@ public class Player : MovingEntity
         start = 0;
 
         animator = GetComponent<Animator>();
+        gear = new PlayerGear();
         charMenu = new CharacterMenu(characterPanel, slot, questLine, mapArea, block, pblock, itemPopup);
 
         if (GameManager.gmInstance.level > 1)
@@ -211,7 +213,7 @@ public class Player : MovingEntity
         }
         if(other.gameObject.tag == "Potion")
         {
-            charMenu.addItem(other.GetComponent<Item>());
+            charMenu.addItem(other.GetComponent<Consumable>());
             Destroy(other.gameObject);
         }
         if (other.gameObject.tag == "Gold")
@@ -231,8 +233,9 @@ public class Player : MovingEntity
         }
         if (other.gameObject.tag == "Equipment")
         {
-            charMenu.addEquipment(other.GetComponent<Item>());
+            charMenu.addEquipment(other.GetComponent<Equipment>());
             Destroy(other.gameObject);
+            
         }
     }
 
@@ -542,5 +545,16 @@ public class Player : MovingEntity
     }
     public int getMaxExp(){
         return maxExp;
+    }
+    public PlayerGear getGear(){
+        return gear;
+    }
+    public void setGear(PlayerGear gear){
+        this.gear = gear;
+    }
+    public Equipment setHelmet(Equipment i){
+        Equipment equiped = gear.Helmet;
+        gear.Helmet = i;
+        return equiped;
     }
 }

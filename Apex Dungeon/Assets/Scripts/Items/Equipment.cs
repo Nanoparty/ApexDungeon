@@ -17,6 +17,24 @@ public class Equipment : Item
     public int crit;
 
     public string modifier;
+    public Equipment(){
+
+    }
+
+    public Equipment(Equipment e){
+        level = e.level;
+        type = e.type;
+        tier = e.tier;
+        defense = e.defense;
+        attack = e.attack;
+        intelligence = e.intelligence;
+        crit = e.crit;
+        modifier = e.modifier;
+        image = e.image;
+        itemName = e.itemName;
+        flavorText = e.flavorText;
+        description = e.description;
+    }
 
     public void setStats(int lvl, string type, int tier, Sprite img, int def, int atk, int intel, int crit, string mod)
     {
