@@ -1,5 +1,4 @@
-﻿using System;
-public enum Article
+﻿public enum Article
 {
     Helmet,
     Chestplate,

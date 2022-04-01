@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System;
 
 public class Equipment : Item
@@ -17,8 +16,8 @@ public class Equipment : Item
     public int crit;
 
     public string modifier;
-    public Equipment(){
-
+    public Equipment()
+    {
     }
 
     public Equipment(Equipment e){
@@ -80,17 +79,10 @@ public class Equipment : Item
         description = descriptionText;
         flavorText = "Something Funny";
         image = img;
-
-        //setInfo(img, "name", "flavor", "details");
-        //this.img = img;
-        //this.name = "name";
-        //this.flavor = "flavor";
-        //this.details = "details";
     }
 
     public override void Create()
     {
-
     }
 
     public override void UseItem()

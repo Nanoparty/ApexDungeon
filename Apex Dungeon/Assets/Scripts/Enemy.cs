@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Enemy : MovingEntity
 {
@@ -63,8 +61,6 @@ public class Enemy : MovingEntity
         return base.AttemptMove<T>(r, c);
     }
 
-    
-
     int calculateExp(){
         return 50;
     }
@@ -103,7 +99,6 @@ public class Enemy : MovingEntity
             //IDLE
             checkAgro();
             moveRandom();
-            //base.AttemptMove<Player>(row + 0, col - 1);
         }
     }
 
@@ -187,7 +182,7 @@ public class Enemy : MovingEntity
         return false;
     }
 
-    float calculateDamage(float damage)
+    new float calculateDamage(float damage)
     {
         float netDamage = damage - (defense * 0.5f);
         return netDamage;
@@ -197,8 +192,4 @@ public class Enemy : MovingEntity
     {
         hp += (int)change;
     }
-
-    
-
-   
 }

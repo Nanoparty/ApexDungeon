@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class Pathfinder
@@ -17,8 +16,6 @@ public class Pathfinder
 
         queue.Enqueue(start);
         visited.Add(start);
-
-        
 
         if(start.row == end.row && start.col == end.col)
         {
@@ -52,15 +49,12 @@ public class Pathfinder
             stack.Push(node);
             node = mapping[node];
         }
-        //string pathDebug = "Start:"+start.row+" " +start.col;
         while (!(stack.Count == 0))
         {
             Tile temp = stack.Pop();
             p.nodes.Enqueue(new Vector2(temp.col, temp.row));
             
         }
-
-
         return p;
     }
 
@@ -107,8 +101,5 @@ public class Pathfinder
             visited.Add(down);
             mapping.Add(down, t);
         }
-        
-        
-        
     }
 }

@@ -1,17 +1,14 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-
     public static GameManager gmInstance = null;
     public DungeonObject Dungeon;
     public DungeonGenerator DunGen;
     public bool playersTurn = false;
     
-
     private List<Enemy> enemies;
     private List<Furniture> furniture;
     private bool enemiesTurn;
@@ -58,36 +55,25 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-
         Vector3 pz = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         pz.z = 0;
 
         mRow = Mathf.Round(pz.y);
         mCol = Mathf.Round(pz.x);
-        //Debug.Log(mRow + " " + mCol);
 
         //updating grid cursor image
         cursor.transform.position = new Vector3(mCol, mRow, 0f);
-
 
         if (playersTurn || enemiesTurn || doingSetup)
         {
             return;
         }
-        //StartCoroutine(MoveEnemies());
-        //WaitForSeconds(0.1);
 
-        //Debug.Log("hi");
         if (!enemiesTurn)
         {
-            //Debug.Log("Enemies start");
             enemiesTurn = true;
             MoveEnemies();
         }
-        
-        
-        
-        
     }
 
     public void removeEnemy(Enemy e)
@@ -160,7 +146,6 @@ public class GameManager : MonoBehaviour
 
     void MoveEnemies()
     {
-        //enemiesTurn = true;
         if(enemies.Count == 0)
         {
             return;
@@ -171,8 +156,6 @@ public class GameManager : MonoBehaviour
             //WAIT OPTIONAL
         }
         playersTurn = true;
-        enemiesTurn = false;
-        //Debug.Log("Enemies Stop");
-        
+        enemiesTurn = false;        
     }
 }

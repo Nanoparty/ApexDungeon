@@ -1,5 +1,4 @@
 using UnityEngine;
-using System.Collections;
 
 [CreateAssetMenu(fileName = "ConsumableGenerator", menuName = "ScriptableObjects/Consumable Generator")]
 public class ConsumableGenerator : ScriptableObject
@@ -59,5 +58,4 @@ public class ConsumableGenerator : ScriptableObject
 
         return consumable;
     }
-
 }

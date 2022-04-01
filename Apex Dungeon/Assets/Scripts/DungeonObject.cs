@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -94,7 +93,6 @@ public class DungeonObject
 
     public bool isPlayer(int r, int c)
     {
-        
         if(tileMap[r,c].occupied == 1)
         {
             return true;
@@ -104,7 +102,6 @@ public class DungeonObject
 
     public bool isEnemy(int r, int c)
     {
-
         if (tileMap[r, c].occupied == 2)
         {
             return true;

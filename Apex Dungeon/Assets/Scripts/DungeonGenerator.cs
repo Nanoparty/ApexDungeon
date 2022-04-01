@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -32,13 +31,10 @@ public class DungeonGenerator : ScriptableObject
     private Transform furnitureContainer;
 
     public GameObject Opening;
-
     public GameObject Shadow;
-
     public GameObject Player;
     public GameObject Stairs;
     public GameObject[] Enemy;
-
     public GameObject[] floor;
     public GameObject[] wallH;
     public GameObject[] wallV;

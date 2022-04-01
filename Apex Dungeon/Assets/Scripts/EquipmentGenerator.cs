@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "EquipmentGenerator", menuName = "ScriptableObjects/Equipment Generator")]
@@ -168,8 +166,6 @@ public class EquipmentGenerator : ScriptableObject
 
         equipment.tag = "Equipment";
 
-        //Debug.Log("Gen Equipment:" + equipment.GetComponent<Equipment>().name);
-
         return equipment;
     }
 
@@ -187,11 +183,9 @@ public class EquipmentGenerator : ScriptableObject
         int tierNum = Random.Range(1, 4);
 
         //pick defense stat
-        //int defNum = Random.Range(1, 11);
 
         //pick modifier
         
-
         //create gameobject
         return GenerateEquipment(level, type, tierNum);
     }

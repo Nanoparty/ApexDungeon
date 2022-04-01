@@ -1,16 +1,13 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class Tile 
 {
-
     public int row;
     public int col;
     public float x;
     public float y;
     
-
     /*
     0 = void
     1 = floor
@@ -20,13 +17,9 @@ public class Tile
     public int type;
     public bool visible;
     public bool explored;
-
     public List<Item> contents = new List<Item>();
-
     public int occupied = 0;
-
     public Sprite img;
-
     public bool blocked;
     public bool stairs = false;
 

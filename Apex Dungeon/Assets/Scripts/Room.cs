@@ -1,15 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class Room
+﻿public class Room
 {
     public int row;
     public int col;
-
     public int width;
     public int height;
-
     public int type;
 
     public Room(int r, int c, int w, int h)

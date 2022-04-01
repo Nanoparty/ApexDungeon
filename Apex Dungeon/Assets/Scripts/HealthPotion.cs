@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class HealthPotion :  Item
 {
@@ -21,7 +19,6 @@ public class HealthPotion :  Item
 
     public override void UseItem()
     {
-        Debug.Log("USE HEALTH POTION");
         Player p = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         p.takeDamage(20);
     }
@@ -30,6 +27,4 @@ public class HealthPotion :  Item
     {
         throw new System.NotImplementedException();
     }
-
- 
 }

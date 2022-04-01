@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Furniture : MonoBehaviour
 {
@@ -8,7 +6,7 @@ public class Furniture : MonoBehaviour
 
     int health = 2;
     int max = 2;
-    private SpriteRenderer renderer;
+    new private SpriteRenderer renderer;
     private int row;
     private int col;
 

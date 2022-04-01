@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public abstract class MovingEntity : MonoBehaviour
 {
@@ -8,7 +6,6 @@ public abstract class MovingEntity : MonoBehaviour
     protected int maxMp;
     protected int hp;
     protected int mp;
-
     protected int expLevel;
     protected int exp;
     protected int maxExp;
@@ -147,7 +144,8 @@ public abstract class MovingEntity : MonoBehaviour
                     updateLocalPosition();
                 }
                 else
-                {//Interupt Path
+                {
+                    //Interupt Path
                     doneMoving();
                     return;
                 }
@@ -188,7 +186,6 @@ public abstract class MovingEntity : MonoBehaviour
         if (Mathf.Abs(distancex) < 0.1 && Mathf.Abs(distancey) < 0.1)
         {
             atTarget = true;
-            //UpdateShadows()
             transform.position = new Vector2(target.x, target.y);
             if ((path.nodes.Count == 0))
             {
@@ -275,8 +272,6 @@ public abstract class MovingEntity : MonoBehaviour
     {
         moving = false;
         atTarget = true;
-        //UpdateShadows(r, c);
-        //Debug.Log("Path done");
     }
 
     private void UpdateShadows(int r, int c)
