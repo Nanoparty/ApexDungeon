@@ -1,11 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
-
 
 public class Player : MovingEntity
 {
@@ -24,19 +20,30 @@ public class Player : MovingEntity
 
     private CharacterMenu charMenu;
     private GameObject levelPopHolder;
-    private int gold;
+    private PlayerGear gear;
     Animator animator;
+    private int gold;
     private bool openCharacter = false;
     private bool openLevel = false;
     private bool opening = true;
     private bool fadeIn = false;
-    private Time time;
     private float start;
     private int prevLevel;
     private string levelStat;
-    private PlayerGear gear;
     protected override void Start()
     {
+        setInitialValues();
+        initializeObjects();
+        
+        if (GameManager.gmInstance.level > 1)
+        {
+            loadCharacterData();
+        }
+
+        base.Start();
+    }
+
+    void setInitialValues(){
         hp = 100;
         mp = 50;
         maxMp = 50;
@@ -56,23 +63,18 @@ public class Player : MovingEntity
         type = 1;
         gold = 0;
         start = 0;
+    }
 
+    void initializeObjects(){
         animator = GetComponent<Animator>();
         gear = new PlayerGear();
         charMenu = new CharacterMenu(characterPanel, slot, questLine, mapArea, block, pblock, itemPopup);
-
-        if (GameManager.gmInstance.level > 1)
-        {
-            loadCharacterData();
-        }
 
         hpbar = GameObject.FindGameObjectWithTag("hpbar").transform.GetChild(1).gameObject.GetComponent<Image>();
         mpbar = GameObject.FindGameObjectWithTag("mpbar").transform.GetChild(1).gameObject.GetComponent<Image>();
         character = GameObject.FindGameObjectWithTag("characterButton").GetComponent<Button>();
 
         character.onClick.AddListener(characterListener);
-
-        base.Start();
     }
 
     void moveController(int clickRow, int clickCol)
@@ -103,12 +105,13 @@ public class Player : MovingEntity
     {
         if (!GameManager.gmInstance.playersTurn) return;
 
-        updateUI();
+        updatePlayerStatus();
 
         GameManager.gmInstance.Dungeon.UpdateShadows(row, col);
 
         if (openCharacter)
         {
+            charMenu.Update();
             if (charMenu.getClosed())
             {
                 charMenu.setClosed(false);
@@ -117,16 +120,10 @@ public class Player : MovingEntity
             return;
         }
 
-        if(openLevel){
-            return;
-        }
-
-        //Debugging tool
-        if (Input.GetKeyDown("t"))
-        {
-            nextFloor();
-        }
-
+        if(openLevel) return;
+    
+        debugMenu();
+        
         checkDead();
         base.Update();
         checkMoving();
@@ -157,6 +154,14 @@ public class Player : MovingEntity
 
             //move
             moveController(clickRow, clickCol);
+        }
+    }
+
+    void debugMenu(){
+        //Debugging tool
+        if (Input.GetKeyDown("t"))
+        {
+            nextFloor();
         }
     }
 
@@ -232,7 +237,6 @@ public class Player : MovingEntity
         {
             charMenu.addEquipment(other.GetComponent<Equipment>());
             Destroy(other.gameObject);
-            
         }
     }
 
@@ -333,7 +337,6 @@ public class Player : MovingEntity
             openLevel = true;
             createLevelPopup();
         }
-        
     }
 
     void createLevelPopup(){
@@ -343,91 +346,66 @@ public class Player : MovingEntity
         levelPop.transform.SetParent(GameObject.FindGameObjectWithTag("LevelUp").transform, false);
         levelPopHolder = levelPop;
 
-        levelPop.transform.GetChild(1).gameObject.GetComponent<TMP_Text>().text = prevLevel + " -> " + expLevel;
-        GameObject Strength = levelPop.transform.GetChild(3).gameObject;
-        GameObject Defense = levelPop.transform.GetChild(4).gameObject;
-        GameObject Crit = levelPop.transform.GetChild(5).gameObject;
-        GameObject Intelligence = levelPop.transform.GetChild(6).gameObject;
-        GameObject Evade = levelPop.transform.GetChild(7).gameObject;
-        GameObject Block = levelPop.transform.GetChild(8).gameObject;
+        Util.setText(levelPop, prevLevel + "->" + expLevel, 1);
 
-        Strength.transform.GetChild(1).gameObject.GetComponent<TMP_Text>().text = damage.ToString();
-        Defense.transform.GetChild(1).gameObject.GetComponent<TMP_Text>().text = defense.ToString();
-        Crit.transform.GetChild(1).gameObject.GetComponent<TMP_Text>().text = critical.ToString();
-        Intelligence.transform.GetChild(1).gameObject.GetComponent<TMP_Text>().text = intelligence.ToString();
-        Evade.transform.GetChild(1).gameObject.GetComponent<TMP_Text>().text = evade.ToString();
-        Block.transform.GetChild(1).gameObject.GetComponent<TMP_Text>().text = blockStat.ToString();
+        GameObject Strength = Util.getChild(levelPop, 3);
+        GameObject Defense = Util.getChild(levelPop, 4);
+        GameObject Crit = Util.getChild(levelPop, 5);
+        GameObject Intelligence = Util.getChild(levelPop, 6);
+        GameObject Evade = Util.getChild(levelPop, 7);
+        GameObject Block = Util.getChild(levelPop, 8);
 
-        Strength.transform.GetChild(2).gameObject.GetComponent<Button>().onClick.AddListener(StrengthListener);
-        Defense.transform.GetChild(2).gameObject.GetComponent<Button>().onClick.AddListener(DefenseListener);
-        Crit.transform.GetChild(2).gameObject.GetComponent<Button>().onClick.AddListener(CritListener);
-        Intelligence.transform.GetChild(2).gameObject.GetComponent<Button>().onClick.AddListener(IntelligenceListener);
-        Evade.transform.GetChild(2).gameObject.GetComponent<Button>().onClick.AddListener(EvadeListener);
-        Block.transform.GetChild(2).gameObject.GetComponent<Button>().onClick.AddListener(BlockListener);
-        
-        levelPop.transform.GetChild(9).gameObject.GetComponent<Button>().onClick.AddListener(LevelConfirmListener);
+        Util.setText(Strength, damage.ToString(), 1);
+        Util.setText(Defense, defense.ToString(), 1);
+        Util.setText(Crit, critical.ToString(), 1);
+        Util.setText(Intelligence, intelligence.ToString(), 1);
+        Util.setText(Evade, evade.ToString(), 1);
+        Util.setText(Block, blockStat.ToString(), 1);
+
+        Util.setListener(Strength, StrengthListener, 2);
+        Util.setListener(Defense, DefenseListener, 2);
+        Util.setListener(Crit, CritListener, 2);
+        Util.setListener(Intelligence, IntelligenceListener, 2);
+        Util.setListener(Evade, EvadeListener, 2);
+        Util.setListener(Block, BlockListener, 2);
+
+        Util.setListener(levelPop, LevelConfirmListener, 9);
     }
 
     void StrengthListener(){
         ResetLevelStats();
-        levelPopHolder.transform.GetChild(3).gameObject
-            .transform.GetChild(1).gameObject
-            .GetComponent<TMP_Text>().text = (damage+1).ToString();
-        levelPopHolder.transform.GetChild(3).gameObject
-            .transform.GetChild(1).gameObject
-            .GetComponent<TMP_Text>().color = Color.green;
+        Util.setText(levelPopHolder, (damage+1).ToString(), 3, 1);
+        Util.setColor(levelPopHolder, Color.green, 3, 1);
         levelStat = "strength";
     }
     void DefenseListener(){
         ResetLevelStats();
-        levelPopHolder.transform.GetChild(4).gameObject
-            .transform.GetChild(1).gameObject
-            .GetComponent<TMP_Text>().text = (defense+1).ToString();
-        levelPopHolder.transform.GetChild(4).gameObject
-            .transform.GetChild(1).gameObject
-            .GetComponent<TMP_Text>().color = Color.green;
+        Util.setText(levelPopHolder, (defense+1).ToString(), 4, 1);
+        Util.setColor(levelPopHolder, Color.green, 4, 1);
         levelStat = "defense";
     }
     void CritListener(){
-        Debug.Log("CRIT");
         ResetLevelStats();
-        levelPopHolder.transform.GetChild(5).gameObject
-            .transform.GetChild(1).gameObject
-            .GetComponent<TMP_Text>().text = (critical+1).ToString();
-        levelPopHolder.transform.GetChild(5).gameObject
-            .transform.GetChild(1).gameObject
-            .GetComponent<TMP_Text>().color = Color.green;
+        Util.setText(levelPopHolder, (critical+1).ToString(), 5, 1);
+        Util.setColor(levelPopHolder, Color.green, 5, 1);
         levelStat = "crit";
     }
     void IntelligenceListener(){
         ResetLevelStats();
-        levelPopHolder.transform.GetChild(6).gameObject
-            .transform.GetChild(1).gameObject
-            .GetComponent<TMP_Text>().text = (intelligence+1).ToString();
-        levelPopHolder.transform.GetChild(6).gameObject
-            .transform.GetChild(1).gameObject
-            .GetComponent<TMP_Text>().color = Color.green;
+        Util.setText(levelPopHolder, (intelligence+1).ToString(), 6, 1);
+        Util.setColor(levelPopHolder, Color.green, 6, 1);
         levelStat = "intelligence";
     }
     void EvadeListener(){
         ResetLevelStats();
-        levelPopHolder.transform.GetChild(7).gameObject
-            .transform.GetChild(1).gameObject
-            .GetComponent<TMP_Text>().text = (evade+1).ToString();
-        levelPopHolder.transform.GetChild(7).gameObject
-            .transform.GetChild(1).gameObject
-            .GetComponent<TMP_Text>().color = Color.green;
+        Util.setText(levelPopHolder, (evade+1).ToString(), 7, 1);
+        Util.setColor(levelPopHolder, Color.green, 7, 1);
         levelStat = "evade";
     }
     void BlockListener(){
         ResetLevelStats();
-        levelPopHolder.transform.GetChild(8).gameObject
-            .transform.GetChild(1).gameObject
-            .GetComponent<TMP_Text>().text = (blockStat+1).ToString();
-        levelPopHolder.transform.GetChild(8).gameObject
-            .transform.GetChild(1).gameObject
-            .GetComponent<TMP_Text>().color = Color.green;
-        levelStat = "block";
+        Util.setText(levelPopHolder, (blockStat+1).ToString(), 8, 1);
+        Util.setColor(levelPopHolder, Color.green, 8, 1);
     }
 
     void ResetLevelStats(){
@@ -492,13 +470,8 @@ public class Player : MovingEntity
     }
     
 
-    void updateUI()
+    void updatePlayerStatus()
     {
-        if(openCharacter){
-            charMenu.Update();
-        }
-        
-
         if (hp < 0)
             hp = 0;
         if (hp > maxHp)
