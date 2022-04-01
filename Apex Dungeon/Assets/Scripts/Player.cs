@@ -406,50 +406,27 @@ public class Player : MovingEntity
         ResetLevelStats();
         Util.setText(levelPopHolder, (blockStat+1).ToString(), 8, 1);
         Util.setColor(levelPopHolder, Color.green, 8, 1);
+        levelStat = "block";
     }
 
     void ResetLevelStats(){
-        levelPopHolder.transform.GetChild(3).gameObject
-            .transform.GetChild(1).gameObject
-            .GetComponent<TMP_Text>().text = (damage).ToString();
-        levelPopHolder.transform.GetChild(3).gameObject
-            .transform.GetChild(1).gameObject
-            .GetComponent<TMP_Text>().color = Color.white;
+        Util.setText(levelPopHolder, (damage).ToString(), 3, 1);
+        Util.setColor(levelPopHolder, Color.white, 3, 1);
 
-        levelPopHolder.transform.GetChild(4).gameObject
-            .transform.GetChild(1).gameObject
-            .GetComponent<TMP_Text>().text = (defense).ToString();
-        levelPopHolder.transform.GetChild(4).gameObject
-            .transform.GetChild(1).gameObject
-            .GetComponent<TMP_Text>().color = Color.white;
+        Util.setText(levelPopHolder, (defense).ToString(), 4, 1);
+        Util.setColor(levelPopHolder, Color.white, 4, 1);
 
-        levelPopHolder.transform.GetChild(5).gameObject
-            .transform.GetChild(1).gameObject
-            .GetComponent<TMP_Text>().text = (critical).ToString();
-        levelPopHolder.transform.GetChild(5).gameObject
-            .transform.GetChild(1).gameObject
-            .GetComponent<TMP_Text>().color = Color.white;
+        Util.setText(levelPopHolder, (critical).ToString(), 5, 1);
+        Util.setColor(levelPopHolder, Color.white, 5, 1);
 
-        levelPopHolder.transform.GetChild(6).gameObject
-            .transform.GetChild(1).gameObject
-            .GetComponent<TMP_Text>().text = (intelligence).ToString();
-        levelPopHolder.transform.GetChild(6).gameObject
-            .transform.GetChild(1).gameObject
-            .GetComponent<TMP_Text>().color = Color.white;
+        Util.setText(levelPopHolder, (intelligence).ToString(), 6, 1);
+        Util.setColor(levelPopHolder, Color.white, 6, 1);
 
-        levelPopHolder.transform.GetChild(7).gameObject
-            .transform.GetChild(1).gameObject
-            .GetComponent<TMP_Text>().text = (evade).ToString();
-        levelPopHolder.transform.GetChild(7).gameObject
-            .transform.GetChild(1).gameObject
-            .GetComponent<TMP_Text>().color = Color.white;
+        Util.setText(levelPopHolder, (evade).ToString(), 7, 1);
+        Util.setColor(levelPopHolder, Color.white, 7, 1);
 
-        levelPopHolder.transform.GetChild(8).gameObject
-            .transform.GetChild(1).gameObject
-            .GetComponent<TMP_Text>().text = (blockStat).ToString();
-        levelPopHolder.transform.GetChild(8).gameObject
-            .transform.GetChild(1).gameObject
-            .GetComponent<TMP_Text>().color = Color.white;
+        Util.setText(levelPopHolder, (blockStat).ToString(), 8, 1);
+        Util.setColor(levelPopHolder, Color.white, 8, 1);
     }
     void LevelConfirmListener(){
         if(levelStat.Equals("strength")){
@@ -472,15 +449,11 @@ public class Player : MovingEntity
 
     void updatePlayerStatus()
     {
-        if (hp < 0)
-            hp = 0;
-        if (hp > maxHp)
-            hp = maxHp;
+        if (hp < 0) hp = 0;
+        if (hp > maxHp) hp = maxHp;
 
-        if (mp < 0)
-            mp = 0;
-        if (mp > maxMp)
-            mp = maxMp;
+        if (mp < 0) mp = 0;
+        if (mp > maxMp) mp = maxMp;
 
         hpbar.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, (float)hp / (float)maxHp * 367);
         mpbar.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, (float)mp / (float)maxMp * 367);
