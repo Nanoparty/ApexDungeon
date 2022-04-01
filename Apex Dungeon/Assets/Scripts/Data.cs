@@ -4,10 +4,7 @@ using UnityEngine;
 
 public static class Data
 {
-    public static Inventory i;
     public static CharacterMenu charMenu;
-    public static Bank b;
-    public static ShopInventory s;
 
     //Character Data
     public static int gold;

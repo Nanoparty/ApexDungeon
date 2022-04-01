@@ -154,7 +154,7 @@ public class CharacterMenu
 
     public void openStats()
     {
-        Debug.Log("EQUIP:"+equipment[0]);
+        //Debug.Log("EQUIP:"+equipment[0]);
         slotsLoaded = false;
         inventorySlots = new List<GameObject>();
         equipmentSlots = new List<GameObject>();
@@ -219,10 +219,10 @@ public class CharacterMenu
         GameObject NecklaceSlot = middleStats.transform.GetChild(10).gameObject;
         GameObject RingSlot = middleStats.transform.GetChild(11).gameObject;
 
-        Debug.Log("Helm:"+ gear.Helmet);
-        Debug.Log("Helm Image:"+ gear.Helmet.image);
+        //Debug.Log("Helm:"+ gear.Helmet);
+        //Debug.Log("Helm Image:"+ gear.Helmet.image);
         
-        if(gear.Helmet.image == null) HelmSlot.transform.GetChild(0).gameObject.SetActive(false);
+        if(gear.Helmet == null) HelmSlot.transform.GetChild(0).gameObject.SetActive(false);
         else HelmSlot.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = gear.Helmet.image;
 
         if(gear.Chestplate == null) ChestSlot.transform.GetChild(0).gameObject.SetActive(false);
