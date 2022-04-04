@@ -318,10 +318,12 @@ public class Player : MovingEntity
     public void addMP(int i)
     {
         mp += i;
+        if(mp > maxMp) mp = maxMp;
     }
     public void addHP(int i)
     {
         hp += i;
+        if(hp > maxHp) hp = maxHp;
     }
     public void addExp(int i){
         exp += i;

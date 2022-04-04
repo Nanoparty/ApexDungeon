@@ -24,7 +24,11 @@ public class Consumable : Item
     {
         if(itemName == "Health Potion"){
             Player p = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
-            p.takeDamage(20);
+            p.addHP(20);
+        }
+        if(itemName == "Mana Potion"){
+            Player p = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+            p.addMP(20);
         }
     }
 }
