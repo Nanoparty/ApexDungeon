@@ -23,6 +23,8 @@ public class CharacterMenu
     GameObject trashButton;
     GameObject compareButton;
     PlayerGear gear;
+    Player player;
+
     public List<Consumable> items;
     public List<Equipment> equipment;
 
@@ -118,6 +120,7 @@ public class CharacterMenu
                         selected = i;
                         equipmentSlots[i].GetComponent<Clickable>().setClicked(false);
                         popupOpen = true;
+                        Debug.Log("Clicked on equipment:"+ equipment[selected]);
                         createPopup();
                     }
                 }
@@ -135,6 +138,7 @@ public class CharacterMenu
         this.pblock = pblock;
         this.minimap = minimap;
         this.itemPopup = itemPopup;
+        this.player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
 
         items = new List<Consumable>();
         equipment = new List<Equipment>();
@@ -163,7 +167,7 @@ public class CharacterMenu
         panelObject = GameObject.Instantiate(panel, Vector3.zero, Quaternion.identity);
         panelObject.transform.SetParent(parent.transform, false);
 
-        this.gear = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().getGear();
+        this.gear = player.getGear();
 
         close = panelObject.transform.GetChild(1).transform.GetChild(2).gameObject.GetComponent<Button>();
         close.onClick.AddListener(closeListener);
@@ -175,8 +179,6 @@ public class CharacterMenu
     }
 
     private void setPlayerStats(){
-        Player player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
-
         charPanel = panelObject.transform.GetChild(0).gameObject;
         GameObject topStats = charPanel.transform.GetChild(0).gameObject;
         GameObject middleStats = charPanel.transform.GetChild(1).gameObject;
@@ -219,32 +221,19 @@ public class CharacterMenu
         GameObject NecklaceSlot = middleStats.transform.GetChild(10).gameObject;
         GameObject RingSlot = middleStats.transform.GetChild(11).gameObject;
 
-        //Debug.Log("Helm:"+ gear.Helmet);
-        //Debug.Log("Helm Image:"+ gear.Helmet.image);
+        Debug.Log("HELMET SLOT IS " + gear.Helmet);
         
         if(gear.Helmet == null) HelmSlot.transform.GetChild(0).gameObject.SetActive(false);
         else HelmSlot.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = gear.Helmet.image;
 
-        if(gear.Chestplate == null) ChestSlot.transform.GetChild(0).gameObject.SetActive(false);
-        else ChestSlot.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = gear.Chestplate.image;
-
-        if(gear.Legs == null) LegSlot.transform.GetChild(0).gameObject.SetActive(false);
-        else LegSlot.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = gear.Legs.image;
-
-        if(gear.Feet == null) BootSlot.transform.GetChild(0).gameObject.SetActive(false);
-        else BootSlot.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = gear.Feet.image;
-
-        if(gear.Weapon == null) WeaponSlot.transform.GetChild(0).gameObject.SetActive(false);
-        else WeaponSlot.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = gear.Weapon.image;
-
-        if(gear.Secondary == null) UtilitySlot.transform.GetChild(0).gameObject.SetActive(false);
-        else UtilitySlot.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = gear.Secondary.image;
-
-        if(gear.Necklace == null) NecklaceSlot.transform.GetChild(0).gameObject.SetActive(false);
-        else NecklaceSlot.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = gear.Necklace.image;
-
-        if(gear.Ring == null) RingSlot.transform.GetChild(0).gameObject.SetActive(false);
-        else RingSlot.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = gear.Ring.image;
+        setEquipmentSlot(HelmSlot, gear.Helmet);
+        setEquipmentSlot(ChestSlot, gear.Chestplate);
+        setEquipmentSlot(LegSlot, gear.Legs);
+        setEquipmentSlot(BootSlot, gear.Feet);
+        setEquipmentSlot(WeaponSlot, gear.Weapon);
+        setEquipmentSlot(UtilitySlot, gear.Secondary);
+        setEquipmentSlot(NecklaceSlot, gear.Necklace);
+        setEquipmentSlot(RingSlot, gear.Ring);
 
         //Set Stats and Gold
         GameObject str = bottomStats.transform.GetChild(0).gameObject;
@@ -264,9 +253,17 @@ public class CharacterMenu
         blck.transform.gameObject.GetComponent<TMP_Text>().text = "Blck:" + player.getBlock();
     }
 
-    private void setTopicPanel(){
-        Player player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+    private void setEquipmentSlot(GameObject slot, Equipment e){
+        if(e == null){
+            slot.transform.GetChild(0).gameObject.SetActive(false);
+        } 
+        else {
+            slot.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = e.image;
+            slot.transform.GetChild(0).gameObject.SetActive(true);
+        }
+    }
 
+    private void setTopicPanel(){
         topicPanel = panelObject.transform.GetChild(1).gameObject;
 
         GameObject topicArea = topicPanel.transform.GetChild(0).gameObject;
@@ -311,8 +308,6 @@ public class CharacterMenu
     }
 
     void populateInventory(){
-        Player player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
-        //Inventory inventory = player.getInventoryObject();
         GameObject topicArea = topicPanel.transform.GetChild(0).gameObject;
 
         int numItems = items.Count;
@@ -347,8 +342,6 @@ public class CharacterMenu
     }
 
     void populateEquipment(){
-        Player player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
-        //Inventory inventory = player.getInventoryObject();
         GameObject topicArea = topicPanel.transform.GetChild(0).gameObject;
 
         int numItems = equipment.Count;
@@ -384,7 +377,6 @@ public class CharacterMenu
         quests.Add("Rescue the princess");
         quests.Add("Finish the game <333");
 
-        Player player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         GameObject topicArea = topicPanel.transform.GetChild(0).gameObject;
 
         int y = 0;
@@ -552,7 +544,7 @@ public class CharacterMenu
 
     void closeListener()
     {
-        GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().setGear(gear);
+        player.setGear(gear);
         closeInventory();
         closed = true;
     }
@@ -591,15 +583,14 @@ public class CharacterMenu
         Debug.Log("EQUIP");
 
         //equip armor
-        Player player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         Equipment e = equipment[selected];
-        //Debug.Log("Equiping selected equipment:"+ e);
-        if(e.type == "helmet"){
-            //Debug.Log("Selected="+selected);
-            //GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().setHelmet(e);
-            //Debug.Log("Equiping a helmet:" + e);
-            gear.Helmet = e;
-        }
+
+        if(e.type == "helmet") gear.Helmet = e;
+        if(e.type == "chestplate") gear.Chestplate = e;
+        if(e.type == "legs") gear.Legs = e;
+        if(e.type == "boots") gear.Feet = e;
+
+
         //equipment.RemoveAt(selected);
 
         //add old armor to inventory
@@ -647,14 +638,12 @@ public class CharacterMenu
         populateTopicArea();
     }
 
-    public void addItem(Consumable i){
-        items.Add(i);
+    public void addItem(Item i){
+        items.Add(i as Consumable);
     }
 
-    public void addEquipment(Equipment i){
-        Debug.Log("ADDING to equipment:"+i);
-        equipment.Add(i);
-        Debug.Log("ADDED to equipment:"+equipment[equipment.Count-1]);
+    public void addEquipment(Item i){
+        equipment.Add(i as Equipment);
     }
 
     public void closeInventory()

@@ -16,8 +16,19 @@ public class Equipment : Item
     public int crit;
 
     public string modifier;
-    public Equipment()
+    public Equipment(int lvl, string type, int tier, Sprite image, int def, int atk, int intel, int crit, string mod)
     {
+        this.level = lvl;
+        this.type = type;
+        this.tier = tier;
+        this.image = image;
+        this.defense = def;
+        this.attack = atk;
+        this.intelligence = intel;
+        this.crit = crit;
+        this.modifier = mod;
+
+        setStats(lvl, type, tier, image, def, atk, intel, crit, mod);
     }
 
     public Equipment(Equipment e){

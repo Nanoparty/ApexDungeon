@@ -18,8 +18,10 @@ public class ConsumableGenerator : ScriptableObject
         item.AddComponent<BoxCollider2D>();
         item.GetComponent<BoxCollider2D>().isTrigger = true;
 
-        item.AddComponent<Consumable>();
-        item.GetComponent<Consumable>().SetStats("Health Potion", "Cherry Flavor", "Heals 10 HP", redPotion);
+        Consumable potion = new Consumable("Health Potion", "Cherry Flavor", "Heals 10 HP", redPotion);
+
+        item.AddComponent<Pickup>();
+        item.GetComponent<Pickup>().SetItem(potion);
 
         item.tag = "Potion";
 
@@ -37,8 +39,10 @@ public class ConsumableGenerator : ScriptableObject
         item.AddComponent<BoxCollider2D>();
         item.GetComponent<BoxCollider2D>().isTrigger = true;
 
-        item.AddComponent<Consumable>();
-        item.GetComponent<Consumable>().SetStats("ManaPotion", "Blueberry Flavor", "Restores 10 MP", bluePotion);
+        Consumable potion = new Consumable("ManaPotion", "Blueberry Flavor", "Restores 10 MP", bluePotion);
+
+        item.AddComponent<Pickup>();
+        item.GetComponent<Pickup>().SetItem(potion);
 
         item.tag = "Potion";
 

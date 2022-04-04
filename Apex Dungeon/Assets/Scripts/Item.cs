@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public abstract class Item : MonoBehaviour
+public abstract class Item
 {
     public string itemName;
     public string description;

@@ -4,15 +4,20 @@ using UnityEngine;
 
 public class Pickup : MonoBehaviour
 {
-    // Start is called before the first frame update
+    public Item item;
+
+    bool pickedUp = false;
     void Start()
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    public Item GetItem(){
+        return item;
     }
+
+    public void SetItem(Item i){
+        item = i;
+    }
+
 }

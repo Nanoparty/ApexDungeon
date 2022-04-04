@@ -161,8 +161,10 @@ public class EquipmentGenerator : ScriptableObject
         equipment.AddComponent<BoxCollider2D>();
         equipment.GetComponent<BoxCollider2D>().isTrigger = true;
 
-        equipment.AddComponent<Equipment>();
-        equipment.GetComponent<Equipment>().setStats(level, type, tier, image, defNum, atkNum, intNum, crtNum, modifier); ;
+        Equipment item = new Equipment(level, type, tier, image, defNum, atkNum, intNum, crtNum, modifier);
+
+        equipment.AddComponent<Pickup>();
+        equipment.GetComponent<Pickup>().SetItem(item);
 
         equipment.tag = "Equipment";
 
@@ -175,9 +177,8 @@ public class EquipmentGenerator : ScriptableObject
         int typeNum = Random.Range(1, 6);
         if (typeNum == 1) type = "helmet";
         else if (typeNum == 2) type = "chestplate";
-        else if (typeNum == 3) type = "gloves";
+        else if (typeNum == 3) type = "boots";
         else if (typeNum == 4) type = "legs";
-        else if (typeNum == 5) type = "boots";
 
         //pick tier
         int tierNum = Random.Range(1, 4);

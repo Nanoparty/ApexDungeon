@@ -14,7 +14,14 @@ public class PlayerGear
     public Equipment Ring;
 
     public PlayerGear(){
-
+        Chestplate = null;
+        Helmet = null;
+        Legs = null;
+        Feet = null;
+        Weapon = null;
+        Secondary = null;
+        Necklace = null;
+        Ring = null;
     }
     
 }

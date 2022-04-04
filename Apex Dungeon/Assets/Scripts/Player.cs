@@ -215,7 +215,7 @@ public class Player : MovingEntity
         }
         if(other.gameObject.tag == "Potion")
         {
-            charMenu.addItem(other.GetComponent<Consumable>());
+            charMenu.addItem(other.GetComponent<Pickup>().GetItem());
             Destroy(other.gameObject);
         }
         if (other.gameObject.tag == "Gold")
@@ -235,7 +235,7 @@ public class Player : MovingEntity
         }
         if (other.gameObject.tag == "Equipment")
         {
-            charMenu.addEquipment(other.GetComponent<Equipment>());
+            charMenu.addEquipment(other.GetComponent<Pickup>().GetItem());
             Destroy(other.gameObject);
         }
     }

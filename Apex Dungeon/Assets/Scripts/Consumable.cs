@@ -2,6 +2,12 @@
 
 public class Consumable : Item
 {
+    public Consumable(string name, string flavor, string desc, Sprite img){
+        itemName = name;
+        flavorText = flavor;
+        description = desc;
+        image = img;
+    }
     public void SetStats(string n, string f, string d, Sprite s)
     {
         itemName = n;
