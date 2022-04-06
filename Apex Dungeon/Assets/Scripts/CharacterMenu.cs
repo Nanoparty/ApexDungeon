@@ -55,7 +55,7 @@ public class CharacterMenu
     }
 
     // Update is called once per frame
-    public void Update()
+    public async void Update()
     {
         
         if(popupOpen){
@@ -97,6 +97,15 @@ public class CharacterMenu
 
         if (Input.GetMouseButtonDown(0))
         {
+            for(int i = 0; i < 8;i++){
+                //check equiped gear for clicks
+                charPanel = panelObject.transform.GetChild(0).gameObject;
+                GameObject middleStats = charPanel.transform.GetChild(1).gameObject;
+                GameObject gearSlot = middleStats.transform.GetChild(4+i).gameObject;
+                if(gearSlot.GetComponent<Clickable>().getClicked()){
+
+                }
+            }
             if(tab == 0){
                 for(int i = 0; i < inventorySlots.Count; i++)
                 {
@@ -111,7 +120,7 @@ public class CharacterMenu
                     }
                 }
             }
-            if(tab == 1){
+            else if(tab == 1){
                 for(int i = 0; i < equipmentSlots.Count; i++)
                 {
                     if (equipmentSlots != null && equipmentSlots.Count > 0 
@@ -578,27 +587,44 @@ public class CharacterMenu
         GameObject.Destroy(popupArea);
         popupOpen = false;
         refreshTopicPanel();
+        setPlayerStats();
     }
     void equipListener(){
         Debug.Log("EQUIP");
 
         //equip armor
         Equipment e = equipment[selected];
-
-        if(e.type == "helmet") gear.Helmet = e;
-        if(e.type == "chestplate") gear.Chestplate = e;
-        if(e.type == "legs") gear.Legs = e;
-        if(e.type == "boots") gear.Feet = e;
+        Equipment old = new Equipment();
 
 
-        //equipment.RemoveAt(selected);
+        if(e.type == "helmet"){
+            old = gear.Helmet;
+            gear.Helmet = e;
+        } 
+        if(e.type == "chestplate"){
+            old = gear.Chestplate;
+            gear.Chestplate = e;
+        } 
+        if(e.type == "legs"){
+            old = gear.Legs;
+            gear.Legs = e;
+        } 
+        if(e.type == "boots"){
+            old = gear.Feet;
+            gear.Feet = e;
+        } 
+
+        //remove equipment from inventory
+        equipment.RemoveAt(selected);
 
         //add old armor to inventory
+        if(old != null) addEquipment(old);
 
         selected = -1;
-        Debug.Log("DESTROY");
         GameObject.Destroy(popupArea);
         popupOpen = false;
+        //openStats();
+
         refreshTopicPanel();
         setPlayerStats();
     }
@@ -617,6 +643,38 @@ public class CharacterMenu
     }
     void compareListener(){
         Debug.Log("COMPARE");
+        Equipment e = equipment[selected];
+        Equipment alt = new Equipment();
+
+        if(e.type == "helmet"){
+            alt = gear.Helmet;
+        } 
+        if(e.type == "chestplate"){
+            alt = gear.Chestplate;
+        } 
+        if(e.type == "legs"){
+            alt = gear.Legs;
+        } 
+        if(e.type == "boots"){
+            alt = gear.Feet;
+        } 
+        if(alt == null)return;
+
+        openComparePopup(alt);
+    }
+
+    void openComparePopup(Equipment alt){
+        GameObject mainHolder = popupArea.transform.GetChild(0).gameObject;
+        GameObject modal2 = mainHolder.transform.GetChild(1).gameObject;
+        modal2.SetActive(true);
+
+        GameObject itemName2 = modal2.transform.GetChild(0).gameObject;
+        GameObject itemFlavor2 = modal2.transform.GetChild(1).gameObject;
+        GameObject itemDesc2 = modal2.transform.GetChild(2).gameObject;
+
+        itemName2.transform.gameObject.GetComponent<TMP_Text>().text = alt.itemName;
+        itemFlavor2.transform.gameObject.GetComponent<TMP_Text>().text = alt.flavorText;
+        itemDesc2.transform.gameObject.GetComponent<TMP_Text>().text = alt.description;
     }
 
     void refreshTopicPanel(){

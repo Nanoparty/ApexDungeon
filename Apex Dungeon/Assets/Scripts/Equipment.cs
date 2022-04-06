@@ -16,6 +16,9 @@ public class Equipment : Item
     public int crit;
 
     public string modifier;
+    public Equipment(){
+
+    }
     public Equipment(int lvl, string type, int tier, Sprite image, int def, int atk, int intel, int crit, string mod)
     {
         this.level = lvl;
@@ -83,7 +86,12 @@ public class Equipment : Item
             else if (type == "boots") nameText = "Diamond Boots";
         }
 
-        string descriptionText = String.Format("Attack +{0} Defense +{1} Intelligence +{2} Crit Chance +{3}", atk, def, intel, crit);
+        string descriptionText = "";
+
+        if(atk > 0) descriptionText += String.Format("Attack +{0}\n", atk);
+        if(def > 0) descriptionText += String.Format("Defense +{0}\n", def);
+        if(intel > 0) descriptionText += String.Format("Intelligence +{0}\n", intel);
+        if(crit > 0) descriptionText += String.Format("Critical +{0}", crit);
 
 
         itemName = nameText;

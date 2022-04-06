@@ -119,7 +119,7 @@ public class Inventory
         if (Input.GetKeyDown("b"))
         {
             //closeInventory();
-            addItem(new HealthPotion(sprite));
+            //addItem(new HealthPotion(sprite));
             Debug.Log(items.Count);
             updateInventory();
         }
