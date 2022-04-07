@@ -201,7 +201,8 @@ public class Player : MovingEntity
         charMenu = Data.charMenu;
     }
 
-    private void nextFloor(){
+    public void nextFloor(){
+        GameManager.gmInstance.Dungeon.setFullBright(false);
         GameManager.gmInstance.level++;
         saveCharacterData();
         GameManager.gmInstance.Reset();
@@ -213,7 +214,7 @@ public class Player : MovingEntity
         {
             nextFloor();
         }
-        if(other.gameObject.tag == "Potion")
+        if(other.gameObject.tag == "Consumable")
         {
             charMenu.addItem(other.GetComponent<Pickup>().GetItem());
             Destroy(other.gameObject);

@@ -56,7 +56,7 @@ public class CharacterMenu
     }
 
     // Update is called once per frame
-    public async void Update()
+    public void Update()
     {
         
         if(popupOpen){

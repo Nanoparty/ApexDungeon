@@ -22,13 +22,24 @@ public class Consumable : Item
 
     public override void UseItem()
     {
+        Player p = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         if(itemName == "Health Potion"){
-            Player p = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
             p.addHP(20);
         }
         if(itemName == "Mana Potion"){
-            Player p = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
             p.addMP(20);
+        }
+        if(itemName == "Skip Orb"){
+            p.nextFloor();
+        }
+        if(itemName == "Teleport Orb"){
+
+        }
+        if(itemName == "Death Orb"){
+
+        }
+        if(itemName == "Map Fragment"){
+            GameManager.gmInstance.Dungeon.setFullBright(true);
         }
     }
 }

@@ -11,10 +11,20 @@ public class DungeonObject
 
     public int width;
     public int height;
+    private bool fullBright = false;
 
     
     public void UpdateShadows(int r, int c)
     {
+        if(fullBright){
+            for(int i = 0; i < width;i++){
+                for(int j = 0; j < height;j++){
+                    tileMap[i,j].visible = true;
+                    SetShadowVisible(i,j);
+                }
+            }
+        }
+
         SetShadowsDark();
         //hallway
         bool hallway = tileMap[r, c].type == 3;
@@ -107,5 +117,9 @@ public class DungeonObject
             return true;
         }
         return false;
+    }
+
+    public void setFullBright(bool b){
+        fullBright = b;
     }
 }
