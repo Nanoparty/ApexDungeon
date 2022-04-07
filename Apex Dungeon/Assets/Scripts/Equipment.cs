@@ -21,15 +21,15 @@ public class Equipment : Item
     }
     public Equipment(int lvl, string type, int tier, Sprite image, int def, int atk, int intel, int crit, string mod)
     {
-        this.level = lvl;
-        this.type = type;
-        this.tier = tier;
-        this.image = image;
-        this.defense = def;
-        this.attack = atk;
-        this.intelligence = intel;
-        this.crit = crit;
-        this.modifier = mod;
+        // this.level = lvl;
+        // this.type = type;
+        // this.tier = tier;
+        // this.image = image;
+        // this.defense = def;
+        // this.attack = atk;
+        // this.intelligence = intel;
+        // this.crit = crit;
+        // this.modifier = mod;
 
         setStats(lvl, type, tier, image, def, atk, intel, crit, mod);
     }
@@ -55,7 +55,7 @@ public class Equipment : Item
         this.type = type;
         this.tier = tier;
         this.defense = def;
-        this.attack = def;
+        this.attack = atk;
         this.intelligence = intel;
         this.crit = crit;
         this.modifier = mod;
@@ -68,6 +68,10 @@ public class Equipment : Item
             else if (type == "gloves") nameText = "Leather Gloves";
             else if (type == "legs") nameText = "Leather Greaves";
             else if (type == "boots") nameText = "Leather Boots";
+            else if (type == "weapon") nameText = "Rusty Dagger";
+            else if (type == "shield") nameText = "Leather Shield";
+            else if (type == "necklace") nameText = "Iron Necklace";
+            else if (type == "ring") nameText = "Iron Ring";
         }
         else if (tier == 2)
         {
@@ -76,6 +80,10 @@ public class Equipment : Item
             else if (type == "gloves") nameText = "Iron Gloves";
             else if (type == "legs") nameText = "Iron Greaves";
             else if (type == "boots") nameText = "Iron Boots";
+            else if (type == "weapon") nameText = "Long Sword";
+            else if (type == "shield") nameText = "Iron Shield";
+            else if (type == "necklace") nameText = "Gold Necklace";
+            else if (type == "ring") nameText = "Gold Ring";
         }
         else if (tier == 3)
         {
@@ -84,6 +92,10 @@ public class Equipment : Item
             else if (type == "gloves") nameText = "Diamond Gloves";
             else if (type == "legs") nameText = "Diamond Greaves";
             else if (type == "boots") nameText = "Diamond Boots";
+            else if (type == "weapon") nameText = "Great Axe";
+            else if (type == "shield") nameText = "Diamond Shield";
+            else if (type == "necklace") nameText = "Diamond Necklace";
+            else if (type == "ring") nameText = "Diamond Ring";
         }
 
         string descriptionText = "";

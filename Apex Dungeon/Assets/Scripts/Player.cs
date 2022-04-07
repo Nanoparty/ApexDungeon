@@ -315,31 +315,7 @@ public class Player : MovingEntity
         //INTERACTION
     }
 
-    public void addMP(int i)
-    {
-        mp += i;
-        if(mp > maxMp) mp = maxMp;
-    }
-    public void addHP(int i)
-    {
-        hp += i;
-        if(hp > maxHp) hp = maxHp;
-    }
-    public void addExp(int i){
-        exp += i;
-        bool levelUp = false;
-        prevLevel = expLevel;
-        while(exp >= maxExp){
-            exp -= maxExp;
-            expLevel++;
-            maxExp += (int)(0.5 * maxExp);
-            levelUp = true;
-        }
-        if(levelUp){
-            openLevel = true;
-            createLevelPopup();
-        }
-    }
+    
 
     void createLevelPopup(){
         Vector3 pos = new Vector3(0, 0, 0);
@@ -497,9 +473,55 @@ public class Player : MovingEntity
     public void setGear(PlayerGear gear){
         this.gear = gear;
     }
-    public Equipment setHelmet(Equipment i){
-        Equipment equiped = gear.Helmet;
-        gear.Helmet = i;
-        return equiped;
+
+    public void addMP(int i)
+    {
+        mp += i;
+        if(mp > maxMp) mp = maxMp;
+    }
+    public void addMaxMP(int i){
+        maxMp += i;
+    }
+    public void addHP(int i)
+    {
+        hp += i;
+        if(hp > maxHp) hp = maxHp;
+    }
+    public void addMaxHP(int i){
+        maxHp += i;
+    }
+    public void addExp(int i){    //////TODO -- fix so that you can get multiple points if level multiple times at once
+        exp += i;
+        bool levelUp = false;
+        prevLevel = expLevel;
+        while(exp >= maxExp){
+            exp -= maxExp;
+            expLevel++;
+            maxExp += (int)(0.5 * maxExp);
+            levelUp = true;
+        }
+        if(levelUp){
+            openLevel = true;
+            createLevelPopup();
+        }
+    }
+    public void addStrength(int i){
+        damage += i;
+        Debug.Log("ADDING "+i + " STRENGTH");
+    }
+    public void addDefense(int i){
+        defense += i;
+    }
+    public void addCrit(int i){
+        critical += i;
+    }
+    public void addIntelligence(int i){
+        intelligence += i;
+    }
+    public void addBlock(int i){
+        blockStat += i;
+    }
+    public void addEvade(int i){
+        evade += i;
     }
 }

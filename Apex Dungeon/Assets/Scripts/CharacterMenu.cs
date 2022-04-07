@@ -678,6 +678,22 @@ public class CharacterMenu
             old = gear.Feet;
             gear.Feet = e;
         } 
+        if(e.type == "weapon"){
+            old = gear.Weapon;
+            gear.Weapon = e;
+        } 
+        if(e.type == "shield"){
+            old = gear.Secondary;
+            gear.Secondary = e;
+        } 
+        if(e.type == "necklace"){
+            old = gear.Necklace;
+            gear.Necklace = e;
+        } 
+        if(e.type == "ring"){
+            old = gear.Ring;
+            gear.Ring = e;
+        } 
 
         //remove equipment from inventory
         equipment.RemoveAt(selected);
@@ -689,6 +705,8 @@ public class CharacterMenu
         GameObject.Destroy(popupArea);
         popupOpen = false;
         //openStats();
+        removeGearStats(old);
+        applyGearStats(e);
 
         refreshTopicPanel();
         setPlayerStats();
@@ -738,8 +756,42 @@ public class CharacterMenu
         popupOpen = false;
         //openStats();
 
+        removeGearStats(e);
+
         refreshTopicPanel();
         setPlayerStats();
+    }
+
+    void applyGearStats(Equipment e){
+        int str = e.attack;
+        int def = e.defense;
+        int crit = e.crit;
+        int intel = e.intelligence;
+        //int block = e.block;
+        //int evade = e.evade;
+
+        Debug.Log("GEAR STR IS "+ e.attack);
+
+        player.addStrength(str);
+        player.addDefense(def);
+        player.addCrit(crit);
+        player.addIntelligence(intel);
+    }
+
+    void removeGearStats(Equipment e){
+        if (e == null)return;
+
+        int str = e.attack;
+        int def = e.defense;
+        int crit = e.crit;
+        int intel = e.intelligence;
+        //int block = e.block;
+        //int evade = e.evade;
+
+        player.addStrength(-str);
+        player.addDefense(-def);
+        player.addCrit(-crit);
+        player.addIntelligence(-intel);
     }
 
     void trashListener(){
@@ -791,7 +843,7 @@ public class CharacterMenu
             e = gear.Ring;
             gear.Ring = null;
         } 
-        
+
         gearSelection = -1;
         GameObject.Destroy(popupArea);
         popupOpen = false;
@@ -852,6 +904,10 @@ public class CharacterMenu
         GameObject.Destroy(mapRoot);
         updateTopicPanel();
         populateTopicArea();
+    }
+
+    void applyGearStats(){
+
     }
 
     public void addItem(Item i){

@@ -30,6 +30,14 @@ public class EquipmentGenerator : ScriptableObject
     public Sprite GoldNecklace;
     public Sprite DiamondNecklace;
 
+    public Sprite Dagger;
+    public Sprite Sword;
+    public Sprite Axe;
+
+    public Sprite LeatherShield;
+    public Sprite IronShield;
+    public Sprite DiamondShield;
+
     //Parameters
     int level;
     string type;
@@ -102,20 +110,6 @@ public class EquipmentGenerator : ScriptableObject
                         break;
                 }
                 break;
-            case "gloves":
-                switch (tier)
-                {
-                    case 1:
-                        image = LeatherGloves;
-                        break;
-                    case 2:
-                        image = IronGloves;
-                        break;
-                    case 3:
-                        image = DiamondGloves;
-                        break;
-                }
-                break;
             case "legs":
                 switch (tier)
                 {
@@ -141,6 +135,62 @@ public class EquipmentGenerator : ScriptableObject
                         break;
                     case 3:
                         image = DiamondBoots;
+                        break;
+                }
+                break;
+            case "weapon":
+                switch (tier)
+                {
+                    case 1:
+                        image = Dagger;
+                        break;
+                    case 2:
+                        image = Sword;
+                        break;
+                    case 3:
+                        image = Axe;
+                        break;
+                }
+                break;
+            case "shield":
+                switch (tier)
+                {
+                    case 1:
+                        image = LeatherShield;
+                        break;
+                    case 2:
+                        image = IronShield;
+                        break;
+                    case 3:
+                        image = DiamondShield;
+                        break;
+                }
+                break;
+            case "necklace":
+                switch (tier)
+                {
+                    case 1:
+                        image = IronNecklace;
+                        break;
+                    case 2:
+                        image = GoldNecklace;
+                        break;
+                    case 3:
+                        image = DiamondNecklace;
+                        break;
+                }
+                break;
+            case "ring":
+                switch (tier)
+                {
+                    case 1:
+                        image = IronRing;
+                        break;
+                    case 2:
+                        image = GoldRing;
+                        break;
+                    case 3:
+                        image = DiamondRing;
                         break;
                 }
                 break;
@@ -174,11 +224,15 @@ public class EquipmentGenerator : ScriptableObject
     public GameObject GenerateEquipment(int level)
     {
         //pick type
-        int typeNum = Random.Range(1, 6);
+        int typeNum = Random.Range(1,9);
         if (typeNum == 1) type = "helmet";
         else if (typeNum == 2) type = "chestplate";
         else if (typeNum == 3) type = "boots";
         else if (typeNum == 4) type = "legs";
+        else if (typeNum == 5) type = "weapon";
+        else if (typeNum == 6) type = "shield";
+        else if (typeNum == 7) type = "necklace";
+        else if (typeNum == 8) type = "ring";
 
         //pick tier
         int tierNum = Random.Range(1, 4);
