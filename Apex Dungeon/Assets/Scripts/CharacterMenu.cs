@@ -45,6 +45,7 @@ public class CharacterMenu
     public Sprite[] icons;
     public Sprite s;
     int selected = -1;
+    int gearSelection = -1;
     bool popupOpen = false;
     bool slotsLoaded = false;
 
@@ -63,7 +64,7 @@ public class CharacterMenu
             if (Input.GetButtonDown("Fire1"))
             {
                 bool isClicked = false;
-                if(tab == 0){
+                if(tab == 0 || gearSelection > -1){
                     isClicked = popupArea.GetComponent<Clickable>().getClicked() 
                      || useButton.GetComponent<Clickable>().getClicked() 
                      || trashButton.GetComponent<Clickable>().getClicked();
@@ -103,7 +104,10 @@ public class CharacterMenu
                 GameObject middleStats = charPanel.transform.GetChild(1).gameObject;
                 GameObject gearSlot = middleStats.transform.GetChild(4+i).gameObject;
                 if(gearSlot.GetComponent<Clickable>().getClicked()){
-
+                    gearSlot.GetComponent<Clickable>().setClicked(false);
+                    gearSelection = i;
+                    popupOpen = true;
+                    createGearPopup();
                 }
             }
             if(tab == 0){
@@ -508,6 +512,8 @@ public class CharacterMenu
             itemFlavor1.transform.gameObject.GetComponent<TMP_Text>().text = i.flavorText;
             itemDesc1.transform.gameObject.GetComponent<TMP_Text>().text = i.description;
 
+            button1.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = "Equip";
+
             modal2.SetActive(false);
             
             button1.GetComponent<Button>().onClick.AddListener(equipListener);
@@ -517,6 +523,65 @@ public class CharacterMenu
             trashButton = button2;
             compareButton = button3;
         }
+        
+    }
+
+    void createGearPopup(){
+        charPanel = panelObject.transform.GetChild(0).gameObject;
+        GameObject middleStats = charPanel.transform.GetChild(1).gameObject;
+        GameObject gearSlot = middleStats.transform.GetChild(4+gearSelection).gameObject;
+
+        Equipment e = new Equipment();
+
+        if(gearSelection == 0) e = gear.Helmet;
+        if(gearSelection == 1) e = gear.Chestplate;
+        if(gearSelection == 2) e = gear.Legs;
+        if(gearSelection == 3) e = gear.Feet;
+        if(gearSelection == 4) e = gear.Weapon;
+        if(gearSelection == 5) e = gear.Secondary;
+        if(gearSelection == 6) e = gear.Necklace;
+        if(gearSelection == 7) e = gear.Ring;
+
+        if(e == null)return;
+
+        Vector3 pos = new Vector3(0, 0, 0);
+
+        GameObject popup = GameObject.Instantiate(itemPopup, pos, Quaternion.identity);
+        GameObject mainHolder = popup.transform.GetChild(0).gameObject;
+
+        GameObject modal1 = mainHolder.transform.GetChild(0).gameObject;
+        GameObject modal2 = mainHolder.transform.GetChild(1).gameObject;
+
+        GameObject itemName1 = modal1.transform.GetChild(0).gameObject;
+        GameObject itemFlavor1 = modal1.transform.GetChild(1).gameObject;
+        GameObject itemDesc1 = modal1.transform.GetChild(2).gameObject;
+
+        GameObject itemName2 = modal2.transform.GetChild(0).gameObject;
+        GameObject itemFlavor2 = modal2.transform.GetChild(1).gameObject;
+        GameObject itemDesc2 = modal2.transform.GetChild(2).gameObject;
+
+        GameObject buttonHolder = modal1.transform.GetChild(3).gameObject;
+        GameObject button1 = buttonHolder.transform.GetChild(0).gameObject;
+        GameObject button2 = buttonHolder.transform.GetChild(1).gameObject;
+        GameObject button3 = buttonHolder.transform.GetChild(2).gameObject;
+        
+        popup.transform.SetParent(topicPanel.transform, false);
+        popupArea = popup;
+        
+        itemName1.transform.gameObject.GetComponent<TMP_Text>().text = e.itemName;
+        itemFlavor1.transform.gameObject.GetComponent<TMP_Text>().text = e.flavorText;
+        itemDesc1.transform.gameObject.GetComponent<TMP_Text>().text = e.description;
+
+        modal2.SetActive(false);
+        button3.SetActive(false);
+
+        button1.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = "Unequip";
+
+        button1.GetComponent<Button>().onClick.AddListener(unequipListener);
+        button2.GetComponent<Button>().onClick.AddListener(trashEquipedListener);
+        useButton = button1;
+        trashButton = button2;
+        compareButton = button3;
         
     }
 
@@ -628,6 +693,55 @@ public class CharacterMenu
         refreshTopicPanel();
         setPlayerStats();
     }
+
+    void unequipListener(){
+        Equipment e = new Equipment();
+
+        if(gearSelection == 0){ 
+            e = gear.Helmet; 
+            gear.Helmet = null;
+        }
+        if(gearSelection == 1){
+            e = gear.Chestplate;
+            gear.Chestplate = null;
+        } 
+        if(gearSelection == 2){
+            e = gear.Legs;
+            gear.Legs = null;
+        } 
+        if(gearSelection == 3){
+            e = gear.Feet;
+            gear.Feet = null;
+        } 
+        if(gearSelection == 4){
+            e = gear.Weapon;
+            gear.Weapon = null;
+        } 
+        if(gearSelection == 5){
+            e = gear.Secondary;
+            gear.Secondary = null;
+        } 
+        if(gearSelection == 6){
+            e = gear.Necklace;
+            gear.Necklace = null;
+        } 
+        if(gearSelection == 7){
+            e = gear.Ring;
+            gear.Ring = null;
+        } 
+
+        if(e != null) addEquipment(e);
+
+        gearSelection = -1;
+        selected = -1;
+        GameObject.Destroy(popupArea);
+        popupOpen = false;
+        //openStats();
+
+        refreshTopicPanel();
+        setPlayerStats();
+    }
+
     void trashListener(){
         if(tab == 0){
             items.RemoveAt(selected);
@@ -641,6 +755,50 @@ public class CharacterMenu
         popupOpen = false;
         refreshTopicPanel();
     }
+
+    void trashEquipedListener(){
+        Equipment e = new Equipment();
+
+        if(gearSelection == 0){ 
+            e = gear.Helmet; 
+            gear.Helmet = null;
+        }
+        if(gearSelection == 1){
+            e = gear.Chestplate;
+            gear.Chestplate = null;
+        } 
+        if(gearSelection == 2){
+            e = gear.Legs;
+            gear.Legs = null;
+        } 
+        if(gearSelection == 3){
+            e = gear.Feet;
+            gear.Feet = null;
+        } 
+        if(gearSelection == 4){
+            e = gear.Weapon;
+            gear.Weapon = null;
+        } 
+        if(gearSelection == 5){
+            e = gear.Secondary;
+            gear.Secondary = null;
+        } 
+        if(gearSelection == 6){
+            e = gear.Necklace;
+            gear.Necklace = null;
+        } 
+        if(gearSelection == 7){
+            e = gear.Ring;
+            gear.Ring = null;
+        } 
+        
+        gearSelection = -1;
+        GameObject.Destroy(popupArea);
+        popupOpen = false;
+        refreshTopicPanel();
+        setPlayerStats();
+    }
+
     void compareListener(){
         Debug.Log("COMPARE");
         Equipment e = equipment[selected];
