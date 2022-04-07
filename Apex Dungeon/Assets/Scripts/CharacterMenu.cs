@@ -868,6 +868,18 @@ public class CharacterMenu
         if(e.type == "boots"){
             alt = gear.Feet;
         } 
+        if(e.type == "weapon"){
+            alt = gear.Weapon;
+        } 
+        if(e.type == "shield"){
+            alt = gear.Secondary;
+        } 
+        if(e.type == "necklace"){
+            alt = gear.Necklace;
+        } 
+        if(e.type == "ring"){
+            alt = gear.Ring;
+        } 
         if(alt == null)return;
 
         openComparePopup(alt);
