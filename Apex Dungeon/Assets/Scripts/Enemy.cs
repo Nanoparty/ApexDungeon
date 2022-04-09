@@ -65,15 +65,20 @@ public class Enemy : MovingEntity
         return 50;
     }
 
+    public void die(){
+        SpawnBlood();
+        GameManager.gmInstance.Dungeon.tileMap[row, col].occupied = 0;
+        GameManager.gmInstance.removeEnemy(this);
+        int givenExp = calculateExp();
+        player.addExp(givenExp);
+        Destroy(this.gameObject);
+    }
+
     public void MoveEnemy()
     {
-        if (dead)
+        if (dead || hp <= 0)
         {
-            GameManager.gmInstance.Dungeon.tileMap[row, col].occupied = 0;
-            GameManager.gmInstance.removeEnemy(this);
-            int givenExp = calculateExp();
-            player.addExp(givenExp);
-            Destroy(this.gameObject);
+            die();
             
         }
         if (agro)

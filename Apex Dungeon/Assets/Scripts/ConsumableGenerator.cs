@@ -87,6 +87,26 @@ public class ConsumableGenerator : ScriptableObject
         return item;
     }
 
+    public GameObject CreateLightOrb(){
+        GameObject item = new GameObject("Light Orb");
+
+        item.AddComponent<SpriteRenderer>();
+        item.GetComponent<SpriteRenderer>().sprite = blueOrb;
+        item.GetComponent<SpriteRenderer>().sortingLayerName = "Items";
+
+        item.AddComponent<BoxCollider2D>();
+        item.GetComponent<BoxCollider2D>().isTrigger = true;
+
+        Consumable orb = new Consumable("Light Orb", "Don't look under the bed.", "Lights up the entire floor", blueOrb);
+
+        item.AddComponent<Pickup>();
+        item.GetComponent<Pickup>().SetItem(orb);
+
+        item.tag = "Consumable";
+
+        return item;
+    }
+
     public GameObject CreateTeleportOrb(){
         GameObject item = new GameObject("Teleport Orb");
 
@@ -158,6 +178,6 @@ public class ConsumableGenerator : ScriptableObject
 
         if (consumable == null) consumable = new GameObject();
 
-        return CreateSkipOrb();
+        return CreateTeleportOrb();
     }
 }

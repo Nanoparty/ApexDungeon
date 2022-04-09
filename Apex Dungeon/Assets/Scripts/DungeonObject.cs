@@ -6,26 +6,45 @@ public class DungeonObject
     public Tile[,] tileMap;
     public GameObject[,] shadowMap;
     public List<GameObject> activeShadows;
+    public List<Vector2> activeShadowCoords;
     public List<Vector2> visibleTiles;
+    public List<Vector2> walkableTiles;
     public List<Room> rooms;
 
     public int width;
     public int height;
     private bool fullBright = false;
+    private bool fullExplored = false;
 
     
     public void UpdateShadows(int r, int c)
     {
-        if(fullBright){
+        if(fullExplored){
+            Debug.Log("FullExplored");
             for(int i = 0; i < width;i++){
                 for(int j = 0; j < height;j++){
-                    tileMap[i,j].visible = true;
-                    SetShadowVisible(i,j);
+                    visibleTiles.Add(new Vector2(i, j));
+                    tileMap[i, j].explored = true;
                 }
             }
         }
 
+        if(fullBright){
+            Debug.Log("Full Bright");
+            for(int i = 0; i < width;i++){
+                for(int j = 0; j < height;j++){
+                    GameObject o = shadowMap[i, j];
+                    o.SetActive(false);
+                    activeShadows.Add(o);
+                }
+            }
+        }
+
+
+        
         SetShadowsDark();
+        
+        
         //hallway
         bool hallway = tileMap[r, c].type == 3;
         if (hallway)
@@ -68,27 +87,39 @@ public class DungeonObject
 
     public void SetShadowVisible(int r, int c)
     {
-        GameObject o = shadowMap[r, c];
-        o.SetActive(false);
-        activeShadows.Add(o);
-        tileMap[r, c].visible = true;
-        visibleTiles.Add(new Vector2(r, c));
-        tileMap[r, c].explored = true;
+        if(!fullBright){
+            GameObject o = shadowMap[r, c];
+            o.SetActive(false);
+            activeShadows.Add(o);
+            activeShadowCoords.Add(new Vector2(r,c));
+        }
+        if(!fullExplored){
+            tileMap[r, c].visible = true;
+            visibleTiles.Add(new Vector2(r, c));
+            tileMap[r, c].explored = true;
+        }
+        
     }
 
     public void SetShadowsDark()
     {
-        foreach(GameObject o in activeShadows)
-        {
-            o.SetActive(true);
-            
+        if(!fullBright){
+            foreach(GameObject o in activeShadows)
+            {
+                o.SetActive(true);
+                
+            }
+            activeShadows.Clear();
+            activeShadowCoords.Clear();
         }
-        activeShadows.Clear();
-        foreach(Vector2 v in visibleTiles)
-        {
-            tileMap[(int)v.x, (int)v.y].visible = false;
+        if(!fullExplored){
+            foreach(Vector2 v in visibleTiles)
+            {
+                tileMap[(int)v.x, (int)v.y].visible = false;
+            }
+            visibleTiles.Clear();
         }
-        visibleTiles.Clear();
+        
     }
 
     public Room getRoom(int r, int c)
@@ -119,7 +150,28 @@ public class DungeonObject
         return false;
     }
 
+    public List<Vector2> getActiveShadowCoords(){
+        return activeShadowCoords;
+    }
+
     public void setFullBright(bool b){
         fullBright = b;
+    }
+    public void setFullExplored(bool b){
+        fullExplored = b;
+    }
+
+    public Vector2 getRandomUnoccupiedTile(){
+        Vector2 result = new Vector2();
+        bool found = false;
+        while(!found){
+            int index = Random.Range(0,walkableTiles.Count);
+            Vector2 pos = walkableTiles[index];
+            if(tileMap[(int)pos.x,(int)pos.y].getOccupied() == false) {
+                found = true;
+                result = pos;
+            }
+        }
+        return result;
     }
 }

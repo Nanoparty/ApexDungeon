@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class Consumable : Item
 {
@@ -33,12 +34,23 @@ public class Consumable : Item
             p.nextFloor();
         }
         if(itemName == "Teleport Orb"){
-
+            Vector2 pos = GameManager.gmInstance.Dungeon.getRandomUnoccupiedTile();
+            p.setPosition((int)pos.x, (int)pos.y);
         }
         if(itemName == "Death Orb"){
-
+            List<Vector2> activeShadows = GameManager.gmInstance.Dungeon.getActiveShadowCoords();
+            foreach(Vector2 v in activeShadows){
+                Enemy e = GameManager.gmInstance.getEnemyAtLoc((int)v.x,(int)v.y);
+                if(e != null){
+                    e.die();
+                    Debug.Log("KILL ENEMY");
+                }
+            }
         }
         if(itemName == "Map Fragment"){
+            GameManager.gmInstance.Dungeon.setFullExplored(true);
+        }
+        if(itemName == "Light Orb"){
             GameManager.gmInstance.Dungeon.setFullBright(true);
         }
     }

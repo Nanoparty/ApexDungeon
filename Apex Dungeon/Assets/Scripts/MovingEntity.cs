@@ -220,6 +220,7 @@ public abstract class MovingEntity : MonoBehaviour
         if(hp <= 0)
         {
             dead = true;
+            SpawnBlood();
         }
         if (change < 0)
         {
@@ -227,7 +228,7 @@ public abstract class MovingEntity : MonoBehaviour
         }
     }
 
-    void SpawnBlood()
+    protected void SpawnBlood()
     {
         Vector3 position = new Vector3(col, row, 0f);
         Instantiate(blood, position, Quaternion.identity);
@@ -277,6 +278,15 @@ public abstract class MovingEntity : MonoBehaviour
     private void UpdateShadows(int r, int c)
     {
         GameManager.gmInstance.Dungeon.UpdateShadows(r, c);
+    }
+
+    public void setHP(int i){
+        this.hp = i;
+    }
+
+    public void setPosition(int r, int c){
+        this.row = r;
+        this.col = c;
     }
 
 

@@ -8,8 +8,10 @@ public class DungeonGenerator : ScriptableObject
     public EquipmentGenerator equipmentGenerator;
     public ConsumableGenerator consumableGenerator;
     public static Tile[,] tileMap;
+    private static List<Vector2> walkableTiles;
     public static GameObject[,] shadowMap;
     public static List<GameObject> activeShadows;
+    public static List<Vector2> activeShadowCoords;
     public static List<Vector2> visibleTiles;
 
     public static int width = 50;
@@ -53,7 +55,9 @@ public class DungeonGenerator : ScriptableObject
         rooms = new List<Room>();
 
         activeShadows = new List<GameObject>();
+        activeShadowCoords = new List<Vector2>();
         visibleTiles = new List<Vector2>();
+        walkableTiles = new List<Vector2>();
 
         dungeon = new GameObject("Dungeon").transform;
         shadowContainer = new GameObject("ShadowContainer").transform;
@@ -99,9 +103,11 @@ public class DungeonGenerator : ScriptableObject
 
         DungeonObject dungeonObject = new DungeonObject();
         dungeonObject.activeShadows = activeShadows;
+        dungeonObject.activeShadowCoords = activeShadowCoords;
         dungeonObject.shadowMap = shadowMap;
         dungeonObject.tileMap = tileMap;
         dungeonObject.visibleTiles = visibleTiles;
+        dungeonObject.walkableTiles = walkableTiles;
         dungeonObject.rooms = rooms;
         dungeonObject.width = width;
         dungeonObject.height = height;
@@ -158,6 +164,7 @@ public class DungeonGenerator : ScriptableObject
                 if (tileMap[startR, col].type == 0 || tileMap[startR, col].type == 2)
                 {
                     tileMap[startR, col] = new Tile(startR, col, 3);
+                    walkableTiles.Add(new Vector2(startR, col));
                 }
                 //place side walls left;
                 if (tileMap[startR, col - 1].type == 0)
@@ -194,6 +201,7 @@ public class DungeonGenerator : ScriptableObject
                 if (tileMap[startR, col].type == 0 || tileMap[startR, col].type == 2)
                 {
                     tileMap[startR, col] = new Tile(startR, col, 3);
+                    walkableTiles.Add(new Vector2(startR, col));
                 }
                 //place side walls left;
                 if (tileMap[startR, col - 1].type == 0)
@@ -235,6 +243,7 @@ public class DungeonGenerator : ScriptableObject
                 if (tileMap[row, startC].type == 0 || tileMap[row, startC].type == 2)
                 {
                     tileMap[row, startC] = new Tile(row, startC, 3);
+                    walkableTiles.Add(new Vector2(row, startC));
                 }
                 //place side walls left;
                 if (tileMap[row - 1, startC].type == 0)
@@ -271,6 +280,7 @@ public class DungeonGenerator : ScriptableObject
                 if (tileMap[row, startC].type == 0 || tileMap[row, startC].type == 2)
                 {
                     tileMap[row, startC] = new Tile(row, startC, 3);
+                    walkableTiles.Add(new Vector2(row, startC));
                 }
                 //place side walls left;
                 if (tileMap[row - 1, startC].type == 0)
@@ -361,7 +371,7 @@ public class DungeonGenerator : ScriptableObject
                 for (int k = 1; k < w-1; k++)
                 {
                     tileMap[r + j, c + k] = new Tile(r + j, c + k, 1);
-
+                    walkableTiles.Add(new Vector2(r + j, c + k));
                 }
             }
         }
