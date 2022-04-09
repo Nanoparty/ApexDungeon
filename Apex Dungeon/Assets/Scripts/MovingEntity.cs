@@ -285,8 +285,11 @@ public abstract class MovingEntity : MonoBehaviour
     }
 
     public void setPosition(int r, int c){
+        GameManager.gmInstance.Dungeon.tileMap[row,col].occupied = 0;
+        gameObject.transform.position = new Vector3(c, r, 0f);
         this.row = r;
         this.col = c;
+        GameManager.gmInstance.Dungeon.tileMap[r,c].occupied = 1;
     }
 
 
