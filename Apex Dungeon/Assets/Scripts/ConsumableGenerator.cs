@@ -171,13 +171,18 @@ public class ConsumableGenerator : ScriptableObject
     {
         GameObject consumable = null;
 
-        int rand = Random.Range(1, 3);
+        int rand = Random.Range(1, 8);
 
         if (rand == 1) consumable = CreateHealthPotion();
-        else if (rand == 2) consumable = CreateManaPotion();
+        if (rand == 2) consumable = CreateManaPotion();
+        if (rand == 3) consumable = CreateDeathOrb();
+        if (rand == 4) consumable = CreateLightOrb();
+        if (rand == 5) consumable = CreateTeleportOrb();
+        if (rand == 6) consumable = CreateMap();
+        if (rand == 7) consumable = CreateSkipOrb();
 
         if (consumable == null) consumable = new GameObject();
 
-        return CreateTeleportOrb();
+        return consumable;
     }
 }
