@@ -207,10 +207,9 @@ public abstract class MovingEntity : MonoBehaviour
 
     protected abstract void OnCantMove<T>(T Component) where T : Component;
 
-    public float calculateDamage(float damage)
+    public float calculateDamage()
     {
-        float netDamage = damage - (defense * 0.5f);
-        return netDamage;
+        return -damage;
     }
 
     public virtual void takeDamage(float change)

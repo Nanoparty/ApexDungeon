@@ -49,16 +49,16 @@ public class Player : MovingEntity
         maxMp = 50;
         maxHp = 100;
 
-        expLevel = 5;
+        expLevel = 1;
         exp = 50;
         maxExp = 100;
 
         damage = 10;
         defense = 10;
-        intelligence = 5;
-        critical = 8;
-        evade = 15;
-        blockStat = 12;
+        intelligence = 10;
+        critical = 10;
+        evade = 10;
+        blockStat = 10;
 
         type = 1;
         gold = 0;
@@ -282,11 +282,17 @@ public class Player : MovingEntity
             Enemy enemy = GameManager.gmInstance.getEnemyAtLoc(clickRow, clickCol);
             if (enemy != null)
             {
-                enemy.takeDamage(-10);
+                enemy.takeDamage(calculateDamage());
                 GameManager.gmInstance.playersTurn = false;
                 return;
             }
         
+    }
+
+    public void takeAttack(float d){
+        // float netDamage = d + (defense * 0.5f);
+        // Debug.Log("PLAYER TAKE DAMANGE:"+netDamage);
+        base.takeDamage(d);
     }
 
     bool isAdjacent(int r, int c)

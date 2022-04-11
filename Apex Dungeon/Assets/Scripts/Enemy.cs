@@ -18,15 +18,20 @@ public class Enemy : MovingEntity
 
     private Path path;
     private Pathfinder finder;
+    private int floor;
 
     protected override void Start()
     {
+        floor = GameManager.gmInstance.level;
+
         //Values
         hp = 100;
         maxHp = 100;
         defense = 5;
         agroRange = 7;
         pRow = pCol = -1;
+
+        setStatsByFloor(floor);
 
         //Objects
         GameManager.gmInstance.AddEnemyToList(this);
@@ -61,8 +66,24 @@ public class Enemy : MovingEntity
         return base.AttemptMove<T>(r, c);
     }
 
+    private void setStatsByFloor(int floor){
+        hp = 100 + 20 * floor;
+        maxHp = hp;
+
+        mp = 100 * floor;
+        maxMp = mp;
+
+        damage = 5 + 1 * floor;
+        defense = 5 + 1 * floor;
+    }
+
     int calculateExp(){
-        return 50;
+        return 50 + 50 * floor;
+    }
+
+    public new void takeDamage(float d){
+        int netDamage = (int)calculateDamageIn(d);
+        base.takeDamage(netDamage);
     }
 
     public void die(){
@@ -121,7 +142,7 @@ public class Enemy : MovingEntity
     {
         if (isAdjacent(player))
         {
-            player.takeDamage(-1);
+            player.takeAttack(calculateDamageOut());
         }
     }
 
@@ -187,10 +208,17 @@ public class Enemy : MovingEntity
         return false;
     }
 
-    new float calculateDamage(float damage)
+    private float calculateDamageOut()
     {
-        float netDamage = damage - (defense * 0.5f);
-        return netDamage;
+        return -1;
+    }
+
+    private float calculateDamageIn(float d){
+        // float damangeBlocked = 1 - 1/(1+d);
+        // float netDamage = d - (d * damangeBlocked);
+        // return netDamage;
+        Debug.Log("Enemy takes damage:"+d);
+        return d;
     }
 
     void addHP(float change)

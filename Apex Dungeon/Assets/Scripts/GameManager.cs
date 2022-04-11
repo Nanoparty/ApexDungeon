@@ -20,7 +20,6 @@ public class GameManager : MonoBehaviour
     public float mCol;
 
     public string DungeonName = "Misty Dungeon";
-    public int floor = 72;
     public int level;
 
     private void Awake()
