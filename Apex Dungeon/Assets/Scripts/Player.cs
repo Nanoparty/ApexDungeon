@@ -17,19 +17,23 @@ public class Player : MovingEntity
     public GameObject mapArea;
     public GameObject itemPopup;
     public GameObject levelPopup;
+    public GameObject endingScreen;
 
     private CharacterMenu charMenu;
     private GameObject levelPopHolder;
     private PlayerGear gear;
-    Animator animator;
+    private Animator animator;
     private int gold;
     private bool openCharacter = false;
     private bool openLevel = false;
     private bool opening = true;
-    private bool fadeIn = false;
+    public bool ending = false;
+    private bool fadeOut = false;
+    public bool fadeIn = true;
     private float start;
     private int prevLevel;
     private string levelStat;
+    private GameObject endScreenHolder;
     protected override void Start()
     {
         setInitialValues();
@@ -44,7 +48,7 @@ public class Player : MovingEntity
     }
 
     void setInitialValues(){
-        hp = 100;
+        hp = 1;
         mp = 50;
         maxMp = 50;
         maxHp = 100;
@@ -84,16 +88,35 @@ public class Player : MovingEntity
         GameManager.gmInstance.playersTurn = false;
     }
 
-    void checkDead()
+    private bool checkDead()
     {
         if (dead)
         {
-            //calculate and save score
+            if(fadeIn){
+                //Debug.Log("Starting fade in");
+                //calculate and save score
+                GameManager.gmInstance.score += gold;
+                fadeIn = false;
 
-            //reset character stats
+                //reset character stats
 
-            //load score screen
+                //death screen
+                GameObject op = GameObject.Instantiate(endingScreen, new Vector3(0, 0, 0), Quaternion.identity);
+                op.transform.GetChild(2).gameObject.GetComponent<Text>().text = "Score: " + GameManager.gmInstance.score.ToString();
+                op.transform.GetChild(1).gameObject.GetComponent<Text>().text = "Floor " + GameManager.gmInstance.level;
+                op.transform.SetParent(GameObject.FindGameObjectWithTag("Canvas").transform, false);
+                op.transform.GetChild(3).gameObject.SetActive(false);
+                endScreenHolder = op;
+            }
+            else if(ending){
+                endScreenHolder.transform.GetChild(3).gameObject.SetActive(true);
+                Debug.Log("ACTIVATE");
+            }
+            
+
+            return true;
         }
+        return false;
     }
 
     void setFadeIn()
@@ -108,6 +131,8 @@ public class Player : MovingEntity
         updatePlayerStatus();
 
         GameManager.gmInstance.Dungeon.UpdateShadows(row, col);
+
+        if(checkDead()) return;
 
         if (openCharacter)
         {
@@ -124,7 +149,7 @@ public class Player : MovingEntity
     
         debugMenu();
         
-        checkDead();
+        
         base.Update();
         checkMoving();
         
@@ -499,6 +524,7 @@ public class Player : MovingEntity
     }
     public void addExp(int i){    //////TODO -- fix so that you can get multiple points if level multiple times at once
         exp += i;
+        GameManager.gmInstance.score += i;
         bool levelUp = false;
         prevLevel = expLevel;
         while(exp >= maxExp){

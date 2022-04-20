@@ -21,10 +21,12 @@ public class GameManager : MonoBehaviour
 
     public string DungeonName = "Misty Dungeon";
     public int level;
+    public int score;
 
     private void Awake()
     {
         level = 1;
+        score = 0;
         if(gmInstance == null)
         {
             gmInstance = this;
