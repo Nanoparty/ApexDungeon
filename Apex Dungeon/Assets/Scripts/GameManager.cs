@@ -22,11 +22,14 @@ public class GameManager : MonoBehaviour
     public string DungeonName = "Misty Dungeon";
     public int level;
     public int score;
+    public List<int> scores;
+    public string state = "play";
 
     private void Awake()
     {
         level = 1;
         score = 0;
+        scores = new List<int>();
         if(gmInstance == null)
         {
             gmInstance = this;
@@ -54,8 +57,29 @@ public class GameManager : MonoBehaviour
         Dungeon = DunGen.Reset();
     }
 
+    public void fullReset(){
+        Data.reset();
+        state = "play";
+        level = 1;
+        score = 0;
+        enemies = new List<Enemy>();
+        furniture = new List<Furniture>();
+        Setup();
+
+        Vector3 position = new Vector3(0f, 0f, 0f);
+        cursor = Instantiate(tileCursor, position, Quaternion.identity) as GameObject;
+    }
+
     void Update()
     {
+        if(state == "score"){
+
+            return;
+        }
+        if(state == "menu"){
+            
+            return;
+        }
         Vector3 pz = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         pz.z = 0;
 

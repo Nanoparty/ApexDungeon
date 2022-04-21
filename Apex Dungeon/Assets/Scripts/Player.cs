@@ -2,6 +2,7 @@
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class Player : MovingEntity
 {
@@ -48,7 +49,7 @@ public class Player : MovingEntity
     }
 
     void setInitialValues(){
-        hp = 1;
+        hp = 50;
         mp = 50;
         maxMp = 50;
         maxHp = 100;
@@ -111,6 +112,12 @@ public class Player : MovingEntity
             else if(ending){
                 endScreenHolder.transform.GetChild(3).gameObject.SetActive(true);
                 Debug.Log("ACTIVATE");
+                if (Input.GetButtonDown("Fire1"))
+                {
+                    GameManager.gmInstance.scores.Add(GameManager.gmInstance.score);
+                    GameManager.gmInstance.state = "score";
+                    SceneManager.LoadScene("Scores", LoadSceneMode.Single);
+                }
             }
             
 

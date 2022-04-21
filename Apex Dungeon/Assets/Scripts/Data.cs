@@ -16,4 +16,8 @@
     public static int crit;
     public static int evade;
     public static int block;
+
+    public static void reset(){
+        
+    }
 }

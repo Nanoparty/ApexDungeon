@@ -54,7 +54,7 @@ public class FadeIn : MonoBehaviour
         }
         else
         {
-            Debug.Log("DONE LARPING");
+            //Debug.Log("DONE LARPING");
             GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().ending = true;
         }
     }
