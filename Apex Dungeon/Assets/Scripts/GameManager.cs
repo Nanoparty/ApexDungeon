@@ -49,6 +49,7 @@ public class GameManager : MonoBehaviour
     void Setup()
     {
         if(SceneManager.GetActiveScene().name == "test") {
+            Dungeon = null;
             Dungeon = DunGen.Initalize();
         }
     }

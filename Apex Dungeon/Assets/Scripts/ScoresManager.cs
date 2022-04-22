@@ -20,11 +20,14 @@ public class ScoresManager : MonoBehaviour
             sc.transform.SetParent(content.transform, false);
         }
         button.onClick.AddListener(mainMenu);
+        Debug.Log("SHADOWS:"+ GameManager.gmInstance.Dungeon.activeShadows.Count);
     }
 
     private void mainMenu(){
-        GameManager.gmInstance.fullReset();
-        SceneManager.LoadScene("test",LoadSceneMode.Single);
+        //GameManager.gmInstance.fullReset();
+        Debug.Log("CLICK");
+        GameManager.gmInstance.Dungeon = null;
+        SceneManager.LoadScene("test", LoadSceneMode.Single);
     }
 
 }

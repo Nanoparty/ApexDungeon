@@ -16,6 +16,18 @@ public class DungeonObject
     private bool fullBright = false;
     private bool fullExplored = false;
 
+    public DungeonObject(){
+        tileMap = null;
+        shadowMap = null;
+        activeShadowCoords = null;
+        activeShadows = null;
+        visibleTiles = null;
+        walkableTiles = null;
+        rooms = null;
+        fullBright = false;
+        fullExplored = false;
+    }
+
     
     public void UpdateShadows(int r, int c)
     {

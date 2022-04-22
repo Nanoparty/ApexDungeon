@@ -13,7 +13,6 @@ public class Player : MovingEntity
     public GameObject slot;
     public GameObject block;
     public GameObject pblock;
-    public GameObject mapHolder;
     public GameObject questLine;
     public GameObject mapArea;
     public GameObject itemPopup;
@@ -49,7 +48,7 @@ public class Player : MovingEntity
     }
 
     void setInitialValues(){
-        hp = 50;
+        hp = 1;
         mp = 50;
         maxMp = 50;
         maxHp = 100;
@@ -137,6 +136,7 @@ public class Player : MovingEntity
 
         updatePlayerStatus();
 
+        Debug.Log("AFTER SHADOW:"+GameManager.gmInstance.Dungeon.activeShadows.Count);
         GameManager.gmInstance.Dungeon.UpdateShadows(row, col);
 
         if(checkDead()) return;
@@ -194,6 +194,12 @@ public class Player : MovingEntity
         if (Input.GetKeyDown("t"))
         {
             nextFloor();
+        }
+        if (Input.GetKeyDown("y"))
+        {
+            GameManager.gmInstance.scores.Add(GameManager.gmInstance.score);
+            GameManager.gmInstance.state = "score";
+            SceneManager.LoadScene("Scores", LoadSceneMode.Single);
         }
     }
 
