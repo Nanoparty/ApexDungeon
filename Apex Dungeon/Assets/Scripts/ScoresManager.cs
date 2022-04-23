@@ -13,6 +13,7 @@ public class ScoresManager : MonoBehaviour
     private List<int> scores;
     void Start()
     {
+        Data.scores = GameManager.gmInstance.scores;
         scores = GameManager.gmInstance.scores;
         foreach(int score in scores){
             GameObject sc = GameObject.Instantiate(scoreCard, new Vector3(0, 0, 0), Quaternion.identity);
@@ -20,14 +21,14 @@ public class ScoresManager : MonoBehaviour
             sc.transform.SetParent(content.transform, false);
         }
         button.onClick.AddListener(mainMenu);
-        Debug.Log("SHADOWS:"+ GameManager.gmInstance.Dungeon.activeShadows.Count);
     }
 
     private void mainMenu(){
-        //GameManager.gmInstance.fullReset();
-        Debug.Log("CLICK");
-        GameManager.gmInstance.Dungeon = null;
-        SceneManager.LoadScene("test", LoadSceneMode.Single);
+        //GameManager.gmInstance.FullReset();
+        //GameManager.gmInstance.state = "play";
+        
+        GameObject.Destroy(GameManager.gmInstance);
+        SceneManager.LoadScene("test",LoadSceneMode.Single);
     }
 
 }

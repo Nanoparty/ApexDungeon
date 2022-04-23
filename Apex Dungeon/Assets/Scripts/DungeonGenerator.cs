@@ -75,6 +75,7 @@ public class DungeonGenerator : ScriptableObject
         GameObject op = GameObject.Instantiate(Opening, new Vector3(0, 0, 0), Quaternion.identity);
         op.transform.GetChild(0).gameObject.GetComponent<Text>().text = GameManager.gmInstance.DungeonName;
         op.transform.GetChild(1).gameObject.GetComponent<Text>().text = "Floor " + GameManager.gmInstance.level;
+        Debug.Log("Canvas:"+GameObject.FindGameObjectWithTag("Canvas").transform);
         op.transform.SetParent(GameObject.FindGameObjectWithTag("Canvas").transform, false);
 
         InitializeTileMap();
@@ -121,6 +122,7 @@ public class DungeonGenerator : ScriptableObject
         GameManager.gmInstance.clearFurniture();
         return Initalize();
     }
+
 
     void InitializeTileMap()
     {

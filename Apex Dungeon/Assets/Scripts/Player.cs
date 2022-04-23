@@ -2,6 +2,7 @@
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 
 public class Player : MovingEntity
@@ -13,6 +14,7 @@ public class Player : MovingEntity
     public GameObject slot;
     public GameObject block;
     public GameObject pblock;
+    public GameObject mapHolder;
     public GameObject questLine;
     public GameObject mapArea;
     public GameObject itemPopup;
@@ -45,10 +47,12 @@ public class Player : MovingEntity
         }
 
         base.Start();
+        Debug.Log("PLAYER STRENGTH:"+ damage);
     }
 
     void setInitialValues(){
-        hp = 1;
+        Debug.Log("Setting initial values");
+        hp = 50;
         mp = 50;
         maxMp = 50;
         maxHp = 100;
@@ -113,6 +117,7 @@ public class Player : MovingEntity
                 Debug.Log("ACTIVATE");
                 if (Input.GetButtonDown("Fire1"))
                 {
+                    GameManager.gmInstance.scores = Data.scores;
                     GameManager.gmInstance.scores.Add(GameManager.gmInstance.score);
                     GameManager.gmInstance.state = "score";
                     SceneManager.LoadScene("Scores", LoadSceneMode.Single);
@@ -136,7 +141,6 @@ public class Player : MovingEntity
 
         updatePlayerStatus();
 
-        Debug.Log("AFTER SHADOW:"+GameManager.gmInstance.Dungeon.activeShadows.Count);
         GameManager.gmInstance.Dungeon.UpdateShadows(row, col);
 
         if(checkDead()) return;
@@ -195,8 +199,12 @@ public class Player : MovingEntity
         {
             nextFloor();
         }
-        if (Input.GetKeyDown("y"))
+        if (Input.GetKeyDown("r"))
         {
+            GameManager.gmInstance.FullReset();
+        }
+        if(Input.GetKeyDown("y")){
+            GameManager.gmInstance.scores = Data.scores ?? new List<int>();
             GameManager.gmInstance.scores.Add(GameManager.gmInstance.score);
             GameManager.gmInstance.state = "score";
             SceneManager.LoadScene("Scores", LoadSceneMode.Single);
@@ -210,6 +218,7 @@ public class Player : MovingEntity
         Data.maxMp = maxMp;
         Data.exp = exp;
         Data.maxExp = maxExp;
+        Data.expLevel = expLevel;
         Data.strength = damage;
         Data.defense = defense;
         Data.intelligence = intelligence;
@@ -222,12 +231,14 @@ public class Player : MovingEntity
     }
 
     public void loadCharacterData(){
+        Debug.Log("Load Character Data");
         hp = Data.hp;
         maxHp = Data.maxHp;
         mp = Data.mp;
         maxMp = Data.maxMp;
         exp = Data.exp;
         maxExp = Data.maxExp;
+        expLevel = Data.expLevel;
         damage = Data.strength;
         defense = Data.defense;
         intelligence = Data.intelligence;
