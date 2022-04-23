@@ -3,10 +3,12 @@
 public static class Data
 {
     public static CharacterMenu charMenu;
+    public static bool inProgress;
     //scores Data
-    public static List<int> scores;
+    public static List<(string, int)> scores;
 
     //Character Data
+    public static string playerName;
     public static int gold;
     public static int hp;
     public static int maxHp;

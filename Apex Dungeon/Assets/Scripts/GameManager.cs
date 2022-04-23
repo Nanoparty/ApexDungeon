@@ -22,7 +22,8 @@ public class GameManager : MonoBehaviour
     public string DungeonName = "Misty Dungeon";
     public int level;
     public int score;
-    public List<int> scores;
+    public List<(string, int)> scores;
+    public string playerName;
     public string state = "play";
 
     private void Awake()
@@ -38,7 +39,8 @@ public class GameManager : MonoBehaviour
         Debug.Log("AWAKE");
         level = 1;
         score = 0;
-        scores = new List<int>();
+        scores = new List<(string, int)>();
+        playerName = Data.playerName;
         
         enemies = new List<Enemy>();
         furniture = new List<Furniture>();
