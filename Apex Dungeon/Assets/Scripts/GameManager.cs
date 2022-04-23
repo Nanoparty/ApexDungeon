@@ -27,9 +27,6 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        level = 1;
-        score = 0;
-        scores = new List<int>();
         if(gmInstance == null)
         {
             gmInstance = this;
@@ -38,12 +35,18 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
         DontDestroyOnLoad(gameObject);
+        Debug.Log("AWAKE");
+        level = 1;
+        score = 0;
+        scores = new List<int>();
+        
         enemies = new List<Enemy>();
         furniture = new List<Furniture>();
         Setup();
 
         Vector3 position = new Vector3(0f, 0f, 0f);
         cursor = Instantiate(tileCursor, position, Quaternion.identity) as GameObject;
+        Debug.Log("Create cursor:"+cursor);
     }
 
     void Setup()
@@ -57,17 +60,14 @@ public class GameManager : MonoBehaviour
         Dungeon = DunGen.Reset();
     }
 
-    public void fullReset(){
+    public void FullReset(){
         Data.reset();
-        state = "play";
         level = 1;
         score = 0;
-        enemies = new List<Enemy>();
-        furniture = new List<Furniture>();
-        Setup();
-
-        Vector3 position = new Vector3(0f, 0f, 0f);
-        cursor = Instantiate(tileCursor, position, Quaternion.identity) as GameObject;
+        enemies.Clear();
+        furniture.Clear();
+        //Dungeon = DunGen.Initalize();
+        //Reset();
     }
 
     void Update()
@@ -79,6 +79,15 @@ public class GameManager : MonoBehaviour
         if(state == "menu"){
             
             return;
+        }
+        if(state == "play" && cursor == null){
+            level = 1;
+            score = 0;
+            enemies.Clear();
+            furniture.Clear();
+            Vector3 position = new Vector3(0f, 0f, 0f);
+            cursor = Instantiate(tileCursor, position, Quaternion.identity) as GameObject;
+            Dungeon = DunGen.Initalize();
         }
         Vector3 pz = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         pz.z = 0;

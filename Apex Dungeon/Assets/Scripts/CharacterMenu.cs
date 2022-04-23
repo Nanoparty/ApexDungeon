@@ -86,7 +86,7 @@ public class CharacterMenu
                     useButton.GetComponent<Clickable>().setClicked(false);
                     trashButton.GetComponent<Clickable>().setClicked(false);
                 }else{
-                    Debug.Log("DESTROY");
+                    //Debug.Log("DESTROY");
                     GameObject.Destroy(popupArea);
                     popupOpen = false;
                 }           
@@ -113,7 +113,7 @@ public class CharacterMenu
             if(tab == 0){
                 for(int i = 0; i < inventorySlots.Count; i++)
                 {
-                    Debug.Log("Checking slot:" + i);
+                    //Debug.Log("Checking slot:" + i);
                     if (inventorySlots != null && inventorySlots.Count > 0 
                         && inventorySlots[i].GetComponent<Clickable>().getClicked())
                     {
@@ -133,7 +133,7 @@ public class CharacterMenu
                         selected = i;
                         equipmentSlots[i].GetComponent<Clickable>().setClicked(false);
                         popupOpen = true;
-                        Debug.Log("Clicked on equipment:"+ equipment[selected]);
+                        //Debug.Log("Clicked on equipment:"+ equipment[selected]);
                         createPopup();
                     }
                 }
@@ -171,6 +171,8 @@ public class CharacterMenu
 
     public void openStats()
     {
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+
         //Debug.Log("EQUIP:"+equipment[0]);
         slotsLoaded = false;
         inventorySlots = new List<GameObject>();
@@ -192,6 +194,8 @@ public class CharacterMenu
     }
 
     private void setPlayerStats(){
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+
         charPanel = panelObject.transform.GetChild(0).gameObject;
         GameObject topStats = charPanel.transform.GetChild(0).gameObject;
         GameObject middleStats = charPanel.transform.GetChild(1).gameObject;
@@ -234,7 +238,7 @@ public class CharacterMenu
         GameObject NecklaceSlot = middleStats.transform.GetChild(10).gameObject;
         GameObject RingSlot = middleStats.transform.GetChild(11).gameObject;
 
-        Debug.Log("HELMET SLOT IS " + gear.Helmet);
+        //Debug.Log("HELMET SLOT IS " + gear.Helmet);
         
         if(gear.Helmet == null) HelmSlot.transform.GetChild(0).gameObject.SetActive(false);
         else HelmSlot.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = gear.Helmet.image;
@@ -258,6 +262,7 @@ public class CharacterMenu
         GameObject blck = bottomStats.transform.GetChild(6).gameObject;
 
         str.transform.gameObject.GetComponent<TMP_Text>().text = "Str:" + player.getStrength();
+        Debug.Log("PLAYER STRENGTH:"+player.getStrength());
         def.transform.gameObject.GetComponent<TMP_Text>().text = "Def:" + player.getDefense();
         crit.transform.gameObject.GetComponent<TMP_Text>().text = "Crit:" + player.getCritical();
         intel.transform.gameObject.GetComponent<TMP_Text>().text = "Int:" + player.getIntelligence();
@@ -330,10 +335,10 @@ public class CharacterMenu
         float cellSize = 120;
         int xOff = 100;
         int yOff = -100;
-        Debug.Log("NumItems:"+ numItems);
+        //Debug.Log("NumItems:"+ numItems);
         for(int i = 0; i < numItems; i++)
         {
-            Debug.Log("Adding new Item");
+            //Debug.Log("Adding new Item");
             Vector3 pos = new Vector3(xOff + x * cellSize, yOff + -1 * y * cellSize, 0);
 
             Item item = items[i];
@@ -350,7 +355,7 @@ public class CharacterMenu
                 y++;
             }
         }
-        Debug.Log("Num Item slots:" + inventorySlots.Count);
+        //Debug.Log("Num Item slots:" + inventorySlots.Count);
         slotsLoaded = true;
     }
 
@@ -466,7 +471,7 @@ public class CharacterMenu
     }
 
     private void createPopup(){
-        Debug.Log("Create Popup");
+        //Debug.Log("Create Popup");
         Vector3 pos = new Vector3(0, 0, 0);
 
         GameObject popup = GameObject.Instantiate(itemPopup, pos, Quaternion.identity);
@@ -618,6 +623,7 @@ public class CharacterMenu
 
     void closeListener()
     {
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         player.setGear(gear);
         closeInventory();
         closed = true;
@@ -644,18 +650,18 @@ public class CharacterMenu
         refreshTopicPanel();
     }
     void useListener(){
-        Debug.Log("USE ITEM");
+        //Debug.Log("USE ITEM");
         items[selected].UseItem();
         items.RemoveAt(selected);
         selected = -1;
-        Debug.Log("DESTROY");
+        //Debug.Log("DESTROY");
         GameObject.Destroy(popupArea);
         popupOpen = false;
         refreshTopicPanel();
         setPlayerStats();
     }
     void equipListener(){
-        Debug.Log("EQUIP");
+        //Debug.Log("EQUIP");
 
         //equip armor
         Equipment e = equipment[selected];
@@ -763,6 +769,7 @@ public class CharacterMenu
     }
 
     void applyGearStats(Equipment e){
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         int str = e.attack;
         int def = e.defense;
         int crit = e.crit;
@@ -770,7 +777,7 @@ public class CharacterMenu
         //int block = e.block;
         //int evade = e.evade;
 
-        Debug.Log("GEAR STR IS "+ e.attack);
+        //Debug.Log("GEAR STR IS "+ e.attack);
 
         player.addStrength(str);
         player.addDefense(def);
@@ -852,7 +859,7 @@ public class CharacterMenu
     }
 
     void compareListener(){
-        Debug.Log("COMPARE");
+        //Debug.Log("COMPARE");
         Equipment e = equipment[selected];
         Equipment alt = new Equipment();
 
