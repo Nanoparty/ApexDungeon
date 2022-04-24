@@ -36,6 +36,7 @@ public class Player : MovingEntity
     private int prevLevel;
     private string levelStat;
     private GameObject endScreenHolder;
+    private bool interrupt = false;
     protected override void Start()
     {
         setInitialValues();
@@ -143,6 +144,10 @@ public class Player : MovingEntity
         updatePlayerStatus();
 
         GameManager.gmInstance.Dungeon.UpdateShadows(row, col);
+
+        if(moving && Input.GetButtonDown("Fire1")){
+            interrupt = true;
+        }
 
         if(checkDead()) return;
 
@@ -319,10 +324,14 @@ public class Player : MovingEntity
     {
         if (moving)
         {
-            if (atTarget)
+            if (atTarget && !interrupt)
             {
                 setNextTarget();
                 GameManager.gmInstance.playersTurn = false;
+            }
+            else if(atTarget){
+                moving = false;
+                interrupt = false;
             }
 
             return;
