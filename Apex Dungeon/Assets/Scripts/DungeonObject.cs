@@ -165,6 +165,15 @@ public class DungeonObject
         return false;
     }
 
+    public bool isStairs(int r, int c)
+    {
+        if (tileMap[r, c].stairs)
+        {
+            return true;
+        }
+        return false;
+    }
+
     public bool isItem(int r, int c)
     {
         foreach(Vector2 item in itemList){
