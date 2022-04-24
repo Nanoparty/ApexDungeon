@@ -48,6 +48,7 @@ public class DungeonObject
                     GameObject o = shadowMap[i, j];
                     o.SetActive(false);
                     activeShadows.Add(o);
+                    tileMap[i,j].visible = true;
                 }
             }
         }
