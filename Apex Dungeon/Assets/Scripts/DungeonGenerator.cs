@@ -13,6 +13,7 @@ public class DungeonGenerator : ScriptableObject
     public static List<GameObject> activeShadows;
     public static List<Vector2> activeShadowCoords;
     public static List<Vector2> visibleTiles;
+    public static List<Vector2> itemList;
 
     public static int width = 50;
     public static int height = 50;
@@ -58,6 +59,7 @@ public class DungeonGenerator : ScriptableObject
         activeShadowCoords = new List<Vector2>();
         visibleTiles = new List<Vector2>();
         walkableTiles = new List<Vector2>();
+        itemList = new List<Vector2>();
 
         dungeon = new GameObject("Dungeon").transform;
         shadowContainer = new GameObject("ShadowContainer").transform;
@@ -109,6 +111,7 @@ public class DungeonGenerator : ScriptableObject
         dungeonObject.tileMap = tileMap;
         dungeonObject.visibleTiles = visibleTiles;
         dungeonObject.walkableTiles = walkableTiles;
+        dungeonObject.itemList = itemList;
         dungeonObject.rooms = rooms;
         dungeonObject.width = width;
         dungeonObject.height = height;
@@ -707,13 +710,14 @@ public class DungeonGenerator : ScriptableObject
                         GameObject item = equipmentGenerator.GenerateEquipment(1);
                         item.transform.parent = itemContainer.transform;
                         item.transform.position = position;
-
+                        itemList.Add(new Vector2(row, col));
                     }
                     else
                     {
                         GameObject item = consumableGenerator.CreateRandomConsumable();
                         item.transform.parent = itemContainer.transform;
                         item.transform.position = position;
+                        itemList.Add(new Vector2(row, col));
                     }
                 }
             }

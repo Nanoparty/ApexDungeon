@@ -269,6 +269,7 @@ public class Player : MovingEntity
         {
             charMenu.addItem(other.GetComponent<Pickup>().GetItem());
             Destroy(other.gameObject);
+            GameManager.gmInstance.Dungeon.removeFromItemList(row, col);
         }
         if (other.gameObject.tag == "Gold")
         {
@@ -289,6 +290,7 @@ public class Player : MovingEntity
         {
             charMenu.addEquipment(other.GetComponent<Pickup>().GetItem());
             Destroy(other.gameObject);
+            GameManager.gmInstance.Dungeon.removeFromItemList(row, col);
         }
     }
 

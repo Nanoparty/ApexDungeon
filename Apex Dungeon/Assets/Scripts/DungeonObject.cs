@@ -10,6 +10,7 @@ public class DungeonObject
     public List<Vector2> visibleTiles;
     public List<Vector2> walkableTiles;
     public List<Room> rooms;
+    public List<Vector2> itemList;
 
     public int width;
     public int height;
@@ -26,6 +27,7 @@ public class DungeonObject
         rooms = null;
         fullBright = false;
         fullExplored = false;
+        itemList = null;
     }
 
     
@@ -163,6 +165,16 @@ public class DungeonObject
         return false;
     }
 
+    public bool isItem(int r, int c)
+    {
+        foreach(Vector2 item in itemList){
+            if (item.x == r && item.y == c){
+                return true;
+            }
+        }
+        return false;
+    }
+
     public List<Vector2> getActiveShadowCoords(){
         return activeShadowCoords;
     }
@@ -186,5 +198,15 @@ public class DungeonObject
             }
         }
         return result;
+    }
+
+    public bool removeFromItemList(int row, int col){
+        foreach(Vector2 item in itemList){
+            if (item.x == row && item.y == col){
+                itemList.Remove(item);
+                return true;
+            }
+        }
+        return false;
     }
 }
