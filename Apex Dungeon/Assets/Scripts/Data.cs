@@ -23,6 +23,7 @@ public static class Data
     public static int crit;
     public static int evade;
     public static int block;
+    public static PlayerGear gear;
 
     public static void reset(){
         

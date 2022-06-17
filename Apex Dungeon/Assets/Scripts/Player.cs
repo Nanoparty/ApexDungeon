@@ -235,6 +235,7 @@ public class Player : MovingEntity
         Data.gold = gold;
 
         Data.charMenu = charMenu;
+        Data.gear = gear;
     }
 
     public void loadCharacterData(){
@@ -255,6 +256,7 @@ public class Player : MovingEntity
         gold = Data.gold;
 
         charMenu = Data.charMenu;
+        gear = Data.gear;
     }
 
     public void nextFloor(){
