@@ -70,12 +70,20 @@ public class DungeonObject
             tileMap[r - 1, c].visible = true;
             tileMap[r, c + 1].visible = true;
             tileMap[r, c - 1].visible = true;
+            tileMap[r-1, c-1].visible = true;
+            tileMap[r-1, c+1].visible = true;
+            tileMap[r+1, c-1].visible = true;
+            tileMap[r+1, c+1].visible = true;
 
             SetShadowVisible(r, c);
             SetShadowVisible(r + 1, c);
             SetShadowVisible(r - 1, c);
             SetShadowVisible(r, c + 1);
             SetShadowVisible(r, c - 1);
+            SetShadowVisible(r-1, c + 1);
+            SetShadowVisible(r-1, c - 1);
+            SetShadowVisible(r+1, c + 1);
+            SetShadowVisible(r+1, c - 1);
         }
         else
         {
