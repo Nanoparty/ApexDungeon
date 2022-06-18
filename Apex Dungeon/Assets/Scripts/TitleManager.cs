@@ -42,6 +42,7 @@ public class TitleManager : MonoBehaviour
 
     void loadGameListener(){
         if(popupOpen)return;
+        SceneManager.LoadScene("CharacterSelect", LoadSceneMode.Single);
     }
 
     void scoresListener(){
@@ -67,6 +68,8 @@ public class TitleManager : MonoBehaviour
         Data.playerName = name;
         taken.Add(name);
         Data.names = taken;
+        Data.activeCharacter = name;
+        Data.charData.Add(new CharacterData(){name=name, level=1, floor=1});
         SceneManager.LoadScene("test", LoadSceneMode.Single);
     }
 

@@ -1,4 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+
 
 public static class Data
 {
@@ -7,6 +10,9 @@ public static class Data
     //scores Data
     public static List<(string, int)> scores;
     public static List<string> names;
+    public static List<CharacterData> charData;
+
+    public static string activeCharacter;
 
     //Character Data
     public static string playerName;
@@ -28,5 +34,29 @@ public static class Data
 
     public static void reset(){
         
+    }
+
+    public static void LoadActiveData(){
+        CharacterData current = charData.Where(cd => cd.name == activeCharacter).FirstOrDefault();
+
+        if(current == null){
+            Debug.Log("Cannot find active character data");
+            return;
+        }
+
+        playerName = current.name;
+        gold = current.gold;
+        hp = current.hp;
+        maxMp = current.maxMp;
+        exp = current.exp;
+        maxExp = current.maxExp;
+        expLevel = current.expLevel;
+        strength = current.strength;
+        intelligence = current.intelligence;
+        defense = current.defense;
+        crit = current.defense;
+        evade = current.evade;
+        block = current.block;
+        gear = current.gear;
     }
 }
