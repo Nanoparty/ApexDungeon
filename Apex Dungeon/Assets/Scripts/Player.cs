@@ -53,7 +53,7 @@ public class Player : MovingEntity
 
     void setInitialValues(){
         Debug.Log("Setting initial values");
-        hp = 50;
+        hp = 100;
         mp = 50;
         maxMp = 50;
         maxHp = 100;

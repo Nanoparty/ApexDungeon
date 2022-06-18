@@ -3,11 +3,12 @@ using UnityEngine;
 
 public class Consumable : Item
 {
-    public Consumable(string name, string flavor, string desc, Sprite img){
+    public Consumable(string name, string flavor, string desc, Sprite img, int level = 1){
         itemName = name;
         flavorText = flavor;
         description = desc;
         image = img;
+        this.level = level;
     }
     public void SetStats(string n, string f, string d, Sprite s)
     {
@@ -25,7 +26,9 @@ public class Consumable : Item
     {
         Player p = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         if(itemName == "Health Potion"){
-            p.addHP(20);
+            int baseHP = 50;
+            float appliedHP = baseHP * Mathf.Pow(1.5f,level-1);
+            p.addHP((int)appliedHP);
         }
         if(itemName == "Mana Potion"){
             p.addMP(20);

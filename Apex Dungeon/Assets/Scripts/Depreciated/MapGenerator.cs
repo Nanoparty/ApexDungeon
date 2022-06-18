@@ -694,9 +694,9 @@ public class MapGenerator : MonoBehaviour
                     }
                     else
                     {
-                        GameObject item = consumableGenerator.CreateRandomConsumable();
-                        item.transform.parent = itemContainer.transform;
-                        item.transform.position = position;
+                        // GameObject item = consumableGenerator.CreateRandomConsumable();
+                        // item.transform.parent = itemContainer.transform;
+                        // item.transform.position = position;
                     }
                 }
             }

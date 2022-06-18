@@ -25,9 +25,9 @@ public class ConsumableGenerator : ScriptableObject
     public Sprite greenLeaf;
     public Sprite yellowLeaf;
 
-    public GameObject CreateHealthPotion()
+    public GameObject CreateHealthPotion(int level)
     {
-        GameObject item = new GameObject("HealthPotion");
+        GameObject item = new GameObject("HealthPotion lvl " + level);
 
         item.AddComponent<SpriteRenderer>();
         item.GetComponent<SpriteRenderer>().sprite = redPotion;
@@ -36,7 +36,9 @@ public class ConsumableGenerator : ScriptableObject
         item.AddComponent<BoxCollider2D>();
         item.GetComponent<BoxCollider2D>().isTrigger = true;
 
-        Consumable potion = new Consumable("Health Potion", "Cherry Flavor", "Heals 10 HP", redPotion);
+        int healAmount =(int)( 50 * Mathf.Pow(1.5f,level-1));
+
+        Consumable potion = new Consumable("Health Potion Lvl " + level, "Cherry Flavor", "Heals " + healAmount + " HP", redPotion, level);
 
         item.AddComponent<Pickup>();
         item.GetComponent<Pickup>().SetItem(potion);
@@ -167,13 +169,13 @@ public class ConsumableGenerator : ScriptableObject
         return item;
     }
 
-    public GameObject CreateRandomConsumable()
+    public GameObject CreateRandomConsumable(int level)
     {
         GameObject consumable = null;
 
         int rand = Random.Range(1, 8);
 
-        if (rand == 1) consumable = CreateHealthPotion();
+        if (rand == 1) consumable = CreateHealthPotion(level);
         if (rand == 2) consumable = CreateManaPotion();
         if (rand == 3) consumable = CreateDeathOrb();
         if (rand == 4) consumable = CreateLightOrb();
@@ -183,6 +185,6 @@ public class ConsumableGenerator : ScriptableObject
 
         if (consumable == null) consumable = new GameObject();
 
-        return CreateLightOrb();
+        return consumable;
     }
 }

@@ -711,14 +711,14 @@ public class DungeonGenerator : ScriptableObject
                     Vector3 position = new Vector3(col, row, 0f);
                     if (coin > 0.5)
                     {
-                        GameObject item = equipmentGenerator.GenerateEquipment(1);
+                        GameObject item = equipmentGenerator.GenerateEquipment(GameManager.gmInstance.level);
                         item.transform.parent = itemContainer.transform;
                         item.transform.position = position;
                         itemList.Add(new Vector2(row, col));
                     }
                     else
                     {
-                        GameObject item = consumableGenerator.CreateRandomConsumable();
+                        GameObject item = consumableGenerator.CreateRandomConsumable(GameManager.gmInstance.level);
                         item.transform.parent = itemContainer.transform;
                         item.transform.position = position;
                         itemList.Add(new Vector2(row, col));

@@ -235,11 +235,24 @@ public class EquipmentGenerator : ScriptableObject
         else if (typeNum == 8) type = "ring";
 
         //pick tier
-        int tierNum = Random.Range(1, 4);
+        //1% legendary/diamond
+        //10% unique/gold
+        //25% rare/iron
+        //75% common/leather
+        int tierNum = 0;
 
-        //pick defense stat
-
-        //pick modifier
+        int dice = Random.Range(1,101);
+        if(dice >= 95){
+            tierNum = 4;
+        }
+        else if(dice >= 85){
+            tierNum = 3;
+        }
+        else if(dice >= 65){
+            tierNum = 2;
+        }else{
+            tierNum = 1;
+        }
         
         //create gameobject
         return GenerateEquipment(level, type, tierNum);
