@@ -176,7 +176,7 @@ public class ConsumableGenerator : ScriptableObject
         int rand = Random.Range(1, 8);
 
         if (rand == 1) consumable = CreateHealthPotion(level);
-        if (rand == 2) consumable = CreateManaPotion();
+        if (rand == 2) consumable = CreateHealthPotion(level);
         if (rand == 3) consumable = CreateDeathOrb();
         if (rand == 4) consumable = CreateLightOrb();
         if (rand == 5) consumable = CreateTeleportOrb();

@@ -6,6 +6,7 @@ public static class Data
     public static bool inProgress;
     //scores Data
     public static List<(string, int)> scores;
+    public static List<string> names;
 
     //Character Data
     public static string playerName;

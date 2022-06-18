@@ -14,7 +14,7 @@ public class ScoresManager : MonoBehaviour
     private List<(string, int)> scores;
     void Start()
     {
-        Data.scores = GameManager.gmInstance.scores;
+        Data.scores = GameManager.gmInstance.scores ?? new List<(string, int)>();
         scores = GameManager.gmInstance.scores;
         foreach((string, int) score in scores){
             GameObject sc = GameObject.Instantiate(scoreCard, new Vector3(0, 0, 0), Quaternion.identity);

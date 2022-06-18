@@ -8,43 +8,71 @@ using TMPro;
 public class TitleManager : MonoBehaviour
 {
     // Start is called before the first frame update
-    public Button Play;
+    public Button NewGame;
+    public Button LoadGame;
     public Button Scores;
     public Button Options;
     public GameObject newPopup;
+    public GameObject popupError;
+    public bool popupOpen = false;
+    public List<string> taken;
+    private bool done;
+    
     
     void Start()
     {
-        Play.onClick.AddListener(playListener);
+        NewGame.onClick.AddListener(newGameListener);
+        LoadGame.onClick.AddListener(loadGameListener);
         Scores.onClick.AddListener(scoresListener);
         Options.onClick.AddListener(optionsListener);
         newPopup.SetActive(false);
+        popupError.SetActive(false);
+        taken = Data.names ?? new List<string>();
+        done = false;
     }
 
-    void playListener(){
-        if(!Data.inProgress){
-            //name popup
-            Data.playerName = "Boomer";
-            newPopup.SetActive(true);
-            newPopup.transform.GetChild(3).GetComponent<Button>().onClick.AddListener(acceptListener);
-        }else{
-            SceneManager.LoadScene("test", LoadSceneMode.Single);
-        }
-        
+    void newGameListener(){
+        if(popupOpen)return;
+
+        popupOpen = true;
+        newPopup.SetActive(true);
+        newPopup.transform.GetChild(2).GetComponent<Button>().onClick.AddListener(acceptListener);
+        newPopup.transform.GetChild(1).GetComponent<Button>().onClick.AddListener(cancelListener);
+    }
+
+    void loadGameListener(){
+        if(popupOpen)return;
     }
 
     void scoresListener(){
+        if(popupOpen)return;
+
         SceneManager.LoadScene("Scores", LoadSceneMode.Single);
     }
 
     void optionsListener(){
-
+        if(popupOpen)return;
     }
 
     void acceptListener(){
-        string name = newPopup.transform.GetChild(2).GetComponent<TMP_InputField>().text;
+        string name = newPopup.transform.GetChild(4).GetComponent<TMP_InputField>().text;
+
+        if(!(name.Length > 0))return;
+        if(taken.Contains(name) && !done){
+            popupError.SetActive(true);
+            return;
+        }
+
+        done = true;
         Data.playerName = name;
-        Data.inProgress = true;
+        taken.Add(name);
+        Data.names = taken;
         SceneManager.LoadScene("test", LoadSceneMode.Single);
+    }
+
+    void cancelListener(){
+        newPopup.transform.GetChild(4).GetComponent<TMP_InputField>().text = "";
+        newPopup.SetActive(false);
+        popupOpen = false;
     }
 }

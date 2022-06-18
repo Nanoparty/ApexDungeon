@@ -267,7 +267,7 @@ public class CharacterMenu
         crit.transform.gameObject.GetComponent<TMP_Text>().text = "Crit:" + player.getCritical();
         intel.transform.gameObject.GetComponent<TMP_Text>().text = "Int:" + player.getIntelligence();
         gold.transform.gameObject.GetComponent<TMP_Text>().text = "Gold:" + player.getGold();
-        evd.transform.gameObject.GetComponent<TMP_Text>().text = "Evd:" + player.getEvade();
+        evd.transform.gameObject.GetComponent<TMP_Text>().text = "Evd:" + player.getEvade() + "%";
         blck.transform.gameObject.GetComponent<TMP_Text>().text = "Blck:" + player.getBlock();
     }
 

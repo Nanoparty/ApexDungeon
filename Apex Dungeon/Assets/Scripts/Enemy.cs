@@ -67,13 +67,15 @@ public class Enemy : MovingEntity
     }
 
     private void setStatsByFloor(int floor){
-        hp = 100 + 20 * floor;
+        int basehp = 30;
+        hp = (int)(basehp * Mathf.Pow(1.5f, floor-1));
         maxHp = hp;
 
         mp = 100 * floor;
         maxMp = mp;
 
-        damage = 5 + 1 * floor;
+        int basedamage = 10;
+        damage = (int)(basedamage * Mathf.Pow(1.5f, floor-1));
         defense = 5 + 1 * floor;
     }
 
@@ -210,7 +212,7 @@ public class Enemy : MovingEntity
 
     private float calculateDamageOut()
     {
-        return -1;
+        return -damage;
     }
 
     private float calculateDamageIn(float d){

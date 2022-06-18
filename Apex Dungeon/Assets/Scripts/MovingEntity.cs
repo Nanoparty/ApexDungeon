@@ -12,6 +12,7 @@ public abstract class MovingEntity : MonoBehaviour
 
     protected int defense;
     protected int damage;
+    protected int attack;
     protected int intelligence;
     protected int critical;
     protected int evade;

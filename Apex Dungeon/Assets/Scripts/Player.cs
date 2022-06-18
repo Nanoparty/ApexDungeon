@@ -35,6 +35,7 @@ public class Player : MovingEntity
     private float start;
     private int prevLevel;
     private string levelStat;
+    private int levelPoints;
     private GameObject endScreenHolder;
     private bool interrupt = false;
     protected override void Start()
@@ -54,15 +55,17 @@ public class Player : MovingEntity
     void setInitialValues(){
         Debug.Log("Setting initial values");
         hp = 100;
-        mp = 50;
+        mp = 100;
         maxMp = 50;
         maxHp = 100;
 
         expLevel = 1;
-        exp = 50;
+        exp = 0;
         maxExp = 100;
+        levelPoints = 0;
 
         damage = 10;
+        attack = 10;
         defense = 10;
         intelligence = 10;
         critical = 10;
@@ -356,6 +359,8 @@ public class Player : MovingEntity
     public void takeAttack(float d){
         // float netDamage = d + (defense * 0.5f);
         // Debug.Log("PLAYER TAKE DAMANGE:"+netDamage);
+        int dice = Random.Range(1, 101);
+        if(dice <= evade) return;
         base.takeDamage(d);
     }
 
@@ -400,25 +405,25 @@ public class Player : MovingEntity
         GameObject Strength = Util.getChild(levelPop, 3);
         GameObject Defense = Util.getChild(levelPop, 4);
         GameObject Crit = Util.getChild(levelPop, 5);
-        GameObject Intelligence = Util.getChild(levelPop, 6);
-        GameObject Evade = Util.getChild(levelPop, 7);
-        GameObject Block = Util.getChild(levelPop, 8);
+        //GameObject Intelligence = Util.getChild(levelPop, 6);
+        GameObject Evade = Util.getChild(levelPop, 6);
+        //GameObject Block = Util.getChild(levelPop, 8);
 
         Util.setText(Strength, damage.ToString(), 1);
         Util.setText(Defense, defense.ToString(), 1);
         Util.setText(Crit, critical.ToString(), 1);
-        Util.setText(Intelligence, intelligence.ToString(), 1);
+        //Util.setText(Intelligence, intelligence.ToString(), 1);
         Util.setText(Evade, evade.ToString(), 1);
-        Util.setText(Block, blockStat.ToString(), 1);
+        //Util.setText(Block, blockStat.ToString(), 1);
 
         Util.setListener(Strength, StrengthListener, 2);
         Util.setListener(Defense, DefenseListener, 2);
         Util.setListener(Crit, CritListener, 2);
-        Util.setListener(Intelligence, IntelligenceListener, 2);
+        //Util.setListener(Intelligence, IntelligenceListener, 2);
         Util.setListener(Evade, EvadeListener, 2);
-        Util.setListener(Block, BlockListener, 2);
+        //Util.setListener(Block, BlockListener, 2);
 
-        Util.setListener(levelPop, LevelConfirmListener, 9);
+        Util.setListener(levelPop, LevelConfirmListener, 7);
     }
 
     void StrengthListener(){
@@ -439,24 +444,24 @@ public class Player : MovingEntity
         Util.setColor(levelPopHolder, Color.green, 5, 1);
         levelStat = "crit";
     }
-    void IntelligenceListener(){
-        ResetLevelStats();
-        Util.setText(levelPopHolder, (intelligence+1).ToString(), 6, 1);
-        Util.setColor(levelPopHolder, Color.green, 6, 1);
-        levelStat = "intelligence";
-    }
+    // void IntelligenceListener(){
+    //     ResetLevelStats();
+    //     Util.setText(levelPopHolder, (intelligence+1).ToString(), 6, 1);
+    //     Util.setColor(levelPopHolder, Color.green, 6, 1);
+    //     levelStat = "intelligence";
+    // }
     void EvadeListener(){
         ResetLevelStats();
-        Util.setText(levelPopHolder, (evade+1).ToString(), 7, 1);
-        Util.setColor(levelPopHolder, Color.green, 7, 1);
+        Util.setText(levelPopHolder, (evade+1).ToString(), 6, 1);
+        Util.setColor(levelPopHolder, Color.green, 6, 1);
         levelStat = "evade";
     }
-    void BlockListener(){
-        ResetLevelStats();
-        Util.setText(levelPopHolder, (blockStat+1).ToString(), 8, 1);
-        Util.setColor(levelPopHolder, Color.green, 8, 1);
-        levelStat = "block";
-    }
+    // void BlockListener(){
+    //     ResetLevelStats();
+    //     Util.setText(levelPopHolder, (blockStat+1).ToString(), 8, 1);
+    //     Util.setColor(levelPopHolder, Color.green, 8, 1);
+    //     levelStat = "block";
+    // }
 
     void ResetLevelStats(){
         Util.setText(levelPopHolder, (damage).ToString(), 3, 1);
@@ -468,14 +473,14 @@ public class Player : MovingEntity
         Util.setText(levelPopHolder, (critical).ToString(), 5, 1);
         Util.setColor(levelPopHolder, Color.white, 5, 1);
 
-        Util.setText(levelPopHolder, (intelligence).ToString(), 6, 1);
+        // Util.setText(levelPopHolder, (intelligence).ToString(), 6, 1);
+        // Util.setColor(levelPopHolder, Color.white, 6, 1);
+
+        Util.setText(levelPopHolder, (evade).ToString(), 6, 1);
         Util.setColor(levelPopHolder, Color.white, 6, 1);
 
-        Util.setText(levelPopHolder, (evade).ToString(), 7, 1);
-        Util.setColor(levelPopHolder, Color.white, 7, 1);
-
-        Util.setText(levelPopHolder, (blockStat).ToString(), 8, 1);
-        Util.setColor(levelPopHolder, Color.white, 8, 1);
+        // Util.setText(levelPopHolder, (blockStat).ToString(), 8, 1);
+        // Util.setColor(levelPopHolder, Color.white, 8, 1);
     }
     void LevelConfirmListener(){
         if(levelStat.Equals("strength")){
@@ -569,8 +574,11 @@ public class Player : MovingEntity
         while(exp >= maxExp){
             exp -= maxExp;
             expLevel++;
+            maxHp = (int)(maxHp * 1.1);
+            hp = maxHp;
             maxExp += (int)(0.5 * maxExp);
             levelUp = true;
+            levelPoints++;
         }
         if(levelUp){
             openLevel = true;
