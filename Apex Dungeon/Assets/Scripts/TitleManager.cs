@@ -17,6 +17,7 @@ public class TitleManager : MonoBehaviour
     public bool popupOpen = false;
     public List<string> taken;
     private bool done;
+    private List<CharacterData> charData;
     
     
     void Start()
@@ -69,7 +70,10 @@ public class TitleManager : MonoBehaviour
         taken.Add(name);
         Data.names = taken;
         Data.activeCharacter = name;
-        Data.charData.Add(new CharacterData(){name=name, level=1, floor=1});
+        charData = Data.charData ?? new List<CharacterData>();
+        charData.Add(new CharacterData(name));
+        Data.charData = charData;
+        Data.LoadActiveData();
         SceneManager.LoadScene("test", LoadSceneMode.Single);
     }
 

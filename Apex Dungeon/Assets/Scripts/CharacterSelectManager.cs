@@ -25,7 +25,7 @@ public class CharacterSelectManager : MonoBehaviour
 
         selectedChar = null;
 
-        AddTestData();
+        //AddTestData();
 
         PopulateCharacters();
     }
@@ -72,6 +72,7 @@ public class CharacterSelectManager : MonoBehaviour
     void ConfirmListener(){
         if(selectedChar == null) return;
         Data.activeCharacter = selectedChar.GetComponent<CharacterData>().name;
+        Data.LoadActiveData();
         SceneManager.LoadScene("test",LoadSceneMode.Single);
     }
 

@@ -47,6 +47,8 @@ public static class Data
         playerName = current.name;
         gold = current.gold;
         hp = current.hp;
+        maxHp = current.maxHp;
+        mp = current.mp;
         maxMp = current.maxMp;
         exp = current.exp;
         maxExp = current.maxExp;
@@ -58,5 +60,31 @@ public static class Data
         evade = current.evade;
         block = current.block;
         gear = current.gear;
+    }
+
+    public static void SaveCharacter(){
+        CharacterData current = charData.Where(cd => cd.name == activeCharacter).FirstOrDefault();
+
+        if(current == null){
+            Debug.Log("Cannot find active character data");
+            return;
+        }
+
+        current.name = playerName;
+        current.gold = gold;
+        current.hp = hp;
+        current.maxHp = maxHp;
+        current.mp = mp;
+        current.maxMp = maxMp;
+        current.exp = exp;
+        current.maxExp = maxExp;
+        current.expLevel = expLevel;
+        current.strength = strength;
+        current.intelligence = intelligence;
+        current.defense = defense;
+        current.evade = evade;
+        current.block = block;
+        current.gear = gear;
+
     }
 }

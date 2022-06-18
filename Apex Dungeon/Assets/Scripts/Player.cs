@@ -10,7 +10,9 @@ public class Player : MovingEntity
     private Image hpbar;
     private Image mpbar;
     private Button character;
+    private Button pause;
     public GameObject characterPanel;
+    public GameObject pausePanel;
     public GameObject slot;
     public GameObject block;
     public GameObject pblock;
@@ -22,12 +24,14 @@ public class Player : MovingEntity
     public GameObject endingScreen;
 
     private CharacterMenu charMenu;
+    private GameObject pauseMenu;
     private GameObject levelPopHolder;
     private PlayerGear gear;
     private Animator animator;
     private int gold;
     private bool openCharacter = false;
     private bool openLevel = false;
+    private bool openPause = false;
     private bool opening = true;
     public bool ending = false;
     private bool fadeOut = false;
@@ -85,8 +89,10 @@ public class Player : MovingEntity
         hpbar = GameObject.FindGameObjectWithTag("hpbar").transform.GetChild(1).gameObject.GetComponent<Image>();
         mpbar = GameObject.FindGameObjectWithTag("mpbar").transform.GetChild(1).gameObject.GetComponent<Image>();
         character = GameObject.FindGameObjectWithTag("characterButton").GetComponent<Button>();
+        pause = GameObject.FindGameObjectWithTag("PauseButton").GetComponent<Button>();
 
         character.onClick.AddListener(characterListener);
+        pause.onClick.AddListener(pauseListener);
     }
 
     void moveController(int clickRow, int clickCol)
@@ -165,7 +171,7 @@ public class Player : MovingEntity
             return;
         }
 
-        if(openLevel) return;
+        if(openLevel || openPause) return;
     
         debugMenu();
         
@@ -239,6 +245,7 @@ public class Player : MovingEntity
 
         Data.charMenu = charMenu;
         Data.gear = gear;
+        Data.SaveCharacter();
     }
 
     public void loadCharacterData(){
@@ -318,10 +325,23 @@ public class Player : MovingEntity
 
     void characterListener()
     {
-        if (!openCharacter)
+        if (!openCharacter && !openPause)
         {
             charMenu.openStats();
             openCharacter = true;
+        }
+    }
+
+    void pauseListener()
+    {
+        if (!openCharacter && !openPause)
+        {
+            openPause = true;
+            GameObject parent = GameObject.FindGameObjectWithTag("Pause");
+            pauseMenu = GameObject.Instantiate(pausePanel, Vector3.zero, Quaternion.identity);
+            pauseMenu.transform.SetParent(parent.transform, false);
+            pauseMenu.transform.GetChild(2).GetComponent<Button>().onClick.AddListener(ResumeListener);
+            pauseMenu.transform.GetChild(3).GetComponent<Button>().onClick.AddListener(MenuListener);
         }
     }
 
@@ -389,6 +409,16 @@ public class Player : MovingEntity
     protected override void OnCantMove<T>(T Component)
     {
         //INTERACTION
+    }
+
+    void ResumeListener(){
+        openPause = false;
+        GameObject.Destroy(pauseMenu);
+    }
+
+    void MenuListener(){
+        saveCharacterData();
+        SceneManager.LoadScene("Title", LoadSceneMode.Single);
     }
 
     
