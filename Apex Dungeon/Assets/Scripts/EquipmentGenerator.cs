@@ -16,16 +16,24 @@ public class EquipmentGenerator : ScriptableObject
     public Sprite IronLegs;
     public Sprite IronBoots;
 
+    public Sprite GoldHelm;
+    public Sprite GoldChest;
+    public Sprite GoldGloves;
+    public Sprite GoldLegs;
+    public Sprite GoldBoots;
+
     public Sprite DiamondHelm;
     public Sprite DiamondChest;
     public Sprite DiamondGloves;
     public Sprite DiamondLegs;
     public Sprite DiamondBoots;
 
+    public Sprite CopperRing;
     public Sprite IronRing;
     public Sprite GoldRing;
     public Sprite DiamondRing;
 
+    public Sprite CopperNecklace;
     public Sprite IronNecklace;
     public Sprite GoldNecklace;
     public Sprite DiamondNecklace;
@@ -33,9 +41,11 @@ public class EquipmentGenerator : ScriptableObject
     public Sprite Dagger;
     public Sprite Sword;
     public Sprite Axe;
+    public Sprite Hammer;
 
     public Sprite LeatherShield;
     public Sprite IronShield;
+    public Sprite GoldShield;
     public Sprite DiamondShield;
 
     //Parameters
@@ -58,27 +68,14 @@ public class EquipmentGenerator : ScriptableObject
         type = inputType;
         tier = inputTier;
 
-        // switch (level)
-        // {
-        //     case 1:
-        //         defense = 10;
-        //         attack = 10;
-        //         intelligence = 10;
-        //         crit = 10;
-        //         break;
-        //     case 2:
-        //         defense = 20;
-        //         attack = 20;
-        //         intelligence = 20;
-        //         crit = 20;
-        //         break;
-        //     case 3:
-        //         defense = 30;
-        //         attack = 30;
-        //         intelligence = 30;
-        //         crit = 30;
-        //         break;
-        // }
+        int attackDamage = 10;
+        int hpBoost = 10;
+
+        int critBoost = 0;
+        int evadeBoost = 0;
+
+        attackDamage = (int)(attackDamage * Mathf.Pow(1.5f, level-1));
+        hpBoost = (int)(hpBoost * Mathf.Pow(1.5f,level-1));
 
         switch (type)
         {
@@ -92,6 +89,9 @@ public class EquipmentGenerator : ScriptableObject
                         image = IronHelm;
                         break;
                     case 3:
+                        image = GoldHelm;
+                        break;
+                    case 4:
                         image = DiamondHelm;
                         break;
                 }
@@ -106,6 +106,9 @@ public class EquipmentGenerator : ScriptableObject
                         image = IronChest;
                         break;
                     case 3:
+                        image = GoldChest;
+                        break;
+                    case 4:
                         image = DiamondChest;
                         break;
                 }
@@ -120,6 +123,9 @@ public class EquipmentGenerator : ScriptableObject
                         image = IronLegs;
                         break;
                     case 3:
+                        image = GoldLegs;
+                        break;
+                    case 4:
                         image = DiamondLegs;
                         break;
                 }
@@ -134,6 +140,9 @@ public class EquipmentGenerator : ScriptableObject
                         image = IronBoots;
                         break;
                     case 3:
+                        image = GoldBoots;
+                        break;
+                    case 4:
                         image = DiamondBoots;
                         break;
                 }
@@ -148,6 +157,9 @@ public class EquipmentGenerator : ScriptableObject
                         image = Sword;
                         break;
                     case 3:
+                        image = Hammer;
+                        break;
+                    case 4:
                         image = Axe;
                         break;
                 }
@@ -162,6 +174,9 @@ public class EquipmentGenerator : ScriptableObject
                         image = IronShield;
                         break;
                     case 3:
+                        image = GoldShield;
+                        break;
+                    case 4:
                         image = DiamondShield;
                         break;
                 }
@@ -170,12 +185,15 @@ public class EquipmentGenerator : ScriptableObject
                 switch (tier)
                 {
                     case 1:
-                        image = IronNecklace;
+                        image = CopperNecklace;
                         break;
                     case 2:
-                        image = GoldNecklace;
+                        image = IronNecklace;
                         break;
                     case 3:
+                        image = GoldNecklace;
+                        break;
+                    case 4:
                         image = DiamondNecklace;
                         break;
                 }
@@ -184,23 +202,20 @@ public class EquipmentGenerator : ScriptableObject
                 switch (tier)
                 {
                     case 1:
-                        image = IronRing;
+                        image = CopperRing;
                         break;
                     case 2:
-                        image = GoldRing;
+                        image = IronRing;
                         break;
                     case 3:
+                        image = GoldRing;
+                        break;
+                    case 4:
                         image = DiamondRing;
                         break;
                 }
                 break;
         }
-
-        //pick stats
-        int defNum = Random.Range(1, 11);
-        int atkNum = Random.Range(1, 11);
-        int intNum = Random.Range(1, 11);
-        int crtNum = Random.Range(1, 11);
 
         GameObject equipment = new GameObject("equipment");
 
@@ -211,7 +226,7 @@ public class EquipmentGenerator : ScriptableObject
         equipment.AddComponent<BoxCollider2D>();
         equipment.GetComponent<BoxCollider2D>().isTrigger = true;
 
-        Equipment item = new Equipment(level, type, tier, image, defNum, atkNum, intNum, crtNum, modifier);
+        Equipment item = new Equipment(level, type, tier, image, hpBoost, attackDamage, critBoost, evadeBoost);
 
         equipment.AddComponent<Pickup>();
         equipment.GetComponent<Pickup>().SetItem(item);
