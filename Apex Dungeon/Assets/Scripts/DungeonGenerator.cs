@@ -39,6 +39,7 @@ public class DungeonGenerator : ScriptableObject
     public GameObject Stairs;
     public GameObject[] Enemy;
     public GameObject[] floor;
+    public GameObject[] voidBlocks;
     public GameObject[] wallH;
     public GameObject[] wallV;
     public GameObject[] Furniture;
@@ -564,6 +565,9 @@ public class DungeonGenerator : ScriptableObject
                 
                 switch (type)
                 {
+                    case 0:
+                        InstantiateRandom(voidBlocks, row, col, mapContainer);
+                        break;
                     case 1:
                         InstantiateRandom(floor, row, col, mapContainer);
                         break;
@@ -757,13 +761,16 @@ public class DungeonGenerator : ScriptableObject
     GameObject getWall(int r, int c)
     {
        
-        bool bottom = false;
+        bool bottom = true;
 
         if (r > 0)
         {
-            if(tileMap[r-1, c].type == 2)
-            {
-                bottom = true;
+            // if(tileMap[r-1, c].type == 2)
+            // {
+            //     bottom = true;
+            // }
+            if(tileMap[r-1, c].type == 1 || tileMap[r-1,c].type == 3){
+                bottom = false;
             }
         }
             
