@@ -4,10 +4,8 @@ using System;
 public class Equipment : Item
 {
     //Parameters
-    public int level;
     public Article article;
     public string type;
-    public int tier;
 
     //stats
     public int defense;
@@ -22,16 +20,6 @@ public class Equipment : Item
     }
     public Equipment(int lvl, string type, int tier, Sprite image, int hpBoost, int attackBoost, int critBoost, int evadeBoost)
     {
-        // this.level = lvl;
-        // this.type = type;
-        // this.tier = tier;
-        // this.image = image;
-        // this.defense = def;
-        // this.attack = atk;
-        // this.intelligence = intel;
-        // this.crit = crit;
-        // this.modifier = mod;
-
         setStats(lvl, type, tier, image, hpBoost, attackBoost, critBoost, evadeBoost);
     }
 
@@ -132,5 +120,9 @@ public class Equipment : Item
 
     public override void UseItem()
     {
+    }
+
+    public int getTier(){
+        return tier;
     }
 }

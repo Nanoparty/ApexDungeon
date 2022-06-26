@@ -22,6 +22,7 @@ public class Player : MovingEntity
     public GameObject itemPopup;
     public GameObject levelPopup;
     public GameObject endingScreen;
+    public Sprite[] frames;
 
     private CharacterMenu charMenu;
     private GameObject pauseMenu;
@@ -84,7 +85,7 @@ public class Player : MovingEntity
     void initializeObjects(){
         animator = GetComponent<Animator>();
         gear = new PlayerGear();
-        charMenu = new CharacterMenu(characterPanel, slot, questLine, mapArea, block, pblock, itemPopup);
+        charMenu = new CharacterMenu(characterPanel, slot, questLine, mapArea, block, pblock, itemPopup, frames);
 
         hpbar = GameObject.FindGameObjectWithTag("hpbar").transform.GetChild(1).gameObject.GetComponent<Image>();
         mpbar = GameObject.FindGameObjectWithTag("mpbar").transform.GetChild(1).gameObject.GetComponent<Image>();
@@ -305,6 +306,7 @@ public class Player : MovingEntity
         }
         if (other.gameObject.tag == "Equipment")
         {
+            Debug.Log("TIER: " +other.GetComponent<Pickup>().GetItem().tier);
             charMenu.addEquipment(other.GetComponent<Pickup>().GetItem());
             Destroy(other.gameObject);
             GameManager.gmInstance.Dungeon.removeFromItemList(row, col);

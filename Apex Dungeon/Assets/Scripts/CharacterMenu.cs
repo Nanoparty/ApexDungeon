@@ -48,6 +48,7 @@ public class CharacterMenu
     int gearSelection = -1;
     bool popupOpen = false;
     bool slotsLoaded = false;
+    private Sprite[] frames;
 
     // Use this for initialization
     void Start()
@@ -142,7 +143,7 @@ public class CharacterMenu
         }
     }
 
-    public CharacterMenu(GameObject panel, GameObject slot, GameObject questLine, GameObject minimap, GameObject block, GameObject pblock, GameObject itemPopup)
+    public CharacterMenu(GameObject panel, GameObject slot, GameObject questLine, GameObject minimap, GameObject block, GameObject pblock, GameObject itemPopup, Sprite[] frames)
     {
         this.panel = panel;
         this.slot = slot;
@@ -152,6 +153,7 @@ public class CharacterMenu
         this.minimap = minimap;
         this.itemPopup = itemPopup;
         this.player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+        this.frames = frames;
 
         items = new List<Consumable>();
         equipment = new List<Equipment>();
@@ -274,10 +276,15 @@ public class CharacterMenu
     private void setEquipmentSlot(GameObject slot, Equipment e){
         if(e == null){
             slot.transform.GetChild(0).gameObject.SetActive(false);
+            slot.GetComponent<Image>().sprite = frames[0];
         } 
         else {
             slot.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = e.image;
             slot.transform.GetChild(0).gameObject.SetActive(true);
+            if(e.tier == 1) slot.GetComponent<Image>().sprite = frames[0];
+            if(e.tier == 2) slot.GetComponent<Image>().sprite = frames[1];
+            if(e.tier == 3) slot.GetComponent<Image>().sprite = frames[2];
+            if(e.tier == 4) slot.GetComponent<Image>().sprite = frames[3];
         }
     }
 
@@ -373,11 +380,17 @@ public class CharacterMenu
         {
             Vector3 pos = new Vector3(xOff + x * cellSize, yOff + -1 * y * cellSize, 0);
 
-            Item item = equipment[i];
+            Equipment item = equipment[i];
 
             GameObject itemslot = GameObject.Instantiate(slot, pos, Quaternion.identity);
             GameObject icon = itemslot.transform.GetChild(0).gameObject;
             icon.GetComponent<Image>().sprite = item.image;
+            Debug.Log("Creating Inventory Item " + item.tier);
+
+            if(item.tier == 1) itemslot.GetComponent<Image>().sprite = frames[0];
+            if(item.tier == 2) itemslot.GetComponent<Image>().sprite = frames[1];
+            if(item.tier == 3) itemslot.GetComponent<Image>().sprite = frames[2];
+            if(item.tier == 4) itemslot.GetComponent<Image>().sprite = frames[3];
 
             itemslot.transform.SetParent(topicArea.transform, false);
             equipmentSlots.Add(itemslot);
@@ -488,7 +501,7 @@ public class CharacterMenu
     private void createPopup(){
         //Debug.Log("Create Popup");
         Vector3 pos = new Vector3(0, 0, 0);
-
+        Debug.Log("gear popup");
         GameObject popup = GameObject.Instantiate(itemPopup, pos, Quaternion.identity);
         GameObject mainHolder = popup.transform.GetChild(0).gameObject;
 
@@ -529,7 +542,13 @@ public class CharacterMenu
         if(tab == 1){
             Item i = equipment[selected];
             itemName1.transform.gameObject.GetComponent<TMP_Text>().text = i.itemName;
-            itemFlavor1.transform.gameObject.GetComponent<TMP_Text>().text = i.flavorText;
+
+            //itemFlavor1.transform.gameObject.GetComponent<TMP_Text>().text = i.flavorText;
+            if(i.tier == 1) itemFlavor1.transform.gameObject.GetComponent<TMP_Text>().text = "Common";
+            if(i.tier == 2) itemFlavor1.transform.gameObject.GetComponent<TMP_Text>().text = "Rare";
+            if(i.tier == 3) itemFlavor1.transform.gameObject.GetComponent<TMP_Text>().text = "Unique";
+            if(i.tier == 4) itemFlavor1.transform.gameObject.GetComponent<TMP_Text>().text = "Legendary";
+            
             itemDesc1.transform.gameObject.GetComponent<TMP_Text>().text = i.description;
 
             button1.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = "Equip";
@@ -565,7 +584,7 @@ public class CharacterMenu
         if(e == null)return;
 
         Vector3 pos = new Vector3(0, 0, 0);
-
+        Debug.Log("Gear Popup");
         GameObject popup = GameObject.Instantiate(itemPopup, pos, Quaternion.identity);
         GameObject mainHolder = popup.transform.GetChild(0).gameObject;
 
@@ -589,7 +608,13 @@ public class CharacterMenu
         popupArea = popup;
         
         itemName1.transform.gameObject.GetComponent<TMP_Text>().text = e.itemName;
-        itemFlavor1.transform.gameObject.GetComponent<TMP_Text>().text = e.flavorText;
+
+        //itemFlavor1.transform.gameObject.GetComponent<TMP_Text>().text = e.flavorText;
+        if(e.tier == 1) itemFlavor1.transform.gameObject.GetComponent<TMP_Text>().text = "Common";
+        if(e.tier == 2) itemFlavor1.transform.gameObject.GetComponent<TMP_Text>().text = "Rare";
+        if(e.tier == 3) itemFlavor1.transform.gameObject.GetComponent<TMP_Text>().text = "Unique";
+        if(e.tier == 4) itemFlavor1.transform.gameObject.GetComponent<TMP_Text>().text = "Legendary";
+
         itemDesc1.transform.gameObject.GetComponent<TMP_Text>().text = e.description;
 
         modal2.SetActive(false);
@@ -917,7 +942,11 @@ public class CharacterMenu
         GameObject itemDesc2 = modal2.transform.GetChild(2).gameObject;
 
         itemName2.transform.gameObject.GetComponent<TMP_Text>().text = alt.itemName;
-        itemFlavor2.transform.gameObject.GetComponent<TMP_Text>().text = alt.flavorText;
+        //itemFlavor2.transform.gameObject.GetComponent<TMP_Text>().text = alt.flavorText;
+        if(alt.tier == 1) itemName2.transform.gameObject.GetComponent<TMP_Text>().text = "Common";
+        if(alt.tier == 2) itemName2.transform.gameObject.GetComponent<TMP_Text>().text = "Rare";
+        if(alt.tier == 3) itemName2.transform.gameObject.GetComponent<TMP_Text>().text = "Unique";
+        if(alt.tier == 4) itemName2.transform.gameObject.GetComponent<TMP_Text>().text = "Legendary";
         itemDesc2.transform.gameObject.GetComponent<TMP_Text>().text = alt.description;
     }
 

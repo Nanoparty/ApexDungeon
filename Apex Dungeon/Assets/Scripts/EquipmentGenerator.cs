@@ -51,7 +51,7 @@ public class EquipmentGenerator : ScriptableObject
     //Parameters
     int level;
     string type;
-    int tier;
+    public int tier;
 
     //stats
     Sprite image;

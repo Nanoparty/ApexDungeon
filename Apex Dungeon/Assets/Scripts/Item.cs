@@ -7,6 +7,7 @@ public abstract class Item
     public string flavorText;
     public Sprite image;
     public int level;
+    public int tier;
     
     public abstract void Create();
 
