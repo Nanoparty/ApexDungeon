@@ -73,6 +73,7 @@ public class CharacterSelectManager : MonoBehaviour
         if(selectedChar == null) return;
         Data.activeCharacter = selectedChar.GetComponent<CharacterData>().name;
         Data.LoadActiveData();
+        Data.loadData = true;
         SceneManager.LoadScene("test",LoadSceneMode.Single);
     }
 

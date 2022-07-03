@@ -47,7 +47,10 @@ public class Player : MovingEntity
     {
         setInitialValues();
         initializeObjects();
-        loadCharacterData();
+        if (GameManager.gmInstance.level > 1 || Data.loadData)
+        {
+            loadCharacterData();
+        }
         
         base.Start();
         Debug.Log("PLAYER STRENGTH:"+ damage);

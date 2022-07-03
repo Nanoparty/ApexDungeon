@@ -175,6 +175,8 @@ public class CharacterMenu
     {
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
 
+        this.gear = player.getGear();
+
         //Debug.Log("EQUIP:"+equipment[0]);
         slotsLoaded = false;
         inventorySlots = new List<GameObject>();
@@ -184,7 +186,7 @@ public class CharacterMenu
         panelObject = GameObject.Instantiate(panel, Vector3.zero, Quaternion.identity);
         panelObject.transform.SetParent(parent.transform, false);
 
-        this.gear = player.getGear();
+        
 
         close = panelObject.transform.GetChild(1).transform.GetChild(2).gameObject.GetComponent<Button>();
         close.onClick.AddListener(closeListener);
@@ -242,9 +244,9 @@ public class CharacterMenu
 
         //Debug.Log("HELMET SLOT IS " + gear.Helmet);
         
-        if(gear.Helmet == null) HelmSlot.transform.GetChild(0).gameObject.SetActive(false);
-        else HelmSlot.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = gear.Helmet.image;
-
+        // if(gear.Helmet == null) HelmSlot.transform.GetChild(0).gameObject.SetActive(false);
+        // else HelmSlot.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = gear.Helmet.image;
+        Debug.Log("GEAR:"+gear.Helmet);
         setEquipmentSlot(HelmSlot, gear.Helmet);
         setEquipmentSlot(ChestSlot, gear.Chestplate);
         setEquipmentSlot(LegSlot, gear.Legs);
@@ -273,7 +275,7 @@ public class CharacterMenu
         blck.transform.gameObject.GetComponent<TMP_Text>().text = "Blck:" + player.getBlock();
     }
 
-    private void setEquipmentSlot(GameObject slot, Equipment e){
+    private void setEquipmentSlot(GameObject slot, Equipment? e){
         if(e == null){
             slot.transform.GetChild(0).gameObject.SetActive(false);
             slot.GetComponent<Image>().sprite = frames[0];

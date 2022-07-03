@@ -13,6 +13,7 @@ public static class Data
     public static List<CharacterData> charData;
 
     public static string activeCharacter;
+    public static bool loadData;
 
     //Character Data
     public static string playerName;

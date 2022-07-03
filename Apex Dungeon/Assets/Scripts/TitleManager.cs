@@ -74,6 +74,7 @@ public class TitleManager : MonoBehaviour
         charData.Add(new CharacterData(name));
         Data.charData = charData;
         Data.LoadActiveData();
+        Data.loadData = false;
         SceneManager.LoadScene("test", LoadSceneMode.Single);
     }
 
