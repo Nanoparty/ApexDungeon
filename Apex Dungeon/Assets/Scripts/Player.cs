@@ -47,12 +47,8 @@ public class Player : MovingEntity
     {
         setInitialValues();
         initializeObjects();
+        loadCharacterData();
         
-        if (GameManager.gmInstance.level > 1)
-        {
-            loadCharacterData();
-        }
-
         base.Start();
         Debug.Log("PLAYER STRENGTH:"+ damage);
     }
@@ -86,6 +82,7 @@ public class Player : MovingEntity
         animator = GetComponent<Animator>();
         gear = new PlayerGear();
         charMenu = new CharacterMenu(characterPanel, slot, questLine, mapArea, block, pblock, itemPopup, frames);
+        Debug.Log("Create Charmenu " + charMenu);
 
         hpbar = GameObject.FindGameObjectWithTag("hpbar").transform.GetChild(1).gameObject.GetComponent<Image>();
         mpbar = GameObject.FindGameObjectWithTag("mpbar").transform.GetChild(1).gameObject.GetComponent<Image>();
@@ -420,6 +417,7 @@ public class Player : MovingEntity
 
     void MenuListener(){
         saveCharacterData();
+        Destroy(GameManager.gmInstance);
         SceneManager.LoadScene("Title", LoadSceneMode.Single);
     }
 

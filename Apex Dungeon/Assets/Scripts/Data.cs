@@ -39,11 +39,6 @@ public static class Data
     public static void LoadActiveData(){
         CharacterData current = charData.Where(cd => cd.name == activeCharacter).FirstOrDefault();
 
-        if(current == null){
-            Debug.Log("Cannot find active character data");
-            return;
-        }
-
         playerName = current.name;
         gold = current.gold;
         hp = current.hp;
@@ -63,16 +58,14 @@ public static class Data
     }
 
     public static void SaveCharacter(){
-        if(charData == null)charData = new List<CharacterData>();
-        if(activeCharacter == null)activeCharacter = "bob";
-        CharacterData current = charData.Where(cd => cd.name == activeCharacter).FirstOrDefault();
 
-        if(current == null){
-            Debug.Log("Cannot find active character data");
+        if(charData == null) {
+            charData = new List<CharacterData>();
+            activeCharacter = "bob";
             charData.Add(new CharacterData(activeCharacter));
-            current = charData.Where(cd => cd.name == activeCharacter).FirstOrDefault();
-            return;
         }
+       
+        CharacterData current = charData.Where(cd => cd.name == activeCharacter).FirstOrDefault();
 
         current.name = playerName;
         current.gold = gold;
@@ -89,6 +82,5 @@ public static class Data
         current.evade = evade;
         current.block = block;
         current.gear = gear;
-
     }
 }

@@ -14,8 +14,8 @@ public class ScoresManager : MonoBehaviour
     private List<(string, int)> scores;
     void Start()
     {
-        Data.scores = GameManager.gmInstance.scores ?? new List<(string, int)>();
-        scores = GameManager.gmInstance.scores;
+        Data.scores = GameManager.gmInstance?.scores ?? new List<(string, int)>();
+        scores = GameManager.gmInstance?.scores ?? new List<(string, int)>();
         foreach((string, int) score in scores){
             GameObject sc = GameObject.Instantiate(scoreCard, new Vector3(0, 0, 0), Quaternion.identity);
             sc.transform.GetComponent<TMP_Text>().text = score.Item1 + " - " + score.Item2.ToString();
@@ -27,9 +27,6 @@ public class ScoresManager : MonoBehaviour
     }
 
     private void mainMenu(){
-        //GameManager.gmInstance.FullReset();
-        //GameManager.gmInstance.state = "play";
-        
         GameObject.Destroy(GameManager.gmInstance);
         SceneManager.LoadScene("Title",LoadSceneMode.Single);
     }
