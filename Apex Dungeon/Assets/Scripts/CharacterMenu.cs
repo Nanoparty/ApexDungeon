@@ -90,6 +90,7 @@ public class CharacterMenu
                 }else{
                     //Debug.Log("DESTROY");
                     closePopup();
+                    unclickAll();
                 }           
                      
             }
@@ -110,6 +111,7 @@ public class CharacterMenu
                     popupOpen = true;
                     createGearPopup();
                     SoundManager.sm.PlayMenuSound();
+                    return;
                 }
             }
             if(tab == 0){
@@ -152,6 +154,44 @@ public class CharacterMenu
     {
         GameObject.Destroy(popupArea);
         popupOpen = false;
+    }
+
+    public void unclickAll()
+    {
+        for (int i = 0; i < 8; i++)
+        {
+            charPanel = panelObject.transform.GetChild(0).gameObject;
+            GameObject middleStats = charPanel.transform.GetChild(1).gameObject;
+            GameObject gearSlot = middleStats.transform.GetChild(4 + i).gameObject;
+            if (gearSlot.GetComponent<Clickable>().getClicked())
+            {
+                gearSlot.GetComponent<Clickable>().setClicked(false);
+            }
+        }
+        if (tab == 0)
+        {
+            //Debug.Log("num slots=" + inventorySlots.Count);
+            for (int i = 0; i < inventorySlots.Count; i++)
+            {
+                //Debug.Log("Checking slot:" + i);
+                if (inventorySlots != null && inventorySlots.Count > 0
+                    && inventorySlots[i].GetComponent<Clickable>().getClicked())
+                {
+                    inventorySlots[i].GetComponent<Clickable>().setClicked(false);
+                }
+            }
+        }
+        if (tab == 1)
+        {
+            for (int i = 0; i < equipmentSlots.Count; i++)
+            {
+                if (equipmentSlots != null && equipmentSlots.Count > 0
+                    && equipmentSlots[i].GetComponent<Clickable>().getClicked())
+                {
+                    equipmentSlots[i].GetComponent<Clickable>().setClicked(false);
+                }
+            }
+        }
     }
 
     public CharacterMenu(GameObject panel, GameObject slot, GameObject questLine, GameObject minimap, GameObject block, GameObject pblock, GameObject itemPopup, Sprite[] frames)
