@@ -25,7 +25,7 @@ public class CharacterSelectManager : MonoBehaviour
 
         selectedChar = null;
 
-        //AddTestData();
+        AddTestData();
 
         PopulateCharacters();
     }
@@ -43,8 +43,8 @@ public class CharacterSelectManager : MonoBehaviour
     void PopulateCharacters(){
         foreach(CharacterData cd in charData){
             Vector3 position = new Vector3(0f, 0f, 0f);
-            GameObject characterUnit = Instantiate(CharacterLine, position, Quaternion.identity) as GameObject;
-            characterUnit.transform.parent = ContentArea.transform;
+            GameObject characterUnit = Instantiate(CharacterLine, position, Quaternion.identity, ContentArea.transform) as GameObject;
+            //characterUnit.transform.parent = ContentArea.transform;
             characterUnit.transform.GetChild(0).GetComponent<TMP_Text>().text = cd.name;
             characterUnit.transform.GetChild(1).GetComponent<TMP_Text>().text = "Level: " + cd.level.ToString();
             characterUnit.transform.GetChild(2).GetComponent<TMP_Text>().text = "Floor: " + cd.floor.ToString();
