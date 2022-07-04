@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using System.Linq;
 using UnityEngine.SceneManagement;
 
 public class ScoresManager : MonoBehaviour
@@ -17,7 +18,14 @@ public class ScoresManager : MonoBehaviour
         Data.scores = GameManager.gmInstance?.scores ?? new List<(string, int)>();
         scores = GameManager.gmInstance?.scores ?? new List<(string, int)>();
 
-        //TestData();
+        TestData();
+
+        //scores.OrderBy (s => s.Item2);
+
+        scores.Sort((a, b) => {
+            int result = b.Item2.CompareTo(a.Item2);
+            return result;
+        });
 
         foreach((string, int) score in scores){
             GameObject sc = GameObject.Instantiate(scoreCard, new Vector3(0, 0, 0), Quaternion.identity);
@@ -33,12 +41,12 @@ public class ScoresManager : MonoBehaviour
     }
 
     void TestData(){
-        scores.Add(("player1",5234));
-        scores.Add(("player2",5234));
-        scores.Add(("player3",5234));
-        scores.Add(("player3",5234));
-        scores.Add(("player3",5234));
-        scores.Add(("player3",5234));
+        scores.Add(("player1",1));
+        scores.Add(("player2",5));
+        scores.Add(("player3",3));
+        scores.Add(("player3",6));
+        scores.Add(("player3",5));
+        scores.Add(("player3",4));
     }
 
     private void mainMenu(){
