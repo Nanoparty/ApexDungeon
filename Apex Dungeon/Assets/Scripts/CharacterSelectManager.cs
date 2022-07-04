@@ -74,7 +74,7 @@ public class CharacterSelectManager : MonoBehaviour
         Data.activeCharacter = selectedChar.GetComponent<CharacterData>().name;
         Data.LoadActiveData();
         Data.loadData = true;
-        SceneManager.LoadScene("test",LoadSceneMode.Single);
+        SceneManager.LoadScene("Dungeon",LoadSceneMode.Single);
     }
 
     void BackListener(){

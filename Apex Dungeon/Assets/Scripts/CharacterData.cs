@@ -29,8 +29,8 @@ public class CharacterData : MonoBehaviour
         level = 0;        
     }
 
-    public CharacterData(string name){
-        this.name = name;
+    public CharacterData(string n){
+        name = n;
         floor = 1;
         level = 1;
         gold = 0;

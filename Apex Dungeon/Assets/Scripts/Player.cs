@@ -29,6 +29,7 @@ public class Player : MovingEntity
     private GameObject levelPopHolder;
     private PlayerGear gear;
     private Animator animator;
+    private string playerName;
     private int gold;
     private bool openCharacter = false;
     private bool openLevel = false;
@@ -53,12 +54,11 @@ public class Player : MovingEntity
         }
         
         base.Start();
-        Debug.Log("PLAYER STRENGTH:"+ damage);
     }
 
     void setInitialValues(){
-        Debug.Log("Setting initial values");
-        hp = 100;
+        playerName = Data.activeCharacter ?? "bob";
+        hp = 10;
         mp = 100;
         maxMp = 50;
         maxHp = 100;
@@ -82,10 +82,11 @@ public class Player : MovingEntity
     }
 
     void initializeObjects(){
+        SoundManager.sm.PlayDungeonMusic();
+
         animator = GetComponent<Animator>();
         gear = new PlayerGear();
         charMenu = new CharacterMenu(characterPanel, slot, questLine, mapArea, block, pblock, itemPopup, frames);
-        Debug.Log("Create Charmenu " + charMenu);
 
         hpbar = GameObject.FindGameObjectWithTag("hpbar").transform.GetChild(1).gameObject.GetComponent<Image>();
         mpbar = GameObject.FindGameObjectWithTag("mpbar").transform.GetChild(1).gameObject.GetComponent<Image>();
@@ -108,7 +109,6 @@ public class Player : MovingEntity
         if (dead)
         {
             if(fadeIn){
-                //Debug.Log("Starting fade in");
                 //calculate and save score
                 GameManager.gmInstance.score += gold;
                 fadeIn = false;
@@ -125,13 +125,13 @@ public class Player : MovingEntity
             }
             else if(ending){
                 endScreenHolder.transform.GetChild(3).gameObject.SetActive(true);
-                Debug.Log("ACTIVATE");
                 if (Input.GetButtonDown("Fire1"))
                 {
                     GameManager.gmInstance.scores = Data.scores ?? new List<(string, int)>();
                     GameManager.gmInstance.scores.Add((GameManager.gmInstance.playerName, GameManager.gmInstance.score));
                     GameManager.gmInstance.state = "score";
                     Data.inProgress = false;
+                    Data.RemoveActive();
                     SceneManager.LoadScene("Scores", LoadSceneMode.Single);
                 }
             }
@@ -184,7 +184,6 @@ public class Player : MovingEntity
         {
             if (EventSystem.current.IsPointerOverGameObject())
             {
-                Debug.Log("Clicked on the UI");
                 return;
             }
 
@@ -229,6 +228,7 @@ public class Player : MovingEntity
     }
 
     public void saveCharacterData(){
+        Data.playerName = playerName;
         Data.hp = hp;
         Data.maxHp = maxHp;
         Data.mp = mp;
@@ -250,7 +250,7 @@ public class Player : MovingEntity
     }
 
     public void loadCharacterData(){
-        Debug.Log("Load Character Data");
+        playerName = Data.playerName;
         hp = Data.hp;
         maxHp = Data.maxHp;
         mp = Data.mp;
@@ -279,6 +279,7 @@ public class Player : MovingEntity
 
     void OnTriggerEnter2D(Collider2D other)
     {
+        SoundManager.sm.PlayPickupSound();
         if(other.gameObject.tag == "Stairs")
         {
             nextFloor();
@@ -306,7 +307,6 @@ public class Player : MovingEntity
         }
         if (other.gameObject.tag == "Equipment")
         {
-            Debug.Log("TIER: " +other.GetComponent<Pickup>().GetItem().tier);
             charMenu.addEquipment(other.GetComponent<Pickup>().GetItem());
             Destroy(other.gameObject);
             GameManager.gmInstance.Dungeon.removeFromItemList(row, col);
@@ -329,6 +329,7 @@ public class Player : MovingEntity
     {
         if (!openCharacter && !openPause)
         {
+            SoundManager.sm.PlayMenuSound();
             charMenu.openStats();
             openCharacter = true;
         }
@@ -338,6 +339,7 @@ public class Player : MovingEntity
     {
         if (!openCharacter && !openPause)
         {
+            SoundManager.sm.PlayMenuSound();
             openPause = true;
             GameObject parent = GameObject.FindGameObjectWithTag("Pause");
             pauseMenu = GameObject.Instantiate(pausePanel, Vector3.zero, Quaternion.identity);
@@ -379,8 +381,7 @@ public class Player : MovingEntity
     }
 
     public void takeAttack(float d){
-        // float netDamage = d + (defense * 0.5f);
-        // Debug.Log("PLAYER TAKE DAMANGE:"+netDamage);
+        SoundManager.sm.PlayHitSound();
         int dice = Random.Range(1, 101);
         if(dice <= evade) return;
         base.takeDamage(d);
@@ -414,11 +415,13 @@ public class Player : MovingEntity
     }
 
     void ResumeListener(){
+        SoundManager.sm.PlayMenuSound();
         openPause = false;
         GameObject.Destroy(pauseMenu);
     }
 
     void MenuListener(){
+        SoundManager.sm.PlayMenuSound();
         saveCharacterData();
         Destroy(GameManager.gmInstance);
         SceneManager.LoadScene("Title", LoadSceneMode.Single);
@@ -460,18 +463,21 @@ public class Player : MovingEntity
     }
 
     void StrengthListener(){
+        SoundManager.sm.PlayMenuSound();
         ResetLevelStats();
         Util.setText(levelPopHolder, (damage+1).ToString(), 3, 1);
         Util.setColor(levelPopHolder, Color.green, 3, 1);
         levelStat = "strength";
     }
     void DefenseListener(){
+        SoundManager.sm.PlayMenuSound();
         ResetLevelStats();
         Util.setText(levelPopHolder, (defense+1).ToString(), 4, 1);
         Util.setColor(levelPopHolder, Color.green, 4, 1);
         levelStat = "defense";
     }
     void CritListener(){
+        SoundManager.sm.PlayMenuSound();
         ResetLevelStats();
         Util.setText(levelPopHolder, (critical+1).ToString(), 5, 1);
         Util.setColor(levelPopHolder, Color.green, 5, 1);
@@ -484,6 +490,7 @@ public class Player : MovingEntity
     //     levelStat = "intelligence";
     // }
     void EvadeListener(){
+        SoundManager.sm.PlayMenuSound();
         ResetLevelStats();
         Util.setText(levelPopHolder, (evade+1).ToString(), 6, 1);
         Util.setColor(levelPopHolder, Color.green, 6, 1);
@@ -516,6 +523,7 @@ public class Player : MovingEntity
         // Util.setColor(levelPopHolder, Color.white, 8, 1);
     }
     void LevelConfirmListener(){
+        SoundManager.sm.PlayMenuSound();
         if(levelStat.Equals("strength")){
             damage++;
         }else if(levelStat.Equals("defense")){
@@ -620,7 +628,6 @@ public class Player : MovingEntity
     }
     public void addStrength(int i){
         damage += i;
-        Debug.Log("ADDING "+i + " STRENGTH");
     }
     public void addDefense(int i){
         defense += i;

@@ -40,7 +40,7 @@ public static class Data
     public static void LoadActiveData(){
         CharacterData current = charData.Where(cd => cd.name == activeCharacter).FirstOrDefault();
 
-        playerName = current.name;
+        playerName = activeCharacter;
         gold = current.gold;
         hp = current.hp;
         maxHp = current.maxHp;
@@ -64,10 +64,13 @@ public static class Data
             charData = new List<CharacterData>();
             activeCharacter = "bob";
             charData.Add(new CharacterData(activeCharacter));
+            playerName = activeCharacter;
+            Debug.Log("NULL CHARACTER DATA");
         }
-       
-        CharacterData current = charData.Where(cd => cd.name == activeCharacter).FirstOrDefault();
+        Debug.Log("Loading Character -> "+activeCharacter);
 
+        CharacterData current = charData.Where(cd => cd.name == activeCharacter).First();
+        Debug.Log("Setting charData name to "+ playerName);
         current.name = playerName;
         current.gold = gold;
         current.hp = hp;
@@ -83,5 +86,10 @@ public static class Data
         current.evade = evade;
         current.block = block;
         current.gear = gear;
+    }
+
+    public static void RemoveActive(){
+        CharacterData current = charData.Where(cd => cd.name == activeCharacter).First();
+        charData.Remove(current);
     }
 }

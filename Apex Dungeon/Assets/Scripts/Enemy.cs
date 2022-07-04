@@ -84,6 +84,7 @@ public class Enemy : MovingEntity
     }
 
     public new void takeDamage(float d){
+        SoundManager.sm.PlayHitSound();
         int netDamage = (int)calculateDamageIn(d);
         base.takeDamage(netDamage);
     }

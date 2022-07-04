@@ -18,10 +18,14 @@ public class TitleManager : MonoBehaviour
     public List<string> taken;
     private bool done;
     private List<CharacterData> charData;
+    public AudioSource audioSource;
     
+    public AudioClip buttonClick;
     
     void Start()
     {
+        SoundManager.sm.PlayTitleMusic();
+        audioSource = GetComponent<AudioSource>();
         NewGame.onClick.AddListener(newGameListener);
         LoadGame.onClick.AddListener(loadGameListener);
         Scores.onClick.AddListener(scoresListener);
@@ -33,6 +37,7 @@ public class TitleManager : MonoBehaviour
     }
 
     void newGameListener(){
+        SoundManager.sm.PlayMenuSound();
         if(popupOpen)return;
 
         popupOpen = true;
@@ -42,21 +47,26 @@ public class TitleManager : MonoBehaviour
     }
 
     void loadGameListener(){
+        SoundManager.sm.PlayMenuSound();
         if(popupOpen)return;
+
         SceneManager.LoadScene("CharacterSelect", LoadSceneMode.Single);
     }
 
     void scoresListener(){
+        SoundManager.sm.PlayMenuSound();
         if(popupOpen)return;
 
         SceneManager.LoadScene("Scores", LoadSceneMode.Single);
     }
 
     void optionsListener(){
+        SoundManager.sm.PlayMenuSound();
         if(popupOpen)return;
     }
 
     void acceptListener(){
+        SoundManager.sm.PlayMenuSound();
         string name = newPopup.transform.GetChild(4).GetComponent<TMP_InputField>().text;
 
         if(!(name.Length > 0))return;
@@ -75,10 +85,12 @@ public class TitleManager : MonoBehaviour
         Data.charData = charData;
         Data.LoadActiveData();
         Data.loadData = false;
-        SceneManager.LoadScene("test", LoadSceneMode.Single);
+        SoundManager.sm.StopMusic();
+        SceneManager.LoadScene("Dungeon", LoadSceneMode.Single);
     }
 
     void cancelListener(){
+        SoundManager.sm.PlayMenuSound();
         newPopup.transform.GetChild(4).GetComponent<TMP_InputField>().text = "";
         newPopup.SetActive(false);
         popupOpen = false;

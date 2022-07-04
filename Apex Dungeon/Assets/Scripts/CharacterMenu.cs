@@ -109,6 +109,7 @@ public class CharacterMenu
                     gearSelection = i;
                     popupOpen = true;
                     createGearPopup();
+                    SoundManager.sm.PlayMenuSound();
                 }
             }
             if(tab == 0){
@@ -122,6 +123,7 @@ public class CharacterMenu
                         inventorySlots[i].GetComponent<Clickable>().setClicked(false);
                         popupOpen = true;
                         createPopup();
+                        SoundManager.sm.PlayMenuSound();
                     }
                 }
             }
@@ -136,6 +138,7 @@ public class CharacterMenu
                         popupOpen = true;
                         //Debug.Log("Clicked on equipment:"+ equipment[selected]);
                         createPopup();
+                        SoundManager.sm.PlayMenuSound();
                     }
                 }
             }
@@ -665,6 +668,7 @@ public class CharacterMenu
 
     void closeListener()
     {
+        SoundManager.sm.PlayMenuSound();
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         player.setGear(gear);
         closeInventory();
@@ -672,26 +676,31 @@ public class CharacterMenu
     }
 
     void itemListener(){
+        SoundManager.sm.PlayMenuSound();
         topicTitleString = "Inventory";
         tab = 0;
         refreshTopicPanel();
     }
     void equipmentListener(){
+        SoundManager.sm.PlayMenuSound();
         topicTitleString = "Equipment";
         tab = 1;
         refreshTopicPanel();
     }
     void questListener(){
+        SoundManager.sm.PlayMenuSound();
         topicTitleString = "Quests";
         tab = 2;
         refreshTopicPanel();
     }
     void mapListener(){
+        SoundManager.sm.PlayMenuSound();
         topicTitleString = "Map";
         tab = 3;
         refreshTopicPanel();
     }
     void useListener(){
+        SoundManager.sm.PlayMenuSound();
         //Debug.Log("USE ITEM");
         items[selected].UseItem();
         items.RemoveAt(selected);
@@ -703,6 +712,7 @@ public class CharacterMenu
         setPlayerStats();
     }
     void equipListener(){
+        SoundManager.sm.PlayMenuSound();
         //Debug.Log("EQUIP");
 
         //equip armor
@@ -761,6 +771,7 @@ public class CharacterMenu
     }
 
     void unequipListener(){
+        SoundManager.sm.PlayMenuSound();
         Equipment e = new Equipment();
 
         if(gearSelection == 0){ 
@@ -844,6 +855,7 @@ public class CharacterMenu
     }
 
     void trashListener(){
+        SoundManager.sm.PlayMenuSound();
         if(tab == 0){
             items.RemoveAt(selected);
         }
@@ -858,6 +870,7 @@ public class CharacterMenu
     }
 
     void trashEquipedListener(){
+        SoundManager.sm.PlayMenuSound();
         Equipment e = new Equipment();
 
         if(gearSelection == 0){ 
@@ -901,6 +914,7 @@ public class CharacterMenu
     }
 
     void compareListener(){
+        SoundManager.sm.PlayMenuSound();
         //Debug.Log("COMPARE");
         Equipment e = equipment[selected];
         Equipment alt = new Equipment();
