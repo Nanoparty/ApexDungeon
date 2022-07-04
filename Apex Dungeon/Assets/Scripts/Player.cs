@@ -7,8 +7,8 @@ using UnityEngine.SceneManagement;
 
 public class Player : MovingEntity
 {
-    private Image hpbar;
-    private Image mpbar;
+    private GameObject hpbar;
+    private GameObject xpbar;
     private Button character;
     private Button pause;
     public GameObject characterPanel;
@@ -58,7 +58,7 @@ public class Player : MovingEntity
 
     void setInitialValues(){
         playerName = Data.activeCharacter ?? "bob";
-        hp = 10;
+        hp = 90;
         mp = 100;
         maxMp = 50;
         maxHp = 100;
@@ -88,8 +88,8 @@ public class Player : MovingEntity
         gear = new PlayerGear();
         charMenu = new CharacterMenu(characterPanel, slot, questLine, mapArea, block, pblock, itemPopup, frames);
 
-        hpbar = GameObject.FindGameObjectWithTag("hpbar").transform.GetChild(1).gameObject.GetComponent<Image>();
-        mpbar = GameObject.FindGameObjectWithTag("mpbar").transform.GetChild(1).gameObject.GetComponent<Image>();
+        hpbar = GameObject.FindGameObjectWithTag("hpbar");
+        xpbar = GameObject.FindGameObjectWithTag("xpbar");
         character = GameObject.FindGameObjectWithTag("characterButton").GetComponent<Button>();
         pause = GameObject.FindGameObjectWithTag("PauseButton").GetComponent<Button>();
 
@@ -210,6 +210,24 @@ public class Player : MovingEntity
 
     void debugMenu(){
         //Debugging tool
+        if (Input.GetKeyDown("q"))
+        {
+            GameObject redbar = hpbar.transform.GetChild(0).gameObject;
+            Vector3 pos = redbar.transform.GetComponent<RectTransform>().position;
+
+            Vector2 sizeDelta = redbar.transform.GetComponent<RectTransform>().sizeDelta;
+            Canvas canvas = GameObject.FindGameObjectWithTag("Canvas").GetComponent<Canvas>();
+            Vector2 canvasScale = new Vector2(canvas.transform.localScale.x, canvas.transform.localScale.y);
+            Vector2 finalScale = new Vector2(sizeDelta.x * canvasScale.x, sizeDelta.y * canvasScale.y);
+            Debug.Log("WORLD POS:" + finalScale.x);
+            float lscale = hpbar.transform.GetComponent<RectTransform>().localScale.x;
+            Debug.Log("LOCAL SCALE=" + lscale);
+            float fullWidth = finalScale.x * 3;
+
+            float scale = redbar.transform.GetComponent<RectTransform>().localScale.x;
+            redbar.transform.GetComponent<RectTransform>().position = new Vector3((pos.x - fullWidth/2), pos.y, pos.z);
+            Debug.Log("New Pos=" + redbar.transform.GetComponent<RectTransform>().position.x);
+        }
         if (Input.GetKeyDown("t"))
         {
             nextFloor();
@@ -550,8 +568,34 @@ public class Player : MovingEntity
         if (mp < 0) mp = 0;
         if (mp > maxMp) mp = maxMp;
 
-        hpbar.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, (float)hp / (float)maxHp * 367);
-        mpbar.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, (float)mp / (float)maxMp * 367);
+        hpbar.transform.GetChild(1).gameObject.GetComponent<TMP_Text>().text = hp + "/" + maxHp;
+        xpbar.transform.GetChild(1).gameObject.GetComponent<TMP_Text>().text = exp + "/" + maxExp;
+
+        GameObject redbar = hpbar.transform.GetChild(0).gameObject;
+        GameObject greenbar = xpbar.transform.GetChild(0).gameObject;
+
+        Canvas canvas = GameObject.FindGameObjectWithTag("Canvas").GetComponent<Canvas>();
+        Vector2 canvasScale = new Vector2(canvas.transform.localScale.x, canvas.transform.localScale.y);
+
+        Vector2 redSizeDelta = redbar.transform.GetComponent<RectTransform>().sizeDelta;
+        Vector2 redFinalScale = new Vector2(redSizeDelta.x * canvasScale.x, redSizeDelta.y * canvasScale.y);
+        float redWidth = redFinalScale.x * hpbar.transform.GetComponent<RectTransform>().localScale.x;
+
+        Vector3 pos1 = redbar.transform.position;
+        float redStartingPos = hpbar.transform.GetChild(2).gameObject.transform.position.x;
+        float redPos = redStartingPos - (redWidth - (((float)hp / (float)maxHp) * redWidth));
+        Debug.Log($"{redStartingPos} - {redWidth} - {(float)hp / (float)maxHp} * {redWidth} = {redPos}");
+        redbar.transform.GetComponent<RectTransform>().position = new Vector3(redPos, pos1.y, pos1.z);
+
+        Vector2 greenSizeDelta = greenbar.transform.GetComponent<RectTransform>().sizeDelta;
+        Vector2 greenFinalScale = new Vector2(greenSizeDelta.x * canvasScale.x, greenSizeDelta.y * canvasScale.y);
+        float greenWidth = greenFinalScale.x * xpbar.transform.GetComponent<RectTransform>().localScale.x;
+
+        Vector3 pos2 = greenbar.transform.position;
+        float greenStartingPos = xpbar.transform.GetChild(2).gameObject.transform.position.x;
+        float greenPos = greenStartingPos + (((float)exp / (float)maxExp) * greenWidth);
+        greenbar.transform.GetComponent<RectTransform>().position = new Vector3(greenPos, pos2.y, pos2.z);
+
     }
 
     public int getStrength(){
