@@ -103,7 +103,7 @@ public class Enemy : MovingEntity
         if (dead || hp <= 0)
         {
             die();
-            
+            return;
         }
         if (agro)
         {
