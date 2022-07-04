@@ -8,6 +8,7 @@ public abstract class Item
     public Sprite image;
     public int level;
     public int tier;
+    public string id;
     
     public abstract void Create();
 

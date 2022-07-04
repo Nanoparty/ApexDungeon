@@ -38,7 +38,7 @@ public class ConsumableGenerator : ScriptableObject
 
         int healAmount =(int)( 50 * Mathf.Pow(1.5f,level-1));
 
-        Consumable potion = new Consumable("Health Potion Lvl " + level, "Cherry Flavor", "Heals " + healAmount + " HP", redPotion, level);
+        Consumable potion = new Consumable("HealthPotion", "Health Potion Lvl " + level, "Cherry Flavor", "Heals " + healAmount + " HP", redPotion, level);
 
         item.AddComponent<Pickup>();
         item.GetComponent<Pickup>().SetItem(potion);
@@ -59,7 +59,7 @@ public class ConsumableGenerator : ScriptableObject
         item.AddComponent<BoxCollider2D>();
         item.GetComponent<BoxCollider2D>().isTrigger = true;
 
-        Consumable potion = new Consumable("ManaPotion", "Blueberry Flavor", "Restores 10 MP", bluePotion);
+        Consumable potion = new Consumable("ManaPotion", "ManaPotion", "Blueberry Flavor", "Restores 10 MP", bluePotion);
 
         item.AddComponent<Pickup>();
         item.GetComponent<Pickup>().SetItem(potion);
@@ -71,6 +71,7 @@ public class ConsumableGenerator : ScriptableObject
 
     public GameObject CreateSkipOrb(){
         GameObject item = new GameObject("Skip Orb");
+        string id = "SkipOrb";
 
         item.AddComponent<SpriteRenderer>();
         item.GetComponent<SpriteRenderer>().sprite = blueOrb;
@@ -79,7 +80,7 @@ public class ConsumableGenerator : ScriptableObject
         item.AddComponent<BoxCollider2D>();
         item.GetComponent<BoxCollider2D>().isTrigger = true;
 
-        Consumable orb = new Consumable("Skip Orb", "This floor sucks", "Teleports you to the next floor", blueOrb);
+        Consumable orb = new Consumable(id, "Skip Orb", "This floor sucks", "Teleports you to the next floor", blueOrb);
 
         item.AddComponent<Pickup>();
         item.GetComponent<Pickup>().SetItem(orb);
@@ -91,6 +92,7 @@ public class ConsumableGenerator : ScriptableObject
 
     public GameObject CreateLightOrb(){
         GameObject item = new GameObject("Light Orb");
+        string id = "LightOrb";
 
         item.AddComponent<SpriteRenderer>();
         item.GetComponent<SpriteRenderer>().sprite = blueOrb;
@@ -99,7 +101,7 @@ public class ConsumableGenerator : ScriptableObject
         item.AddComponent<BoxCollider2D>();
         item.GetComponent<BoxCollider2D>().isTrigger = true;
 
-        Consumable orb = new Consumable("Light Orb", "Don't look under the bed.", "Lights up the entire floor", blueOrb);
+        Consumable orb = new Consumable(id, "Light Orb", "Don't look under the bed.", "Lights up the entire floor", blueOrb);
 
         item.AddComponent<Pickup>();
         item.GetComponent<Pickup>().SetItem(orb);
@@ -111,6 +113,7 @@ public class ConsumableGenerator : ScriptableObject
 
     public GameObject CreateTeleportOrb(){
         GameObject item = new GameObject("Teleport Orb");
+        string id = "TeleportOrb";
 
         item.AddComponent<SpriteRenderer>();
         item.GetComponent<SpriteRenderer>().sprite = blueOrb;
@@ -119,7 +122,7 @@ public class ConsumableGenerator : ScriptableObject
         item.AddComponent<BoxCollider2D>();
         item.GetComponent<BoxCollider2D>().isTrigger = true;
 
-        Consumable orb = new Consumable("Teleport Orb", "Anywhere but here please", "Teleports you randomly on this floor", blueOrb);
+        Consumable orb = new Consumable(id, "Teleport Orb", "Anywhere but here please", "Teleports you randomly on this floor", blueOrb);
 
         item.AddComponent<Pickup>();
         item.GetComponent<Pickup>().SetItem(orb);
@@ -131,6 +134,7 @@ public class ConsumableGenerator : ScriptableObject
 
     public GameObject CreateDeathOrb(){
         GameObject item = new GameObject("Death Orb");
+        string id = "DeathOrb";
 
         item.AddComponent<SpriteRenderer>();
         item.GetComponent<SpriteRenderer>().sprite = blackOrb;
@@ -139,7 +143,7 @@ public class ConsumableGenerator : ScriptableObject
         item.AddComponent<BoxCollider2D>();
         item.GetComponent<BoxCollider2D>().isTrigger = true;
 
-        Consumable orb = new Consumable("Death Orb", "Very Edgy", "Kills all enemies in your vision.", blackOrb);
+        Consumable orb = new Consumable(id, "Death Orb", "Very Edgy", "Kills all enemies in your vision.", blackOrb);
 
         item.AddComponent<Pickup>();
         item.GetComponent<Pickup>().SetItem(orb);
@@ -151,6 +155,7 @@ public class ConsumableGenerator : ScriptableObject
 
     public GameObject CreateMap(){
         GameObject item = new GameObject("Map Fragment");
+        string id = "Map";
 
         item.AddComponent<SpriteRenderer>();
         item.GetComponent<SpriteRenderer>().sprite = map;
@@ -159,7 +164,7 @@ public class ConsumableGenerator : ScriptableObject
         item.AddComponent<BoxCollider2D>();
         item.GetComponent<BoxCollider2D>().isTrigger = true;
 
-        Consumable orb = new Consumable("Map Fragment", "Great Explorer", "Reveals the entire map of any floor", map);
+        Consumable orb = new Consumable(id, "Map Fragment", "Great Explorer", "Reveals the entire map of any floor", map);
 
         item.AddComponent<Pickup>();
         item.GetComponent<Pickup>().SetItem(orb);
@@ -185,6 +190,6 @@ public class ConsumableGenerator : ScriptableObject
 
         if (consumable == null) consumable = new GameObject();
 
-        return CreateSkipOrb();
+        return CreateHealthPotion(level);
     }
 }

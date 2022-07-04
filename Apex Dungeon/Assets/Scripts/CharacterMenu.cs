@@ -257,7 +257,7 @@ public class CharacterMenu
         
         // if(gear.Helmet == null) HelmSlot.transform.GetChild(0).gameObject.SetActive(false);
         // else HelmSlot.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = gear.Helmet.image;
-        Debug.Log("GEAR:"+gear.Helmet);
+        //Debug.Log("GEAR:"+gear.Helmet);
         setEquipmentSlot(HelmSlot, gear.Helmet);
         setEquipmentSlot(ChestSlot, gear.Chestplate);
         setEquipmentSlot(LegSlot, gear.Legs);
@@ -706,7 +706,7 @@ public class CharacterMenu
     }
     void useListener(){
         SoundManager.sm.PlayMenuSound();
-        //Debug.Log("USE ITEM");
+        Debug.Log("USE ITEM");
         items[selected].UseItem();
         items.RemoveAt(selected);
         selected = -1;
