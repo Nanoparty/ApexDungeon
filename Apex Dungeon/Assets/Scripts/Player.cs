@@ -163,6 +163,7 @@ public class Player : MovingEntity
 
         if (openCharacter)
         {
+            //Debug.Log("charmenu UPdate");
             charMenu.Update();
             if (charMenu.getClosed())
             {
@@ -219,14 +220,14 @@ public class Player : MovingEntity
             Canvas canvas = GameObject.FindGameObjectWithTag("Canvas").GetComponent<Canvas>();
             Vector2 canvasScale = new Vector2(canvas.transform.localScale.x, canvas.transform.localScale.y);
             Vector2 finalScale = new Vector2(sizeDelta.x * canvasScale.x, sizeDelta.y * canvasScale.y);
-            Debug.Log("WORLD POS:" + finalScale.x);
+            //Debug.Log("WORLD POS:" + finalScale.x);
             float lscale = hpbar.transform.GetComponent<RectTransform>().localScale.x;
-            Debug.Log("LOCAL SCALE=" + lscale);
+            //Debug.Log("LOCAL SCALE=" + lscale);
             float fullWidth = finalScale.x * 3;
 
             float scale = redbar.transform.GetComponent<RectTransform>().localScale.x;
             redbar.transform.GetComponent<RectTransform>().position = new Vector3((pos.x - fullWidth/2), pos.y, pos.z);
-            Debug.Log("New Pos=" + redbar.transform.GetComponent<RectTransform>().position.x);
+            //Debug.Log("New Pos=" + redbar.transform.GetComponent<RectTransform>().position.x);
         }
         if (Input.GetKeyDown("t"))
         {
@@ -347,6 +348,7 @@ public class Player : MovingEntity
     {
         if (!openCharacter && !openPause)
         {
+            charMenu.setClosed(false);
             SoundManager.sm.PlayMenuSound();
             charMenu.openStats();
             openCharacter = true;
@@ -584,7 +586,7 @@ public class Player : MovingEntity
         Vector3 pos1 = redbar.transform.position;
         float redStartingPos = hpbar.transform.GetChild(2).gameObject.transform.position.x;
         float redPos = redStartingPos - (redWidth - (((float)hp / (float)maxHp) * redWidth));
-        Debug.Log($"{redStartingPos} - {redWidth} - {(float)hp / (float)maxHp} * {redWidth} = {redPos}");
+        //Debug.Log($"{redStartingPos} - {redWidth} - {(float)hp / (float)maxHp} * {redWidth} = {redPos}");
         redbar.transform.GetComponent<RectTransform>().position = new Vector3(redPos, pos1.y, pos1.z);
 
         Vector2 greenSizeDelta = greenbar.transform.GetComponent<RectTransform>().sizeDelta;
@@ -687,5 +689,10 @@ public class Player : MovingEntity
     }
     public void addEvade(int i){
         evade += i;
+    }
+    public void closeInventory()
+    {
+        charMenu.closeInventory();
+        openCharacter = false;
     }
 }

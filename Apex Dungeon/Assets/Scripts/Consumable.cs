@@ -34,9 +34,11 @@ public class Consumable : Item
             p.addMP(20);
         }
         if(itemName == "Skip Orb"){
+            p.closeInventory();
             p.nextFloor();
         }
         if(itemName == "Teleport Orb"){
+            //p.closeInventory();
             Vector2 pos = GameManager.gmInstance.Dungeon.getRandomUnoccupiedTile();
             p.setPosition((int)pos.x, (int)pos.y);
         }

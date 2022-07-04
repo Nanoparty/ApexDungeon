@@ -61,6 +61,7 @@ public class CharacterMenu
     {
         
         if(popupOpen){
+            //Debug.Log("POPUP OPEN");
             //close when click outside popup
             if (Input.GetButtonDown("Fire1"))
             {
@@ -88,8 +89,7 @@ public class CharacterMenu
                     trashButton.GetComponent<Clickable>().setClicked(false);
                 }else{
                     //Debug.Log("DESTROY");
-                    GameObject.Destroy(popupArea);
-                    popupOpen = false;
+                    closePopup();
                 }           
                      
             }
@@ -113,12 +113,14 @@ public class CharacterMenu
                 }
             }
             if(tab == 0){
+                //Debug.Log("num slots=" + inventorySlots.Count);
                 for(int i = 0; i < inventorySlots.Count; i++)
                 {
                     //Debug.Log("Checking slot:" + i);
                     if (inventorySlots != null && inventorySlots.Count > 0 
                         && inventorySlots[i].GetComponent<Clickable>().getClicked())
                     {
+                        //Debug.Log(i + " is selected");
                         selected = i;
                         inventorySlots[i].GetComponent<Clickable>().setClicked(false);
                         popupOpen = true;
@@ -144,6 +146,12 @@ public class CharacterMenu
             }
             
         }
+    }
+
+    public void closePopup()
+    {
+        GameObject.Destroy(popupArea);
+        popupOpen = false;
     }
 
     public CharacterMenu(GameObject panel, GameObject slot, GameObject questLine, GameObject minimap, GameObject block, GameObject pblock, GameObject itemPopup, Sprite[] frames)
@@ -269,7 +277,7 @@ public class CharacterMenu
         GameObject blck = bottomStats.transform.GetChild(6).gameObject;
 
         str.transform.gameObject.GetComponent<TMP_Text>().text = "Str:" + player.getStrength();
-        Debug.Log("PLAYER STRENGTH:"+player.getStrength());
+        //Debug.Log("PLAYER STRENGTH:"+player.getStrength());
         def.transform.gameObject.GetComponent<TMP_Text>().text = "Def:" + player.getDefense();
         crit.transform.gameObject.GetComponent<TMP_Text>().text = "Crit:" + player.getCritical();
         intel.transform.gameObject.GetComponent<TMP_Text>().text = "Int:" + player.getIntelligence();
@@ -390,7 +398,7 @@ public class CharacterMenu
             GameObject itemslot = GameObject.Instantiate(slot, pos, Quaternion.identity);
             GameObject icon = itemslot.transform.GetChild(0).gameObject;
             icon.GetComponent<Image>().sprite = item.image;
-            Debug.Log("Creating Inventory Item " + item.tier);
+            //Debug.Log("Creating Inventory Item " + item.tier);
 
             if(item.tier == 1) itemslot.GetComponent<Image>().sprite = frames[0];
             if(item.tier == 2) itemslot.GetComponent<Image>().sprite = frames[1];
@@ -492,7 +500,7 @@ public class CharacterMenu
                 }
                 if (GameManager.gmInstance.Dungeon.isStairs(i, j))
                 {
-                    Debug.Log("STAIRS");
+                    //Debug.Log("STAIRS");
                     Vector3 pos = new Vector3(xOff + j * size, yOff + i * size, 0f);
                     GameObject b = GameObject.Instantiate(block, pos, Quaternion.identity);
                     b.GetComponent<Image>().sprite = icons[5];
@@ -506,7 +514,7 @@ public class CharacterMenu
     private void createPopup(){
         //Debug.Log("Create Popup");
         Vector3 pos = new Vector3(0, 0, 0);
-        Debug.Log("gear popup");
+        //Debug.Log("gear popup");
         GameObject popup = GameObject.Instantiate(itemPopup, pos, Quaternion.identity);
         GameObject mainHolder = popup.transform.GetChild(0).gameObject;
 
@@ -589,7 +597,7 @@ public class CharacterMenu
         if(e == null)return;
 
         Vector3 pos = new Vector3(0, 0, 0);
-        Debug.Log("Gear Popup");
+        //Debug.Log("Gear Popup");
         GameObject popup = GameObject.Instantiate(itemPopup, pos, Quaternion.identity);
         GameObject mainHolder = popup.transform.GetChild(0).gameObject;
 
@@ -669,10 +677,7 @@ public class CharacterMenu
     void closeListener()
     {
         SoundManager.sm.PlayMenuSound();
-        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
-        player.setGear(gear);
         closeInventory();
-        closed = true;
     }
 
     void itemListener(){
@@ -999,6 +1004,10 @@ public class CharacterMenu
 
     public void closeInventory()
     {
+        closePopup();
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+        player.setGear(gear);
+        closed = true;
         GameObject.Destroy(panelObject);
     }
 
