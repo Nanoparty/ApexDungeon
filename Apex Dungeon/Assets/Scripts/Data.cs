@@ -5,6 +5,12 @@ using UnityEngine;
 
 public static class Data
 {
+    //settings
+    public static bool music = true;
+    public static bool sound = true;
+    public static float musicVolume = 1f;
+    public static float soundVolume = 1f;
+
     public static CharacterMenu charMenu;
     public static bool inProgress;
     //scores Data

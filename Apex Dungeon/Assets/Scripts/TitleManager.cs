@@ -63,6 +63,7 @@ public class TitleManager : MonoBehaviour
     void optionsListener(){
         SoundManager.sm.PlayMenuSound();
         if(popupOpen)return;
+        SceneManager.LoadScene("Options", LoadSceneMode.Single);
     }
 
     void acceptListener(){

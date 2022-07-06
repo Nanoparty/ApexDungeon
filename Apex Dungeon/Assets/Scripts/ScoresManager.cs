@@ -34,8 +34,6 @@ public class ScoresManager : MonoBehaviour
             sc.transform.SetParent(content.transform, false);
         }
         button.onClick.AddListener(mainMenu);
-
-        
     }
 
     void TestData(){
@@ -48,6 +46,7 @@ public class ScoresManager : MonoBehaviour
     }
 
     private void mainMenu(){
+        SoundManager.sm.PlayMenuSound();
         GameObject.Destroy(GameManager.gmInstance);
         SceneManager.LoadScene("Title",LoadSceneMode.Single);
     }

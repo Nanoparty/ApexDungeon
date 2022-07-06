@@ -27,22 +27,44 @@ public class SoundManager: MonoBehaviour
         audioSource = GetComponent<AudioSource>();
     }
 
+    public void UpdateVolume()
+    {
+        audioSource.volume = Data.musicVolume;
+    }
+
+    public void UpdatePlaying()
+    {
+        if (!Data.music && audioSource.isPlaying)
+        {
+            audioSource.Pause();
+        }
+        if(Data.music && !audioSource.isPlaying)
+        {
+            audioSource.Play();
+        }
+    }
+
     public void PlayTitleMusic(){
-        audioSource.volume = 0.3f;
+        if (!Data.music) return;
+        if (audioSource.clip == titleMusic && audioSource.isPlaying) return;
+        audioSource.volume = Data.musicVolume;
         audioSource.clip = titleMusic;
         audioSource.Play();
     }
 
     public void PlayMenuSound(){
-        audioSource.PlayOneShot(buttonSound, 3f);
+        if (!Data.sound) return;
+        audioSource.PlayOneShot(buttonSound, Data.soundVolume * 3f);
     }
 
     public void PlayPickupSound(){
-        audioSource.PlayOneShot(randomClip(pickupSounds), 3f);
+        if (!Data.sound) return;
+        audioSource.PlayOneShot(randomClip(pickupSounds), Data.soundVolume * 3f);
     }
 
     public void PlayDungeonMusic(){
-        audioSource.volume = 0.3f;
+        if (!Data.music) return;
+        audioSource.volume = Data.musicVolume;
         audioSource.clip = randomClip(dungeonMusic);
         audioSource.Play();
     }
@@ -52,7 +74,8 @@ public class SoundManager: MonoBehaviour
     }
 
     public void PlayHitSound(){
-        audioSource.PlayOneShot(randomClip(hitSounds), 2f);
+        if (!Data.sound) return;
+        audioSource.PlayOneShot(randomClip(hitSounds), Data.soundVolume * 3f);
     }
 
     public AudioClip randomClip(AudioClip[] clips){
