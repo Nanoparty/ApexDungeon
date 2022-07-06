@@ -1004,10 +1004,10 @@ public class CharacterMenu
 
         itemName2.transform.gameObject.GetComponent<TMP_Text>().text = alt.itemName;
         //itemFlavor2.transform.gameObject.GetComponent<TMP_Text>().text = alt.flavorText;
-        if(alt.tier == 1) itemName2.transform.gameObject.GetComponent<TMP_Text>().text = "Common";
-        if(alt.tier == 2) itemName2.transform.gameObject.GetComponent<TMP_Text>().text = "Rare";
-        if(alt.tier == 3) itemName2.transform.gameObject.GetComponent<TMP_Text>().text = "Unique";
-        if(alt.tier == 4) itemName2.transform.gameObject.GetComponent<TMP_Text>().text = "Legendary";
+        if(alt.tier == 1) itemFlavor2.transform.gameObject.GetComponent<TMP_Text>().text = "Common";
+        if(alt.tier == 2) itemFlavor2.transform.gameObject.GetComponent<TMP_Text>().text = "Rare";
+        if(alt.tier == 3) itemFlavor2.transform.gameObject.GetComponent<TMP_Text>().text = "Unique";
+        if(alt.tier == 4) itemFlavor2.transform.gameObject.GetComponent<TMP_Text>().text = "Legendary";
         itemDesc2.transform.gameObject.GetComponent<TMP_Text>().text = alt.description;
     }
 

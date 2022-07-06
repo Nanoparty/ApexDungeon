@@ -364,9 +364,55 @@ public class Player : MovingEntity
             GameObject parent = GameObject.FindGameObjectWithTag("Pause");
             pauseMenu = GameObject.Instantiate(pausePanel, Vector3.zero, Quaternion.identity);
             pauseMenu.transform.SetParent(parent.transform, false);
-            pauseMenu.transform.GetChild(2).GetComponent<Button>().onClick.AddListener(ResumeListener);
-            pauseMenu.transform.GetChild(3).GetComponent<Button>().onClick.AddListener(MenuListener);
+
+            GameObject buttons = pauseMenu.transform.GetChild(1).gameObject.transform.GetChild(1).gameObject;
+            GameObject options = pauseMenu.transform.GetChild(1).gameObject.transform.GetChild(2).gameObject;
+            GameObject music = options.transform.GetChild(0).gameObject;
+            GameObject sound = options.transform.GetChild(1).gameObject;
+
+            buttons.transform.GetChild(0).GetComponent<Button>().onClick.AddListener(ResumeListener);
+            buttons.transform.GetChild(1).GetComponent<Button>().onClick.AddListener(MenuListener);
+
+            Toggle musicToggle = music.transform.GetChild(1).gameObject.GetComponent<Toggle>();
+            Toggle soundToggle = sound.transform.GetChild(1).gameObject.GetComponent<Toggle>();
+            Slider musicSlider = music.transform.GetChild(2).gameObject.GetComponent<Slider>();
+            Slider soundSlider = sound.transform.GetChild(2).gameObject.GetComponent<Slider>();
+
+            musicToggle.isOn = Data.music;
+            soundToggle.isOn = Data.sound;
+            musicSlider.value = Data.musicVolume;
+            soundSlider.value = Data.soundVolume;
+
+            musicToggle.onValueChanged.AddListener((value) => { musicToggleListener(value); });
+            soundToggle.onValueChanged.AddListener((value) => { soundToggleListener(value); });
+            musicSlider.onValueChanged.AddListener((value) => { musicSliderListener(value); });
+            soundSlider.onValueChanged.AddListener((value) => { soundSliderListener(value); });
+
         }
+    }
+
+    void musicToggleListener(bool value)
+    {
+        Data.music = value;
+        SoundManager.sm.UpdatePlaying();
+        SoundManager.sm.PlayMenuSound();
+    }
+
+    void musicSliderListener(float value)
+    {
+        Data.musicVolume = value;
+        SoundManager.sm.UpdateVolume();
+    }
+
+    void soundToggleListener(bool value)
+    {
+        SoundManager.sm.PlayMenuSound();
+        Data.sound = value;
+    }
+
+    void soundSliderListener(float value)
+    {
+        Data.soundVolume = value;
     }
 
     void checkMoving()

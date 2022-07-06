@@ -34,9 +34,10 @@ public class SoundManager: MonoBehaviour
 
     public void UpdatePlaying()
     {
+        Debug.Log("Update playing->" + audioSource.isPlaying);
         if (!Data.music && audioSource.isPlaying)
         {
-            audioSource.Pause();
+            StopMusic();
         }
         if(Data.music && !audioSource.isPlaying)
         {
@@ -49,6 +50,7 @@ public class SoundManager: MonoBehaviour
         if (audioSource.clip == titleMusic && audioSource.isPlaying) return;
         audioSource.volume = Data.musicVolume;
         audioSource.clip = titleMusic;
+        audioSource.loop = true;
         audioSource.Play();
     }
 
@@ -63,9 +65,11 @@ public class SoundManager: MonoBehaviour
     }
 
     public void PlayDungeonMusic(){
+        Debug.Log("DungeonMusic");
         if (!Data.music) return;
         audioSource.volume = Data.musicVolume;
         audioSource.clip = randomClip(dungeonMusic);
+        audioSource.loop = true;
         audioSource.Play();
     }
 
