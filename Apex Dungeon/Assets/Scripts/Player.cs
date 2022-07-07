@@ -23,6 +23,7 @@ public class Player : MovingEntity
     public GameObject levelPopup;
     public GameObject endingScreen;
     public Sprite[] frames;
+    public GameObject damageText;
 
     private CharacterMenu charMenu;
     private GameObject pauseMenu;
@@ -453,6 +454,8 @@ public class Player : MovingEntity
 
     public void takeAttack(float d){
         SoundManager.sm.PlayHitSound();
+        GameObject damageNum = GameObject.Instantiate(damageText, new Vector3(this.transform.position.x, this.transform.position.y, 0), Quaternion.identity, this.transform);
+        damageNum.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = $"{d}";
         int dice = Random.Range(1, 101);
         if(dice <= evade) return;
         base.takeDamage(d);
