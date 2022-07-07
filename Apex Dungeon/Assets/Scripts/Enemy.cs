@@ -75,7 +75,7 @@ public class Enemy : MovingEntity
         maxMp = mp;
 
         int basedamage = 10;
-        damage = (int)(basedamage * Mathf.Pow(1.5f, floor-1));
+        attack = (int)(basedamage * Mathf.Pow(1.5f, floor-1));
         defense = 5 + 1 * floor;
     }
 
@@ -213,7 +213,7 @@ public class Enemy : MovingEntity
 
     private float calculateDamageOut()
     {
-        return -damage;
+        return -attack;
     }
 
     private float calculateDamageIn(float d){

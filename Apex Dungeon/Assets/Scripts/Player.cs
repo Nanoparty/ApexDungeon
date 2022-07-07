@@ -52,8 +52,13 @@ public class Player : MovingEntity
         {
             loadCharacterData();
         }
-        
+
         base.Start();
+    }
+
+    void calculateAttack()
+    {
+        attack = attack + (int)(attack * (strength * 0.02));
     }
 
     void setInitialValues(){
@@ -68,8 +73,8 @@ public class Player : MovingEntity
         maxExp = 100;
         levelPoints = 0;
 
-        damage = 10;
         attack = 10;
+        strength = 10;
         defense = 10;
         intelligence = 10;
         critical = 10;
@@ -255,7 +260,7 @@ public class Player : MovingEntity
         Data.exp = exp;
         Data.maxExp = maxExp;
         Data.expLevel = expLevel;
-        Data.strength = damage;
+        Data.strength = strength;
         Data.defense = defense;
         Data.intelligence = intelligence;
         Data.crit = critical;
@@ -277,7 +282,7 @@ public class Player : MovingEntity
         exp = Data.exp;
         maxExp = Data.maxExp;
         expLevel = Data.expLevel;
-        damage = Data.strength;
+        strength = Data.strength;
         defense = Data.defense;
         intelligence = Data.intelligence;
         critical = Data.crit;
@@ -511,7 +516,7 @@ public class Player : MovingEntity
         GameObject Evade = Util.getChild(levelPop, 6);
         //GameObject Block = Util.getChild(levelPop, 8);
 
-        Util.setText(Strength, damage.ToString(), 1);
+        Util.setText(Strength, strength.ToString(), 1);
         Util.setText(Defense, defense.ToString(), 1);
         Util.setText(Crit, critical.ToString(), 1);
         //Util.setText(Intelligence, intelligence.ToString(), 1);
@@ -531,7 +536,7 @@ public class Player : MovingEntity
     void StrengthListener(){
         SoundManager.sm.PlayMenuSound();
         ResetLevelStats();
-        Util.setText(levelPopHolder, (damage+1).ToString(), 3, 1);
+        Util.setText(levelPopHolder, (strength+1).ToString(), 3, 1);
         Util.setColor(levelPopHolder, Color.green, 3, 1);
         levelStat = "strength";
     }
@@ -570,7 +575,7 @@ public class Player : MovingEntity
     // }
 
     void ResetLevelStats(){
-        Util.setText(levelPopHolder, (damage).ToString(), 3, 1);
+        Util.setText(levelPopHolder, (strength).ToString(), 3, 1);
         Util.setColor(levelPopHolder, Color.white, 3, 1);
 
         Util.setText(levelPopHolder, (defense).ToString(), 4, 1);
@@ -591,7 +596,7 @@ public class Player : MovingEntity
     void LevelConfirmListener(){
         SoundManager.sm.PlayMenuSound();
         if(levelStat.Equals("strength")){
-            damage++;
+            strength++;
         }else if(levelStat.Equals("defense")){
             defense++;
         }else if(levelStat.Equals("crit")){
@@ -647,7 +652,7 @@ public class Player : MovingEntity
     }
 
     public int getStrength(){
-        return damage;
+        return strength;
     }
     public int getDefense(){
         return defense;
@@ -698,6 +703,15 @@ public class Player : MovingEntity
     }
     public void addMaxHP(int i){
         maxHp += i;
+        if(hp > maxHp)
+        {
+            hp = maxHp;
+        }
+    }
+    public void addTotalHP(int i)
+    {
+        maxHp += i;
+        hp += i;
     }
     public void addExp(int i){    //////TODO -- fix so that you can get multiple points if level multiple times at once
         exp += i;
@@ -719,7 +733,11 @@ public class Player : MovingEntity
         }
     }
     public void addStrength(int i){
-        damage += i;
+        strength += i;
+    }
+    public void addAttack(int i)
+    {
+        attack += i;
     }
     public void addDefense(int i){
         defense += i;

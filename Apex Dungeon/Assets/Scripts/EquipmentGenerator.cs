@@ -77,6 +77,37 @@ public class EquipmentGenerator : ScriptableObject
         attackDamage = (int)(attackDamage * Mathf.Pow(1.5f, level-1));
         hpBoost = (int)(hpBoost * Mathf.Pow(1.5f,level-1));
 
+        int up = Random.Range(0, 20);
+        int down = Random.Range(0, 20);
+
+        attackDamage = (int)(attackDamage * (1 + (up - down) * 0.01));
+        hpBoost = (int)(hpBoost * (1 + (up - down) * 0.01));
+
+        if (tier == 2)
+        {
+            attackDamage = (int)(attackDamage * 1.1);
+            hpBoost = (int)(hpBoost * 1.1);
+        }
+        if(tier == 3)
+        {
+            attackDamage = (int)(attackDamage * 1.2);
+            hpBoost = (int)(hpBoost * 1.2);
+        }
+        if(tier == 4)
+        {
+            attackDamage = (int)(attackDamage * 1.3);
+            hpBoost = (int)(hpBoost * 1.3);
+        }
+
+        if(type == "weapon")
+        {
+            hpBoost = 0;
+        }
+        else
+        {
+            attackDamage = 0;
+        }
+
         switch (type)
         {
             case "helmet":

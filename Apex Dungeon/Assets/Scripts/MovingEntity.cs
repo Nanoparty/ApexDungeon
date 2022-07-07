@@ -10,9 +10,10 @@ public abstract class MovingEntity : MonoBehaviour
     protected int exp;
     protected int maxExp;
 
-    protected int defense;
-    protected int damage;
+    
     protected int attack;
+    protected int defense;
+    protected int strength;
     protected int intelligence;
     protected int critical;
     protected int evade;
@@ -210,7 +211,10 @@ public abstract class MovingEntity : MonoBehaviour
 
     public float calculateDamage()
     {
-        return -damage;
+        float increase = (float)(attack * (strength * 0.02));
+        float attackDamage = (float)(attack + increase);
+        Debug.Log("attack=" + attack + " increase=" + increase + " total=" + attackDamage);
+        return -attackDamage;
     }
 
     public virtual void takeDamage(float change)

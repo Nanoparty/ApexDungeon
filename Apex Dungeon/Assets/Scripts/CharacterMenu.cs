@@ -868,8 +868,8 @@ public class CharacterMenu
 
     void applyGearStats(Equipment e){
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
-        int str = e.attack;
-        int def = e.defense;
+        int att = e.attack;
+        int hp = e.defense;
         int crit = e.crit;
         int intel = e.intelligence;
         //int block = e.block;
@@ -877,8 +877,8 @@ public class CharacterMenu
 
         //Debug.Log("GEAR STR IS "+ e.attack);
 
-        player.addStrength(str);
-        player.addDefense(def);
+        player.addAttack(att);
+        player.addTotalHP(hp);
         player.addCrit(crit);
         player.addIntelligence(intel);
     }
@@ -886,15 +886,15 @@ public class CharacterMenu
     void removeGearStats(Equipment e){
         if (e == null)return;
 
-        int str = e.attack;
-        int def = e.defense;
+        int att = e.attack;
+        int hp = e.defense;
         int crit = e.crit;
         int intel = e.intelligence;
         //int block = e.block;
         //int evade = e.evade;
 
-        player.addStrength(-str);
-        player.addDefense(-def);
+        player.addAttack(-att);
+        player.addMaxHP(-hp);
         player.addCrit(-crit);
         player.addIntelligence(-intel);
     }
