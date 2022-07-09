@@ -10,6 +10,8 @@ public class FadeIn : MonoBehaviour
     private GameObject t1;
     private GameObject t2;
     private GameObject t3;
+    private Button retry;
+    private Button menu;
     private float targetAlpha;
     // Use this for initialization
     void Start()
@@ -18,12 +20,17 @@ public class FadeIn : MonoBehaviour
         this.t1 = this.gameObject.transform.GetChild(0).gameObject;
         this.t2 = this.gameObject.transform.GetChild(1).gameObject;
         this.t3 = this.gameObject.transform.GetChild(2).gameObject;
+        retry = this.gameObject.transform.GetChild(3).gameObject.GetComponent<Button>();
+        menu = this.gameObject.transform.GetChild(4).gameObject.transform.GetComponent<Button>();
         if (this.image == null)
         {
             Debug.LogError("Error: No image on " + this.name);
         }
         this.targetAlpha = 1f;
         Debug.Log("color:"+image.color.a);
+
+        retry.onClick.AddListener(retryListener);
+        menu.onClick.AddListener(menuListener);
     }
 
     // Update is called once per frame
@@ -57,6 +64,16 @@ public class FadeIn : MonoBehaviour
             //Debug.Log("DONE LARPING");
             GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().ending = true;
         }
+    }
+
+    void retryListener()
+    {
+
+    }
+
+    void menuListener()
+    {
+
     }
 
     

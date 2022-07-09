@@ -40,10 +40,12 @@ public class TitleManager : MonoBehaviour
         SoundManager.sm.PlayMenuSound();
         if(popupOpen)return;
 
-        popupOpen = true;
-        newPopup.SetActive(true);
-        newPopup.transform.GetChild(2).GetComponent<Button>().onClick.AddListener(acceptListener);
-        newPopup.transform.GetChild(1).GetComponent<Button>().onClick.AddListener(cancelListener);
+        SceneManager.LoadScene("CharacterCreator", LoadSceneMode.Single);
+
+        //popupOpen = true;
+        //newPopup.SetActive(true);
+        //newPopup.transform.GetChild(2).GetComponent<Button>().onClick.AddListener(acceptListener);
+        //newPopup.transform.GetChild(1).GetComponent<Button>().onClick.AddListener(cancelListener);
     }
 
     void loadGameListener(){
