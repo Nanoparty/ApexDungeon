@@ -451,13 +451,12 @@ public class Player : MovingEntity
     {
         
             Enemy enemy = GameManager.gmInstance.getEnemyAtLoc(clickRow, clickCol);
-            if (enemy != null)
+            if (enemy != null && attacking == false)
             {
                 animator.Play("AttackLeft");
                 setAttackAnimation(clickRow, clickCol);
                 attacking = true;
                 enemy.takeDamage(calculateDamage());
-                //GameManager.gmInstance.playersTurn = false;
                 return;
             }
         
@@ -473,7 +472,7 @@ public class Player : MovingEntity
 
     public void takeAttack(float d){
         SoundManager.sm.PlayHitSound();
-        GameObject damageNum = GameObject.Instantiate(damageText, new Vector3(this.transform.position.x, this.transform.position.y, 0), Quaternion.identity, this.transform);
+        GameObject damageNum = GameObject.Instantiate(damageText, new Vector3(this.transform.position.x, this.transform.position.y, 0), Quaternion.identity);
         damageNum.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = $"{d}";
         int dice = Random.Range(1, 101);
         if(dice <= evade) return;

@@ -85,10 +85,12 @@ public class Enemy : MovingEntity
     }
 
     public new void takeDamage(float d){
+        Debug.Log("ENEMY SPAWN DMG TEXT");
         SoundManager.sm.PlayHitSound();
-        GameObject damageNum = GameObject.Instantiate(damageText, new Vector3(this.transform.position.x, this.transform.position.y, 0), Quaternion.identity, this.transform);
-        damageNum.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = $"{d}";
+        
         int netDamage = (int)calculateDamageIn(d);
+        GameObject damageNum = GameObject.Instantiate(damageText, new Vector3(this.transform.position.x, this.transform.position.y, 0), Quaternion.identity);
+        damageNum.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = $"{netDamage}";
         base.takeDamage(netDamage);
     }
 
