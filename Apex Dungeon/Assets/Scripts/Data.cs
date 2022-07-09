@@ -95,7 +95,9 @@ public static class Data
     }
 
     public static void RemoveActive(){
+        if (activeCharacter == "") return;
         CharacterData current = charData.Where(cd => cd.name == activeCharacter).First();
         charData.Remove(current);
+        activeCharacter = "";
     }
 }

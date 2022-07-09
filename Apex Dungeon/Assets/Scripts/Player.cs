@@ -111,6 +111,18 @@ public class Player : MovingEntity
         GameManager.gmInstance.playersTurn = false;
     }
 
+    public void saveScores()
+    {
+        endScreenHolder.transform.GetChild(3).gameObject.SetActive(true);
+        endScreenHolder.transform.GetChild(4).gameObject.SetActive(true);
+        GameManager.gmInstance.scores = Data.scores ?? new List<(string, int)>();
+        GameManager.gmInstance.scores.Add((GameManager.gmInstance.playerName, GameManager.gmInstance.score));
+        GameManager.gmInstance.state = "score";
+        Data.inProgress = false;
+        Data.RemoveActive();
+        //SceneManager.LoadScene("Scores", LoadSceneMode.Single);
+    }
+
     private bool checkDead()
     {
         if (dead)
@@ -128,6 +140,7 @@ public class Player : MovingEntity
                 op.transform.GetChild(1).gameObject.GetComponent<Text>().text = "Floor " + GameManager.gmInstance.level;
                 op.transform.SetParent(GameObject.FindGameObjectWithTag("Canvas").transform, false);
                 op.transform.GetChild(3).gameObject.SetActive(false);
+                op.transform.GetChild(4).gameObject.SetActive(false);
                 endScreenHolder = op;
             }
             else if(ending){
