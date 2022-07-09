@@ -44,6 +44,7 @@ public class Player : MovingEntity
     private int levelPoints;
     private GameObject endScreenHolder;
     private bool interrupt = false;
+    private bool attacking = false;
 
     protected override void Start()
     {
@@ -90,7 +91,7 @@ public class Player : MovingEntity
     void initializeObjects(){
         SoundManager.sm.PlayDungeonMusic();
 
-        animator = GetComponent<Animator>();
+        animator = transform.GetChild(1).gameObject.transform.GetComponent<Animator>();
         gear = new PlayerGear();
         charMenu = new CharacterMenu(characterPanel, slot, questLine, mapArea, block, pblock, itemPopup, frames);
 
@@ -160,6 +161,13 @@ public class Player : MovingEntity
         updatePlayerStatus();
 
         GameManager.gmInstance.Dungeon.UpdateShadows(row, col);
+
+        if(attacking && animator.GetCurrentAnimatorStateInfo(0).IsName("PlayerDown"))
+        {
+            attacking = false;
+            //animator.Play("PlayerDown");
+            GameManager.gmInstance.playersTurn = false;
+        }
 
         if(moving && Input.GetButtonDown("Fire1")){
             interrupt = true;
@@ -445,11 +453,22 @@ public class Player : MovingEntity
             Enemy enemy = GameManager.gmInstance.getEnemyAtLoc(clickRow, clickCol);
             if (enemy != null)
             {
+                animator.Play("AttackLeft");
+                setAttackAnimation(clickRow, clickCol);
+                attacking = true;
                 enemy.takeDamage(calculateDamage());
-                GameManager.gmInstance.playersTurn = false;
+                //GameManager.gmInstance.playersTurn = false;
                 return;
             }
         
+    }
+
+    public void setAttackAnimation(int enemyRow, int enemyCol)
+    {
+        if (enemyRow > row) animator.Play("AttackUp");
+        if (enemyRow < row) animator.Play("AttackDown");
+        if (enemyCol > col) animator.Play("AttackRight");
+        if (enemyCol < col) animator.Play("AttackLeft");
     }
 
     public void takeAttack(float d){
