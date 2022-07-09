@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using TMPro;
+using UnityEngine;
 
 public abstract class MovingEntity : MonoBehaviour
 {
@@ -26,6 +27,7 @@ public abstract class MovingEntity : MonoBehaviour
     public LayerMask blockingLayer;
 
     public ParticleSystem blood;
+    public GameObject damageText;
 
     protected BoxCollider2D boxCollider;
 
@@ -228,6 +230,8 @@ public abstract class MovingEntity : MonoBehaviour
         }
         if (change < 0)
         {
+            GameObject damageNum = GameObject.Instantiate(damageText, new Vector3(this.transform.position.x, this.transform.position.y, 0), Quaternion.identity, this.transform);
+            damageNum.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = $"{change}";
             SpawnBlood();
         }
     }

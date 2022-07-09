@@ -23,7 +23,6 @@ public class Player : MovingEntity
     public GameObject levelPopup;
     public GameObject endingScreen;
     public Sprite[] frames;
-    public GameObject damageText;
 
     private CharacterMenu charMenu;
     private GameObject pauseMenu;
@@ -45,6 +44,7 @@ public class Player : MovingEntity
     private int levelPoints;
     private GameObject endScreenHolder;
     private bool interrupt = false;
+
     protected override void Start()
     {
         setInitialValues();
@@ -703,6 +703,9 @@ public class Player : MovingEntity
     {
         hp += i;
         if(hp > maxHp) hp = maxHp;
+        GameObject damageNum = GameObject.Instantiate(damageText, new Vector3(this.transform.position.x, this.transform.position.y, 0), Quaternion.identity, this.transform);
+        damageNum.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().color = new Color(50f / 255f, 205f / 255f, 50f / 255f); ;
+        damageNum.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = $"+{i}";
     }
     public void addMaxHP(int i){
         maxHp += i;
