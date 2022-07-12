@@ -155,7 +155,7 @@ public class ConsumableGenerator : ScriptableObject
 
     public GameObject CreateMap(){
         GameObject item = new GameObject("Map Fragment");
-        string id = "Map";
+        string id = "MapFragment";
 
         item.AddComponent<SpriteRenderer>();
         item.GetComponent<SpriteRenderer>().sprite = map;

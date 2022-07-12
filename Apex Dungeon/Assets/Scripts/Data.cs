@@ -13,6 +13,7 @@ public static class Data
 
     public static CharacterMenu charMenu;
     public static bool inProgress;
+
     //scores Data
     public static List<(string, int)> scores;
     public static List<string> names;
@@ -95,6 +96,14 @@ public static class Data
     }
 
     public static void RemoveActive(){
+        if (charData == null)
+        {
+            charData = new List<CharacterData>();
+            activeCharacter = "bob";
+            charData.Add(new CharacterData(activeCharacter));
+            playerName = activeCharacter;
+            Debug.Log("NULL CHARACTER DATA");
+        }
         if (activeCharacter == "") return;
         CharacterData current = charData.Where(cd => cd.name == activeCharacter).First();
         charData.Remove(current);

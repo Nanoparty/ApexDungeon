@@ -75,12 +75,14 @@ public class FadeIn : MonoBehaviour
     void retryListener()
     {
         if (!done) return;
+        Destroy(GameManager.gmInstance);
         SceneManager.LoadScene("CharacterCreator", LoadSceneMode.Single);
     }
 
     void menuListener()
     {
         if (!done) return;
+        Destroy(GameManager.gmInstance);
         SceneManager.LoadScene("Title", LoadSceneMode.Single);
     }
 

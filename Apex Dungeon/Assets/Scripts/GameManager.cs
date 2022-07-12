@@ -183,6 +183,7 @@ public class GameManager : MonoBehaviour
 
     void MoveEnemies()
     {
+        Debug.Log("Enemies Moving");
         if(enemies.Count == 0)
         {
             return;

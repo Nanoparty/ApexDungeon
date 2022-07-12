@@ -85,7 +85,7 @@ public class Enemy : MovingEntity
     }
 
     public new void takeDamage(float d){
-        Debug.Log("ENEMY SPAWN DMG TEXT");
+        //Debug.Log("ENEMY SPAWN DMG TEXT");
         SoundManager.sm.PlayHitSound();
         
         int netDamage = (int)calculateDamageIn(d);
@@ -225,7 +225,7 @@ public class Enemy : MovingEntity
         // float damangeBlocked = 1 - 1/(1+d);
         // float netDamage = d - (d * damangeBlocked);
         // return netDamage;
-        Debug.Log("Enemy takes damage:"+d);
+        //Debug.Log("Enemy takes damage:"+d);
         return d;
     }
 

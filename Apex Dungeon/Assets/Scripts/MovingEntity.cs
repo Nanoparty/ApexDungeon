@@ -215,7 +215,7 @@ public abstract class MovingEntity : MonoBehaviour
     {
         float increase = (float)(attack * (strength * 0.02));
         float attackDamage = (float)(attack + increase);
-        Debug.Log("attack=" + attack + " increase=" + increase + " total=" + attackDamage);
+        //Debug.Log("attack=" + attack + " increase=" + increase + " total=" + attackDamage);
         return -attackDamage;
     }
 

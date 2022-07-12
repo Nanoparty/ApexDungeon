@@ -109,6 +109,7 @@ public class Player : MovingEntity
         bool val;
         val = AttemptMove<Player>(clickRow, clickCol);
         GameManager.gmInstance.playersTurn = false;
+        Debug.Log("Move controller end turn");
     }
 
     public void saveScores()
@@ -175,14 +176,16 @@ public class Player : MovingEntity
 
         GameManager.gmInstance.Dungeon.UpdateShadows(row, col);
 
-        if(attacking && animator.GetCurrentAnimatorStateInfo(0).IsName("PlayerDown"))
+        if (attacking)
         {
-            attacking = false;
-            //animator.Play("PlayerDown");
-            GameManager.gmInstance.playersTurn = false;
+            if (animator.GetCurrentAnimatorStateInfo(0).IsName("PlayerDown")) {
+                attacking = false;
+                GameManager.gmInstance.playersTurn = false;
+            }
+            return;
         }
 
-        if(moving && Input.GetButtonDown("Fire1")){
+        if (moving && Input.GetButtonDown("Fire1")){
             interrupt = true;
         }
 
@@ -227,7 +230,8 @@ public class Player : MovingEntity
                 }
                 else
                 {
-                    attackController(clickRow, clickCol);
+                    if (attackController(clickRow, clickCol))
+                        return;
                 }
             }
 
@@ -460,7 +464,7 @@ public class Player : MovingEntity
         }
     }
 
-    void attackController(int clickRow, int clickCol)
+    bool attackController(int clickRow, int clickCol)
     {
         
             Enemy enemy = GameManager.gmInstance.getEnemyAtLoc(clickRow, clickCol);
@@ -470,9 +474,10 @@ public class Player : MovingEntity
                 setAttackAnimation(clickRow, clickCol);
                 attacking = true;
                 enemy.takeDamage(calculateDamage());
-                return;
+                //GameManager.gmInstance.playersTurn = false;
+                return true;
             }
-        
+        return false;
     }
 
     public void setAttackAnimation(int enemyRow, int enemyCol)
@@ -485,10 +490,18 @@ public class Player : MovingEntity
 
     public void takeAttack(float d){
         SoundManager.sm.PlayHitSound();
-        GameObject damageNum = GameObject.Instantiate(damageText, new Vector3(this.transform.position.x, this.transform.position.y, 0), Quaternion.identity);
-        damageNum.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = $"{d}";
+        
         int dice = Random.Range(1, 101);
-        if(dice <= evade) return;
+        if(dice <= evade)
+        {
+            GameObject evadeText = GameObject.Instantiate(damageText, new Vector3(this.transform.position.x, this.transform.position.y, 0), Quaternion.identity);
+            evadeText.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = $"Evade";
+            evadeText.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().color = new Color(50f / 255f, 205f / 255f, 50f / 255f);
+            return;
+        }
+        //GameObject damageNum = GameObject.Instantiate(damageText, new Vector3(this.transform.position.x, this.transform.position.y, 0), Quaternion.identity);
+        //damageNum.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = $"{d}";
+        Debug.Log("Player take damage");
         base.takeDamage(d);
     }
 
@@ -735,7 +748,7 @@ public class Player : MovingEntity
         hp += i;
         if(hp > maxHp) hp = maxHp;
         GameObject damageNum = GameObject.Instantiate(damageText, new Vector3(this.transform.position.x, this.transform.position.y, 0), Quaternion.identity, this.transform);
-        damageNum.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().color = new Color(50f / 255f, 205f / 255f, 50f / 255f); ;
+        damageNum.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().color = new Color(50f / 255f, 205f / 255f, 50f / 255f);
         damageNum.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = $"+{i}";
     }
     public void addMaxHP(int i){
