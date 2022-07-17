@@ -23,6 +23,7 @@ public class Player : MovingEntity
     public GameObject levelPopup;
     public GameObject endingScreen;
     public Sprite[] frames;
+    public Sprite[] tabs;
 
     private CharacterMenu charMenu;
     private GameObject pauseMenu;
@@ -65,7 +66,7 @@ public class Player : MovingEntity
 
     void setInitialValues(){
         playerName = Data.activeCharacter ?? "bob";
-        hp = 90;
+        hp = 100;
         mp = 100;
         maxMp = 50;
         maxHp = 100;
@@ -93,7 +94,7 @@ public class Player : MovingEntity
 
         animator = transform.GetChild(1).gameObject.transform.GetComponent<Animator>();
         gear = new PlayerGear();
-        charMenu = new CharacterMenu(characterPanel, slot, questLine, mapArea, block, pblock, itemPopup, frames);
+        charMenu = new CharacterMenu(characterPanel, slot, questLine, mapArea, block, pblock, itemPopup, frames, tabs);
 
         hpbar = GameObject.FindGameObjectWithTag("hpbar");
         xpbar = GameObject.FindGameObjectWithTag("xpbar");

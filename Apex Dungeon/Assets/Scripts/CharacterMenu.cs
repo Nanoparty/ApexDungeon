@@ -34,6 +34,8 @@ public class CharacterMenu
     PlayerGear gear;
     Player player;
 
+    Sprite[] tabs;
+
     public List<Consumable> items;
     public List<Equipment> equipment;
 
@@ -51,8 +53,8 @@ public class CharacterMenu
     int tab = 0;
 
     private int[,] map;
-    private int width = 100;
-    private int height = 100;
+    private int width = 50;
+    private int height = 50;
     GameObject mapRoot;
     public Sprite[] icons;
     public Sprite s;
@@ -203,7 +205,7 @@ public class CharacterMenu
         }
     }
 
-    public CharacterMenu(GameObject panel, GameObject slot, GameObject questLine, GameObject minimap, GameObject block, GameObject pblock, GameObject itemPopup, Sprite[] frames)
+    public CharacterMenu(GameObject panel, GameObject slot, GameObject questLine, GameObject minimap, GameObject block, GameObject pblock, GameObject itemPopup, Sprite[] frames, Sprite[] tabs)
     {
         this.panel = panel;
         this.slot = slot;
@@ -214,6 +216,7 @@ public class CharacterMenu
         this.itemPopup = itemPopup;
         this.player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         this.frames = frames;
+        this.tabs = tabs;
 
         items = new List<Consumable>();
         equipment = new List<Equipment>();
@@ -291,14 +294,30 @@ public class CharacterMenu
 
         levelText.transform.GetChild(1).transform.GetComponent<TMP_Text>().text = player.getExpLevel().ToString();
 
-        //hpbar.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, (float)hp / (float)maxHp * 136f);
-        //mpbar.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, (float)mp / (float)maxMp * 136f);
+        GameObject redbar = hpBar.transform.GetChild(0).gameObject;
+        GameObject greenbar = expBar.transform.GetChild(0).gameObject;
 
-        //hpText.transform.gameObject.GetComponent<TMP_Text>().text = hp + "/" + maxHp;
-        //mpText.transform.gameObject.GetComponent<TMP_Text>().text = mp + "/" + maxMp;
+        Canvas canvas = GameObject.FindGameObjectWithTag("Canvas").GetComponent<Canvas>();
+        Vector2 canvasScale = new Vector2(canvas.transform.localScale.x, canvas.transform.localScale.y);
 
-        //Set Player Profile picture
-        //playerProfile.transform.GetChild(0).gameObject.GetComponent<Animator>().Play()
+        Vector2 redSizeDelta = redbar.transform.GetComponent<RectTransform>().sizeDelta;
+        Vector2 redFinalScale = new Vector2(redSizeDelta.x * canvasScale.x, redSizeDelta.y * canvasScale.y);
+        float redWidth = redFinalScale.x * panelObject.transform.GetComponent<RectTransform>().localScale.x;
+
+        Vector3 pos1 = redbar.transform.position;
+        float redStartingPos = hpBar.transform.GetChild(1).gameObject.transform.position.x;
+        float redPos = redStartingPos - (redWidth - (((float)hp / (float)maxHp) * redWidth));
+        Debug.Log($"{redStartingPos} - {redWidth} - {(float)hp / (float)maxHp} * {redWidth} = {redPos}");
+        redbar.transform.GetComponent<RectTransform>().position = new Vector3(redPos, pos1.y, pos1.z);
+
+        Vector2 greenSizeDelta = greenbar.transform.GetComponent<RectTransform>().sizeDelta;
+        Vector2 greenFinalScale = new Vector2(greenSizeDelta.x * canvasScale.x, greenSizeDelta.y * canvasScale.y);
+        float greenWidth = greenFinalScale.x * panelObject.transform.GetComponent<RectTransform>().localScale.x;
+
+        Vector3 pos2 = greenbar.transform.position;
+        float greenStartingPos = expBar.transform.GetChild(1).gameObject.transform.position.x;
+        float greenPos = greenStartingPos + (((float)exp / (float)maxExp) * greenWidth);
+        greenbar.transform.GetComponent<RectTransform>().position = new Vector3(greenPos, pos2.y, pos2.z);
 
         //Set Player Stats
         TMP_Text strengthText = statusBanner.transform.GetChild(0).gameObject.GetComponent<TMP_Text>();
@@ -360,17 +379,24 @@ public class CharacterMenu
         equipmentPanel.SetActive(false);
         mapPanel.SetActive(false);
 
-        if(tab == 0)
+        inventoryTab.transform.GetComponent<Image>().sprite = tabs[1];
+        equipmentTab.transform.GetComponent<Image>().sprite = tabs[1];
+        mapTab.transform.GetComponent<Image>().sprite = tabs[1];
+
+        if (tab == 0)
         {
             inventoryPanel.SetActive(true);
+            inventoryTab.transform.GetComponent<Image>().sprite = tabs[0];
         }
         else if(tab == 1)
         {
             equipmentPanel.SetActive(true);
+            equipmentTab.transform.GetComponent<Image>().sprite = tabs[0];
         }
         else if(tab == 3)
         {
             mapPanel.SetActive(true);
+            mapTab.transform.GetComponent<Image>().sprite = tabs[0];
         }
     }
 
@@ -543,9 +569,12 @@ public class CharacterMenu
         mapRoot.transform.SetParent(mapArea.transform, false);
 
         int size = 20;
-        GameObject mapHolder = GameObject.FindGameObjectWithTag("Map").transform.GetChild(0).gameObject.transform.GetChild(0).gameObject;
+        GameObject mapHolder = mapRoot.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject;
         mapHolder.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width * size + 100);
         mapHolder.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height * size + 100);
+
+        //mapRoot.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, mapArea.GetComponent<RectTransform>().rect.width);
+        //mapRoot.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, mapArea.GetComponent<RectTransform>().rect.height);
 
         int xOff = -1 * ((width * size + 100) / 2) + 50;
         int yOff = -1 * ((height * size + 100) / 2) + 50;
