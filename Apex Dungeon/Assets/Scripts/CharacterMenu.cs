@@ -8,7 +8,16 @@ public class CharacterMenu
 {
     GameObject panel;
     GameObject panelObject;
-    Button close;
+
+    Button closeTab;
+    Button inventoryTab;
+    Button equipmentTab;
+    Button mapTab;
+
+    GameObject inventoryPanel;
+    GameObject equipmentPanel;
+    GameObject mapPanel;
+
     GameObject topicPanel;
     GameObject charPanel;
     GameObject slot;
@@ -49,6 +58,8 @@ public class CharacterMenu
     bool popupOpen = false;
     bool slotsLoaded = false;
     private Sprite[] frames;
+
+    private int maxSlots = 25;
 
     // Use this for initialization
     void Start()
@@ -102,9 +113,9 @@ public class CharacterMenu
         {
             for(int i = 0; i < 8;i++){
                 //check equiped gear for clicks
-                charPanel = panelObject.transform.GetChild(0).gameObject;
-                GameObject middleStats = charPanel.transform.GetChild(1).gameObject;
-                GameObject gearSlot = middleStats.transform.GetChild(4+i).gameObject;
+                GameObject status = panelObject.transform.GetChild(1).gameObject;
+                GameObject equipment = status.transform.GetChild(6).gameObject;
+                GameObject gearSlot = equipment.transform.GetChild(i).gameObject;
                 if(gearSlot.GetComponent<Clickable>().getClicked()){
                     gearSlot.GetComponent<Clickable>().setClicked(false);
                     gearSelection = i;
@@ -116,7 +127,7 @@ public class CharacterMenu
             }
             if(tab == 0){
                 //Debug.Log("num slots=" + inventorySlots.Count);
-                for(int i = 0; i < inventorySlots.Count; i++)
+                for(int i = 0; i < items.Count; i++)
                 {
                     //Debug.Log("Checking slot:" + i);
                     if (inventorySlots != null && inventorySlots.Count > 0 
@@ -228,7 +239,6 @@ public class CharacterMenu
 
         this.gear = player.getGear();
 
-        //Debug.Log("EQUIP:"+equipment[0]);
         slotsLoaded = false;
         inventorySlots = new List<GameObject>();
         equipmentSlots = new List<GameObject>();
@@ -237,10 +247,15 @@ public class CharacterMenu
         panelObject = GameObject.Instantiate(panel, Vector3.zero, Quaternion.identity);
         panelObject.transform.SetParent(parent.transform, false);
 
-        
+        inventoryTab = panelObject.transform.GetChild(0).transform.GetChild(0).gameObject.GetComponent<Button>();
+        equipmentTab = panelObject.transform.GetChild(0).transform.GetChild(1).gameObject.GetComponent<Button>();
+        mapTab = panelObject.transform.GetChild(0).transform.GetChild(2).gameObject.GetComponent<Button>();
+        closeTab = panelObject.transform.GetChild(0).transform.GetChild(3).gameObject.GetComponent<Button>();
 
-        close = panelObject.transform.GetChild(1).transform.GetChild(2).gameObject.GetComponent<Button>();
-        close.onClick.AddListener(closeListener);
+        inventoryTab.onClick.AddListener(itemListener);
+        equipmentTab.onClick.AddListener(equipmentListener);
+        mapTab.onClick.AddListener(mapListener);
+        closeTab.onClick.AddListener(closeListener);
 
         setPlayerStats();
         setTopicPanel();
@@ -251,53 +266,64 @@ public class CharacterMenu
     private void setPlayerStats(){
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
 
-        charPanel = panelObject.transform.GetChild(0).gameObject;
-        GameObject topStats = charPanel.transform.GetChild(0).gameObject;
-        GameObject middleStats = charPanel.transform.GetChild(1).gameObject;
-        GameObject bottomStats = charPanel.transform.GetChild(2).gameObject;
+        charPanel = panelObject.transform.GetChild(1).gameObject;
+        GameObject nameBanner = charPanel.transform.GetChild(0).gameObject;
+        GameObject healthBanner = charPanel.transform.GetChild(1).gameObject;
+        GameObject playerProfile = charPanel.transform.GetChild(2).gameObject;
+        GameObject statusBanner = charPanel.transform.GetChild(4).gameObject;
+        GameObject equipment = charPanel.transform.GetChild(6).gameObject;
+
+        //set name
+        nameBanner.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = Data.playerName;
 
         //Set HP and MP
-        Image hpbar = topStats.transform.GetChild(2).gameObject.transform.GetComponent<Image>();
-        Image mpbar = topStats.transform.GetChild(3).gameObject.transform.GetComponent<Image>();
-        GameObject hpText = topStats.transform.GetChild(4).gameObject;
-        GameObject mpText = topStats.transform.GetChild(5).gameObject;
+        GameObject hpText = healthBanner.transform.GetChild(0).gameObject;
+        GameObject expText = healthBanner.transform.GetChild(1).gameObject;
+        GameObject levelText = healthBanner.transform.GetChild(2).gameObject;
+        GameObject hpBar = healthBanner.transform.GetChild(3).gameObject;
+        GameObject expBar = healthBanner.transform.GetChild(4).gameObject;
 
         int hp = player.getHP();
-        int mp = player.getMP();
-        int maxHp = player.getMaxHP();
-        int maxMp = player.getMaxMP();
-
-        hpbar.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, (float)hp / (float)maxHp * 136f);
-        mpbar.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, (float)mp / (float)maxMp * 136f);
-
-        hpText.transform.gameObject.GetComponent<TMP_Text>().text = hp + "/" + maxHp;
-        mpText.transform.gameObject.GetComponent<TMP_Text>().text = mp + "/" + maxMp;
-
-        //Set Equipment, Level and EXP
-        GameObject levelText = middleStats.transform.GetChild(1).gameObject;
-        Image expBar = middleStats.transform.GetChild(3).gameObject.transform.GetComponent<Image>();
-
         int exp = player.getExp();
+        int maxHp = player.getMaxHP();
         int maxExp = player.getMaxExp();
 
-        expBar.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, (float)exp / (float)maxExp * 124f);
-        levelText.transform.GetComponent<TMP_Text>().text = "Level:" + player.getExpLevel();
+        hpText.GetComponent<TMP_Text>().text = hp + "/" + maxHp;
+        expText.GetComponent<TMP_Text>().text = exp + "/" + maxExp;
 
-        GameObject HelmSlot = middleStats.transform.GetChild(4).gameObject;
-        GameObject ChestSlot = middleStats.transform.GetChild(5).gameObject;
-        GameObject LegSlot = middleStats.transform.GetChild(6).gameObject;
-        GameObject BootSlot = middleStats.transform.GetChild(7).gameObject;
+        levelText.transform.GetChild(1).transform.GetComponent<TMP_Text>().text = player.getExpLevel().ToString();
 
-        GameObject WeaponSlot = middleStats.transform.GetChild(8).gameObject;
-        GameObject UtilitySlot = middleStats.transform.GetChild(9).gameObject;
-        GameObject NecklaceSlot = middleStats.transform.GetChild(10).gameObject;
-        GameObject RingSlot = middleStats.transform.GetChild(11).gameObject;
+        //hpbar.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, (float)hp / (float)maxHp * 136f);
+        //mpbar.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, (float)mp / (float)maxMp * 136f);
 
-        //Debug.Log("HELMET SLOT IS " + gear.Helmet);
-        
-        // if(gear.Helmet == null) HelmSlot.transform.GetChild(0).gameObject.SetActive(false);
-        // else HelmSlot.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = gear.Helmet.image;
-        //Debug.Log("GEAR:"+gear.Helmet);
+        //hpText.transform.gameObject.GetComponent<TMP_Text>().text = hp + "/" + maxHp;
+        //mpText.transform.gameObject.GetComponent<TMP_Text>().text = mp + "/" + maxMp;
+
+        //Set Player Profile picture
+
+        //Set Player Stats
+        TMP_Text strengthText = statusBanner.transform.GetChild(0).gameObject.GetComponent<TMP_Text>();
+        TMP_Text defenseText = statusBanner.transform.GetChild(1).gameObject.GetComponent<TMP_Text>();
+        TMP_Text criticalText = statusBanner.transform.GetChild(2).gameObject.GetComponent<TMP_Text>();
+        TMP_Text evasionText = statusBanner.transform.GetChild(3).gameObject.GetComponent<TMP_Text>();
+        TMP_Text goldText = statusBanner.transform.GetChild(4).gameObject.GetComponent<TMP_Text>();
+
+        strengthText.text = "Strength:" + player.getStrength();
+        defenseText.text = "Defense:" + player.getDefense();
+        criticalText.text = "Critical:" + player.getCritical();
+        evasionText.text = "Evasion:" + player.getEvade();
+        goldText.text = "Gold:" + player.getGold();
+
+        //set equipment
+        GameObject HelmSlot = equipment.transform.GetChild(0).gameObject;
+        GameObject ChestSlot = equipment.transform.GetChild(1).gameObject;
+        GameObject LegSlot = equipment.transform.GetChild(2).gameObject;
+        GameObject BootSlot = equipment.transform.GetChild(3).gameObject;
+        GameObject WeaponSlot = equipment.transform.GetChild(4).gameObject;
+        GameObject UtilitySlot = equipment.transform.GetChild(5).gameObject;
+        GameObject NecklaceSlot = equipment.transform.GetChild(6).gameObject;
+        GameObject RingSlot = equipment.transform.GetChild(7).gameObject;
+
         setEquipmentSlot(HelmSlot, gear.Helmet);
         setEquipmentSlot(ChestSlot, gear.Chestplate);
         setEquipmentSlot(LegSlot, gear.Legs);
@@ -306,34 +332,19 @@ public class CharacterMenu
         setEquipmentSlot(UtilitySlot, gear.Secondary);
         setEquipmentSlot(NecklaceSlot, gear.Necklace);
         setEquipmentSlot(RingSlot, gear.Ring);
-
-        //Set Stats and Gold
-        GameObject str = bottomStats.transform.GetChild(0).gameObject;
-        GameObject def = bottomStats.transform.GetChild(1).gameObject;
-        GameObject crit = bottomStats.transform.GetChild(2).gameObject;
-        GameObject intel = bottomStats.transform.GetChild(3).gameObject;
-        GameObject gold = bottomStats.transform.GetChild(4).gameObject;
-        GameObject evd = bottomStats.transform.GetChild(5).gameObject;
-        GameObject blck = bottomStats.transform.GetChild(6).gameObject;
-
-        str.transform.gameObject.GetComponent<TMP_Text>().text = "Str:" + player.getStrength();
-        //Debug.Log("PLAYER STRENGTH:"+player.getStrength());
-        def.transform.gameObject.GetComponent<TMP_Text>().text = "Def:" + player.getDefense();
-        crit.transform.gameObject.GetComponent<TMP_Text>().text = "Crit:" + player.getCritical();
-        intel.transform.gameObject.GetComponent<TMP_Text>().text = "Int:" + player.getIntelligence();
-        gold.transform.gameObject.GetComponent<TMP_Text>().text = "Gold:" + player.getGold();
-        evd.transform.gameObject.GetComponent<TMP_Text>().text = "Evd:" + player.getEvade() + "%";
-        blck.transform.gameObject.GetComponent<TMP_Text>().text = "Blck:" + player.getBlock();
     }
 
     private void setEquipmentSlot(GameObject slot, Equipment? e){
         if(e == null){
-            slot.transform.GetChild(0).gameObject.SetActive(false);
+            slot.transform.GetChild(0).gameObject.SetActive(true);
+            slot.transform.GetChild(1).gameObject.SetActive(false);
             slot.GetComponent<Image>().sprite = frames[0];
         } 
         else {
-            slot.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = e.image;
-            slot.transform.GetChild(0).gameObject.SetActive(true);
+            slot.transform.GetChild(0).gameObject.SetActive(false);
+            slot.transform.GetChild(1).gameObject.SetActive(true);
+            slot.transform.GetChild(1).gameObject.GetComponent<Image>().sprite = e.image;
+
             if(e.tier == 1) slot.GetComponent<Image>().sprite = frames[0];
             if(e.tier == 2) slot.GetComponent<Image>().sprite = frames[1];
             if(e.tier == 3) slot.GetComponent<Image>().sprite = frames[2];
@@ -342,28 +353,26 @@ public class CharacterMenu
     }
 
     private void setTopicPanel(){
-        topicPanel = panelObject.transform.GetChild(1).gameObject;
+        inventoryPanel = panelObject.transform.GetChild(2).gameObject;
+        equipmentPanel = panelObject.transform.GetChild(3).gameObject;
+        mapPanel = panelObject.transform.GetChild(4).gameObject;
 
-        GameObject topicArea = topicPanel.transform.GetChild(0).gameObject;
-        GameObject topicTitle = topicPanel.transform.GetChild(1).gameObject;
-        Button itemsTab = topicPanel.transform.GetChild(3).gameObject.GetComponent<Button>();
-        Button equipmentTab = topicPanel.transform.GetChild(4).gameObject.GetComponent<Button>();
-        Button questTab = topicPanel.transform.GetChild(5).gameObject.GetComponent<Button>();
-        Button mapTab = topicPanel.transform.GetChild(6).gameObject.GetComponent<Button>();
+        inventoryPanel.SetActive(false);
+        equipmentPanel.SetActive(false);
+        mapPanel.SetActive(false);
 
-        topicTitle.transform.gameObject.GetComponent<TMP_Text>().text = topicTitleString;
-
-        itemsTab.onClick.AddListener(itemListener);
-        equipmentTab.onClick.AddListener(equipmentListener);
-        questTab.onClick.AddListener(questListener);
-        mapTab.onClick.AddListener(mapListener);
-    }
-
-    private void updateTopicPanel(){
-        topicPanel = panelObject.transform.GetChild(1).gameObject;
-
-        GameObject topicTitle = topicPanel.transform.GetChild(1).gameObject;
-        topicTitle.transform.gameObject.GetComponent<TMP_Text>().text = topicTitleString;
+        if(tab == 0)
+        {
+            inventoryPanel.SetActive(true);
+        }
+        else if(tab == 1)
+        {
+            equipmentPanel.SetActive(true);
+        }
+        else if(tab == 3)
+        {
+            mapPanel.SetActive(true);
+        }
     }
 
     void populateTopicArea(){
@@ -371,88 +380,130 @@ public class CharacterMenu
             //Inventory
             populateInventory();
         }
-        if(tab == 1){
+        else if(tab == 1){
             //Equipment
             populateEquipment();
         }
-        if(tab == 2){
+        else if(tab == 2){
             //Quests
             populateQuests();
         }
-        if(tab == 3){
+        else if(tab == 3){
             //Map
             populateMap();
         }
     }
 
     void populateInventory(){
-        GameObject topicArea = topicPanel.transform.GetChild(0).gameObject;
+        GameObject slotsPanel = inventoryPanel.transform.GetChild(0).gameObject;
 
         int numItems = items.Count;
 
-        int x = 0;
-        int y = 0;
-        float cellSize = 120;
-        int xOff = 100;
-        int yOff = -100;
-        //Debug.Log("NumItems:"+ numItems);
-        for(int i = 0; i < numItems; i++)
+        GameObject[] invSlots = new GameObject[maxSlots];
+
+        for(int i = 0; i < maxSlots; i++)
         {
-            //Debug.Log("Adding new Item");
-            Vector3 pos = new Vector3(xOff + x * cellSize, yOff + -1 * y * cellSize, 0);
+            invSlots[i] = slotsPanel.transform.GetChild(i).gameObject;
+            if(i < numItems)
+            {
+                Item item = items[i];
 
-            Item item = items[i];
-
-            GameObject itemslot = GameObject.Instantiate(slot, pos, Quaternion.identity);
-            GameObject icon = itemslot.transform.GetChild(0).gameObject;
-            icon.GetComponent<Image>().sprite = item.image;
-
-            itemslot.transform.SetParent(topicArea.transform, false);
-            inventorySlots.Add(itemslot);
-            x++;
-            if(x == 5){
-                x = 0;
-                y++;
+                invSlots[i].transform.GetChild(0).gameObject.SetActive(true);
+                invSlots[i].transform.GetChild(0).transform.GetComponent<Image>().sprite = item.image;
+                inventorySlots.Add(invSlots[i]);
+            }
+            else
+            {
+                invSlots[i].transform.GetChild(0).gameObject.SetActive(false);
             }
         }
+
+        //int x = 0;
+        //int y = 0;
+        //float cellSize = 120;
+        //int xOff = 100;
+        //int yOff = -100;
+        ////Debug.Log("NumItems:"+ numItems);
+        //for(int i = 0; i < numItems; i++)
+        //{
+        //    //Debug.Log("Adding new Item");
+        //    Vector3 pos = new Vector3(xOff + x * cellSize, yOff + -1 * y * cellSize, 0);
+
+        //    Item item = items[i];
+
+        //    GameObject itemslot = GameObject.Instantiate(slot, pos, Quaternion.identity);
+        //    GameObject icon = itemslot.transform.GetChild(0).gameObject;
+        //    icon.GetComponent<Image>().sprite = item.image;
+
+        //    itemslot.transform.SetParent(topicArea.transform, false);
+        //    inventorySlots.Add(itemslot);
+        //    x++;
+        //    if(x == 5){
+        //        x = 0;
+        //        y++;
+        //    }
+        //}
         //Debug.Log("Num Item slots:" + inventorySlots.Count);
         slotsLoaded = true;
     }
 
     void populateEquipment(){
-        GameObject topicArea = topicPanel.transform.GetChild(0).gameObject;
 
-        int numItems = equipment.Count;
+        GameObject slotsPanel = equipmentPanel.transform.GetChild(0).gameObject;
 
-        int x = 0;
-        int y = 0;
-        float cellSize = 120;
-        int xOff = 100;
-        int yOff = -100;
-        for(int i = 0; i < numItems; i++)
+        int numEquip = equipment.Count;
+
+        GameObject[] equipSlots = new GameObject[maxSlots];
+
+        for (int i = 0; i < maxSlots; i++)
         {
-            Vector3 pos = new Vector3(xOff + x * cellSize, yOff + -1 * y * cellSize, 0);
+            equipSlots[i] = slotsPanel.transform.GetChild(i).gameObject;
+            if (i < numEquip)
+            {
+                Equipment item = equipment[i];
 
-            Equipment item = equipment[i];
-
-            GameObject itemslot = GameObject.Instantiate(slot, pos, Quaternion.identity);
-            GameObject icon = itemslot.transform.GetChild(0).gameObject;
-            icon.GetComponent<Image>().sprite = item.image;
-            //Debug.Log("Creating Inventory Item " + item.tier);
-
-            if(item.tier == 1) itemslot.GetComponent<Image>().sprite = frames[0];
-            if(item.tier == 2) itemslot.GetComponent<Image>().sprite = frames[1];
-            if(item.tier == 3) itemslot.GetComponent<Image>().sprite = frames[2];
-            if(item.tier == 4) itemslot.GetComponent<Image>().sprite = frames[3];
-
-            itemslot.transform.SetParent(topicArea.transform, false);
-            equipmentSlots.Add(itemslot);
-            x++;
-            if(x == 5){
-                x = 0;
-                y++;
+                equipSlots[i].transform.GetChild(0).gameObject.SetActive(false);
+                equipSlots[i].transform.GetChild(0).transform.GetComponent<Image>().sprite = item.image;
+                equipmentSlots.Add(equipSlots[i]);
+            }
+            else
+            {
+                equipSlots[i].transform.GetChild(0).gameObject.SetActive(false);
             }
         }
+        //GameObject topicArea = topicPanel.transform.GetChild(0).gameObject;
+
+        //int numItems = equipment.Count;
+
+        //int x = 0;
+        //int y = 0;
+        //float cellSize = 120;
+        //int xOff = 100;
+        //int yOff = -100;
+        //for(int i = 0; i < numItems; i++)
+        //{
+        //    Vector3 pos = new Vector3(xOff + x * cellSize, yOff + -1 * y * cellSize, 0);
+
+        //    Equipment item = equipment[i];
+
+        //    GameObject itemslot = GameObject.Instantiate(slot, pos, Quaternion.identity);
+        //    GameObject icon = itemslot.transform.GetChild(0).gameObject;
+        //    icon.GetComponent<Image>().sprite = item.image;
+        //    //Debug.Log("Creating Inventory Item " + item.tier);
+
+        //    if(item.tier == 1) itemslot.GetComponent<Image>().sprite = frames[0];
+        //    if(item.tier == 2) itemslot.GetComponent<Image>().sprite = frames[1];
+        //    if(item.tier == 3) itemslot.GetComponent<Image>().sprite = frames[2];
+        //    if(item.tier == 4) itemslot.GetComponent<Image>().sprite = frames[3];
+
+        //    itemslot.transform.SetParent(topicArea.transform, false);
+        //    equipmentSlots.Add(itemslot);
+        //    x++;
+        //    if(x == 5){
+        //        x = 0;
+        //        y++;
+        //    }
+        //}
         slotsLoaded = true;
     }
 
@@ -485,27 +536,28 @@ public class CharacterMenu
     }
 
     void populateMap(){
-        GameObject topicArea = topicPanel.transform.GetChild(0).gameObject;
 
-        mapRoot = GameObject.Instantiate(minimap, new Vector3(0, 0, 0), Quaternion.identity);
-        mapRoot.transform.SetParent(topicArea.transform, false);
+        GameObject mapArea = mapPanel.transform.GetChild(1).gameObject.transform.GetChild(0).gameObject;
+
+        GameObject mapRoot = GameObject.Instantiate(minimap, new Vector3(0, 0, 0), Quaternion.identity);
+        mapRoot.transform.SetParent(mapArea.transform, false);
 
         int size = 20;
         GameObject mapHolder = GameObject.FindGameObjectWithTag("Map").transform.GetChild(0).gameObject.transform.GetChild(0).gameObject;
         mapHolder.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width * size + 100);
         mapHolder.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height * size + 100);
 
-        int xOff = -1*((width*size + 100)/2) + 50;
-        int yOff = -1 * ((height * size +100)/ 2) + 50;
-        
+        int xOff = -1 * ((width * size + 100) / 2) + 50;
+        int yOff = -1 * ((height * size + 100) / 2) + 50;
+
         for (int i = 0; i < height; i++)
         {
-            for(int j = 0;j < width; j++)
+            for (int j = 0; j < width; j++)
             {
                 if (GameManager.gmInstance.Dungeon.tileMap[i, j].explored == false) continue;
-                if(GameManager.gmInstance.Dungeon.tileMap[i,j].type == 2)
+                if (GameManager.gmInstance.Dungeon.tileMap[i, j].type == 2)
                 {
-                    Vector3 pos = new Vector3(xOff + j * size,yOff + i * size, 0f);
+                    Vector3 pos = new Vector3(xOff + j * size, yOff + i * size, 0f);
                     GameObject b = GameObject.Instantiate(block, pos, Quaternion.identity);
                     b.GetComponent<Image>().sprite = icons[4];
                     b.transform.SetParent(mapHolder.transform, false);
@@ -546,7 +598,7 @@ public class CharacterMenu
                     b.GetComponent<Image>().sprite = icons[5];
                     b.transform.SetParent(mapHolder.transform, false);
                 }
-                
+
             }
         }
     }
@@ -722,25 +774,21 @@ public class CharacterMenu
 
     void itemListener(){
         SoundManager.sm.PlayMenuSound();
-        topicTitleString = "Inventory";
         tab = 0;
         refreshTopicPanel();
     }
     void equipmentListener(){
         SoundManager.sm.PlayMenuSound();
-        topicTitleString = "Equipment";
         tab = 1;
         refreshTopicPanel();
     }
     void questListener(){
         SoundManager.sm.PlayMenuSound();
-        topicTitleString = "Quests";
         tab = 2;
         refreshTopicPanel();
     }
     void mapListener(){
         SoundManager.sm.PlayMenuSound();
-        topicTitleString = "Map";
         tab = 3;
         refreshTopicPanel();
     }
@@ -1026,7 +1074,7 @@ public class CharacterMenu
         }
         questObjects.Clear();
         GameObject.Destroy(mapRoot);
-        updateTopicPanel();
+        setTopicPanel();
         populateTopicArea();
     }
 
