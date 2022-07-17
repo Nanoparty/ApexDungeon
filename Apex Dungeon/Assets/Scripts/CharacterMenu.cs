@@ -40,6 +40,9 @@ public class CharacterMenu
     public List<GameObject> inventorySlots;
     public List<GameObject> equipmentSlots;
 
+    GameObject[] invSlots;
+    GameObject[] equipSlots;
+
     public List<string> quests;
     public List<GameObject> questObjects;
 
@@ -76,6 +79,7 @@ public class CharacterMenu
             //close when click outside popup
             if (Input.GetButtonDown("Fire1"))
             {
+                Debug.Log("use:" + useButton);
                 bool isClicked = false;
                 if(tab == 0 || gearSelection > -1){
                     isClicked = popupArea.GetComponent<Clickable>().getClicked() 
@@ -116,7 +120,8 @@ public class CharacterMenu
                 GameObject status = panelObject.transform.GetChild(1).gameObject;
                 GameObject equipment = status.transform.GetChild(6).gameObject;
                 GameObject gearSlot = equipment.transform.GetChild(i).gameObject;
-                if(gearSlot.GetComponent<Clickable>().getClicked()){
+                GameObject gearImage = gearSlot.transform.GetChild(1).gameObject;
+                if(gearSlot.GetComponent<Clickable>().getClicked() && gearImage.active){
                     gearSlot.GetComponent<Clickable>().setClicked(false);
                     gearSelection = i;
                     popupOpen = true;
@@ -126,16 +131,12 @@ public class CharacterMenu
                 }
             }
             if(tab == 0){
-                //Debug.Log("num slots=" + inventorySlots.Count);
                 for(int i = 0; i < items.Count; i++)
                 {
-                    //Debug.Log("Checking slot:" + i);
-                    if (inventorySlots != null && inventorySlots.Count > 0 
-                        && inventorySlots[i].GetComponent<Clickable>().getClicked())
+                    if (invSlots != null && invSlots[i].GetComponent<Clickable>().getClicked())
                     {
-                        //Debug.Log(i + " is selected");
                         selected = i;
-                        inventorySlots[i].GetComponent<Clickable>().setClicked(false);
+                        invSlots[i].GetComponent<Clickable>().setClicked(false);
                         popupOpen = true;
                         createPopup();
                         SoundManager.sm.PlayMenuSound();
@@ -143,13 +144,12 @@ public class CharacterMenu
                 }
             }
             else if(tab == 1){
-                for(int i = 0; i < equipmentSlots.Count; i++)
+                for(int i = 0; i < equipment.Count; i++)
                 {
-                    if (equipmentSlots != null && equipmentSlots.Count > 0 
-                        && equipmentSlots[i].GetComponent<Clickable>().getClicked())
+                    if(equipSlots != null && equipSlots[i].GetComponent<Clickable>().getClicked())
                     {
                         selected = i;
-                        equipmentSlots[i].GetComponent<Clickable>().setClicked(false);
+                        equipSlots[i].GetComponent<Clickable>().setClicked(false);
                         popupOpen = true;
                         //Debug.Log("Clicked on equipment:"+ equipment[selected]);
                         createPopup();
@@ -171,35 +171,33 @@ public class CharacterMenu
     {
         for (int i = 0; i < 8; i++)
         {
-            charPanel = panelObject.transform.GetChild(0).gameObject;
-            GameObject middleStats = charPanel.transform.GetChild(1).gameObject;
-            GameObject gearSlot = middleStats.transform.GetChild(4 + i).gameObject;
-            if (gearSlot.GetComponent<Clickable>().getClicked())
+            //check equiped gear for clicks
+            GameObject status = panelObject.transform.GetChild(1).gameObject;
+            GameObject equipment = status.transform.GetChild(6).gameObject;
+            GameObject gearSlot = equipment.transform.GetChild(i).gameObject;
+            GameObject gearImage = gearSlot.transform.GetChild(1).gameObject;
+            if (gearSlot.GetComponent<Clickable>().getClicked() && gearImage.active)
             {
                 gearSlot.GetComponent<Clickable>().setClicked(false);
             }
         }
         if (tab == 0)
         {
-            //Debug.Log("num slots=" + inventorySlots.Count);
-            for (int i = 0; i < inventorySlots.Count; i++)
+            for (int i = 0; i < items.Count; i++)
             {
-                //Debug.Log("Checking slot:" + i);
-                if (inventorySlots != null && inventorySlots.Count > 0
-                    && inventorySlots[i].GetComponent<Clickable>().getClicked())
+                if (invSlots != null && invSlots[i].GetComponent<Clickable>().getClicked())
                 {
-                    inventorySlots[i].GetComponent<Clickable>().setClicked(false);
+                    invSlots[i].GetComponent<Clickable>().setClicked(false);
                 }
             }
         }
         if (tab == 1)
         {
-            for (int i = 0; i < equipmentSlots.Count; i++)
+            for (int i = 0; i < equipment.Count; i++)
             {
-                if (equipmentSlots != null && equipmentSlots.Count > 0
-                    && equipmentSlots[i].GetComponent<Clickable>().getClicked())
+                if (equipSlots != null && equipSlots[i].GetComponent<Clickable>().getClicked())
                 {
-                    equipmentSlots[i].GetComponent<Clickable>().setClicked(false);
+                    equipSlots[i].GetComponent<Clickable>().setClicked(false);
                 }
             }
         }
@@ -274,7 +272,7 @@ public class CharacterMenu
         GameObject equipment = charPanel.transform.GetChild(6).gameObject;
 
         //set name
-        nameBanner.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = Data.playerName;
+        nameBanner.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = player.getName();
 
         //Set HP and MP
         GameObject hpText = healthBanner.transform.GetChild(0).gameObject;
@@ -300,6 +298,7 @@ public class CharacterMenu
         //mpText.transform.gameObject.GetComponent<TMP_Text>().text = mp + "/" + maxMp;
 
         //Set Player Profile picture
+        //playerProfile.transform.GetChild(0).gameObject.GetComponent<Animator>().Play()
 
         //Set Player Stats
         TMP_Text strengthText = statusBanner.transform.GetChild(0).gameObject.GetComponent<TMP_Text>();
@@ -399,7 +398,7 @@ public class CharacterMenu
 
         int numItems = items.Count;
 
-        GameObject[] invSlots = new GameObject[maxSlots];
+        invSlots = new GameObject[maxSlots];
 
         for(int i = 0; i < maxSlots; i++)
         {
@@ -452,8 +451,9 @@ public class CharacterMenu
         GameObject slotsPanel = equipmentPanel.transform.GetChild(0).gameObject;
 
         int numEquip = equipment.Count;
+        Debug.Log("Count:" + numEquip);
 
-        GameObject[] equipSlots = new GameObject[maxSlots];
+        equipSlots = new GameObject[maxSlots];
 
         for (int i = 0; i < maxSlots; i++)
         {
@@ -462,7 +462,7 @@ public class CharacterMenu
             {
                 Equipment item = equipment[i];
 
-                equipSlots[i].transform.GetChild(0).gameObject.SetActive(false);
+                equipSlots[i].transform.GetChild(0).gameObject.SetActive(true);
                 equipSlots[i].transform.GetChild(0).transform.GetComponent<Image>().sprite = item.image;
                 equipmentSlots.Add(equipSlots[i]);
             }
@@ -604,76 +604,88 @@ public class CharacterMenu
     }
 
     private void createPopup(){
-        //Debug.Log("Create Popup");
         Vector3 pos = new Vector3(0, 0, 0);
-        //Debug.Log("gear popup");
         GameObject popup = GameObject.Instantiate(itemPopup, pos, Quaternion.identity);
         GameObject mainHolder = popup.transform.GetChild(0).gameObject;
 
-        GameObject modal1 = mainHolder.transform.GetChild(0).gameObject;
-        GameObject modal2 = mainHolder.transform.GetChild(1).gameObject;
+        GameObject primary = mainHolder.transform.GetChild(0).gameObject;
+        GameObject modal1 = primary.transform.GetChild(0).gameObject;
+        GameObject tags1 = primary.transform.GetChild(1).gameObject;
+        GameObject top1 = modal1.transform.GetChild(0).gameObject;
+        GameObject itemFrame1 = top1.transform.GetChild(0).gameObject;
+        GameObject textHolder1 = top1.transform.GetChild(1).gameObject;
+        GameObject itemName1 = textHolder1.transform.GetChild(0).gameObject;
+        GameObject itemRank1 = textHolder1.transform.GetChild(1).gameObject;
+        GameObject itemDesc1 = modal1.transform.GetChild(1).gameObject;
+        useButton = tags1.transform.GetChild(0).gameObject;
+        trashButton = tags1.transform.GetChild(1).gameObject;
+        compareButton = tags1.transform.GetChild(2).gameObject;
 
-        GameObject itemName1 = modal1.transform.GetChild(0).gameObject;
-        GameObject itemFlavor1 = modal1.transform.GetChild(1).gameObject;
-        GameObject itemDesc1 = modal1.transform.GetChild(2).gameObject;
-
-        GameObject itemName2 = modal2.transform.GetChild(0).gameObject;
-        GameObject itemFlavor2 = modal2.transform.GetChild(1).gameObject;
-        GameObject itemDesc2 = modal2.transform.GetChild(2).gameObject;
-
-        GameObject buttonHolder = modal1.transform.GetChild(3).gameObject;
-        GameObject button1 = buttonHolder.transform.GetChild(0).gameObject;
-        GameObject button2 = buttonHolder.transform.GetChild(1).gameObject;
-        GameObject button3 = buttonHolder.transform.GetChild(2).gameObject;
+        GameObject secondary = mainHolder.transform.GetChild(1).gameObject;
+        GameObject modal2 = secondary.transform.GetChild(0).gameObject;
+        GameObject top2 = modal2.transform.GetChild(0).gameObject;
+        GameObject itemFrame2 = top2.transform.GetChild(0).gameObject;
+        GameObject textHolder2 = top2.transform.GetChild(1).gameObject;
+        GameObject itemName2 = textHolder2.transform.GetChild(0).gameObject;
+        GameObject itemRank2 = textHolder2.transform.GetChild(1).gameObject;
+        GameObject itemDesc2 = modal2.transform.GetChild(1).gameObject;
         
-        popup.transform.SetParent(topicPanel.transform, false);
+        popup.transform.SetParent(panelObject.transform, false);
         popupArea = popup;
 
         if(tab == 0){
             Item i = items[selected];
             itemName1.transform.gameObject.GetComponent<TMP_Text>().text = i.itemName;
-            itemFlavor1.transform.gameObject.GetComponent<TMP_Text>().text = i.flavorText;
+            itemRank1.transform.gameObject.GetComponent<TMP_Text>().text = i.flavorText;
             itemDesc1.transform.gameObject.GetComponent<TMP_Text>().text = i.description;
+            itemFrame1.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = i.image;
 
-            modal2.SetActive(false);
-            button3.SetActive(false);
+            secondary.SetActive(false);
+            compareButton.SetActive(false);
 
-            button1.GetComponent<Button>().onClick.AddListener(useListener);
-            button2.GetComponent<Button>().onClick.AddListener(trashListener);
-            useButton = button1;
-            trashButton = button2;
-            compareButton = button3;
+            useButton.GetComponent<Button>().onClick.AddListener(useListener);
+            trashButton.GetComponent<Button>().onClick.AddListener(trashListener);
         }
         if(tab == 1){
             Item i = equipment[selected];
             itemName1.transform.gameObject.GetComponent<TMP_Text>().text = i.itemName;
 
             //itemFlavor1.transform.gameObject.GetComponent<TMP_Text>().text = i.flavorText;
-            if(i.tier == 1) itemFlavor1.transform.gameObject.GetComponent<TMP_Text>().text = "Common";
-            if(i.tier == 2) itemFlavor1.transform.gameObject.GetComponent<TMP_Text>().text = "Rare";
-            if(i.tier == 3) itemFlavor1.transform.gameObject.GetComponent<TMP_Text>().text = "Unique";
-            if(i.tier == 4) itemFlavor1.transform.gameObject.GetComponent<TMP_Text>().text = "Legendary";
-            
+            if(i.tier == 1) itemRank1.transform.gameObject.GetComponent<TMP_Text>().text = "Common";
+            if (i.tier == 2)
+            {
+                itemRank1.transform.gameObject.GetComponent<TMP_Text>().text = "Rare";
+                itemRank1.transform.gameObject.GetComponent<TMP_Text>().color = Color.white;
+            }
+            if (i.tier == 3)
+            {
+                itemRank1.transform.gameObject.GetComponent<TMP_Text>().text = "Unique";
+                itemRank1.transform.gameObject.GetComponent<TMP_Text>().color = new Color(1f, 215f / 255f, 0f, 1f);
+            }
+            if (i.tier == 4)
+            {
+                itemRank1.transform.gameObject.GetComponent<TMP_Text>().text = "Legendary";
+                itemRank1.transform.gameObject.GetComponent<TMP_Text>().color = new Color(185f / 255f, 242f / 255f, 255f / 255f, 1f);
+            }
+
             itemDesc1.transform.gameObject.GetComponent<TMP_Text>().text = i.description;
+            itemFrame1.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = i.image;
 
-            button1.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = "Equip";
+            useButton.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = "Equip";
 
-            modal2.SetActive(false);
+            secondary.SetActive(false);
             
-            button1.GetComponent<Button>().onClick.AddListener(equipListener);
-            button2.GetComponent<Button>().onClick.AddListener(trashListener);
-            button3.GetComponent<Button>().onClick.AddListener(compareListener);
-            useButton = button1;
-            trashButton = button2;
-            compareButton = button3;
+            useButton.GetComponent<Button>().onClick.AddListener(equipListener);
+            trashButton.GetComponent<Button>().onClick.AddListener(trashListener);
+            compareButton.GetComponent<Button>().onClick.AddListener(compareListener);
         }
         
     }
 
     void createGearPopup(){
-        charPanel = panelObject.transform.GetChild(0).gameObject;
-        GameObject middleStats = charPanel.transform.GetChild(1).gameObject;
-        GameObject gearSlot = middleStats.transform.GetChild(4+gearSelection).gameObject;
+        //charPanel = panelObject.transform.GetChild(0).gameObject;
+        //GameObject middleStats = charPanel.transform.GetChild(1).gameObject;
+        //GameObject gearSlot = middleStats.transform.GetChild(4+gearSelection).gameObject;
 
         Equipment e = new Equipment();
 
@@ -693,46 +705,54 @@ public class CharacterMenu
         GameObject popup = GameObject.Instantiate(itemPopup, pos, Quaternion.identity);
         GameObject mainHolder = popup.transform.GetChild(0).gameObject;
 
-        GameObject modal1 = mainHolder.transform.GetChild(0).gameObject;
-        GameObject modal2 = mainHolder.transform.GetChild(1).gameObject;
+        GameObject primary = mainHolder.transform.GetChild(0).gameObject;
+        GameObject modal1 = primary.transform.GetChild(0).gameObject;
+        GameObject tags1 = primary.transform.GetChild(1).gameObject;
+        GameObject top1 = modal1.transform.GetChild(0).gameObject;
+        GameObject itemFrame1 = top1.transform.GetChild(0).gameObject;
+        GameObject textHolder1 = top1.transform.GetChild(1).gameObject;
+        GameObject itemName1 = textHolder1.transform.GetChild(0).gameObject;
+        GameObject itemRank1 = textHolder1.transform.GetChild(1).gameObject;
+        GameObject itemDesc1 = modal1.transform.GetChild(1).gameObject;
+        useButton = tags1.transform.GetChild(0).gameObject;
+        trashButton = tags1.transform.GetChild(1).gameObject;
+        compareButton = tags1.transform.GetChild(2).gameObject;
 
-        GameObject itemName1 = modal1.transform.GetChild(0).gameObject;
-        GameObject itemFlavor1 = modal1.transform.GetChild(1).gameObject;
-        GameObject itemDesc1 = modal1.transform.GetChild(2).gameObject;
+        GameObject secondary = mainHolder.transform.GetChild(1).gameObject;
 
-        GameObject itemName2 = modal2.transform.GetChild(0).gameObject;
-        GameObject itemFlavor2 = modal2.transform.GetChild(1).gameObject;
-        GameObject itemDesc2 = modal2.transform.GetChild(2).gameObject;
 
-        GameObject buttonHolder = modal1.transform.GetChild(3).gameObject;
-        GameObject button1 = buttonHolder.transform.GetChild(0).gameObject;
-        GameObject button2 = buttonHolder.transform.GetChild(1).gameObject;
-        GameObject button3 = buttonHolder.transform.GetChild(2).gameObject;
-        
-        popup.transform.SetParent(topicPanel.transform, false);
+        popup.transform.SetParent(panelObject.transform, false);
         popupArea = popup;
         
         itemName1.transform.gameObject.GetComponent<TMP_Text>().text = e.itemName;
 
         //itemFlavor1.transform.gameObject.GetComponent<TMP_Text>().text = e.flavorText;
-        if(e.tier == 1) itemFlavor1.transform.gameObject.GetComponent<TMP_Text>().text = "Common";
-        if(e.tier == 2) itemFlavor1.transform.gameObject.GetComponent<TMP_Text>().text = "Rare";
-        if(e.tier == 3) itemFlavor1.transform.gameObject.GetComponent<TMP_Text>().text = "Unique";
-        if(e.tier == 4) itemFlavor1.transform.gameObject.GetComponent<TMP_Text>().text = "Legendary";
+        if(e.tier == 1) itemRank1.transform.gameObject.GetComponent<TMP_Text>().text = "Common";
+        if (e.tier == 2)
+        {
+            itemRank1.transform.gameObject.GetComponent<TMP_Text>().text = "Rare";
+            itemRank1.transform.gameObject.GetComponent<TMP_Text>().color = Color.white;
+        }
+        if (e.tier == 3)
+        {
+            itemRank1.transform.gameObject.GetComponent<TMP_Text>().text = "Unique";
+            itemRank1.transform.gameObject.GetComponent<TMP_Text>().color = new Color(1f, 215f / 255f, 0f, 1f);
+        }
+        if (e.tier == 4)
+        {
+            itemRank1.transform.gameObject.GetComponent<TMP_Text>().text = "Legendary";
+            itemRank1.transform.gameObject.GetComponent<TMP_Text>().color = new Color(185f / 255f, 242f / 255f, 255f / 255f, 1f);
+        }
 
         itemDesc1.transform.gameObject.GetComponent<TMP_Text>().text = e.description;
 
-        modal2.SetActive(false);
-        button3.SetActive(false);
+        secondary.SetActive(false);
+        compareButton.SetActive(false);
 
-        button1.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = "Unequip";
+        useButton.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = "Unequip";
 
-        button1.GetComponent<Button>().onClick.AddListener(unequipListener);
-        button2.GetComponent<Button>().onClick.AddListener(trashEquipedListener);
-        useButton = button1;
-        trashButton = button2;
-        compareButton = button3;
-        
+        useButton.GetComponent<Button>().onClick.AddListener(unequipListener);
+        trashButton.GetComponent<Button>().onClick.AddListener(trashEquipedListener);
     }
 
     void buildMap()
@@ -1043,36 +1063,53 @@ public class CharacterMenu
 
     void openComparePopup(Equipment alt){
         GameObject mainHolder = popupArea.transform.GetChild(0).gameObject;
-        GameObject modal2 = mainHolder.transform.GetChild(1).gameObject;
-        modal2.SetActive(true);
 
-        GameObject itemName2 = modal2.transform.GetChild(0).gameObject;
-        GameObject itemFlavor2 = modal2.transform.GetChild(1).gameObject;
-        GameObject itemDesc2 = modal2.transform.GetChild(2).gameObject;
+        GameObject secondary = mainHolder.transform.GetChild(1).gameObject;
+        GameObject modal2 = secondary.transform.GetChild(0).gameObject;
+        GameObject top2 = modal2.transform.GetChild(0).gameObject;
+        GameObject itemFrame2 = top2.transform.GetChild(0).gameObject;
+        GameObject textHolder2 = top2.transform.GetChild(1).gameObject;
+        GameObject itemName2 = textHolder2.transform.GetChild(0).gameObject;
+        GameObject itemRank2 = textHolder2.transform.GetChild(1).gameObject;
+        GameObject itemDesc2 = modal2.transform.GetChild(1).gameObject;
+        
+        secondary.SetActive(true);
 
         itemName2.transform.gameObject.GetComponent<TMP_Text>().text = alt.itemName;
-        //itemFlavor2.transform.gameObject.GetComponent<TMP_Text>().text = alt.flavorText;
-        if(alt.tier == 1) itemFlavor2.transform.gameObject.GetComponent<TMP_Text>().text = "Common";
-        if(alt.tier == 2) itemFlavor2.transform.gameObject.GetComponent<TMP_Text>().text = "Rare";
-        if(alt.tier == 3) itemFlavor2.transform.gameObject.GetComponent<TMP_Text>().text = "Unique";
-        if(alt.tier == 4) itemFlavor2.transform.gameObject.GetComponent<TMP_Text>().text = "Legendary";
+        if(alt.tier == 1) itemRank2.transform.gameObject.GetComponent<TMP_Text>().text = "Common";
+        if (alt.tier == 2)
+        {
+            itemRank2.transform.gameObject.GetComponent<TMP_Text>().text = "Rare";
+            itemRank2.transform.gameObject.GetComponent<TMP_Text>().color = Color.white;
+        }
+        if (alt.tier == 3)
+        {
+            itemRank2.transform.gameObject.GetComponent<TMP_Text>().text = "Unique";
+            itemRank2.transform.gameObject.GetComponent<TMP_Text>().color = new Color(1f, 215f / 255f, 0f, 1f);
+        }
+        if (alt.tier == 4)
+        {
+            itemRank2.transform.gameObject.GetComponent<TMP_Text>().text = "Legendary";
+            itemRank2.transform.gameObject.GetComponent<TMP_Text>().color = new Color(185f / 255f, 242f / 255f, 255f / 255f, 1f);
+        }
         itemDesc2.transform.gameObject.GetComponent<TMP_Text>().text = alt.description;
+        itemFrame2.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = alt.image;
     }
 
     void refreshTopicPanel(){
         slotsLoaded = false;
-        foreach(GameObject o in inventorySlots){
-            GameObject.Destroy(o);
-        }
-        inventorySlots.Clear();
-        foreach(GameObject o in equipmentSlots){
-            GameObject.Destroy(o);
-        }
-        equipmentSlots.Clear();
-        foreach(GameObject o in questObjects){
-            GameObject.Destroy(o);
-        }
-        questObjects.Clear();
+        //foreach(GameObject o in inventorySlots){
+        //    GameObject.Destroy(o);
+        //}
+        //inventorySlots.Clear();
+        //foreach(GameObject o in equipmentSlots){
+        //    GameObject.Destroy(o);
+        //}
+        //equipmentSlots.Clear();
+        //foreach(GameObject o in questObjects){
+        //    GameObject.Destroy(o);
+        //}
+        //questObjects.Clear();
         GameObject.Destroy(mapRoot);
         setTopicPanel();
         populateTopicArea();

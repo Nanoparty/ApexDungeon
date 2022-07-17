@@ -809,4 +809,8 @@ public class Player : MovingEntity
         charMenu.closeInventory();
         openCharacter = false;
     }
+    public string getName()
+    {
+        return playerName;
+    }
 }
