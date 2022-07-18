@@ -18,7 +18,7 @@ public class ScoresManager : MonoBehaviour
         Data.scores = GameManager.gmInstance?.scores ?? new List<(string, int)>();
         scores = GameManager.gmInstance?.scores ?? new List<(string, int)>();
 
-        TestData();
+        //TestData();
 
         scores.Sort((a, b) => {
             int result = b.Item2.CompareTo(a.Item2);

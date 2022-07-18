@@ -25,7 +25,7 @@ public class CharacterSelectManager : MonoBehaviour
 
         selectedChar = null;
 
-        AddTestData();
+        //AddTestData();
 
         PopulateCharacters();
     }
