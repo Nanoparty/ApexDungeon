@@ -12,33 +12,33 @@ public class TitleManager : MonoBehaviour
     public Button LoadGame;
     public Button Scores;
     public Button Options;
-    public GameObject newPopup;
-    public GameObject popupError;
-    public bool popupOpen = false;
-    public List<string> taken;
+    //public GameObject newPopup;
+    //public GameObject popupError;
+    //public bool popupOpen = false;
+    //public List<string> taken;
     private bool done;
     private List<CharacterData> charData;
-    public AudioSource audioSource;
+    //public AudioSource audioSource;
     
-    public AudioClip buttonClick;
+    //public AudioClip buttonClick;
     
     void Start()
     {
         SoundManager.sm.PlayTitleMusic();
-        audioSource = GetComponent<AudioSource>();
+        //audioSource = GetComponent<AudioSource>();
         NewGame.onClick.AddListener(newGameListener);
         LoadGame.onClick.AddListener(loadGameListener);
         Scores.onClick.AddListener(scoresListener);
         Options.onClick.AddListener(optionsListener);
-        newPopup.SetActive(false);
-        popupError.SetActive(false);
-        taken = Data.names ?? new List<string>();
+        //newPopup.SetActive(false);
+        //popupError.SetActive(false);
+        //taken = Data.names ?? new List<string>();
         done = false;
     }
 
     void newGameListener(){
         SoundManager.sm.PlayMenuSound();
-        if(popupOpen)return;
+        //if(popupOpen)return;
 
         SceneManager.LoadScene("CharacterCreator", LoadSceneMode.Single);
 
@@ -50,52 +50,52 @@ public class TitleManager : MonoBehaviour
 
     void loadGameListener(){
         SoundManager.sm.PlayMenuSound();
-        if(popupOpen)return;
+        //if(popupOpen)return;
 
         SceneManager.LoadScene("CharacterSelect", LoadSceneMode.Single);
     }
 
     void scoresListener(){
         SoundManager.sm.PlayMenuSound();
-        if(popupOpen)return;
+        //if(popupOpen)return;
 
         SceneManager.LoadScene("Scores", LoadSceneMode.Single);
     }
 
     void optionsListener(){
         SoundManager.sm.PlayMenuSound();
-        if(popupOpen)return;
+        //if(popupOpen)return;
         SceneManager.LoadScene("Options", LoadSceneMode.Single);
     }
 
-    void acceptListener(){
-        SoundManager.sm.PlayMenuSound();
-        string name = newPopup.transform.GetChild(4).GetComponent<TMP_InputField>().text;
+    //void acceptListener(){
+    //    SoundManager.sm.PlayMenuSound();
+    //    string name = newPopup.transform.GetChild(4).GetComponent<TMP_InputField>().text;
 
-        if(!(name.Length > 0))return;
-        if(taken.Contains(name) && !done){
-            popupError.SetActive(true);
-            return;
-        }
+    //    if(!(name.Length > 0))return;
+    //    if(taken.Contains(name) && !done){
+    //        popupError.SetActive(true);
+    //        return;
+    //    }
 
-        done = true;
-        Data.playerName = name;
-        taken.Add(name);
-        Data.names = taken;
-        Data.activeCharacter = name;
-        charData = Data.charData ?? new List<CharacterData>();
-        charData.Add(new CharacterData(name));
-        Data.charData = charData;
-        Data.LoadActiveData();
-        Data.loadData = false;
-        SoundManager.sm.StopMusic();
-        SceneManager.LoadScene("Dungeon", LoadSceneMode.Single);
-    }
+    //    done = true;
+    //    Data.playerName = name;
+    //    taken.Add(name);
+    //    Data.names = taken;
+    //    Data.activeCharacter = name;
+    //    charData = Data.charData ?? new List<CharacterData>();
+    //    charData.Add(new CharacterData(name));
+    //    Data.charData = charData;
+    //    Data.LoadActiveData();
+    //    Data.loadData = false;
+    //    SoundManager.sm.StopMusic();
+    //    SceneManager.LoadScene("Dungeon", LoadSceneMode.Single);
+    //}
 
-    void cancelListener(){
-        SoundManager.sm.PlayMenuSound();
-        newPopup.transform.GetChild(4).GetComponent<TMP_InputField>().text = "";
-        newPopup.SetActive(false);
-        popupOpen = false;
-    }
+    //void cancelListener(){
+    //    SoundManager.sm.PlayMenuSound();
+    //    newPopup.transform.GetChild(4).GetComponent<TMP_InputField>().text = "";
+    //    newPopup.SetActive(false);
+    //    popupOpen = false;
+    //}
 }

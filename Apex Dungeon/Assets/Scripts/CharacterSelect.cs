@@ -12,7 +12,7 @@ public class CharacterSelect : MonoBehaviour, IPointerDownHandler
     {
         Debug.Log("Clicked " + this.name);
         clicked = true;
-        this.gameObject.GetComponent<Image>().color = Color.green;
+        this.transform.GetChild(0).gameObject.GetComponent<Image>().color = Color.green;
         Debug.Log("CLICKED CHARACTER");
     }
 
@@ -24,9 +24,9 @@ public class CharacterSelect : MonoBehaviour, IPointerDownHandler
     {
         clicked = b;
         if(b){
-            this.gameObject.GetComponent<Image>().color = Color.green;
+            this.transform.GetChild(0).gameObject.GetComponent<Image>().color = Color.green;
         }else{
-            this.gameObject.GetComponent<Image>().color = Color.white;
+            this.transform.GetChild(0).gameObject.GetComponent<Image>().color = Color.white;
         }
     }
 }

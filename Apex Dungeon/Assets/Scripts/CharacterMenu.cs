@@ -289,8 +289,8 @@ public class CharacterMenu
         int maxHp = player.getMaxHP();
         int maxExp = player.getMaxExp();
 
-        hpText.GetComponent<TMP_Text>().text = hp + "/" + maxHp;
-        expText.GetComponent<TMP_Text>().text = exp + "/" + maxExp;
+        hpText.GetComponent<TMP_Text>().text = "HP: " + hp + "/" + maxHp;
+        expText.GetComponent<TMP_Text>().text = "EXP: " + exp + "/" + maxExp;
 
         levelText.transform.GetChild(1).transform.GetComponent<TMP_Text>().text = player.getExpLevel().ToString();
 
@@ -563,7 +563,7 @@ public class CharacterMenu
 
     void populateMap(){
 
-        GameObject mapArea = mapPanel.transform.GetChild(1).gameObject.transform.GetChild(0).gameObject;
+        GameObject mapArea = mapPanel.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject;
 
         GameObject mapRoot = GameObject.Instantiate(minimap, new Vector3(0, 0, 0), Quaternion.identity);
         mapRoot.transform.SetParent(mapArea.transform, false);
