@@ -774,6 +774,7 @@ public class CharacterMenu
         }
 
         itemDesc1.transform.gameObject.GetComponent<TMP_Text>().text = e.description;
+        itemFrame1.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = e.image;
 
         secondary.SetActive(false);
         compareButton.SetActive(false);
