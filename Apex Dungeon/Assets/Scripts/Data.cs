@@ -38,6 +38,7 @@ public static class Data
     public static int crit;
     public static int evade;
     public static int block;
+    public static int floor = 1;
     public static PlayerGear gear;
 
     public static void reset(){
@@ -63,6 +64,7 @@ public static class Data
         evade = current.evade;
         block = current.block;
         gear = current.gear;
+        floor = current.floor;
     }
 
     public static void SaveCharacter(){
@@ -93,6 +95,7 @@ public static class Data
         current.evade = evade;
         current.block = block;
         current.gear = gear;
+        current.floor = floor;
     }
 
     public static void RemoveActive(){

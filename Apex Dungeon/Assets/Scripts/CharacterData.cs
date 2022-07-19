@@ -25,8 +25,8 @@ public class CharacterData : MonoBehaviour
 
     public CharacterData(){
         name = "";
-        floor = 0;
-        level = 0;        
+        floor = 1;
+        level = 1;        
     }
 
     public CharacterData(string n){

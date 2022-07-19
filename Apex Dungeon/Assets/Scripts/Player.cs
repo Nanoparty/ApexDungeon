@@ -317,6 +317,7 @@ public class Player : MovingEntity
         Data.evade = evade;
         Data.block = blockStat;
         Data.gold = gold;
+        Data.floor = GameManager.gmInstance.level;
 
         Data.charMenu = charMenu;
         Data.gear = gear;
@@ -345,6 +346,7 @@ public class Player : MovingEntity
     }
 
     public void nextFloor(){
+        stairsModal.SetActive(true);
         GameManager.gmInstance.Dungeon.setFullBright(false);
         GameManager.gmInstance.level++;
         saveCharacterData();

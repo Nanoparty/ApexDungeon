@@ -37,7 +37,7 @@ public class GameManager : MonoBehaviour
         }
         DontDestroyOnLoad(gameObject);
         Debug.Log("AWAKE");
-        level = 1;
+        level = Data.floor;
         score = 0;
         scores = new List<(string, int)>();
         playerName = Data.playerName;
