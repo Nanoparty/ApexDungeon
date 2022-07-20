@@ -100,13 +100,11 @@ namespace UnityEditor.Tilemaps
         {
             var evt = Event.current;
 
-            if (CanPickOutsideEditMode() || inEditMode)
-            {
-                if (evt.type == EventType.Layout)
-                    HandleUtility.AddDefaultControl(m_PermanentControlID);
+            if (evt.type == EventType.Layout)
+                HandleUtility.AddDefaultControl(m_PermanentControlID);
 
+            if (CanPickOutsideEditMode() || inEditMode)
                 HandleBrushPicking();
-            }
 
             if (inEditMode)
             {
