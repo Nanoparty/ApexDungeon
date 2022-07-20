@@ -36,8 +36,8 @@ public class Enemy : MovingEntity
 
         //Objects
         GameManager.gmInstance.AddEnemyToList(this);
-        animator = GetComponent<Animator>();
-        sr = GetComponent<SpriteRenderer>();
+        animator = this.transform.GetChild(1).gameObject.GetComponent<Animator>();
+        sr = this.transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>();
         healthBar = this.transform.GetChild(0).GetComponent<SpriteRenderer>();
         path = new Path();
         finder = new Pathfinder();
@@ -151,7 +151,17 @@ public class Enemy : MovingEntity
         if (isAdjacent(player))
         {
             player.takeAttack(calculateDamageOut());
+            setAttackAnimation(player.getRow(), player.getCol());
+            //animator.Play("AttackLeft");
         }
+    }
+
+    public void setAttackAnimation(int enemyRow, int enemyCol)
+    {
+        if (enemyRow > row) animator.Play("AttackUp");
+        if (enemyRow < row) animator.Play("AttackDown");
+        if (enemyCol > col) animator.Play("AttackRight");
+        if (enemyCol < col) animator.Play("AttackLeft");
     }
 
     void checkAgro()

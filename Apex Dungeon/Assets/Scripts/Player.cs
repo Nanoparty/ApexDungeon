@@ -497,7 +497,7 @@ public class Player : MovingEntity
             Enemy enemy = GameManager.gmInstance.getEnemyAtLoc(clickRow, clickCol);
             if (enemy != null && attacking == false)
             {
-                animator.Play("AttackLeft");
+                //animator.Play("AttackLeft");
                 setAttackAnimation(clickRow, clickCol);
                 attacking = true;
                 enemy.takeDamage(calculateDamage());
