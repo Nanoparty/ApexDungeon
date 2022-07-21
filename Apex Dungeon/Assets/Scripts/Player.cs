@@ -839,6 +839,7 @@ public class Player : MovingEntity
         bool levelUp = false;
         prevLevel = expLevel;
         while(exp >= maxExp){
+            SoundManager.sm.PlayLevelUpSound();
             exp -= maxExp;
             expLevel++;
             maxHp = (int)(maxHp * 1.1);

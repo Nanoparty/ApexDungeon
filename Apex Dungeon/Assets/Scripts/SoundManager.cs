@@ -59,6 +59,12 @@ public class SoundManager: MonoBehaviour
         audioSource.PlayOneShot(buttonSound, Data.soundVolume * 3f);
     }
 
+    public void PlayLevelUpSound()
+    {
+        if (!Data.sound) return;
+        audioSource.PlayOneShot(levelUpSound, Data.soundVolume * 3f);
+    }
+
     public void PlayPickupSound(){
         if (!Data.sound) return;
         audioSource.PlayOneShot(randomClip(pickupSounds), Data.soundVolume * 3f);
