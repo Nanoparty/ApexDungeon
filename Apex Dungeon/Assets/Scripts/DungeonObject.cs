@@ -115,13 +115,14 @@ public class DungeonObject
             o.SetActive(false);
             activeShadows.Add(o);
             activeShadowCoords.Add(new Vector2(r,c));
-        }
-        if(!fullExplored){
             tileMap[r, c].visible = true;
             visibleTiles.Add(new Vector2(r, c));
+        }
+        if (!fullExplored) { 
             tileMap[r, c].explored = true;
         }
         
+
     }
 
     public void SetShadowsDark()
