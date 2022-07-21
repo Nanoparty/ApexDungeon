@@ -152,7 +152,9 @@ public class Player : MovingEntity
     {
         if (dead)
         {
+            
             if (fadeIn) {
+                SoundManager.sm.PlayDeathSound();
                 //calculate and save score
                 GameManager.gmInstance.score += gold;
                 fadeIn = false;

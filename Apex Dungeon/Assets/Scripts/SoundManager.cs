@@ -12,6 +12,7 @@ public class SoundManager: MonoBehaviour
     public AudioClip levelUpSound;
     public AudioClip goldSound;
     public AudioClip buttonSound;
+    public AudioClip deathSound;
 
     private AudioSource audioSource;
 
@@ -63,6 +64,12 @@ public class SoundManager: MonoBehaviour
     {
         if (!Data.sound) return;
         audioSource.PlayOneShot(levelUpSound, Data.soundVolume * 3f);
+    }
+
+    public void PlayDeathSound()
+    {
+        if (!Data.sound) return;
+        audioSource.PlayOneShot(deathSound, Data.soundVolume);
     }
 
     public void PlayPickupSound(){
