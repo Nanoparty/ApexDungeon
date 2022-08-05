@@ -25,6 +25,10 @@ public class ConsumableGenerator : ScriptableObject
     public Sprite greenLeaf;
     public Sprite yellowLeaf;
 
+    public Sprite gold;
+    public Sprite silver;
+    public Sprite copper;
+
     public GameObject CreateHealthPotion(int level)
     {
         GameObject item = new GameObject("HealthPotion lvl " + level);
@@ -174,6 +178,64 @@ public class ConsumableGenerator : ScriptableObject
         return item;
     }
 
+    public GameObject CreateGold()
+    {
+        GameObject item = new GameObject("Gold");
+
+        item.AddComponent<SpriteRenderer>();
+        item.GetComponent<SpriteRenderer>().sprite = gold;
+        item.GetComponent<SpriteRenderer>().sortingLayerName = "Items";
+
+        item.AddComponent<BoxCollider2D>();
+        item.GetComponent<BoxCollider2D>().isTrigger = true;
+
+        Money money = item.AddComponent<Money>();
+        money.amount = 100;
+
+        item.tag = "Gold";
+
+        return item;
+    }
+
+    public GameObject CreateSilver()
+    {
+        GameObject item = new GameObject("Silver");
+
+        item.AddComponent<SpriteRenderer>();
+        item.GetComponent<SpriteRenderer>().sprite = silver;
+        item.GetComponent<SpriteRenderer>().sortingLayerName = "Items";
+
+        item.AddComponent<BoxCollider2D>();
+        item.GetComponent<BoxCollider2D>().isTrigger = true;
+
+        Money money = item.AddComponent<Money>();
+        money.amount = 50;
+
+        item.tag = "Silver";
+
+        return item;
+    }
+
+    public GameObject CreateCopper()
+    {
+        GameObject item = new GameObject("Copper");
+
+        item.AddComponent<SpriteRenderer>();
+        item.GetComponent<SpriteRenderer>().sprite = copper;
+        item.GetComponent<SpriteRenderer>().sortingLayerName = "Items";
+
+        item.AddComponent<BoxCollider2D>();
+        item.GetComponent<BoxCollider2D>().isTrigger = true;
+
+        Money money = item.AddComponent<Money>();
+        money.amount = 25;
+
+
+        item.tag = "Copper";
+
+        return item;
+    }
+
     public GameObject CreateRandomConsumable(int level)
     {
         GameObject consumable = null;
@@ -187,9 +249,23 @@ public class ConsumableGenerator : ScriptableObject
         if (rand == 5) consumable = CreateTeleportOrb();
         if (rand == 6) consumable = CreateMap();
         if (rand == 7) consumable = CreateSkipOrb();
+        
 
         if (consumable == null) consumable = new GameObject();
 
-        return CreateMap();
+        return consumable;
+    }
+
+    public GameObject CreateRandomMoney(int level)
+    {
+        GameObject money = null;
+
+        int rand = Random.RandomRange(1, 4);
+
+        if (rand == 1) money = CreateGold();
+        if (rand == 2) money = CreateSilver();
+        if (rand == 3) money = CreateCopper();
+
+        return money;
     }
 }

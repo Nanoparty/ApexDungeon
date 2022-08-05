@@ -6,15 +6,33 @@ public class SoundManager: MonoBehaviour
 {
     public static SoundManager sm = null;
     public AudioClip titleMusic;
+
     public AudioClip[] dungeonMusic;
+
     public AudioClip[] hitSounds;
     public AudioClip[] pickupSounds;
+    public AudioClip[] impactSounds;
+    public AudioClip[] deathSounds;
+    public AudioClip[] approvalSounds;
+    public AudioClip[] stepSounds;
+    public AudioClip[] coinSounds;
+    public AudioClip[] stickSounds;
+    public AudioClip[] monsterSounds;
+
     public AudioClip levelUpSound;
-    public AudioClip goldSound;
     public AudioClip buttonSound;
     public AudioClip deathSound;
+    public AudioClip bookOpen;
+    public AudioClip bookClose;
+    public AudioClip pageTurn;
+    public AudioClip equipSound;
+    public AudioClip unequipSound;
+    public AudioClip potionSound;
+    public AudioClip magicSound;
+    public AudioClip mapSound;
 
-    private AudioSource audioSource;
+    private AudioSource musicSource;
+    private AudioSource soundSource;
 
     private void Awake(){
         if(sm == null)
@@ -25,74 +43,169 @@ public class SoundManager: MonoBehaviour
             Destroy(gameObject);
         }
         DontDestroyOnLoad(gameObject);
-        audioSource = GetComponent<AudioSource>();
+        musicSource = GetComponent<AudioSource>();
+        soundSource = transform.GetChild(0).gameObject.GetComponent<AudioSource>();
+
+        musicSource.volume = Data.musicVolume;
+        soundSource.volume = Data.soundVolume;
     }
 
-    public void UpdateVolume()
+    public void UpdateMusicVolume()
     {
-        audioSource.volume = Data.musicVolume;
+        musicSource.volume = Data.musicVolume * 0.05f;
+    }
+
+    public void UpdateSoundVolume()
+    {
+        soundSource.volume = Data.soundVolume;
     }
 
     public void UpdatePlaying()
     {
-        Debug.Log("Update playing->" + audioSource.isPlaying);
-        if (!Data.music && audioSource.isPlaying)
+        Debug.Log("Update playing->" + musicSource.isPlaying);
+        if (!Data.music && musicSource.isPlaying)
         {
             StopMusic();
         }
-        if(Data.music && !audioSource.isPlaying)
+        if(Data.music && !musicSource.isPlaying)
         {
-            audioSource.Play();
+            musicSource.Play();
         }
     }
 
     public void PlayTitleMusic(){
         if (!Data.music) return;
-        if (audioSource.clip == titleMusic && audioSource.isPlaying) return;
-        audioSource.volume = Data.musicVolume;
-        audioSource.clip = titleMusic;
-        audioSource.loop = true;
-        audioSource.Play();
+        if (musicSource.clip == titleMusic && musicSource.isPlaying) return;
+        musicSource.volume = Data.musicVolume * 0.05f;
+        musicSource.clip = titleMusic;
+        musicSource.loop = true;
+        musicSource.Play();
+    }
+
+    public void PlayDungeonMusic()
+    {
+        Debug.Log("DungeonMusic");
+        if (!Data.music) return;
+        musicSource.volume = Data.musicVolume * 0.05f;
+        musicSource.clip = randomClip(dungeonMusic);
+        musicSource.loop = true;
+        musicSource.Play();
+    }
+
+    public void StopMusic()
+    {
+        musicSource.Stop();
     }
 
     public void PlayMenuSound(){
         if (!Data.sound) return;
-        audioSource.PlayOneShot(buttonSound, Data.soundVolume * 3f);
+        soundSource.PlayOneShot(buttonSound);
     }
 
     public void PlayLevelUpSound()
     {
         if (!Data.sound) return;
-        audioSource.PlayOneShot(levelUpSound, Data.soundVolume * 3f);
+        soundSource.PlayOneShot(levelUpSound);
     }
 
     public void PlayDeathSound()
     {
         if (!Data.sound) return;
-        audioSource.PlayOneShot(deathSound, Data.soundVolume);
+        soundSource.PlayOneShot(deathSound, 0.3f);
     }
 
     public void PlayPickupSound(){
         if (!Data.sound) return;
-        audioSource.PlayOneShot(randomClip(pickupSounds), Data.soundVolume * 3f);
-    }
-
-    public void PlayDungeonMusic(){
-        Debug.Log("DungeonMusic");
-        if (!Data.music) return;
-        audioSource.volume = Data.musicVolume;
-        audioSource.clip = randomClip(dungeonMusic);
-        audioSource.loop = true;
-        audioSource.Play();
-    }
-
-    public void StopMusic(){
-        audioSource.Stop();
+        soundSource.PlayOneShot(randomClip(pickupSounds));
     }
 
     public void PlayHitSound(){
         if (!Data.sound) return;
-        audioSource.PlayOneShot(randomClip(hitSounds), Data.soundVolume * 3f);
+        soundSource.PlayOneShot(randomClip(hitSounds), 0.3f);
+    }
+
+    public void PlayBookOpen()
+    {
+        if (!Data.sound) return;
+        soundSource.PlayOneShot(bookOpen);
+    }
+
+    public void PlayBookClose()
+    {
+        if (!Data.sound) return;
+        soundSource.PlayOneShot(bookClose);
+    }
+
+    public void PlayPageTurn()
+    {
+        if (!Data.sound) return;
+        soundSource.PlayOneShot(pageTurn);
+    }
+
+    public void PlayEquipSound()
+    {
+        if (!Data.sound) return;
+        soundSource.PlayOneShot(equipSound);
+    }
+
+    public void PlayUnequipSound()
+    {
+        if (!Data.sound) return;
+        soundSource.PlayOneShot(unequipSound);
+    }
+
+    public void PlayPotionSound()
+    {
+        if (!Data.sound) return;
+        soundSource.PlayOneShot(potionSound);
+    }
+
+    public void PlayMagicSound()
+    {
+        if (!Data.sound) return;
+        soundSource.PlayOneShot(magicSound);
+    }
+
+    public void PlayStepSound()
+    {
+        if (!Data.sound) return;
+        soundSource.PlayOneShot(randomClip(stepSounds), 0.2f);
+    }
+
+    public void PlayCoinSound()
+    {
+        if (!Data.sound) return;
+        soundSource.PlayOneShot(randomClip(coinSounds), 0.2f);
+    }
+
+    public void PlayApprovalSound()
+    {
+        if (!Data.sound) return;
+        soundSource.PlayOneShot(randomClip(approvalSounds));
+    }
+
+    public void PlayDeathSound2()
+    {
+        if (!Data.sound) return;
+        soundSource.PlayOneShot(randomClip(deathSounds));
+    }
+
+    public void PlayImpactSounds()
+    {
+        if (!Data.sound) return;
+        soundSource.PlayOneShot(randomClip(impactSounds), 0.3f);
+    }
+
+    public void PlayStickSounds()
+    {
+        if (!Data.sound) return;
+        soundSource.PlayOneShot(randomClip(stickSounds), 0.3f);
+    }
+
+    public void PlayMonsterSounds()
+    {
+        if (!Data.sound) return;
+        soundSource.PlayOneShot(randomClip(monsterSounds), 0.3f);
     }
 
     public AudioClip randomClip(AudioClip[] clips){

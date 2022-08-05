@@ -855,7 +855,8 @@ public class CharacterMenu
         setPlayerStats();
     }
     void equipListener(){
-        SoundManager.sm.PlayMenuSound();
+        //SoundManager.sm.PlayMenuSound();
+        SoundManager.sm.PlayEquipSound();
         //Debug.Log("EQUIP");
 
         //equip armor
@@ -914,7 +915,8 @@ public class CharacterMenu
     }
 
     void unequipListener(){
-        SoundManager.sm.PlayMenuSound();
+        //SoundManager.sm.PlayMenuSound();
+        SoundManager.sm.PlayUnequipSound();
         Equipment e = new Equipment();
 
         if(gearSelection == 0){ 

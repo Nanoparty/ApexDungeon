@@ -95,6 +95,7 @@ public class Enemy : MovingEntity
     }
 
     public void die(){
+        SoundManager.sm.PlayMonsterSounds();
         SpawnBlood();
         GameManager.gmInstance.Dungeon.tileMap[row, col].occupied = 0;
         GameManager.gmInstance.removeEnemy(this);

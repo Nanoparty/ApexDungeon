@@ -103,6 +103,7 @@ public class DungeonGenerator : ScriptableObject
         SpawnEnemies();
         SpawnFurniture();
         SpawnItems();
+        SpawnMoney();
         InstantiateShadowMap();
 
         DungeonObject dungeonObject = new DungeonObject();
@@ -723,6 +724,40 @@ public class DungeonGenerator : ScriptableObject
                         item.transform.position = position;
                         itemList.Add(new Vector2(row, col));
                     }
+                }
+            }
+        }
+    }
+
+    void SpawnMoney()
+    {
+        for (int i = 0; i < rooms.Count; i++)
+        {
+            for (int j = 0; j < 2; j++)
+            {
+                Room room = rooms[i];
+                bool valid = false;
+                int tries = 0;
+                int row = 0;
+                int col = 0;
+                while (!valid && tries < 10)
+                {
+                    tries++;
+                    row = Random.Range(room.row + 1, room.row + room.height - 2);
+                    col = Random.Range(room.col + 1, room.col + room.width - 2);
+                    if (!tileMap[row, col].getOccupied() && !tileMap[row, col].stairs)
+                    {
+                        valid = true;
+                    }
+                }
+                if (valid)
+                {
+                    Vector3 position = new Vector3(col, row, 0f);
+                    
+                    GameObject item = consumableGenerator.CreateRandomMoney(GameManager.gmInstance.level);
+                    item.transform.parent = itemContainer.transform;
+                    item.transform.position = position;
+                    itemList.Add(new Vector2(row, col));
                 }
             }
         }

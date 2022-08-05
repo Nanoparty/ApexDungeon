@@ -31,6 +31,7 @@ public class Consumable : Item
             float appliedHP = baseHP * Mathf.Pow(1.5f,level-1);
             Debug.Log($"Adding {appliedHP} hp");
             p.addHP((int)appliedHP);
+            SoundManager.sm.PlayPotionSound();
         }
         if(id == "ManaPotion"){
             p.addMP(20);
@@ -38,11 +39,13 @@ public class Consumable : Item
         if(id == "SkipOrb"){
             //p.closeInventory();
             p.nextFloor();
+            SoundManager.sm.PlayMagicSound();
         }
         if(id == "TeleportOrb"){
             //p.closeInventory();
             Vector2 pos = GameManager.gmInstance.Dungeon.getRandomUnoccupiedTile();
             p.setPosition((int)pos.x, (int)pos.y);
+            SoundManager.sm.PlayMagicSound();
         }
         if(id == "DeathOrb"){
             List<Vector2> activeShadows = GameManager.gmInstance.Dungeon.getActiveShadowCoords();
@@ -53,12 +56,15 @@ public class Consumable : Item
                     Debug.Log("KILL ENEMY");
                 }
             }
+            SoundManager.sm.PlayMagicSound();
         }
         if(id == "MapFragment"){
             GameManager.gmInstance.Dungeon.setFullExplored(true);
+            SoundManager.sm.PlayPageTurn();
         }
         if(id == "LightOrb"){
             GameManager.gmInstance.Dungeon.setFullBright(true);
+            SoundManager.sm.PlayMagicSound();
         }
     }
 }

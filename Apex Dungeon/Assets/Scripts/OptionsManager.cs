@@ -50,8 +50,8 @@ public class OptionsManager : MonoBehaviour
     void musicSliderListener(float value)
     {
         Data.musicVolume = value;
-        SoundManager.sm.UpdateVolume();
-        SoundManager.sm.PlayMenuSound();
+        SoundManager.sm.UpdateMusicVolume();
+        //SoundManager.sm.PlayMenuSound();
     }
 
     void soundToggleListener(bool value)
@@ -64,5 +64,6 @@ public class OptionsManager : MonoBehaviour
     {
         //SoundManager.sm.PlayMenuSound();
         Data.soundVolume = value;
+        SoundManager.sm.UpdateSoundVolume();
     }
 }

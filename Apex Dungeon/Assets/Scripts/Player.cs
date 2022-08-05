@@ -24,6 +24,7 @@ public class Player : MovingEntity
     public GameObject endingScreen;
     public Sprite[] frames;
     public Sprite[] tabs;
+    public GameObject goldText;
 
     private CharacterMenu charMenu;
     private GameObject pauseMenu;
@@ -357,7 +358,6 @@ public class Player : MovingEntity
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        SoundManager.sm.PlayPickupSound();
         if(other.gameObject.tag == "Stairs")
         {
             stairsOpen = true;
@@ -368,27 +368,25 @@ public class Player : MovingEntity
             charMenu.addItem(other.GetComponent<Pickup>().GetItem());
             Destroy(other.gameObject);
             GameManager.gmInstance.Dungeon.removeFromItemList(row, col);
+            SoundManager.sm.PlayPickupSound();
         }
-        if (other.gameObject.tag == "Gold")
+        if (other.gameObject.tag == "Gold" || other.gameObject.tag == "Silver" || other.gameObject.tag == "Copper")
         {
+            int amount = other.GetComponent<Money>().amount;
+            Debug.Log("GOLD:" + amount);
+            gold += amount;
+            SoundManager.sm.PlayCoinSound();
+            GameObject goldNum = GameObject.Instantiate(goldText, new Vector3(this.transform.position.x, this.transform.position.y, 0), Quaternion.identity, this.transform);
+            goldNum.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = $"+{amount}";
             Destroy(other.gameObject);
-            gold += 100;
-        }
-        if (other.gameObject.tag == "Silver")
-        {
-            Destroy(other.gameObject);
-            gold += 50;
-        }
-        if (other.gameObject.tag == "Copper")
-        {
-            Destroy(other.gameObject);
-            gold += 25;
+
         }
         if (other.gameObject.tag == "Equipment")
         {
             charMenu.addEquipment(other.GetComponent<Pickup>().GetItem());
             Destroy(other.gameObject);
             GameManager.gmInstance.Dungeon.removeFromItemList(row, col);
+            SoundManager.sm.PlayPickupSound();
         }
     }
 
@@ -399,6 +397,7 @@ public class Player : MovingEntity
         {
             f.setDamage(-1);
             GameManager.gmInstance.playersTurn = false;
+            SoundManager.sm.PlayStickSounds();
             return true;
         }
         else return false;
@@ -461,7 +460,7 @@ public class Player : MovingEntity
     void musicSliderListener(float value)
     {
         Data.musicVolume = value;
-        SoundManager.sm.UpdateVolume();
+        SoundManager.sm.UpdateMusicVolume();
     }
 
     void soundToggleListener(bool value)
@@ -473,6 +472,7 @@ public class Player : MovingEntity
     void soundSliderListener(float value)
     {
         Data.soundVolume = value;
+        SoundManager.sm.UpdateSoundVolume();
     }
 
     void checkMoving()
@@ -483,6 +483,7 @@ public class Player : MovingEntity
             {
                 setNextTarget();
                 GameManager.gmInstance.playersTurn = false;
+                SoundManager.sm.PlayStepSound();
             }
             else if(atTarget){
                 moving = false;
@@ -551,6 +552,7 @@ public class Player : MovingEntity
         
         if(canMove)
         {
+            SoundManager.sm.PlayStepSound();
             return true;
         }
         return false;
