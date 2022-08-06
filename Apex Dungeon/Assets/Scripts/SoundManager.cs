@@ -18,6 +18,7 @@ public class SoundManager: MonoBehaviour
     public AudioClip[] coinSounds;
     public AudioClip[] stickSounds;
     public AudioClip[] monsterSounds;
+    public AudioClip[] criticalSounds;
 
     public AudioClip levelUpSound;
     public AudioClip buttonSound;
@@ -164,6 +165,12 @@ public class SoundManager: MonoBehaviour
     {
         if (!Data.sound) return;
         soundSource.PlayOneShot(magicSound);
+    }
+
+    public void PlayCriticalSound()
+    {
+        if (!Data.sound) return;
+        soundSource.PlayOneShot(randomClip(criticalSounds), 0.5f);
     }
 
     public void PlayStepSound()

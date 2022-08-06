@@ -211,11 +211,12 @@ public abstract class MovingEntity : MonoBehaviour
 
     protected abstract void OnCantMove<T>(T Component) where T : Component;
 
-    public float calculateDamage()
+    public float calculateDamage(float m = 1f)
     {
         float increase = (float)(attack * (strength * 0.02));
         float attackDamage = (float)(attack + increase);
         //Debug.Log("attack=" + attack + " increase=" + increase + " total=" + attackDamage);
+        attackDamage *= m;
         return -attackDamage;
     }
 

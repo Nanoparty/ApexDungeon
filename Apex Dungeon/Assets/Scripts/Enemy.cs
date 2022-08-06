@@ -84,13 +84,23 @@ public class Enemy : MovingEntity
         return 50 + 50 * floor;
     }
 
-    public new void takeDamage(float d){
+    public new void takeDamage(float d, bool critical = false){
         //Debug.Log("ENEMY SPAWN DMG TEXT");
-        SoundManager.sm.PlayHitSound();
         
+
         int netDamage = (int)calculateDamageIn(d);
         GameObject damageNum = GameObject.Instantiate(damageText, new Vector3(this.transform.position.x, this.transform.position.y, 0), Quaternion.identity);
-        damageNum.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = $"{netDamage}";
+        if (critical)
+        {
+            SoundManager.sm.PlayCriticalSound();
+            damageNum.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = $"CRIT! {netDamage}";
+            damageNum.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().color = new Color(1.0f, 0.64f, 0.0f);
+        }
+        else
+        {
+            SoundManager.sm.PlayHitSound();
+            damageNum.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = $"{netDamage}";
+        }
         base.takeDamage(netDamage);
     }
 

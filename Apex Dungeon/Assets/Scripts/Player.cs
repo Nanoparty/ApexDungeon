@@ -500,14 +500,23 @@ public class Player : MovingEntity
     bool attackController(int clickRow, int clickCol)
     {
         
-            Enemy enemy = GameManager.gmInstance.getEnemyAtLoc(clickRow, clickCol);
-            if (enemy != null && attacking == false)
+        Enemy enemy = GameManager.gmInstance.getEnemyAtLoc(clickRow, clickCol);
+        if (enemy != null && attacking == false)
+        {
+            setAttackAnimation(clickRow, clickCol);
+            attacking = true;
+            int dice = Random.Range(0, 100);
+            if (dice <= critical)
             {
-                setAttackAnimation(clickRow, clickCol);
-                attacking = true;
-                enemy.takeDamage(calculateDamage());
-                return true;
+                enemy.takeDamage(calculateDamage(3), true);
             }
+            else
+            {
+                enemy.takeDamage(calculateDamage());
+            }
+                
+            return true;
+        }
         return false;
     }
 
