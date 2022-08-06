@@ -603,7 +603,7 @@ public class CharacterMenu
 
         GameObject mapArea = mapPanel.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject;
 
-        GameObject mapRoot = GameObject.Instantiate(minimap, new Vector3(0, 0, 0), Quaternion.identity);
+        mapRoot = GameObject.Instantiate(minimap, new Vector3(0, 0, 0), Quaternion.identity);
         mapRoot.transform.SetParent(mapArea.transform, false);
 
         int size = 20;
