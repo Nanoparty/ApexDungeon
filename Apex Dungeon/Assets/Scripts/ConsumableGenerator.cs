@@ -178,7 +178,7 @@ public class ConsumableGenerator : ScriptableObject
         return item;
     }
 
-    public GameObject CreateGold()
+    public GameObject CreateGold(int level)
     {
         GameObject item = new GameObject("Gold");
 
@@ -190,14 +190,14 @@ public class ConsumableGenerator : ScriptableObject
         item.GetComponent<BoxCollider2D>().isTrigger = true;
 
         Money money = item.AddComponent<Money>();
-        money.amount = 100;
+        money.amount = (int)(100 * Mathf.Pow(1.5f, level - 1)); ;
 
         item.tag = "Gold";
 
         return item;
     }
 
-    public GameObject CreateSilver()
+    public GameObject CreateSilver(int level)
     {
         GameObject item = new GameObject("Silver");
 
@@ -209,14 +209,14 @@ public class ConsumableGenerator : ScriptableObject
         item.GetComponent<BoxCollider2D>().isTrigger = true;
 
         Money money = item.AddComponent<Money>();
-        money.amount = 50;
+        money.amount = (int)(50 * Mathf.Pow(1.5f, level - 1)); ;
 
         item.tag = "Silver";
 
         return item;
     }
 
-    public GameObject CreateCopper()
+    public GameObject CreateCopper(int level)
     {
         GameObject item = new GameObject("Copper");
 
@@ -228,8 +228,7 @@ public class ConsumableGenerator : ScriptableObject
         item.GetComponent<BoxCollider2D>().isTrigger = true;
 
         Money money = item.AddComponent<Money>();
-        money.amount = 25;
-
+        money.amount = (int)(25 * Mathf.Pow(1.5f, level - 1));
 
         item.tag = "Copper";
 
@@ -262,9 +261,9 @@ public class ConsumableGenerator : ScriptableObject
 
         int rand = Random.RandomRange(1, 4);
 
-        if (rand == 1) money = CreateGold();
-        if (rand == 2) money = CreateSilver();
-        if (rand == 3) money = CreateCopper();
+        if (rand == 1) money = CreateGold(level);
+        if (rand == 2) money = CreateSilver(level);
+        if (rand == 3) money = CreateCopper(level);
 
         return money;
     }

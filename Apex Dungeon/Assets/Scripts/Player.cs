@@ -366,6 +366,7 @@ public class Player : MovingEntity
         }
         if(other.gameObject.tag == "Consumable")
         {
+            if (charMenu.items.Count == charMenu.maxSlots) return;
             charMenu.addItem(other.GetComponent<Pickup>().GetItem());
             Destroy(other.gameObject);
             GameManager.gmInstance.Dungeon.removeFromItemList(row, col);
@@ -384,6 +385,7 @@ public class Player : MovingEntity
         }
         if (other.gameObject.tag == "Equipment")
         {
+            if (charMenu.equipment.Count == charMenu.maxSlots) return;
             charMenu.addEquipment(other.GetComponent<Pickup>().GetItem());
             Destroy(other.gameObject);
             GameManager.gmInstance.Dungeon.removeFromItemList(row, col);

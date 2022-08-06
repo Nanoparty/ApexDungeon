@@ -66,7 +66,7 @@ public class CharacterMenu
     bool slotsLoaded = false;
     private Sprite[] frames;
 
-    private int maxSlots = 25;
+    public int maxSlots = 25;
 
     private bool flipping = false;
     private bool flipping2 = false;
