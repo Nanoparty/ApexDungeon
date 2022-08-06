@@ -360,6 +360,7 @@ public class Player : MovingEntity
     {
         if(other.gameObject.tag == "Stairs")
         {
+            SoundManager.sm.PlayPageTurn();
             stairsOpen = true;
             stairsModal.SetActive(true);
         }
@@ -408,7 +409,7 @@ public class Player : MovingEntity
         if (!openCharacter && !openPause)
         {
             charMenu.setClosed(false);
-            SoundManager.sm.PlayMenuSound();
+            SoundManager.sm.PlayBookOpen();
             charMenu.openStats();
             openCharacter = true;
         }
@@ -500,11 +501,9 @@ public class Player : MovingEntity
             Enemy enemy = GameManager.gmInstance.getEnemyAtLoc(clickRow, clickCol);
             if (enemy != null && attacking == false)
             {
-                //animator.Play("AttackLeft");
                 setAttackAnimation(clickRow, clickCol);
                 attacking = true;
                 enemy.takeDamage(calculateDamage());
-                //GameManager.gmInstance.playersTurn = false;
                 return true;
             }
         return false;

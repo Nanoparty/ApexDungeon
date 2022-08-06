@@ -14,6 +14,7 @@ public class CharacterMenu
     Button equipmentTab;
     Button mapTab;
 
+    GameObject statusPanel;
     GameObject inventoryPanel;
     GameObject equipmentPanel;
     GameObject mapPanel;
@@ -33,6 +34,7 @@ public class CharacterMenu
     GameObject compareButton;
     PlayerGear gear;
     Player player;
+    Animator anim;
 
     Sprite[] tabs;
 
@@ -66,6 +68,9 @@ public class CharacterMenu
 
     private int maxSlots = 25;
 
+    private bool flipping = false;
+    private bool flipping2 = false;
+
     // Use this for initialization
     void Start()
     {
@@ -75,6 +80,33 @@ public class CharacterMenu
     // Update is called once per frame
     public void Update()
     {
+
+        if (flipping)
+        {
+            Debug.Log("Flipping");
+            if (anim.GetCurrentAnimatorStateInfo(0).IsName("BookLeft") || anim.GetCurrentAnimatorStateInfo(0).IsName("BookRight"))
+            {
+                flipping2 = true;
+                Debug.Log("In Progress");
+            }
+            if(flipping2 && anim.GetCurrentAnimatorStateInfo(0).IsName("BookIdle")) {
+                Debug.Log("Done flipping");
+                flipping = false;
+                flipping2 = false;
+                refreshTopicPanel();
+            }
+        }
+
+        if (Input.GetKeyDown("left"))
+        {
+            anim.Play("BookLeft");
+            Debug.Log("Left");
+        }
+        if (Input.GetKeyDown("right"))
+        {
+            anim.Play("BookRight");
+            Debug.Log("Right");
+        }
         
         if(popupOpen){
             //Debug.Log("POPUP OPEN");
@@ -240,6 +272,8 @@ public class CharacterMenu
 
         this.gear = player.getGear();
 
+        
+
         slotsLoaded = false;
         inventorySlots = new List<GameObject>();
         equipmentSlots = new List<GameObject>();
@@ -257,6 +291,8 @@ public class CharacterMenu
         equipmentTab.onClick.AddListener(equipmentListener);
         mapTab.onClick.AddListener(mapListener);
         closeTab.onClick.AddListener(closeListener);
+
+        anim = panelObject.GetComponent<Animator>();
 
         setPlayerStats();
         setTopicPanel();
@@ -371,10 +407,12 @@ public class CharacterMenu
     }
 
     private void setTopicPanel(){
+        statusPanel = panelObject.transform.GetChild(1).gameObject;
         inventoryPanel = panelObject.transform.GetChild(2).gameObject;
         equipmentPanel = panelObject.transform.GetChild(3).gameObject;
         mapPanel = panelObject.transform.GetChild(4).gameObject;
 
+        statusPanel.SetActive(true);
         inventoryPanel.SetActive(false);
         equipmentPanel.SetActive(false);
         mapPanel.SetActive(false);
@@ -818,19 +856,53 @@ public class CharacterMenu
 
     void closeListener()
     {
-        SoundManager.sm.PlayMenuSound();
+        SoundManager.sm.PlayBookClose();
         closeInventory();
     }
 
+    string flipDirection(int newTab)
+    {
+        if(newTab > tab)
+        {
+            return "BookLeft";
+        }else if(newTab < tab)
+        {
+            return "BookRight";
+        }
+        else
+        {
+            return "BookIdle";
+        }
+    }
+
     void itemListener(){
-        SoundManager.sm.PlayMenuSound();
+        if (tab == 0) return;
+        SoundManager.sm.PlayPageTurn();
+
+        statusPanel.SetActive(false);
+        inventoryPanel.SetActive(false);
+        equipmentPanel.SetActive(false);
+        mapPanel.SetActive(false);
+
+        anim.Play(flipDirection(0));
+        flipping = true;
+
         tab = 0;
-        refreshTopicPanel();
     }
     void equipmentListener(){
-        SoundManager.sm.PlayMenuSound();
+      
+        if (tab == 1) return;
+        SoundManager.sm.PlayPageTurn();
+
+        statusPanel.SetActive(false);
+        inventoryPanel.SetActive(false);
+        equipmentPanel.SetActive(false);
+        mapPanel.SetActive(false);
+
+        anim.Play(flipDirection(1));
+        flipping = true;
+
         tab = 1;
-        refreshTopicPanel();
     }
     void questListener(){
         SoundManager.sm.PlayMenuSound();
@@ -838,9 +910,18 @@ public class CharacterMenu
         refreshTopicPanel();
     }
     void mapListener(){
-        SoundManager.sm.PlayMenuSound();
+        if (tab == 3) return;
+        SoundManager.sm.PlayPageTurn();
+
+        statusPanel.SetActive(false);
+        inventoryPanel.SetActive(false);
+        equipmentPanel.SetActive(false);
+        mapPanel.SetActive(false);
+
+        anim.Play(flipDirection(3));
+        flipping = true;
+
         tab = 3;
-        refreshTopicPanel();
     }
     void useListener(){
         SoundManager.sm.PlayMenuSound();
