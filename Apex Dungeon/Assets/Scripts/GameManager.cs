@@ -26,6 +26,8 @@ public class GameManager : MonoBehaviour
     public string playerName;
     public string state = "play";
 
+    private int cursorRow, cursorCol;
+
     private void Awake()
     {
         if(gmInstance == null)
@@ -99,7 +101,19 @@ public class GameManager : MonoBehaviour
         mCol = Mathf.Round(pz.x);
 
         //updating grid cursor image
-        cursor.transform.position = new Vector3(mCol, mRow, 0f);
+        if (Input.GetButtonDown("Fire1"))
+        {
+            cursor.SetActive(true);
+            cursor.transform.position = new Vector3(mCol, mRow, 0f);
+            cursorRow = (int)mRow;
+            cursorCol = (int)mCol;
+        }
+        Player player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+        if (player.getRow() == cursorRow && player.getCol() == cursorCol)
+        {
+            cursor.SetActive(false);
+        }
+
 
         if (playersTurn || enemiesTurn || doingSetup)
         {
