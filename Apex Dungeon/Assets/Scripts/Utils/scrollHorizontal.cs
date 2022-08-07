@@ -6,21 +6,22 @@ public class scrollHorizontal : MonoBehaviour
 {
     public float speed = 1;
     public Vector3 resetPosition;
-    public float endPosition = 1280;
+    public float endPosition;
     
     void Start()
     {
-        resetPosition = transform.position;
+        //resetPosition = transform.position;
     }
 
     // Update is called once per frame
     void Update()
     {
         //GameObject cloud = GetComponent().rect.width;
-        transform.position = new Vector3(transform.position.x + speed, transform.position.y, 0);
-        if (transform.position.x > endPosition*1.5f)
+        transform.localPosition = new Vector3(transform.localPosition.x + speed * Time.deltaTime, transform.localPosition.y, 0);
+        Debug.Log(transform.localPosition.x);
+        if (transform.localPosition.x > endPosition)
         {
-            transform.position = resetPosition;
+            transform.localPosition = resetPosition;
         }
     }
 }

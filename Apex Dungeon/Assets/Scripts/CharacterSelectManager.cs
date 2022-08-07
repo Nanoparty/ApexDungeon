@@ -70,6 +70,7 @@ public class CharacterSelectManager : MonoBehaviour
     }
 
     void ConfirmListener(){
+        SoundManager.sm.PlayMenuSound();
         if(selectedChar == null) return;
         Data.activeCharacter = selectedChar.GetComponent<CharacterData>().name;
         Data.LoadActiveData();
@@ -78,6 +79,7 @@ public class CharacterSelectManager : MonoBehaviour
     }
 
     void BackListener(){
+        SoundManager.sm.PlayMenuSound();
         SceneManager.LoadScene("Title",LoadSceneMode.Single);
     }
 }
