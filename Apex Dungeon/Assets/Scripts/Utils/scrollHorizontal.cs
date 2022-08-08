@@ -18,7 +18,7 @@ public class scrollHorizontal : MonoBehaviour
     {
         //GameObject cloud = GetComponent().rect.width;
         transform.localPosition = new Vector3(transform.localPosition.x + speed * Time.deltaTime, transform.localPosition.y, 0);
-        Debug.Log(transform.localPosition.x);
+        //Debug.Log(transform.localPosition.x);
         if (transform.localPosition.x > endPosition)
         {
             transform.localPosition = resetPosition;

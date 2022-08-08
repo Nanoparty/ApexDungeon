@@ -46,7 +46,7 @@ public class CharacterSelectManager : MonoBehaviour
             GameObject characterUnit = Instantiate(CharacterLine, position, Quaternion.identity, ContentArea.transform) as GameObject;
             //characterUnit.transform.parent = ContentArea.transform;
             characterUnit.transform.GetChild(1).transform.GetChild(0).GetComponent<TMP_Text>().text = cd.name;
-            characterUnit.transform.GetChild(1).transform.GetChild(1).GetComponent<TMP_Text>().text = "Level: " + cd.level.ToString();
+            characterUnit.transform.GetChild(1).transform.GetChild(1).GetComponent<TMP_Text>().text = "Level: " + cd.expLevel.ToString();
             characterUnit.transform.GetChild(1).transform.GetChild(2).GetComponent<TMP_Text>().text = "Floor: " + cd.floor.ToString();
             characterUnit.AddComponent<CharacterData>();
             characterUnit.GetComponent<CharacterData>().name = cd.name;

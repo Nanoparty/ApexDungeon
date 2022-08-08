@@ -5,15 +5,34 @@ using UnityEngine;
 [System.Serializable]
 public class SaveData
 {
-    float musicVolume;
-    float soundVolume;
+    public float musicVolume;
+    public float soundVolume;
 
-    bool musicOn;
-    bool soundOn;
+    public bool musicOn;
+    public bool soundOn;
 
-    List<string> usedNames;
+    public List<string> usedNames;
 
-    List<SavePlayer> players;
+    public List<SavePlayer> players;
 
-    List<string> scores;
+    public List<(string, int)> scores;
+
+    public SaveData()
+    {
+        musicOn = Data.music;
+        soundOn = Data.sound;
+
+        musicVolume = Data.musicVolume;
+        soundVolume = Data.soundVolume;
+
+        usedNames = Data.names;
+        scores = Data.scores;
+
+        players = new List<SavePlayer>();
+
+        foreach (CharacterData cd in Data.charData ?? new List<CharacterData>())
+        {
+            players.Add(new SavePlayer(cd));
+        }
+    }
 }

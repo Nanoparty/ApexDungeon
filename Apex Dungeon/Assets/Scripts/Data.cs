@@ -11,7 +11,6 @@ public static class Data
     public static float musicVolume = 1f;
     public static float soundVolume = 1f;
 
-    public static CharacterMenu charMenu;
     public static bool inProgress;
 
     //scores Data
@@ -21,6 +20,10 @@ public static class Data
 
     public static string activeCharacter;
     public static bool loadData;
+
+    //inventory data
+    public static List<Equipment> equipment;
+    public static List<Consumable> consumables;
 
     //Character Data
     public static string playerName;
@@ -65,6 +68,10 @@ public static class Data
         block = current.block;
         gear = current.gear;
         floor = current.floor;
+
+        //TODO set active character inventory
+        equipment = current?.equipment ?? new List<Equipment>();
+        consumables = current?.consumables ?? new List<Consumable>(); 
     }
 
     public static void SaveCharacter(){
@@ -96,6 +103,8 @@ public static class Data
         current.block = block;
         current.gear = gear;
         current.floor = floor;
+        current.equipment = equipment;
+        current.consumables = consumables;
     }
 
     public static void RemoveActive(){
@@ -111,5 +120,66 @@ public static class Data
         CharacterData current = charData.Where(cd => cd.name == activeCharacter).First();
         charData.Remove(current);
         activeCharacter = "";
+    }
+
+    public static void SaveToFile()
+    {
+        SaveSystem.SaveData();
+    }
+
+    public static void LoadFromFile(ImageLookup il)
+    {
+        SaveData data = SaveSystem.LoadData();
+        if (data == null) return;
+        music = data.musicOn;
+        sound = data.soundOn;
+        musicVolume = data.musicVolume;
+        soundVolume = data.soundVolume;
+        scores = data.scores;
+        names = data.usedNames;
+
+        List<CharacterData> loadCharData = new List<CharacterData>();
+
+        if (data.players == null) return;
+
+        foreach(SavePlayer p in data.players)
+        {
+            //Equipment helmet = new Equipment(p.helmet);
+            //Equipment chest = new Equipment(p.chestplate);
+            //Equipment legs = new Equipment(p.legs);
+            //Equipment feet = new Equipment(p.feet);
+            //Equipment weapon = new Equipment(p.weapon);
+            //Equipment shield = new Equipment(p.shield);
+            //Equipment necklace = new Equipment(p.necklace);
+            //Equipment ring = new Equipment(p.ring);
+
+            //PlayerGear gear = new PlayerGear(chest, helmet, legs, feet, weapon, shield, necklace, ring);
+            PlayerGear gear = new PlayerGear(p, il);
+
+            List<Equipment> equips = new List<Equipment>();
+            foreach(SaveGear g in p.equipment)
+            {
+                Equipment e = new Equipment(g, il);
+                equips.Add(e);
+            }
+
+            List<Consumable> consumes = new List<Consumable>();
+            foreach(SaveConsumable c in p.consumables)
+            {
+                Consumable item = new Consumable(c);
+                if(item.image == null)
+                {
+                    Debug.Log(item.id);
+                    item.image = il.getImage(item.id);
+                }
+                consumes.Add(item);
+            }
+
+            CharacterData cd = new CharacterData(p.name, p.floor, p.level, p.gold, p.strength, p.defense,
+                p.evasion, p.critical, p.hp, p.maxHp, p.exp, p.maxExp, gear, equips, consumes);
+
+            loadCharData.Add(cd);
+        }
+        charData = loadCharData;
     }
 }

@@ -23,6 +23,19 @@ public class Equipment : Item
         setStats(lvl, type, tier, image, hpBoost, attackBoost, critBoost, evadeBoost);
     }
 
+    public Equipment(SaveGear gear, ImageLookup il)
+    {
+        attack = gear.attack;
+        defense = gear.hpBoost;
+        type = gear.type;
+        tier = gear.tier;
+        level = gear.itemLevel;
+        itemName = gear.itemName;
+        description = gear.description;
+        flavorText = gear.rank;
+        image = il.getEquipmentImage(tier, type);
+    }
+
     public Equipment(Equipment e){
         level = e.level;
         type = e.type;

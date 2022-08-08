@@ -250,8 +250,8 @@ public class CharacterMenu
         this.frames = frames;
         this.tabs = tabs;
 
-        items = new List<Consumable>();
-        equipment = new List<Equipment>();
+        items = Data.consumables ?? new List<Consumable>();
+        equipment = Data.equipment ?? new List<Equipment>();
         inventorySlots = new List<GameObject>();
         equipmentSlots = new List<GameObject>();
         quests = new List<string>();

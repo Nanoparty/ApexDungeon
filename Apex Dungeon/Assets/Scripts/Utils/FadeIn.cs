@@ -75,6 +75,7 @@ public class FadeIn : MonoBehaviour
     void retryListener()
     {
         if (!done) return;
+        Data.SaveToFile();
         Destroy(GameManager.gmInstance);
         SceneManager.LoadScene("CharacterCreator", LoadSceneMode.Single);
     }
@@ -82,6 +83,7 @@ public class FadeIn : MonoBehaviour
     void menuListener()
     {
         if (!done) return;
+        Data.SaveToFile();
         Destroy(GameManager.gmInstance);
         SceneManager.LoadScene("Title", LoadSceneMode.Single);
     }

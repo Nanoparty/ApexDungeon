@@ -15,8 +15,7 @@ public class ScoresManager : MonoBehaviour
     private List<(string, int)> scores;
     void Start()
     {
-        Data.scores = GameManager.gmInstance?.scores ?? new List<(string, int)>();
-        scores = GameManager.gmInstance?.scores ?? new List<(string, int)>();
+        scores = Data.scores;
 
         //TestData();
 

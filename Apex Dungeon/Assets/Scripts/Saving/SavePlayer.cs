@@ -5,30 +5,70 @@ using UnityEngine;
 [System.Serializable]
 public class SavePlayer
 {
-    string name;
-    int level;
-    int floor;
+    public string name;
+    public int level;
+    public int floor;
 
-    int strength;
-    int defense;
-    int evasion;
-    int critical;
+    public int strength;
+    public int defense;
+    public int evasion;
+    public int critical;
 
-    int hp;
-    int maxHp;
-    int exp;
-    int maxExp;
+    public int hp;
+    public int maxHp;
+    public int exp;
+    public int maxExp;
 
-    int gold;
+    public int gold;
 
-    SaveGear helmet;
-    SaveGear chestplate;
-    SaveGear legs;
-    SaveGear feet;
-    SaveGear weapon;
-    SaveGear shield;
-    SaveGear necklace;
-    SaveGear ring;
+    public SaveGear helmet;
+    public SaveGear chestplate;
+    public SaveGear legs;
+    public SaveGear feet;
+    public SaveGear weapon;
+    public SaveGear shield;
+    public SaveGear necklace;
+    public SaveGear ring;
 
-    SaveInventory inventory;
+    public List<SaveGear> equipment;
+    public List<SaveConsumable> consumables;
+
+    public SavePlayer(CharacterData data)
+    {
+        name = data.name;
+        level = data.expLevel;
+        floor = data.floor;
+
+        strength = data.strength;
+        defense = data.defense;
+        evasion = data.evade;
+        critical = data.crit;
+
+        hp = data.hp;
+        maxHp = data.maxHp;
+        exp = data.exp;
+        maxExp = data.maxExp;
+
+        gold = data.gold;
+
+        helmet = new SaveGear(data.gear.Helmet);
+        chestplate = new SaveGear(data.gear.Chestplate);
+        legs = new SaveGear(data.gear.Legs);
+        feet = new SaveGear(data.gear.Feet);
+        weapon = new SaveGear(data.gear.Weapon);
+        shield = new SaveGear(data.gear.Secondary);
+        necklace = new SaveGear(data.gear.Necklace);
+        ring = new SaveGear(data.gear.Ring);
+
+        equipment = new List<SaveGear>();
+        foreach(Equipment e in data.equipment)
+        {
+            equipment.Add(new SaveGear(e));
+        }
+        consumables = new List<SaveConsumable>();
+        foreach(Consumable c in data.consumables)
+        {
+            consumables.Add(new SaveConsumable(c));
+        }
+    }
 }

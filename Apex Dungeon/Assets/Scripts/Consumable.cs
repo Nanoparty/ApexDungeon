@@ -11,6 +11,16 @@ public class Consumable : Item
         this.level = level;
         this.id = id;
     }
+
+    public Consumable(SaveConsumable sc)
+    {
+        itemName = sc.itemName;
+        flavorText = sc.rank;
+        description = sc.description;
+        level = sc.itemLevel;
+        id = sc.id;
+    }
+
     public void SetStats(string n, string f, string d, Sprite s)
     {
         itemName = n;

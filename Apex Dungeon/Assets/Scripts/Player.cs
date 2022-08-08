@@ -143,6 +143,7 @@ public class Player : MovingEntity
         endScreenHolder.transform.GetChild(4).gameObject.SetActive(true);
         GameManager.gmInstance.scores = Data.scores ?? new List<(string, int)>();
         GameManager.gmInstance.scores.Add((GameManager.gmInstance.playerName, GameManager.gmInstance.score));
+        Data.scores.Add((GameManager.gmInstance.playerName, GameManager.gmInstance.score));
         GameManager.gmInstance.state = "score";
         Data.inProgress = false;
         Data.RemoveActive();
@@ -322,12 +323,15 @@ public class Player : MovingEntity
         Data.gold = gold;
         Data.floor = GameManager.gmInstance.level;
 
-        Data.charMenu = charMenu;
+        //Data.charMenu = charMenu;
+        Data.equipment = charMenu.equipment;
+        Data.consumables = charMenu.items;
         Data.gear = gear;
         Data.SaveCharacter();
     }
 
     public void loadCharacterData(){
+        
         playerName = Data.playerName;
         hp = Data.hp;
         maxHp = Data.maxHp;
@@ -344,8 +348,17 @@ public class Player : MovingEntity
         blockStat = Data.block;
         gold = Data.gold;
 
-        charMenu = Data.charMenu;
         gear = Data.gear;
+    }
+
+    void OnApplicationFocus(bool hasFocus)
+    {
+        if (!hasFocus)
+        {
+            Debug.Log("Lose Focus");
+            saveCharacterData();
+            Data.SaveToFile();
+        }
     }
 
     public void nextFloor(){
@@ -353,6 +366,7 @@ public class Player : MovingEntity
         GameManager.gmInstance.Dungeon.setFullBright(false);
         GameManager.gmInstance.level++;
         saveCharacterData();
+        Data.SaveToFile();
         GameManager.gmInstance.Reset();
     }
 
@@ -582,6 +596,7 @@ public class Player : MovingEntity
     void MenuListener(){
         SoundManager.sm.PlayMenuSound();
         saveCharacterData();
+        Data.SaveToFile();
         Destroy(GameManager.gmInstance);
         SceneManager.LoadScene("Title", LoadSceneMode.Single);
     }

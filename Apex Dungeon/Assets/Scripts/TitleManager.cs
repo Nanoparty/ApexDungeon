@@ -19,9 +19,16 @@ public class TitleManager : MonoBehaviour
     private bool done;
     private List<CharacterData> charData;
     //public AudioSource audioSource;
-    
+
     //public AudioClip buttonClick;
-    
+
+    public ImageLookup imageLookup;
+
+    private void Awake()
+    {
+        Data.LoadFromFile(imageLookup);
+    }
+
     void Start()
     {
         SoundManager.sm.PlayTitleMusic();

@@ -32,6 +32,7 @@ public class OptionsManager : MonoBehaviour
     void menuListener()
     {
         SoundManager.sm.PlayMenuSound();
+        Data.SaveToFile();
         SceneManager.LoadScene("Title", LoadSceneMode.Single);
     }
 

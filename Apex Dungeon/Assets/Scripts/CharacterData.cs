@@ -22,6 +22,8 @@ public class CharacterData : MonoBehaviour
     public int evade;
     public int block;
     public PlayerGear gear;
+    public List<Equipment> equipment;
+    public List<Consumable> consumables;
 
     public CharacterData(){
         name = "";
@@ -48,5 +50,28 @@ public class CharacterData : MonoBehaviour
         evade = 10;
         block = 10;
         gear = new PlayerGear();
+        equipment = new List<Equipment>();
+        consumables = new List<Consumable>();
+    }
+
+    public CharacterData(string name, int floor, int expLevel, int gold, int strength,
+        int defense, int evade, int crit, int hp, int maxHp, int exp, int maxExp, PlayerGear gear,
+        List<Equipment> equipment, List<Consumable> consumables)
+    {
+        this.name = name;
+        this.floor = floor;
+        this.expLevel = expLevel;
+        this.gold = gold;
+        this.strength = strength;
+        this.defense = defense;
+        this.evade = evade;
+        this.crit = crit;
+        this.hp = hp;
+        this.maxHp = maxHp;
+        this.exp = exp;
+        this.maxExp = maxExp;
+        this.gear = gear;
+        this.equipment = equipment;
+        this.consumables = consumables;
     }
 }
