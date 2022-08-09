@@ -80,8 +80,8 @@ public class ImageLookup : ScriptableObject
     {
         var images = new Dictionary<string, Sprite>();
         images["HealthPotion"] = redPotion;
-        images["Skip Orb"] = images["Light Orb"] = images["Teleport Orb"] = blueOrb;
-        images["Death Orb"] = blackOrb;
+        images["SkipOrb"] = images["LightOrb"] = images["TeleportOrb"] = blueOrb;
+        images["DeathOrb"] = blackOrb;
         images["MapFragment"] = map;
         
         return images[id];

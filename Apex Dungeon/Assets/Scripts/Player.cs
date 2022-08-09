@@ -143,7 +143,7 @@ public class Player : MovingEntity
         endScreenHolder.transform.GetChild(4).gameObject.SetActive(true);
         GameManager.gmInstance.scores = Data.scores ?? new List<(string, int)>();
         GameManager.gmInstance.scores.Add((GameManager.gmInstance.playerName, GameManager.gmInstance.score));
-        Data.scores.Add((GameManager.gmInstance.playerName, GameManager.gmInstance.score));
+        //Data.scores.Add((GameManager.gmInstance.playerName, GameManager.gmInstance.score));
         GameManager.gmInstance.state = "score";
         Data.inProgress = false;
         Data.RemoveActive();
