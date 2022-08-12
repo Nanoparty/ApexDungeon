@@ -821,7 +821,7 @@ public class Player : MovingEntity
         maxHp += i;
         hp += i;
     }
-    public void addExp(int i){    //////TODO -- fix so that you can get multiple points if level multiple times at once
+    public void addExp(int i){
         exp += i;
         GameManager.gmInstance.score += i;
         bool levelUp = false;
