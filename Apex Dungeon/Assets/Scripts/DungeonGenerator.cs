@@ -44,8 +44,6 @@ public class DungeonGenerator : ScriptableObject
     public GameObject[] wallV;
     public GameObject[] Furniture;
 
-
-    // Start is called before the first frame update
     public DungeonObject Initalize()
     {
         maxWidth = 15;
@@ -78,7 +76,6 @@ public class DungeonGenerator : ScriptableObject
         GameObject op = GameObject.Instantiate(Opening, new Vector3(0, 0, 0), Quaternion.identity);
         op.transform.GetChild(0).transform.GetChild(0).gameObject.GetComponent<Text>().text = GameManager.gmInstance.DungeonName;
         op.transform.GetChild(1).transform.GetChild(0).gameObject.GetComponent<Text>().text = "Floor " + GameManager.gmInstance.level;
-        //Debug.Log("Canvas:"+GameObject.FindGameObjectWithTag("Canvas").transform);
         op.transform.SetParent(GameObject.FindGameObjectWithTag("Canvas").transform, false);
 
         InitializeTileMap();
@@ -476,10 +473,6 @@ public class DungeonGenerator : ScriptableObject
             tries++;
             row = Random.Range(0, height - w - 1);
             col = Random.Range(0, width - h - 1);
-            
-            
-                
-            
         }
         return new Vector2(row, col);
     }
@@ -522,36 +515,6 @@ public class DungeonGenerator : ScriptableObject
             
         }
         return collide;
-    }
-
-    void GenerateMap()
-    {
-        
-
-        for(int i =0; i< height; i++)
-        {
-            for(int j = 0;j< width; j++)
-            {
-                
-                tileMap[i, j] = new Tile(i , j,1);
-            }
-        }
-
-        for(int i = 0; i < width; i++)
-        {
-            tileMap[0,i] = new Tile(0,i,2);
-            tileMap[i, 0] = new Tile(i, 0, 2);
-
-            tileMap[height-1, i] = new Tile(height-1, i, 2);
-            tileMap[i, height-1] = new Tile(i, height-1, 2);
-
-            //tileMap[4, i+2] = new Tile(4, i+2, 2);
-        }
-
-        for(int i = 0;i < 5; i++)
-        {
-            tileMap[4, i] = new Tile(4, i, 2);
-        }
     }
 
     void SpawnMap()
@@ -679,10 +642,6 @@ public class DungeonGenerator : ScriptableObject
             InstantiateSingle(Stairs, row, col, dungeon);
             tileMap[row, col].stairs = true;
         }
-        else
-        {
-        }
-        
     }
 
     void SpawnItems()
@@ -800,27 +759,11 @@ public class DungeonGenerator : ScriptableObject
 
         if (r > 0)
         {
-            // if(tileMap[r-1, c].type == 2)
-            // {
-            //     bottom = true;
-            // }
             if(tileMap[r-1, c].type == 1 || tileMap[r-1,c].type == 3){
                 bottom = false;
             }
         }
             
-        /*
-        if (c < width-1)
-            top = tileMap[r, c + 1].type == 2;
-        if(c > 0)
-            bottom = tileMap[r, c - 1].type == 2;
-        if(r > 0)
-            left = tileMap[r - 1, c].type == 2;
-        if(r < height-1)
-            right = tileMap[r + 1, c].type == 2;
-            */
-
-        
         if (bottom)
         {
             return getRandom(wallV,r,c);

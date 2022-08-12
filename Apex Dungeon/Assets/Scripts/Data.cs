@@ -69,7 +69,6 @@ public static class Data
         gear = current.gear;
         floor = current.floor;
 
-        //TODO set active character inventory
         equipment = current?.equipment ?? new List<Equipment>();
         consumables = current?.consumables ?? new List<Consumable>(); 
     }
@@ -83,10 +82,8 @@ public static class Data
             playerName = activeCharacter;
             Debug.Log("NULL CHARACTER DATA");
         }
-        Debug.Log("Loading Character -> "+activeCharacter);
 
         CharacterData current = charData.Where(cd => cd.name == activeCharacter).First();
-        Debug.Log("Setting charData name to "+ playerName);
         current.name = playerName;
         current.gold = gold;
         current.hp = hp;
@@ -144,16 +141,6 @@ public static class Data
 
         foreach(SavePlayer p in data.players)
         {
-            //Equipment helmet = new Equipment(p.helmet);
-            //Equipment chest = new Equipment(p.chestplate);
-            //Equipment legs = new Equipment(p.legs);
-            //Equipment feet = new Equipment(p.feet);
-            //Equipment weapon = new Equipment(p.weapon);
-            //Equipment shield = new Equipment(p.shield);
-            //Equipment necklace = new Equipment(p.necklace);
-            //Equipment ring = new Equipment(p.ring);
-
-            //PlayerGear gear = new PlayerGear(chest, helmet, legs, feet, weapon, shield, necklace, ring);
             PlayerGear gear = new PlayerGear(p, il);
 
             List<Equipment> equips = new List<Equipment>();
