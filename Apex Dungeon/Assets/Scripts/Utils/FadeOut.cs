@@ -32,22 +32,20 @@ public class FadeOut : MonoBehaviour
         begin = true;
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (begin)
         {
-            //Debug.Log("update");
             Color curColor = this.image1.color;
             Color textColor = this.text1.color;
             Color backColor = this.Background.color;
             float alphaDiff = Mathf.Abs(curColor.a - this.targetAlpha);
             float alphaDiffText = Mathf.Abs(textColor.a - this.targetAlpha);
-            if (curColor.a > 0)
+            if (curColor.a > 0.1)
             {
-                curColor.a = curColor.a - FadeRate;        //Mathf.Lerp(curColor.a, targetAlpha, this.FadeRate * Time.deltaTime);
-                textColor.a = textColor.a - FadeRate;
-                backColor.a = backColor.a - FadeRate;
+                curColor.a = Mathf.Lerp(curColor.a, targetAlpha, this.FadeRate * Time.deltaTime);
+                textColor.a = Mathf.Lerp(curColor.a, targetAlpha, this.FadeRate * Time.deltaTime);
+                backColor.a = Mathf.Lerp(curColor.a, targetAlpha, this.FadeRate * Time.deltaTime);
                 this.image1.color = curColor;
                 this.image2.color = curColor;
                 this.text1.color = textColor;

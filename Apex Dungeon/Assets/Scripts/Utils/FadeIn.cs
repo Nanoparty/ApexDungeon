@@ -15,7 +15,7 @@ public class FadeIn : MonoBehaviour
     private GameObject menu;
     private float targetAlpha;
     private bool done = false;
-    // Use this for initialization
+
     void Start()
     {
         this.image = this.GetComponent<Image>();
@@ -24,21 +24,13 @@ public class FadeIn : MonoBehaviour
         this.t3 = this.gameObject.transform.GetChild(2).gameObject;
         retry = this.gameObject.transform.GetChild(3).gameObject;
         menu = this.gameObject.transform.GetChild(4).gameObject;
-        //retry.SetActive(false);
-        //menu.SetActive(false);
 
-        if (this.image == null)
-        {
-            Debug.LogError("Error: No image on " + this.name);
-        }
         this.targetAlpha = 1f;
-        Debug.Log("color:"+image.color.a);
 
         retry.GetComponent<Button>().onClick.AddListener(retryListener);
         menu.GetComponent<Button>().onClick.AddListener(menuListener);
     }
 
-    // Update is called once per frame
     void Update()
     {
         Color curColor = this.image.color;
@@ -51,8 +43,6 @@ public class FadeIn : MonoBehaviour
 
         if (alphaDiff > 0.01f)
         {
-            Debug.Log("color:"+image.color.a);
-            //Debug.Log("Lerp:"+Mathf.Lerp(curColor.a, targetAlpha, this.FadeRate * Time.deltaTime));
             curColor.a = Mathf.Lerp(curColor.a, targetAlpha, this.FadeRate * Time.deltaTime);
             this.image.color = curColor;
 
@@ -66,7 +56,6 @@ public class FadeIn : MonoBehaviour
         }
         else if(!done)
         {
-            //Debug.Log("DONE LARPING");
             GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().saveScores();
             done = true;
         }

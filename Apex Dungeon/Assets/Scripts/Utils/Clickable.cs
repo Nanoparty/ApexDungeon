@@ -8,7 +8,6 @@ public class Clickable : MonoBehaviour, IPointerDownHandler
     bool clicked = false;
     public void OnPointerDown(PointerEventData eventData)
     {
-        Debug.Log("Clicked " + this.name);
         clicked = true;
     }
 
