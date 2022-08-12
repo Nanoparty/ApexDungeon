@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.DefaultCompany.ApexDungeon"
+    package="com.Nanoriot.ApexDungeon"
     android:installLocation="preferExternal"
     android:targetSandboxVersion="2"
     android:versionCode="1"
@@ -8,7 +8,7 @@
 
     <uses-sdk
         android:minSdkVersion="22"
-        android:targetSdkVersion="30" />
+        android:targetSdkVersion="31" />
 
     <supports-screens
         android:anyDensity="true"
@@ -21,6 +21,10 @@
     <uses-feature
         android:name="android.hardware.vulkan.version"
         android:required="false" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <uses-feature
         android:name="android.hardware.touchscreen"
         android:required="false" />
@@ -38,6 +42,7 @@
         <activity
             android:name="com.unity3d.player.UnityPlayerActivity"
             android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|orientation|screenLayout|uiMode|screenSize|smallestScreenSize|fontScale|layoutDirection|density"
+            android:exported="true"
             android:hardwareAccelerated="false"
             android:launchMode="singleTask"
             android:resizeableActivity="false"

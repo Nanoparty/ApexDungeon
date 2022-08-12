@@ -5,7 +5,7 @@ dependencies {
     }
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 31
     buildToolsVersion '30.0.2'
 
     compileOptions {
@@ -15,8 +15,8 @@ android {
 
     defaultConfig {
         minSdkVersion 22
-        targetSdkVersion 30
-        applicationId 'com.DefaultCompany.ApexDungeon'
+        targetSdkVersion 31
+        applicationId 'com.Nanoriot.ApexDungeon'
         ndk {
             abiFilters 'armeabi-v7a'
         }
@@ -25,8 +25,17 @@ android {
     }
 
     aaptOptions {
-        noCompress = ['.unity3d', '.ress', '.resource', '.obb', '.unityexp'] + unityStreamingAssets.tokenize(', ')
+        noCompress = ['.unity3d', '.ress', '.resource', '.obb', '.bundle', '.unityexp'] + unityStreamingAssets.tokenize(', ')
         ignoreAssetsPattern = "!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~"
+    }
+
+    signingConfigs {
+        release {
+            storeFile file('/Users/nate/Documents/Vault/Unity/nanoriot.keystore')
+            storePassword 'Black@water15'
+            keyAlias 'nanoriot'
+            keyPassword 'Black@water15'
+        }
     }
 
     lintOptions {
@@ -37,13 +46,13 @@ android {
         debug {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt')
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
             jniDebuggable true
         }
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt')
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
         }
     }
 

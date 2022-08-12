@@ -141,13 +141,11 @@ public class Player : MovingEntity
     {
         endScreenHolder.transform.GetChild(3).gameObject.SetActive(true);
         endScreenHolder.transform.GetChild(4).gameObject.SetActive(true);
-        GameManager.gmInstance.scores = Data.scores ?? new List<(string, int)>();
-        GameManager.gmInstance.scores.Add((GameManager.gmInstance.playerName, GameManager.gmInstance.score));
-        //Data.scores.Add((GameManager.gmInstance.playerName, GameManager.gmInstance.score));
-        GameManager.gmInstance.state = "score";
+        List<(string, int)> scores = Data.scores ?? new List<(string, int)>();
+        scores.Add((GameManager.gmInstance.playerName, GameManager.gmInstance.score));
+        Data.scores = scores;
         Data.inProgress = false;
         Data.RemoveActive();
-        //SceneManager.LoadScene("Scores", LoadSceneMode.Single);
     }
 
     private bool checkDead()

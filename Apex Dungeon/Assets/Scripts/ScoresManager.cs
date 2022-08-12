@@ -15,7 +15,7 @@ public class ScoresManager : MonoBehaviour
     private List<(string, int)> scores;
     void Start()
     {
-        scores = Data.scores;
+        scores = Data.scores ?? new List<(string, int)>();
 
         //TestData();
 
