@@ -11,7 +11,6 @@ public class testExplosion : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             explosion.Play();
-            //CameraShaker.Instance.ShakeOnce(4f, 4f, .1f, 1f);
         }
     }
 }

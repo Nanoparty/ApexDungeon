@@ -15,7 +15,7 @@ public class CharacterSelectManager : MonoBehaviour
     public GameObject Back;
     public GameObject ContentArea;
     private GameObject selectedChar;
-    // Start is called before the first frame update
+
     void Start()
     {
         characters = new List<GameObject>();
@@ -44,7 +44,7 @@ public class CharacterSelectManager : MonoBehaviour
         foreach(CharacterData cd in charData){
             Vector3 position = new Vector3(0f, 0f, 0f);
             GameObject characterUnit = Instantiate(CharacterLine, position, Quaternion.identity, ContentArea.transform) as GameObject;
-            //characterUnit.transform.parent = ContentArea.transform;
+
             characterUnit.transform.GetChild(1).transform.GetChild(0).GetComponent<TMP_Text>().text = cd.name;
             characterUnit.transform.GetChild(1).transform.GetChild(1).GetComponent<TMP_Text>().text = "Level: " + cd.expLevel.ToString();
             characterUnit.transform.GetChild(1).transform.GetChild(2).GetComponent<TMP_Text>().text = "Floor: " + cd.floor.ToString();
@@ -54,7 +54,6 @@ public class CharacterSelectManager : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
     void Update()
     {
         foreach(GameObject c in characters){

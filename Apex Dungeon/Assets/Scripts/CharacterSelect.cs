@@ -10,11 +10,9 @@ public class CharacterSelect : MonoBehaviour, IPointerDownHandler
     bool clicked = false;
     public void OnPointerDown(PointerEventData eventData)
     {
-        Debug.Log("Clicked " + this.name);
         clicked = true;
         this.transform.GetChild(0).gameObject.GetComponent<Image>().color = Color.green;
         SoundManager.sm.PlayMenuSound();
-        Debug.Log("CLICKED CHARACTER");
     }
 
     public bool getClicked()

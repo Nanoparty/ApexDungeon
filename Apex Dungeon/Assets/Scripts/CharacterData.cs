@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CharacterData : MonoBehaviour
 {
-    public string name;
+    public new string name;
     public int floor;
     public int level;
     public int gold;

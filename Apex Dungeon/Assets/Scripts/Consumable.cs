@@ -39,7 +39,6 @@ public class Consumable : Item
         if(id == "HealthPotion"){
             int baseHP = 50;
             float appliedHP = baseHP * Mathf.Pow(1.5f,level-1);
-            Debug.Log($"Adding {appliedHP} hp");
             p.addHP((int)appliedHP);
             SoundManager.sm.PlayPotionSound();
         }
@@ -47,12 +46,10 @@ public class Consumable : Item
             p.addMP(20);
         }
         if(id == "SkipOrb"){
-            //p.closeInventory();
             p.nextFloor();
             SoundManager.sm.PlayMagicSound();
         }
         if(id == "TeleportOrb"){
-            //p.closeInventory();
             Vector2 pos = GameManager.gmInstance.Dungeon.getRandomUnoccupiedTile();
             p.setPosition((int)pos.x, (int)pos.y);
             SoundManager.sm.PlayMagicSound();
@@ -63,7 +60,6 @@ public class Consumable : Item
                 Enemy e = GameManager.gmInstance.getEnemyAtLoc((int)v.x,(int)v.y);
                 if(e != null){
                     e.die();
-                    Debug.Log("KILL ENEMY");
                 }
             }
             SoundManager.sm.PlayMagicSound();

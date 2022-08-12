@@ -51,7 +51,6 @@ public class CharacterMenu
     public List<GameObject> questObjects;
 
     bool closed;
-    string topicTitleString = "Inventory";
     int tab = 0;
 
     private int[,] map;
@@ -71,49 +70,25 @@ public class CharacterMenu
     private bool flipping = false;
     private bool flipping2 = false;
 
-    // Use this for initialization
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
     public void Update()
     {
 
         if (flipping)
         {
-            Debug.Log("Flipping");
             if (anim.GetCurrentAnimatorStateInfo(0).IsName("BookLeft") || anim.GetCurrentAnimatorStateInfo(0).IsName("BookRight"))
             {
                 flipping2 = true;
-                Debug.Log("In Progress");
             }
             if(flipping2 && anim.GetCurrentAnimatorStateInfo(0).IsName("BookIdle")) {
-                Debug.Log("Done flipping");
                 flipping = false;
                 flipping2 = false;
                 refreshTopicPanel();
             }
         }
-
-        if (Input.GetKeyDown("left"))
-        {
-            anim.Play("BookLeft");
-            Debug.Log("Left");
-        }
-        if (Input.GetKeyDown("right"))
-        {
-            anim.Play("BookRight");
-            Debug.Log("Right");
-        }
         
         if(popupOpen){
-            //Debug.Log("POPUP OPEN");
-            //close when click outside popup
             if (Input.GetButtonDown("Fire1"))
             {
-                Debug.Log("use:" + useButton);
                 bool isClicked = false;
                 if(tab == 0 || gearSelection > -1){
                     isClicked = popupArea.GetComponent<Clickable>().getClicked() 
@@ -137,7 +112,6 @@ public class CharacterMenu
                     useButton.GetComponent<Clickable>().setClicked(false);
                     trashButton.GetComponent<Clickable>().setClicked(false);
                 }else{
-                    //Debug.Log("DESTROY");
                     closePopup();
                     unclickAll();
                 }           
@@ -145,7 +119,6 @@ public class CharacterMenu
             }
             return;
         }
-
 
         if (Input.GetMouseButtonDown(0))
         {
@@ -185,7 +158,6 @@ public class CharacterMenu
                         selected = i;
                         equipSlots[i].GetComponent<Clickable>().setClicked(false);
                         popupOpen = true;
-                        //Debug.Log("Clicked on equipment:"+ equipment[selected]);
                         createPopup();
                         SoundManager.sm.PlayMenuSound();
                     }
@@ -272,8 +244,6 @@ public class CharacterMenu
 
         this.gear = player.getGear();
 
-        
-
         slotsLoaded = false;
         inventorySlots = new List<GameObject>();
         equipmentSlots = new List<GameObject>();
@@ -343,7 +313,6 @@ public class CharacterMenu
         Vector3 pos1 = redbar.transform.position;
         float redStartingPos = hpBar.transform.GetChild(1).gameObject.transform.position.x;
         float redPos = redStartingPos - (redWidth - (((float)hp / (float)maxHp) * redWidth));
-        Debug.Log($"{redStartingPos} - {redWidth} - {(float)hp / (float)maxHp} * {redWidth} = {redPos}");
         redbar.transform.GetComponent<RectTransform>().position = new Vector3(redPos, pos1.y, pos1.z);
 
         Vector2 greenSizeDelta = greenbar.transform.GetComponent<RectTransform>().sizeDelta;
@@ -481,32 +450,6 @@ public class CharacterMenu
             }
         }
 
-        //int x = 0;
-        //int y = 0;
-        //float cellSize = 120;
-        //int xOff = 100;
-        //int yOff = -100;
-        ////Debug.Log("NumItems:"+ numItems);
-        //for(int i = 0; i < numItems; i++)
-        //{
-        //    //Debug.Log("Adding new Item");
-        //    Vector3 pos = new Vector3(xOff + x * cellSize, yOff + -1 * y * cellSize, 0);
-
-        //    Item item = items[i];
-
-        //    GameObject itemslot = GameObject.Instantiate(slot, pos, Quaternion.identity);
-        //    GameObject icon = itemslot.transform.GetChild(0).gameObject;
-        //    icon.GetComponent<Image>().sprite = item.image;
-
-        //    itemslot.transform.SetParent(topicArea.transform, false);
-        //    inventorySlots.Add(itemslot);
-        //    x++;
-        //    if(x == 5){
-        //        x = 0;
-        //        y++;
-        //    }
-        //}
-        //Debug.Log("Num Item slots:" + inventorySlots.Count);
         slotsLoaded = true;
     }
 
@@ -515,7 +458,6 @@ public class CharacterMenu
         GameObject slotsPanel = equipmentPanel.transform.GetChild(0).gameObject;
 
         int numEquip = equipment.Count;
-        Debug.Log("Count:" + numEquip);
 
         equipSlots = new GameObject[maxSlots];
 
@@ -535,39 +477,6 @@ public class CharacterMenu
                 equipSlots[i].transform.GetChild(0).gameObject.SetActive(false);
             }
         }
-        //GameObject topicArea = topicPanel.transform.GetChild(0).gameObject;
-
-        //int numItems = equipment.Count;
-
-        //int x = 0;
-        //int y = 0;
-        //float cellSize = 120;
-        //int xOff = 100;
-        //int yOff = -100;
-        //for(int i = 0; i < numItems; i++)
-        //{
-        //    Vector3 pos = new Vector3(xOff + x * cellSize, yOff + -1 * y * cellSize, 0);
-
-        //    Equipment item = equipment[i];
-
-        //    GameObject itemslot = GameObject.Instantiate(slot, pos, Quaternion.identity);
-        //    GameObject icon = itemslot.transform.GetChild(0).gameObject;
-        //    icon.GetComponent<Image>().sprite = item.image;
-        //    //Debug.Log("Creating Inventory Item " + item.tier);
-
-        //    if(item.tier == 1) itemslot.GetComponent<Image>().sprite = frames[0];
-        //    if(item.tier == 2) itemslot.GetComponent<Image>().sprite = frames[1];
-        //    if(item.tier == 3) itemslot.GetComponent<Image>().sprite = frames[2];
-        //    if(item.tier == 4) itemslot.GetComponent<Image>().sprite = frames[3];
-
-        //    itemslot.transform.SetParent(topicArea.transform, false);
-        //    equipmentSlots.Add(itemslot);
-        //    x++;
-        //    if(x == 5){
-        //        x = 0;
-        //        y++;
-        //    }
-        //}
         slotsLoaded = true;
     }
 
@@ -610,9 +519,6 @@ public class CharacterMenu
         GameObject mapHolder = mapRoot.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject;
         mapHolder.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width * size + 100);
         mapHolder.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height * size + 100);
-
-        //mapRoot.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, mapArea.GetComponent<RectTransform>().rect.width);
-        //mapRoot.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, mapArea.GetComponent<RectTransform>().rect.height);
 
         int xOff = -1 * ((width * size + 100) / 2) + 50;
         int yOff = -1 * ((height * size + 100) / 2) + 50;
@@ -659,7 +565,6 @@ public class CharacterMenu
                 }
                 if (GameManager.gmInstance.Dungeon.isStairs(i, j))
                 {
-                    //Debug.Log("STAIRS");
                     Vector3 pos = new Vector3(xOff + j * size, yOff + i * size, 0f);
                     GameObject b = GameObject.Instantiate(block, pos, Quaternion.identity);
                     b.GetComponent<Image>().sprite = icons[5];
@@ -717,7 +622,6 @@ public class CharacterMenu
             Item i = equipment[selected];
             itemName1.transform.gameObject.GetComponent<TMP_Text>().text = i.itemName;
 
-            //itemFlavor1.transform.gameObject.GetComponent<TMP_Text>().text = i.flavorText;
             if(i.tier == 1) itemRank1.transform.gameObject.GetComponent<TMP_Text>().text = "Common";
             if (i.tier == 2)
             {
@@ -750,10 +654,6 @@ public class CharacterMenu
     }
 
     void createGearPopup(){
-        //charPanel = panelObject.transform.GetChild(0).gameObject;
-        //GameObject middleStats = charPanel.transform.GetChild(1).gameObject;
-        //GameObject gearSlot = middleStats.transform.GetChild(4+gearSelection).gameObject;
-
         Equipment e = new Equipment();
 
         if(gearSelection == 0) e = gear.Helmet;
@@ -768,7 +668,6 @@ public class CharacterMenu
         if(e == null)return;
 
         Vector3 pos = new Vector3(0, 0, 0);
-        //Debug.Log("Gear Popup");
         GameObject popup = GameObject.Instantiate(itemPopup, pos, Quaternion.identity);
         GameObject mainHolder = popup.transform.GetChild(0).gameObject;
 
@@ -787,13 +686,11 @@ public class CharacterMenu
 
         GameObject secondary = mainHolder.transform.GetChild(1).gameObject;
 
-
         popup.transform.SetParent(panelObject.transform, false);
         popupArea = popup;
         
         itemName1.transform.gameObject.GetComponent<TMP_Text>().text = e.itemName;
 
-        //itemFlavor1.transform.gameObject.GetComponent<TMP_Text>().text = e.flavorText;
         if(e.tier == 1) itemRank1.transform.gameObject.GetComponent<TMP_Text>().text = "Common";
         if (e.tier == 2)
         {
@@ -925,25 +822,20 @@ public class CharacterMenu
     }
     void useListener(){
         SoundManager.sm.PlayMenuSound();
-        Debug.Log("USE ITEM");
         items[selected].UseItem();
         items.RemoveAt(selected);
         selected = -1;
-        //Debug.Log("DESTROY");
         GameObject.Destroy(popupArea);
         popupOpen = false;
         refreshTopicPanel();
         setPlayerStats();
     }
     void equipListener(){
-        //SoundManager.sm.PlayMenuSound();
         SoundManager.sm.PlayEquipSound();
-        //Debug.Log("EQUIP");
 
         //equip armor
         Equipment e = equipment[selected];
         Equipment old = new Equipment();
-
 
         if(e.type == "helmet"){
             old = gear.Helmet;
@@ -987,7 +879,6 @@ public class CharacterMenu
         selected = -1;
         GameObject.Destroy(popupArea);
         popupOpen = false;
-        //openStats();
         removeGearStats(old);
         applyGearStats(e);
 
@@ -996,7 +887,6 @@ public class CharacterMenu
     }
 
     void unequipListener(){
-        //SoundManager.sm.PlayMenuSound();
         SoundManager.sm.PlayUnequipSound();
         Equipment e = new Equipment();
 
@@ -1039,7 +929,6 @@ public class CharacterMenu
         selected = -1;
         GameObject.Destroy(popupArea);
         popupOpen = false;
-        //openStats();
 
         removeGearStats(e);
 
@@ -1053,10 +942,6 @@ public class CharacterMenu
         int hp = e.defense;
         int crit = e.crit;
         int intel = e.intelligence;
-        //int block = e.block;
-        //int evade = e.evade;
-
-        //Debug.Log("GEAR STR IS "+ e.attack);
 
         player.addAttack(att);
         player.addTotalHP(hp);
@@ -1071,8 +956,6 @@ public class CharacterMenu
         int hp = e.defense;
         int crit = e.crit;
         int intel = e.intelligence;
-        //int block = e.block;
-        //int evade = e.evade;
 
         player.addAttack(-att);
         player.addMaxHP(-hp);
@@ -1141,7 +1024,6 @@ public class CharacterMenu
 
     void compareListener(){
         SoundManager.sm.PlayMenuSound();
-        //Debug.Log("COMPARE");
         Equipment e = equipment[selected];
         Equipment alt = new Equipment();
 
@@ -1211,25 +1093,9 @@ public class CharacterMenu
 
     void refreshTopicPanel(){
         slotsLoaded = false;
-        //foreach(GameObject o in inventorySlots){
-        //    GameObject.Destroy(o);
-        //}
-        //inventorySlots.Clear();
-        //foreach(GameObject o in equipmentSlots){
-        //    GameObject.Destroy(o);
-        //}
-        //equipmentSlots.Clear();
-        //foreach(GameObject o in questObjects){
-        //    GameObject.Destroy(o);
-        //}
-        //questObjects.Clear();
         GameObject.Destroy(mapRoot);
         setTopicPanel();
         populateTopicArea();
-    }
-
-    void applyGearStats(){
-
     }
 
     public void addItem(Item i){

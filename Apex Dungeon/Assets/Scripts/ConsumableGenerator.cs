@@ -259,7 +259,7 @@ public class ConsumableGenerator : ScriptableObject
     {
         GameObject money = null;
 
-        int rand = Random.RandomRange(1, 4);
+        int rand = Random.Range(1, 4);
 
         if (rand == 1) money = CreateGold(level);
         if (rand == 2) money = CreateSilver(level);

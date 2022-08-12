@@ -6,8 +6,6 @@ using TMPro;
 
 public static class Util 
 {
-    //Strength.transform.GetChild(1).gameObject.GetComponent<TMP_Text>().text = damage.ToString();
-
     public static GameObject getChild(GameObject o, int child){
         return o.transform.GetChild(child).gameObject;
     }

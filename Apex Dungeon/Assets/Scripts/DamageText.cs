@@ -4,22 +4,19 @@ using UnityEngine;
 
 public class DamageText : MonoBehaviour
 {
-    public float speed = 0.01f;
-    public float maxDistance = 0.5f;
-    public float start;
-    public float lifespan = 0;
-    // Start is called before the first frame update
+    private float speed = 0.7f;
+    private float maxDistance = 0.5f;
+    private float start;
+
     void Start()
     {
-        start = transform.position.y;
+        start = transform.localPosition.y;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        lifespan += Time.deltaTime;
-        transform.position = new Vector3(transform.position.x, transform.position.y + speed, 0);
-        if (lifespan > 0.8f)
+        transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y + speed * Time.deltaTime, 0);
+        if (transform.localPosition.y - start > maxDistance)
         {
             Destroy(this.gameObject);
         }
