@@ -63,7 +63,6 @@ public class SoundManager: MonoBehaviour
 
     public void UpdatePlaying()
     {
-        Debug.Log("Update playing->" + musicSource.isPlaying);
         if (!Data.music && musicSource.isPlaying)
         {
             StopMusic();
@@ -85,7 +84,6 @@ public class SoundManager: MonoBehaviour
 
     public void PlayDungeonMusic()
     {
-        Debug.Log("DungeonMusic");
         if (!Data.music) return;
         musicSource.volume = Data.musicVolume * 0.05f;
         musicSource.clip = randomClip(dungeonMusic);

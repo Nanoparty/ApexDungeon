@@ -117,7 +117,6 @@ public class Equipment : Item
 
         if(attackDamage > 0) descriptionText += String.Format("Attack Damage +{0}\n", attackDamage);
         if(hpBoost > 0) descriptionText += String.Format("HP Increase +{0}\n", hpBoost);
-        //if(intel > 0) descriptionText += String.Format("Intelligence +{0}\n", intel);
         if(critBoost > 0) descriptionText += String.Format("Critical Hit Chance +{0}", critBoost);
         if(evadeBoost > 0) descriptionText += String.Format("Evade Chance +{0}", evadeBoost);
 

@@ -8,11 +8,6 @@ public class ShadowTile : MonoBehaviour
 
     public SpriteRenderer image;
 
-    void Start()
-    {
-        
-    }
-
     public ShadowTile(int r, int c, bool v)
     {
         row = r;

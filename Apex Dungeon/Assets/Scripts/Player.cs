@@ -67,11 +67,6 @@ public class Player : MovingEntity
         base.Start();
     }
 
-    void calculateAttack()
-    {
-        attack = attack + (int)(attack * (strength * 0.02));
-    }
-
     void setInitialValues() {
         playerName = Data.activeCharacter ?? "bob";
         hp = 100;
@@ -123,7 +118,6 @@ public class Player : MovingEntity
         bool val;
         val = AttemptMove<Player>(clickRow, clickCol);
         GameManager.gmInstance.playersTurn = false;
-        Debug.Log("Move controller end turn");
     }
 
     void stairsYes()
@@ -141,9 +135,6 @@ public class Player : MovingEntity
     {
         endScreenHolder.transform.GetChild(3).gameObject.SetActive(true);
         endScreenHolder.transform.GetChild(4).gameObject.SetActive(true);
-        List<(string, int)> scores = Data.scores ?? new List<(string, int)>();
-        scores.Add((GameManager.gmInstance.playerName, GameManager.gmInstance.score));
-        Data.scores = scores;
         Data.inProgress = false;
         Data.RemoveActive();
     }
@@ -157,9 +148,10 @@ public class Player : MovingEntity
                 SoundManager.sm.PlayDeathSound();
                 //calculate and save score
                 GameManager.gmInstance.score += gold;
+                List<(string, int)> scores = Data.scores ?? new List<(string, int)>();
+                scores.Add((GameManager.gmInstance.playerName, GameManager.gmInstance.score));
+                Data.scores = scores;
                 fadeIn = false;
-
-                //reset character stats
 
                 //death screen
                 GameObject op = GameObject.Instantiate(endingScreen, new Vector3(0, 0, 0), Quaternion.identity);
@@ -170,28 +162,10 @@ public class Player : MovingEntity
                 op.transform.GetChild(4).gameObject.SetActive(false);
                 endScreenHolder = op;
             }
-            else if (ending) {
-                endScreenHolder.transform.GetChild(3).gameObject.SetActive(true);
-                if (Input.GetButtonDown("Fire1"))
-                {
-                    GameManager.gmInstance.scores = Data.scores ?? new List<(string, int)>();
-                    GameManager.gmInstance.scores.Add((GameManager.gmInstance.playerName, GameManager.gmInstance.score));
-                    GameManager.gmInstance.state = "score";
-                    Data.inProgress = false;
-                    Data.RemoveActive();
-                    SceneManager.LoadScene("Scores", LoadSceneMode.Single);
-                }
-            }
-
-
+            
             return true;
         }
         return false;
-    }
-
-    void setFadeIn()
-    {
-
     }
 
     protected override void Update()
@@ -219,7 +193,6 @@ public class Player : MovingEntity
 
         if (openCharacter)
         {
-            //Debug.Log("charmenu UPdate");
             charMenu.Update();
             if (charMenu.getClosed())
             {
@@ -232,7 +205,6 @@ public class Player : MovingEntity
         if (openLevel || openPause || stairsOpen) return;
     
         debugMenu();
-        
         
         base.Update();
         checkMoving();
@@ -277,14 +249,11 @@ public class Player : MovingEntity
             Canvas canvas = GameObject.FindGameObjectWithTag("Canvas").GetComponent<Canvas>();
             Vector2 canvasScale = new Vector2(canvas.transform.localScale.x, canvas.transform.localScale.y);
             Vector2 finalScale = new Vector2(sizeDelta.x * canvasScale.x, sizeDelta.y * canvasScale.y);
-            //Debug.Log("WORLD POS:" + finalScale.x);
             float lscale = hpbar.transform.GetComponent<RectTransform>().localScale.x;
-            //Debug.Log("LOCAL SCALE=" + lscale);
             float fullWidth = finalScale.x * 3;
 
             float scale = redbar.transform.GetComponent<RectTransform>().localScale.x;
             redbar.transform.GetComponent<RectTransform>().position = new Vector3((pos.x - fullWidth/2), pos.y, pos.z);
-            //Debug.Log("New Pos=" + redbar.transform.GetComponent<RectTransform>().position.x);
         }
         if (Input.GetKeyDown("t"))
         {
@@ -321,7 +290,6 @@ public class Player : MovingEntity
         Data.gold = gold;
         Data.floor = GameManager.gmInstance.level;
 
-        //Data.charMenu = charMenu;
         Data.equipment = charMenu.equipment;
         Data.consumables = charMenu.items;
         Data.gear = gear;
@@ -353,7 +321,6 @@ public class Player : MovingEntity
     {
         if (!hasFocus)
         {
-            Debug.Log("Lose Focus");
             saveCharacterData();
             Data.SaveToFile();
         }
@@ -387,7 +354,6 @@ public class Player : MovingEntity
         if (other.gameObject.tag == "Gold" || other.gameObject.tag == "Silver" || other.gameObject.tag == "Copper")
         {
             int amount = other.GetComponent<Money>().amount;
-            Debug.Log("GOLD:" + amount);
             gold += amount;
             SoundManager.sm.PlayCoinSound();
             GameObject goldNum = GameObject.Instantiate(goldText, new Vector3(this.transform.position.x, this.transform.position.y, 0), Quaternion.identity, this.transform);
@@ -551,9 +517,6 @@ public class Player : MovingEntity
             evadeText.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().color = new Color(50f / 255f, 205f / 255f, 50f / 255f);
             return;
         }
-        //GameObject damageNum = GameObject.Instantiate(damageText, new Vector3(this.transform.position.x, this.transform.position.y, 0), Quaternion.identity);
-        //damageNum.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = $"{d}";
-        Debug.Log("Player take damage");
         base.takeDamage(d);
     }
 
@@ -755,7 +718,6 @@ public class Player : MovingEntity
         GameObject.Destroy(levelPopHolder);
         openLevel = false;
     }
-    
 
     void updatePlayerStatus()
     {
@@ -781,7 +743,6 @@ public class Player : MovingEntity
         Vector3 pos1 = redbar.transform.position;
         float redStartingPos = hpbar.transform.GetChild(2).gameObject.transform.position.x;
         float redPos = redStartingPos - (redWidth - (((float)hp / (float)maxHp) * redWidth));
-        //Debug.Log($"{redStartingPos} - {redWidth} - {(float)hp / (float)maxHp} * {redWidth} = {redPos}");
         redbar.transform.GetComponent<RectTransform>().position = new Vector3(redPos, pos1.y, pos1.z);
 
         Vector2 greenSizeDelta = greenbar.transform.GetComponent<RectTransform>().sizeDelta;

@@ -34,7 +34,6 @@ public class DungeonObject
     public void UpdateShadows(int r, int c)
     {
         if(fullExplored){
-            Debug.Log("FullExplored");
             for(int i = 0; i < width;i++){
                 for(int j = 0; j < height;j++){
                     visibleTiles.Add(new Vector2(i, j));
@@ -44,7 +43,6 @@ public class DungeonObject
         }
 
         if(fullBright){
-            Debug.Log("Full Bright");
             for(int i = 0; i < width;i++){
                 for(int j = 0; j < height;j++){
                     GameObject o = shadowMap[i, j];
@@ -55,10 +53,7 @@ public class DungeonObject
             }
         }
 
-
-        
-        SetShadowsDark();
-        
+        SetShadowsDark();        
         
         //hallway
         bool hallway = tileMap[r, c].type == 3;
@@ -95,7 +90,6 @@ public class DungeonObject
             int rWidth = curRoom.width;
             int rHeight = curRoom.height;
 
-
             SetShadowVisible(r, c);
 
             for(int i = startCol; i < startCol + rWidth; i++)
@@ -121,8 +115,6 @@ public class DungeonObject
         if (!fullExplored) { 
             tileMap[r, c].explored = true;
         }
-        
-
     }
 
     public void SetShadowsDark()

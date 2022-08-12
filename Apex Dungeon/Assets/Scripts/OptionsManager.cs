@@ -52,7 +52,6 @@ public class OptionsManager : MonoBehaviour
     {
         Data.musicVolume = value;
         SoundManager.sm.UpdateMusicVolume();
-        //SoundManager.sm.PlayMenuSound();
     }
 
     void soundToggleListener(bool value)
@@ -63,7 +62,6 @@ public class OptionsManager : MonoBehaviour
 
     void soundSliderListener(float value)
     {
-        //SoundManager.sm.PlayMenuSound();
         Data.soundVolume = value;
         SoundManager.sm.UpdateSoundVolume();
     }

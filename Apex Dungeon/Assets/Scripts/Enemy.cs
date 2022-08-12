@@ -84,10 +84,7 @@ public class Enemy : MovingEntity
         return 50 + 50 * floor;
     }
 
-    public new void takeDamage(float d, bool critical = false){
-        //Debug.Log("ENEMY SPAWN DMG TEXT");
-        
-
+    public new void takeDamage(float d, bool critical = false){        
         int netDamage = (int)calculateDamageIn(d);
         GameObject damageNum = GameObject.Instantiate(damageText, new Vector3(this.transform.position.x, this.transform.position.y, 0), Quaternion.identity);
         if (critical)
@@ -163,7 +160,6 @@ public class Enemy : MovingEntity
         {
             player.takeAttack(calculateDamageOut());
             setAttackAnimation(player.getRow(), player.getCol());
-            //animator.Play("AttackLeft");
         }
     }
 
@@ -243,10 +239,6 @@ public class Enemy : MovingEntity
     }
 
     private float calculateDamageIn(float d){
-        // float damangeBlocked = 1 - 1/(1+d);
-        // float netDamage = d - (d * damangeBlocked);
-        // return netDamage;
-        //Debug.Log("Enemy takes damage:"+d);
         return d;
     }
 

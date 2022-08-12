@@ -19,7 +19,6 @@ public class Pathfinder
 
         if(start.row == end.row && start.col == end.col)
         {
-            Debug.Log("Same Position");
             return null;
         }
         bool found = false;

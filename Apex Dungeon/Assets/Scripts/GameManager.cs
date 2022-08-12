@@ -38,7 +38,6 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
         DontDestroyOnLoad(gameObject);
-        Debug.Log("AWAKE");
         level = Data.floor;
         score = 0;
         scores = new List<(string, int)>();
@@ -50,7 +49,6 @@ public class GameManager : MonoBehaviour
 
         Vector3 position = new Vector3(0f, 0f, 0f);
         cursor = Instantiate(tileCursor, position, Quaternion.identity) as GameObject;
-        Debug.Log("Create cursor:"+cursor);
     }
 
     void Setup()
@@ -71,8 +69,6 @@ public class GameManager : MonoBehaviour
         score = 0;
         enemies.Clear();
         furniture.Clear();
-        //Dungeon = DunGen.Initalize();
-        //Reset();
     }
 
     void Update()
@@ -197,7 +193,6 @@ public class GameManager : MonoBehaviour
 
     void MoveEnemies()
     {
-        Debug.Log("Enemies Moving");
         if(enemies.Count == 0)
         {
             return;

@@ -6,12 +6,6 @@ public class Pickup : MonoBehaviour
 {
     public Item item;
 
-    bool pickedUp = false;
-    void Start()
-    {
-        
-    }
-
     public Item GetItem(){
         return item;
     }
