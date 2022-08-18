@@ -209,11 +209,10 @@ public class CharacterMenu
         }
     }
 
-    public CharacterMenu(GameObject panel, GameObject slot, GameObject questLine, GameObject minimap, GameObject block, GameObject pblock, GameObject itemPopup, Sprite[] frames, Sprite[] tabs)
+    public CharacterMenu(GameObject panel, GameObject slot, GameObject minimap, GameObject block, GameObject pblock, GameObject itemPopup, Sprite[] frames, Sprite[] tabs)
     {
         this.panel = panel;
         this.slot = slot;
-        this.questLine = questLine;
         this.block = block;
         this.pblock = pblock;
         this.minimap = minimap;

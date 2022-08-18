@@ -16,42 +16,29 @@ public class Player : MovingEntity
     public GameObject slot;
     public GameObject block;
     public GameObject pblock;
-    public GameObject mapHolder;
-    public GameObject questLine;
     public GameObject mapArea;
     public GameObject itemPopup;
-    public GameObject levelPopup;
     public GameObject endingScreen;
     public Sprite[] frames;
     public Sprite[] tabs;
     public GameObject goldText;
+    public LevelUp levelUp;
 
     private CharacterMenu charMenu;
     private GameObject pauseMenu;
-    private GameObject levelPopHolder;
     private PlayerGear gear;
     private Animator animator;
     private GameObject stairsModal;
     private string playerName;
     private int gold;
     private bool openCharacter = false;
-    private bool openLevel = false;
+    public bool openLevel = false;
     private bool openPause = false;
-    private bool opening = true;
     public bool ending = false;
-    private bool fadeOut = false;
     public bool fadeIn = true;
-    private float start;
-    private int prevLevel;
-    private int levelPoints;
     private GameObject endScreenHolder;
     private bool interrupt = false;
     private bool attacking = false;
-
-    private int tempStrength;
-    private int tempDefense;
-    private int tempEvasion;
-    private int tempCritical;
 
     private bool stairsOpen = false;
 
@@ -73,12 +60,9 @@ public class Player : MovingEntity
         mp = 100;
         maxMp = 50;
         maxHp = 100;
-
         expLevel = 1;
         exp = 0;
         maxExp = 100;
-        levelPoints = 0;
-
         attack = 10;
         strength = 10;
         defense = 10;
@@ -86,10 +70,8 @@ public class Player : MovingEntity
         critical = 10;
         evade = 10;
         blockStat = 10;
-
         type = 1;
         gold = 0;
-        start = 0;
     }
 
     void initializeObjects() {
@@ -97,7 +79,7 @@ public class Player : MovingEntity
 
         animator = transform.GetChild(1).gameObject.transform.GetComponent<Animator>();
         gear = new PlayerGear();
-        charMenu = new CharacterMenu(characterPanel, slot, questLine, mapArea, block, pblock, itemPopup, frames, tabs);
+        charMenu = new CharacterMenu(characterPanel, slot, mapArea, block, pblock, itemPopup, frames, tabs);
 
         hpbar = GameObject.FindGameObjectWithTag("hpbar");
         xpbar = GameObject.FindGameObjectWithTag("xpbar");
@@ -562,163 +544,6 @@ public class Player : MovingEntity
         SceneManager.LoadScene("Title", LoadSceneMode.Single);
     }
 
-    
-
-    void createLevelPopup(){
-        Vector3 pos = new Vector3(0, 0, 0);
-
-        GameObject levelPop = GameObject.Instantiate(levelPopup, pos, Quaternion.identity);
-        levelPop.transform.SetParent(GameObject.FindGameObjectWithTag("LevelUp").transform, false);
-        levelPopHolder = levelPop;
-
-        Util.setText(levelPop, prevLevel + "->" + expLevel, 1);
-        Util.setText(levelPop, "Points Remaining:" + levelPoints, 2);
-
-        GameObject Strength = Util.getChild(levelPop, 3);
-        GameObject Defense = Util.getChild(levelPop, 4);
-        GameObject Crit = Util.getChild(levelPop, 5);
-        //GameObject Intelligence = Util.getChild(levelPop, 6);
-        GameObject Evade = Util.getChild(levelPop, 6);
-        //GameObject Block = Util.getChild(levelPop, 8);
-
-        Util.setText(Strength, strength.ToString(), 1);
-        Util.setText(Defense, defense.ToString(), 1);
-        Util.setText(Crit, critical.ToString(), 1);
-        //Util.setText(Intelligence, intelligence.ToString(), 1);
-        Util.setText(Evade, evade.ToString(), 1);
-        //Util.setText(Block, blockStat.ToString(), 1);
-
-        Util.setListener(Strength, StrengthAddListener, 2);
-        Util.setListener(Strength, StrengthSubListener, 3);
-
-        Util.setListener(Defense, DefenseAddListener, 2);
-        Util.setListener(Defense, DefenseSubListener, 3);
-
-        Util.setListener(Crit, CritAddListener, 2);
-        Util.setListener(Crit, CritSubListener, 3);
-
-        //Util.setListener(Intelligence, IntelligenceListener, 2);
-
-        Util.setListener(Evade, EvadeAddListener, 2);
-        Util.setListener(Evade, EvadeSubListener, 3);
-
-        //Util.setListener(Block, BlockListener, 2);
-
-        Util.setListener(levelPop, LevelConfirmListener, 7);
-
-        tempStrength = strength;
-        tempDefense = defense;
-        tempCritical = critical;
-        tempEvasion = evade;
-    }
-
-    void StrengthAddListener(){
-        SoundManager.sm.PlayMenuSound();
-        if (levelPoints == 0) return;
-
-        tempStrength++;
-        levelPoints--;
-        Util.setText(levelPopHolder, (tempStrength).ToString(), 3, 1);
-        Util.setColor(levelPopHolder, Color.green, 3, 1);
-        Util.setText(levelPopHolder, "Points Remaining:" + levelPoints, 2);
-    }
-    void StrengthSubListener()
-    {
-        SoundManager.sm.PlayMenuSound();
-        if (tempStrength == strength) return;
-
-        tempStrength--;
-        levelPoints++;
-        if (tempStrength == strength)
-        {
-            Util.setColor(levelPopHolder, new Color(94f/255f,52f/255f,0f), 3, 1);
-        }
-        Util.setText(levelPopHolder, (tempStrength).ToString(), 3, 1);
-        Util.setText(levelPopHolder, "Points Remaining:" + levelPoints, 2);
-    }
-    void DefenseAddListener(){
-        SoundManager.sm.PlayMenuSound();
-        if (levelPoints == 0) return;
-
-        tempDefense++;
-        levelPoints--;
-        Util.setText(levelPopHolder, tempDefense.ToString(), 4, 1);
-        Util.setColor(levelPopHolder, Color.green, 4, 1);
-        Util.setText(levelPopHolder, "Points Remaining:" + levelPoints, 2);
-    }
-    void DefenseSubListener()
-    {
-        SoundManager.sm.PlayMenuSound();
-        if (tempDefense == defense) return;
-
-        tempDefense--;
-        levelPoints++;
-        Util.setText(levelPopHolder, tempDefense.ToString(), 4, 1);
-        if (tempDefense == defense)
-        {
-            Util.setColor(levelPopHolder, new Color(94f / 255f, 52f / 255f, 0f), 4, 1);
-        }
-        Util.setText(levelPopHolder, "Points Remaining:" + levelPoints, 2);
-    }
-    void CritAddListener(){
-        SoundManager.sm.PlayMenuSound();
-        if (levelPoints == 0) return;
-
-        tempCritical++;
-        levelPoints--;
-        Util.setText(levelPopHolder, tempCritical.ToString(), 5, 1);
-        Util.setColor(levelPopHolder, Color.green, 5, 1);
-        Util.setText(levelPopHolder, "Points Remaining:" + levelPoints, 2);
-    }
-    void CritSubListener()
-    {
-        SoundManager.sm.PlayMenuSound();
-        if (tempCritical == critical) return;
-
-        tempCritical--;
-        levelPoints++;
-        Util.setText(levelPopHolder, tempCritical.ToString(), 5, 1);
-        if (tempDefense == defense)
-        {
-            Util.setColor(levelPopHolder, new Color(94f / 255f, 52f / 255f, 0f), 5, 1);
-        }
-        Util.setText(levelPopHolder, "Points Remaining:" + levelPoints, 2);
-    }
-    void EvadeAddListener(){
-        SoundManager.sm.PlayMenuSound();
-        if (levelPoints == 0) return;
-
-        levelPoints--;
-        tempEvasion++;
-        Util.setText(levelPopHolder, tempEvasion.ToString(), 6, 1);
-        Util.setColor(levelPopHolder, Color.green, 6, 1);
-        Util.setText(levelPopHolder, "Points Remaining:" + levelPoints, 2);
-    }
-    void EvadeSubListener()
-    {
-        SoundManager.sm.PlayMenuSound();
-        if (tempEvasion == evade) return;
-
-        tempEvasion--;
-        levelPoints++;
-        Util.setText(levelPopHolder, tempEvasion.ToString(), 6, 1);
-        if (tempDefense == defense)
-        {
-            Util.setColor(levelPopHolder, new Color(94f / 255f, 52f / 255f, 0f), 6, 1);
-        }
-        Util.setText(levelPopHolder, "Points Remaining:" + levelPoints, 2);
-    }
-
-    void LevelConfirmListener(){
-        SoundManager.sm.PlayMenuSound();
-        strength = tempStrength;
-        defense = tempDefense;
-        critical = tempCritical;
-        evade = tempEvasion;
-        GameObject.Destroy(levelPopHolder);
-        openLevel = false;
-    }
-
     void updatePlayerStatus()
     {
         if (hp < 0) hp = 0;
@@ -823,9 +648,9 @@ public class Player : MovingEntity
     }
     public void addExp(int i){
         exp += i;
+        int levelPoints = 0;
         GameManager.gmInstance.score += i;
-        bool levelUp = false;
-        prevLevel = expLevel;
+        bool didLevel = false;
         while(exp >= maxExp){
             SoundManager.sm.PlayLevelUpSound();
             exp -= maxExp;
@@ -833,12 +658,13 @@ public class Player : MovingEntity
             maxHp = (int)(maxHp * 1.1);
             hp = maxHp;
             maxExp += (int)(0.5 * maxExp);
-            levelUp = true;
+            didLevel = true;
             levelPoints++;
         }
-        if(levelUp){
+        if(didLevel)
+        {
             openLevel = true;
-            createLevelPopup();
+            levelUp.CreatePopup(this, levelPoints);
         }
     }
     public void addStrength(int i){
@@ -862,6 +688,22 @@ public class Player : MovingEntity
     }
     public void addEvade(int i){
         evade += i;
+    }
+    public void setStrength(int i)
+    {
+        strength = i;
+    }
+    public void setDefense(int i)
+    {
+        defense = i;
+    }
+    public void setCritical(int i)
+    {
+        critical = i;
+    }
+    public void setEvasion(int i)
+    {
+        evade = i;
     }
     public void closeInventory()
     {
