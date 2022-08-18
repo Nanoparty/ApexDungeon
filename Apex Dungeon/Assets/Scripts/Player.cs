@@ -11,26 +11,18 @@ public class Player : MovingEntity
     private GameObject xpbar;
     private Button character;
     private Button pause;
-    public GameObject characterPanel;
-    public GameObject slot;
-    public GameObject block;
-    public GameObject pblock;
-    public GameObject mapArea;
-    public GameObject itemPopup;
     public GameObject endingScreen;
-    public Sprite[] frames;
-    public Sprite[] tabs;
     public GameObject goldText;
     public LevelUp levelUp;
     public Pause pauseMenu;
+    public Journal journal;
 
-    private CharacterMenu charMenu;
     private PlayerGear gear;
     private Animator animator;
     private GameObject stairsModal;
     private string playerName;
     private int gold;
-    private bool openCharacter = false;
+    public bool openJournal = false;
     public bool openLevel = false;
     public bool openPause = false;
     public bool ending = false;
@@ -78,7 +70,6 @@ public class Player : MovingEntity
 
         animator = transform.GetChild(1).gameObject.transform.GetComponent<Animator>();
         gear = new PlayerGear();
-        charMenu = new CharacterMenu(characterPanel, slot, mapArea, block, pblock, itemPopup, frames, tabs);
 
         hpbar = GameObject.FindGameObjectWithTag("hpbar");
         xpbar = GameObject.FindGameObjectWithTag("xpbar");
@@ -172,14 +163,9 @@ public class Player : MovingEntity
 
         if (checkDead()) return;
 
-        if (openCharacter)
+        if (openJournal)
         {
-            charMenu.Update();
-            if (charMenu.getClosed())
-            {
-                charMenu.setClosed(false);
-                openCharacter = false;
-            }
+            journal.Update();
             return;
         }
 
@@ -271,8 +257,8 @@ public class Player : MovingEntity
         Data.gold = gold;
         Data.floor = GameManager.gmInstance.level;
 
-        Data.equipment = charMenu.equipment;
-        Data.consumables = charMenu.items;
+        Data.equipment = journal.getEquipment();
+        Data.consumables = journal.getItems();
         Data.gear = gear;
         Data.SaveCharacter();
     }
@@ -326,8 +312,8 @@ public class Player : MovingEntity
         }
         if(other.gameObject.tag == "Consumable")
         {
-            if (charMenu.items.Count == charMenu.maxSlots) return;
-            charMenu.addItem(other.GetComponent<Pickup>().GetItem());
+            if (journal.getItems().Count == Journal.maxSlots) return;
+            journal.addItem(other.GetComponent<Pickup>().GetItem());
             Destroy(other.gameObject);
             GameManager.gmInstance.Dungeon.removeFromItemList(row, col);
             SoundManager.sm.PlayPickupSound();
@@ -344,8 +330,8 @@ public class Player : MovingEntity
         }
         if (other.gameObject.tag == "Equipment")
         {
-            if (charMenu.equipment.Count == charMenu.maxSlots) return;
-            charMenu.addEquipment(other.GetComponent<Pickup>().GetItem());
+            if (journal.getEquipment().Count == Journal.maxSlots) return;
+            journal.addEquipment(other.GetComponent<Pickup>().GetItem());
             Destroy(other.gameObject);
             GameManager.gmInstance.Dungeon.removeFromItemList(row, col);
             SoundManager.sm.PlayPickupSound();
@@ -367,18 +353,17 @@ public class Player : MovingEntity
 
     void characterListener()
     {
-        if (!openCharacter && !openPause)
+        if (!openJournal && !openPause)
         {
-            charMenu.setClosed(false);
             SoundManager.sm.PlayBookOpen();
-            charMenu.openStats();
-            openCharacter = true;
+            journal.CreateJournal(this);
+            openJournal = true;
         }
     }
 
     void pauseListener()
     {
-        if (!openCharacter && !openPause)
+        if (!openJournal && !openPause)
         {
             pauseMenu.CreatePause(this);
         }
@@ -636,11 +621,6 @@ public class Player : MovingEntity
     public void setEvasion(int i)
     {
         evade = i;
-    }
-    public void closeInventory()
-    {
-        charMenu.closeInventory();
-        openCharacter = false;
     }
     public string getName()
     {
