@@ -12,7 +12,6 @@ public class Player : MovingEntity
     private Button character;
     private Button pause;
     public GameObject characterPanel;
-    public GameObject pausePanel;
     public GameObject slot;
     public GameObject block;
     public GameObject pblock;
@@ -23,9 +22,9 @@ public class Player : MovingEntity
     public Sprite[] tabs;
     public GameObject goldText;
     public LevelUp levelUp;
+    public Pause pauseMenu;
 
     private CharacterMenu charMenu;
-    private GameObject pauseMenu;
     private PlayerGear gear;
     private Animator animator;
     private GameObject stairsModal;
@@ -33,7 +32,7 @@ public class Player : MovingEntity
     private int gold;
     private bool openCharacter = false;
     public bool openLevel = false;
-    private bool openPause = false;
+    public bool openPause = false;
     public bool ending = false;
     public bool fadeIn = true;
     private GameObject endScreenHolder;
@@ -381,61 +380,8 @@ public class Player : MovingEntity
     {
         if (!openCharacter && !openPause)
         {
-            SoundManager.sm.PlayMenuSound();
-            openPause = true;
-            GameObject parent = GameObject.FindGameObjectWithTag("Pause");
-            pauseMenu = GameObject.Instantiate(pausePanel, Vector3.zero, Quaternion.identity);
-            pauseMenu.transform.SetParent(parent.transform, false);
-
-            GameObject buttons = pauseMenu.transform.GetChild(1).gameObject.transform.GetChild(1).gameObject;
-            GameObject options = pauseMenu.transform.GetChild(1).gameObject.transform.GetChild(2).gameObject;
-            GameObject music = options.transform.GetChild(0).gameObject;
-            GameObject sound = options.transform.GetChild(1).gameObject;
-
-            buttons.transform.GetChild(0).GetComponent<Button>().onClick.AddListener(ResumeListener);
-            buttons.transform.GetChild(1).GetComponent<Button>().onClick.AddListener(MenuListener);
-
-            Toggle musicToggle = music.transform.GetChild(1).gameObject.GetComponent<Toggle>();
-            Toggle soundToggle = sound.transform.GetChild(1).gameObject.GetComponent<Toggle>();
-            Slider musicSlider = music.transform.GetChild(2).gameObject.GetComponent<Slider>();
-            Slider soundSlider = sound.transform.GetChild(2).gameObject.GetComponent<Slider>();
-
-            musicToggle.isOn = Data.music;
-            soundToggle.isOn = Data.sound;
-            musicSlider.value = Data.musicVolume;
-            soundSlider.value = Data.soundVolume;
-
-            musicToggle.onValueChanged.AddListener((value) => { musicToggleListener(value); });
-            soundToggle.onValueChanged.AddListener((value) => { soundToggleListener(value); });
-            musicSlider.onValueChanged.AddListener((value) => { musicSliderListener(value); });
-            soundSlider.onValueChanged.AddListener((value) => { soundSliderListener(value); });
-
+            pauseMenu.CreatePause(this);
         }
-    }
-
-    void musicToggleListener(bool value)
-    {
-        Data.music = value;
-        SoundManager.sm.UpdatePlaying();
-        SoundManager.sm.PlayMenuSound();
-    }
-
-    void musicSliderListener(float value)
-    {
-        Data.musicVolume = value;
-        SoundManager.sm.UpdateMusicVolume();
-    }
-
-    void soundToggleListener(bool value)
-    {
-        SoundManager.sm.PlayMenuSound();
-        Data.sound = value;
-    }
-
-    void soundSliderListener(float value)
-    {
-        Data.soundVolume = value;
-        SoundManager.sm.UpdateSoundVolume();
     }
 
     void checkMoving()
@@ -528,20 +474,6 @@ public class Player : MovingEntity
     protected override void OnCantMove<T>(T Component)
     {
         //INTERACTION
-    }
-
-    void ResumeListener(){
-        SoundManager.sm.PlayMenuSound();
-        openPause = false;
-        GameObject.Destroy(pauseMenu);
-    }
-
-    void MenuListener(){
-        SoundManager.sm.PlayMenuSound();
-        saveCharacterData();
-        Data.SaveToFile();
-        Destroy(GameManager.gmInstance);
-        SceneManager.LoadScene("Title", LoadSceneMode.Single);
     }
 
     void updatePlayerStatus()
