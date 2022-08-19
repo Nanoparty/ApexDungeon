@@ -7,19 +7,23 @@ using UnityEngine.SceneManagement;
 
 public class Player : MovingEntity
 {
-    private GameObject hpbar;
-    private GameObject xpbar;
-    private Button character;
-    private Button pause;
     public GameObject endingScreen;
     public GameObject goldText;
     public LevelUp levelUp;
     public Pause pauseMenu;
     public Journal journal;
 
+    private GameObject hpBar;
+    private GameObject expBar;
+
+    private Button journalButton;
+    private Button pauseButton;
+
     private PlayerGear gear;
     private Animator animator;
     private GameObject stairsModal;
+    private GameObject endScreenHolder;
+
     private string playerName;
     private int gold;
     public bool openJournal = false;
@@ -27,7 +31,6 @@ public class Player : MovingEntity
     public bool openPause = false;
     public bool ending = false;
     public bool fadeIn = true;
-    private GameObject endScreenHolder;
     private bool interrupt = false;
     private bool attacking = false;
 
@@ -71,18 +74,18 @@ public class Player : MovingEntity
         animator = transform.GetChild(1).gameObject.transform.GetComponent<Animator>();
         gear = new PlayerGear();
 
-        hpbar = GameObject.FindGameObjectWithTag("hpbar");
-        xpbar = GameObject.FindGameObjectWithTag("xpbar");
-        character = GameObject.FindGameObjectWithTag("characterButton").GetComponent<Button>();
-        pause = GameObject.FindGameObjectWithTag("PauseButton").GetComponent<Button>();
+        hpBar = GameObject.FindGameObjectWithTag("hpbar");
+        expBar = GameObject.FindGameObjectWithTag("xpbar");
+        journalButton = GameObject.FindGameObjectWithTag("characterButton").GetComponent<Button>();
+        pauseButton = GameObject.FindGameObjectWithTag("PauseButton").GetComponent<Button>();
 
         stairsModal = GameObject.FindGameObjectWithTag("stairspopup");
         stairsModal.SetActive(false);
         stairsModal.transform.GetChild(2).GetComponent<Button>().onClick.AddListener(stairsNo);
         stairsModal.transform.GetChild(3).GetComponent<Button>().onClick.AddListener(stairsYes);
 
-        character.onClick.AddListener(characterListener);
-        pause.onClick.AddListener(pauseListener);
+        journalButton.onClick.AddListener(characterListener);
+        pauseButton.onClick.AddListener(pauseListener);
     }
 
     void moveController(int clickRow, int clickCol)
@@ -207,35 +210,9 @@ public class Player : MovingEntity
 
     void debugMenu(){
         //Debugging tool
-        if (Input.GetKeyDown("q"))
-        {
-            GameObject redbar = hpbar.transform.GetChild(0).gameObject;
-            Vector3 pos = redbar.transform.GetComponent<RectTransform>().position;
-
-            Vector2 sizeDelta = redbar.transform.GetComponent<RectTransform>().sizeDelta;
-            Canvas canvas = GameObject.FindGameObjectWithTag("Canvas").GetComponent<Canvas>();
-            Vector2 canvasScale = new Vector2(canvas.transform.localScale.x, canvas.transform.localScale.y);
-            Vector2 finalScale = new Vector2(sizeDelta.x * canvasScale.x, sizeDelta.y * canvasScale.y);
-            float lscale = hpbar.transform.GetComponent<RectTransform>().localScale.x;
-            float fullWidth = finalScale.x * 3;
-
-            float scale = redbar.transform.GetComponent<RectTransform>().localScale.x;
-            redbar.transform.GetComponent<RectTransform>().position = new Vector3((pos.x - fullWidth/2), pos.y, pos.z);
-        }
         if (Input.GetKeyDown("t"))
         {
             nextFloor();
-        }
-        if (Input.GetKeyDown("r"))
-        {
-            GameManager.gmInstance.FullReset();
-        }
-        if(Input.GetKeyDown("y")){
-            GameManager.gmInstance.scores = Data.scores ?? new List<(string, int)>();
-            GameManager.gmInstance.scores.Add((GameManager.gmInstance.playerName,GameManager.gmInstance.score));
-            GameManager.gmInstance.state = "score";
-            Data.inProgress = false;
-            SceneManager.LoadScene("Scores", LoadSceneMode.Single);
         }
     }
 
@@ -256,7 +233,6 @@ public class Player : MovingEntity
         Data.block = blockStat;
         Data.gold = gold;
         Data.floor = GameManager.gmInstance.level;
-
         Data.equipment = journal.getEquipment();
         Data.consumables = journal.getItems();
         Data.gear = gear;
@@ -264,7 +240,6 @@ public class Player : MovingEntity
     }
 
     public void loadCharacterData(){
-        
         playerName = Data.playerName;
         hp = Data.hp;
         maxHp = Data.maxHp;
@@ -280,7 +255,6 @@ public class Player : MovingEntity
         evade = Data.evade;
         blockStat = Data.block;
         gold = Data.gold;
-
         gear = Data.gear;
     }
 
@@ -469,30 +443,30 @@ public class Player : MovingEntity
         if (mp < 0) mp = 0;
         if (mp > maxMp) mp = maxMp;
 
-        hpbar.transform.GetChild(1).gameObject.GetComponent<TMP_Text>().text = hp + "/" + maxHp;
-        xpbar.transform.GetChild(1).gameObject.GetComponent<TMP_Text>().text = exp + "/" + maxExp;
+        hpBar.transform.GetChild(1).gameObject.GetComponent<TMP_Text>().text = hp + "/" + maxHp;
+        expBar.transform.GetChild(1).gameObject.GetComponent<TMP_Text>().text = exp + "/" + maxExp;
 
-        GameObject redbar = hpbar.transform.GetChild(0).gameObject;
-        GameObject greenbar = xpbar.transform.GetChild(0).gameObject;
+        GameObject redbar = hpBar.transform.GetChild(0).gameObject;
+        GameObject greenbar = expBar.transform.GetChild(0).gameObject;
 
         Canvas canvas = GameObject.FindGameObjectWithTag("Canvas").GetComponent<Canvas>();
         Vector2 canvasScale = new Vector2(canvas.transform.localScale.x, canvas.transform.localScale.y);
 
         Vector2 redSizeDelta = redbar.transform.GetComponent<RectTransform>().sizeDelta;
         Vector2 redFinalScale = new Vector2(redSizeDelta.x * canvasScale.x, redSizeDelta.y * canvasScale.y);
-        float redWidth = redFinalScale.x * hpbar.transform.GetComponent<RectTransform>().localScale.x;
+        float redWidth = redFinalScale.x * hpBar.transform.GetComponent<RectTransform>().localScale.x;
 
         Vector3 pos1 = redbar.transform.position;
-        float redStartingPos = hpbar.transform.GetChild(2).gameObject.transform.position.x;
+        float redStartingPos = hpBar.transform.GetChild(2).gameObject.transform.position.x;
         float redPos = redStartingPos - (redWidth - (((float)hp / (float)maxHp) * redWidth));
         redbar.transform.GetComponent<RectTransform>().position = new Vector3(redPos, pos1.y, pos1.z);
 
         Vector2 greenSizeDelta = greenbar.transform.GetComponent<RectTransform>().sizeDelta;
         Vector2 greenFinalScale = new Vector2(greenSizeDelta.x * canvasScale.x, greenSizeDelta.y * canvasScale.y);
-        float greenWidth = greenFinalScale.x * xpbar.transform.GetComponent<RectTransform>().localScale.x;
+        float greenWidth = greenFinalScale.x * expBar.transform.GetComponent<RectTransform>().localScale.x;
 
         Vector3 pos2 = greenbar.transform.position;
-        float greenStartingPos = xpbar.transform.GetChild(2).gameObject.transform.position.x;
+        float greenStartingPos = expBar.transform.GetChild(2).gameObject.transform.position.x;
         float greenPos = greenStartingPos + (((float)exp / (float)maxExp) * greenWidth);
         greenbar.transform.GetComponent<RectTransform>().position = new Vector3(greenPos, pos2.y, pos2.z);
 
