@@ -21,26 +21,26 @@ public class Journal : ScriptableObject
 
     private List<Consumable> items;
     private List<Equipment> equipment;
-
-    private int[,] map;
-    private int width, height;
-    private Sprite[] icons;
     private PlayerGear gear;
-    private bool slotsLoaded;
-    private GameObject journalRoot;
-    private GameObject popupRoot;
-    private Animator anim;
-    private Button inventoryTab, equipmentTab, mapTab, closeTab;
-    private int tab;
-    private GameObject charPanel, statusPanel, equipmentPanel, mapPanel, inventoryPanel;
-    private bool flipping, flipping2;
-    private bool popupOpen;
-    private int selected, gearSelection;
+
     private GameObject[] invSlots;
     private GameObject[] equipSlots;
     private GameObject mapRoot;
+    private GameObject journalRoot;
+    private GameObject popupRoot;
     private GameObject useButton, trashButton, compareButton;
-
+    private GameObject charPanel, statusPanel, equipmentPanel, mapPanel, inventoryPanel;
+    private Button inventoryTab, equipmentTab, mapTab, closeTab;
+    private Animator anim;
+    private Sprite[] icons;
+    
+    private int[,] map;
+    private int width, height;    
+    private int tab;
+    private bool flipping, flipping2;
+    private bool popupOpen;
+    private int selected, gearSelection;
+    
     private void OnEnable()
     {
         items = Data.consumables ?? new List<Consumable>();
@@ -59,7 +59,6 @@ public class Journal : ScriptableObject
 
         gear = player.getGear();
 
-        slotsLoaded = false;
         flipping = flipping2 = false;
         popupOpen = false;
         tab = 0;
@@ -89,6 +88,17 @@ public class Journal : ScriptableObject
 
     public void Update()
     {
+        CheckPageFlipping();
+        if (popupOpen)
+        {
+            CheckPopupClick();
+            return;
+        }
+        CheckItemSelect();
+    }
+
+    void CheckPageFlipping()
+    {
         if (flipping)
         {
             if (anim.GetCurrentAnimatorStateInfo(0).IsName("BookLeft") || anim.GetCurrentAnimatorStateInfo(0).IsName("BookRight"))
@@ -102,47 +112,47 @@ public class Journal : ScriptableObject
                 refreshTopicPanel();
             }
         }
+    }
 
-        if (popupOpen)
+    void CheckPopupClick()
+    {
+        if (Input.GetButtonDown("Fire1"))
         {
-            if (Input.GetButtonDown("Fire1"))
+            bool isClicked = false;
+            if (tab == 0 || gearSelection > -1)
             {
-                bool isClicked = false;
-                if (tab == 0 || gearSelection > -1)
-                {
-                    isClicked = popupRoot.GetComponent<Clickable>().getClicked()
-                     || useButton.GetComponent<Clickable>().getClicked()
-                     || trashButton.GetComponent<Clickable>().getClicked();
-                }
+                isClicked = popupRoot.GetComponent<Clickable>().getClicked()
+                 || useButton.GetComponent<Clickable>().getClicked()
+                 || trashButton.GetComponent<Clickable>().getClicked();
+            }
+            if (tab == 1)
+            {
+                isClicked = popupRoot.GetComponent<Clickable>().getClicked()
+                 || useButton.GetComponent<Clickable>().getClicked()
+                 || trashButton.GetComponent<Clickable>().getClicked()
+                 || compareButton.GetComponent<Clickable>().getClicked();
+            }
+            if (isClicked)
+            {
+                popupRoot.GetComponent<Clickable>().setClicked(false);
+
                 if (tab == 1)
                 {
-                    isClicked = popupRoot.GetComponent<Clickable>().getClicked()
-                     || useButton.GetComponent<Clickable>().getClicked()
-                     || trashButton.GetComponent<Clickable>().getClicked()
-                     || compareButton.GetComponent<Clickable>().getClicked();
+                    compareButton.GetComponent<Clickable>().setClicked(false);
                 }
-
-                if (isClicked)
-                {
-                    popupRoot.GetComponent<Clickable>().setClicked(false);
-
-                    if (tab == 1)
-                    {
-                        compareButton.GetComponent<Clickable>().setClicked(false);
-                    }
-                    useButton.GetComponent<Clickable>().setClicked(false);
-                    trashButton.GetComponent<Clickable>().setClicked(false);
-                }
-                else
-                {
-                    closePopup();
-                    unclickAll();
-                }
-
+                useButton.GetComponent<Clickable>().setClicked(false);
+                trashButton.GetComponent<Clickable>().setClicked(false);
             }
-            return;
+            else
+            {
+                closePopup();
+                unclickAll();
+            }
         }
+    }
 
+    void CheckItemSelect()
+    {
         if (Input.GetMouseButtonDown(0))
         {
             for (int i = 0; i < 8; i++)
@@ -190,7 +200,6 @@ public class Journal : ScriptableObject
                     }
                 }
             }
-
         }
     }
 

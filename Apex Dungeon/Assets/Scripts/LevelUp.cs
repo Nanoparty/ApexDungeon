@@ -29,8 +29,8 @@ public class LevelUp : ScriptableObject
         defense = player.getDefense();
         critical = player.getCritical();
         evasion = player.getEvade();
-        prevLevel = player.getExpLevel();
-        expLevel = prevLevel + points;
+        expLevel = player.getExpLevel();
+        prevLevel = expLevel - points;
         levelPoints = points;
 
         Vector3 pos = new Vector3(0, 0, 0);
