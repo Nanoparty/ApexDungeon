@@ -41,14 +41,17 @@ public class Journal : ScriptableObject
     private GameObject mapRoot;
     private GameObject useButton, trashButton, compareButton;
 
+    private void OnEnable()
+    {
+        items = Data.consumables ?? new List<Consumable>();
+        equipment = Data.equipment ?? new List<Equipment>();
+        map = new int[100, 100];
+    }
+
     public void CreateJournal(Player player)
     {
         this.player = player;
 
-        items = Data.consumables ?? new List<Consumable>();
-        equipment = Data.equipment ?? new List<Equipment>();
-
-        map = new int[100, 100];
         buildMap();
         width = GameManager.gmInstance.Dungeon.width;
         height = GameManager.gmInstance.Dungeon.height;
