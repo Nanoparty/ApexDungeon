@@ -299,6 +299,7 @@ public class Player : MovingEntity
             SoundManager.sm.PlayCoinSound();
             GameObject goldNum = GameObject.Instantiate(goldText, new Vector3(this.transform.position.x, this.transform.position.y, 0), Quaternion.identity, this.transform);
             goldNum.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = $"+{amount}";
+            GameManager.gmInstance.Dungeon.removeFromItemList(row, col);
             Destroy(other.gameObject);
 
         }

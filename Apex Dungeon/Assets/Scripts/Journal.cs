@@ -46,6 +46,7 @@ public class Journal : ScriptableObject
         items = Data.consumables ?? new List<Consumable>();
         equipment = Data.equipment ?? new List<Equipment>();
         map = new int[100, 100];
+        tab = 0;
     }
 
     public void CreateJournal(Player player)
@@ -61,7 +62,6 @@ public class Journal : ScriptableObject
 
         flipping = flipping2 = false;
         popupOpen = false;
-        tab = 0;
         selected = -1;
         gearSelection = -1;
 
@@ -488,13 +488,6 @@ public class Journal : ScriptableObject
                     b.GetComponent<Image>().sprite = icons[0];
                     b.transform.SetParent(mapHolder.transform, false);
                 }
-                if (GameManager.gmInstance.Dungeon.isPlayer(i, j))
-                {
-                    Vector3 pos = new Vector3(xOff + j * size, yOff + i * size, 0f);
-                    GameObject b = GameObject.Instantiate(mapBlock, pos, Quaternion.identity);
-                    b.GetComponent<Image>().sprite = icons[1];
-                    b.transform.SetParent(mapHolder.transform, false);
-                }
                 if (GameManager.gmInstance.Dungeon.isEnemy(i, j))
                 {
                     Vector3 pos = new Vector3(xOff + j * size, yOff + i * size, 0f);
@@ -514,6 +507,13 @@ public class Journal : ScriptableObject
                     Vector3 pos = new Vector3(xOff + j * size, yOff + i * size, 0f);
                     GameObject b = GameObject.Instantiate(mapBlock, pos, Quaternion.identity);
                     b.GetComponent<Image>().sprite = icons[5];
+                    b.transform.SetParent(mapHolder.transform, false);
+                }
+                if (GameManager.gmInstance.Dungeon.isPlayer(i, j))
+                {
+                    Vector3 pos = new Vector3(xOff + j * size, yOff + i * size, 0f);
+                    GameObject b = GameObject.Instantiate(mapBlock, pos, Quaternion.identity);
+                    b.GetComponent<Image>().sprite = icons[1];
                     b.transform.SetParent(mapHolder.transform, false);
                 }
 
