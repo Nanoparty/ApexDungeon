@@ -102,11 +102,14 @@ public class Enemy : MovingEntity
     }
 
     public void die(){
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         SoundManager.sm.PlayMonsterSounds();
         SpawnBlood();
         GameManager.gmInstance.Dungeon.tileMap[row, col].occupied = 0;
         GameManager.gmInstance.removeEnemy(this);
         int givenExp = calculateExp();
+        Debug.Log("EXP:" + givenExp);
+        Debug.Log("Player:" + player);
         player.addExp(givenExp);
         Destroy(this.gameObject);
     }
