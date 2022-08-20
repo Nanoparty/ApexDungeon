@@ -48,11 +48,13 @@ public class Consumable : Item
         if(id == "SkipOrb"){
             p.nextFloor();
             SoundManager.sm.PlayMagicSound();
+            p.CloseJournal();
         }
         if(id == "TeleportOrb"){
             Vector2 pos = GameManager.gmInstance.Dungeon.getRandomUnoccupiedTile();
             p.setPosition((int)pos.x, (int)pos.y);
             SoundManager.sm.PlayMagicSound();
+            p.CloseJournal();
         }
         if(id == "DeathOrb"){
             List<Vector2> activeShadows = GameManager.gmInstance.Dungeon.getActiveShadowCoords();
@@ -63,6 +65,7 @@ public class Consumable : Item
                 }
             }
             SoundManager.sm.PlayMagicSound();
+            p.CloseJournal();
         }
         if(id == "MapFragment"){
             GameManager.gmInstance.Dungeon.setFullExplored(true);
@@ -71,6 +74,7 @@ public class Consumable : Item
         if(id == "LightOrb"){
             GameManager.gmInstance.Dungeon.setFullBright(true);
             SoundManager.sm.PlayMagicSound();
+            p.CloseJournal();
         }
     }
 }

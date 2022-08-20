@@ -40,6 +40,7 @@ public class Journal : ScriptableObject
     private bool flipping, flipping2;
     private bool popupOpen;
     private int selected, gearSelection;
+    private bool open;
     
     private void OnEnable()
     {
@@ -47,6 +48,7 @@ public class Journal : ScriptableObject
         equipment = Data.equipment ?? new List<Equipment>();
         map = new int[100, 100];
         tab = 0;
+        open = false;
     }
 
     public void CreateJournal(Player player)
@@ -64,6 +66,7 @@ public class Journal : ScriptableObject
         popupOpen = false;
         selected = -1;
         gearSelection = -1;
+        open = true;
 
         GameObject parent = GameObject.FindGameObjectWithTag("Character");
         journalRoot = GameObject.Instantiate(journalPrefab, Vector3.zero, Quaternion.identity);
@@ -756,7 +759,7 @@ public class Journal : ScriptableObject
     void closeListener()
     {
         SoundManager.sm.PlayBookClose();
-        closeInventory();
+        closeJournal();
     }
 
     string flipDirection(int newTab)
@@ -1062,11 +1065,12 @@ public class Journal : ScriptableObject
         equipment.Add(i as Equipment);
     }
 
-    public void closeInventory()
+    public void closeJournal()
     {
         closePopup();
         player.setGear(gear);
         player.openJournal = false;
+        open = false;
         GameObject.Destroy(journalRoot);
     }
 
@@ -1109,6 +1113,11 @@ public class Journal : ScriptableObject
     public List<Consumable> getItems()
     {
         return items;
+    }
+
+    public bool isOpen()
+    {
+        return open;
     }
 
 }

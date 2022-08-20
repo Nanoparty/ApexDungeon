@@ -166,7 +166,7 @@ public class Player : MovingEntity
 
         if (checkDead()) return;
 
-        if (openJournal)
+        if (openJournal || journal.isOpen())
         {
             journal.Update();
             return;
@@ -265,6 +265,11 @@ public class Player : MovingEntity
             saveCharacterData();
             Data.SaveToFile();
         }
+    }
+
+    public void CloseJournal()
+    {
+        journal.closeJournal();
     }
 
     public void nextFloor(){
