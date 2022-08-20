@@ -28,8 +28,8 @@ public class Pause : ScriptableObject
         GameObject music = options.transform.GetChild(0).gameObject;
         GameObject sound = options.transform.GetChild(1).gameObject;
 
-        buttons.transform.GetChild(0).GetComponent<Button>().onClick.AddListener(ResumeListener);
-        buttons.transform.GetChild(1).GetComponent<Button>().onClick.AddListener(MenuListener);
+        buttons.transform.GetChild(0).GetComponent<Button>().onClick.AddListener(MenuListener);
+        buttons.transform.GetChild(1).GetComponent<Button>().onClick.AddListener(ResumeListener);
 
         Toggle musicToggle = music.transform.GetChild(1).gameObject.GetComponent<Toggle>();
         Toggle soundToggle = sound.transform.GetChild(1).gameObject.GetComponent<Toggle>();
