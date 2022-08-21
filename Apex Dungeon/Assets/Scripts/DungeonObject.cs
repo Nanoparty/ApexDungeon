@@ -132,13 +132,11 @@ public class DungeonObject
             activeShadows.Clear();
             activeShadowCoords.Clear();
         }
-        if(!fullExplored){
-            foreach(Vector2 v in visibleTiles)
-            {
-                tileMap[(int)v.x, (int)v.y].visible = false;
-            }
-            visibleTiles.Clear();
+        foreach(Vector2 v in visibleTiles)
+        {
+            tileMap[(int)v.x, (int)v.y].visible = false;
         }
+        visibleTiles.Clear();
         
     }
 
