@@ -16,8 +16,8 @@ public class Player : MovingEntity
     private GameObject hpBar;
     private GameObject expBar;
 
-    private Button journalButton;
-    private Button pauseButton;
+    private GameObject journalButton;
+    private GameObject pauseButton;
 
     private PlayerGear gear;
     private Animator animator;
@@ -76,16 +76,16 @@ public class Player : MovingEntity
 
         hpBar = GameObject.FindGameObjectWithTag("hpbar");
         expBar = GameObject.FindGameObjectWithTag("xpbar");
-        journalButton = GameObject.FindGameObjectWithTag("characterButton").GetComponent<Button>();
-        pauseButton = GameObject.FindGameObjectWithTag("PauseButton").GetComponent<Button>();
+
+        journalButton = GameObject.FindGameObjectWithTag("characterButton");
+        pauseButton = GameObject.FindGameObjectWithTag("PauseButton");
+        journalButton.GetComponent<Button>().onClick.AddListener(journalListener);
+        pauseButton.GetComponent<Button>().onClick.AddListener(pauseListener);
 
         stairsModal = GameObject.FindGameObjectWithTag("stairspopup");
         stairsModal.SetActive(false);
         stairsModal.transform.GetChild(2).GetComponent<Button>().onClick.AddListener(stairsNo);
         stairsModal.transform.GetChild(3).GetComponent<Button>().onClick.AddListener(stairsYes);
-
-        journalButton.onClick.AddListener(characterListener);
-        pauseButton.onClick.AddListener(pauseListener);
     }
 
     void moveController(int clickRow, int clickCol)
@@ -181,7 +181,17 @@ public class Player : MovingEntity
         
         if (Input.GetButtonDown("Fire1"))
         {
+            Debug.Log("Detect Click");
             if (EventSystem.current.IsPointerOverGameObject())
+            {
+                Debug.Log("UI");
+                return;
+            }
+
+            //check for UI Button
+            if (openJournal || openPause ||
+                journalButton.GetComponent<Clickable>().getClicked() ||
+                pauseButton.GetComponent<Clickable>().getClicked())
             {
                 return;
             }
@@ -331,13 +341,14 @@ public class Player : MovingEntity
         else return false;
     }
 
-    void characterListener()
+    void journalListener()
     {
         if (!openJournal && !openPause)
         {
             SoundManager.sm.PlayBookOpen();
             journal.CreateJournal(this);
             openJournal = true;
+            journalButton.GetComponent<Clickable>().setClicked(false);
         }
     }
 
@@ -346,6 +357,8 @@ public class Player : MovingEntity
         if (!openJournal && !openPause)
         {
             pauseMenu.CreatePause(this);
+            openPause = true;
+            pauseButton.GetComponent<Clickable>().setClicked(false);
         }
     }
 
@@ -377,7 +390,7 @@ public class Player : MovingEntity
             setAttackAnimation(clickRow, clickCol);
             attacking = true;
             int dice = Random.Range(0, 100);
-            if (dice <= critical)
+            if (true)//(dice <= critical)
             {
                 enemy.takeDamage(calculateDamage(3), true);
             }
