@@ -390,7 +390,7 @@ public class Player : MovingEntity
             setAttackAnimation(clickRow, clickCol);
             attacking = true;
             int dice = Random.Range(0, 100);
-            if (true)//(dice <= critical)
+            if (dice <= critical)
             {
                 enemy.takeDamage(calculateDamage(3), true);
             }
