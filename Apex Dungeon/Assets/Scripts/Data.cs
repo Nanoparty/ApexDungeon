@@ -28,6 +28,7 @@ public static class Data
     //Character Data
     public static string playerName;
     public static int gold;
+    public static int baseHp;
     public static int hp;
     public static int maxHp;
     public static int mp;
@@ -53,6 +54,7 @@ public static class Data
 
         playerName = activeCharacter;
         gold = current.gold;
+        baseHp = current.baseHp;
         hp = current.hp;
         maxHp = current.maxHp;
         mp = current.mp;
@@ -86,6 +88,7 @@ public static class Data
         CharacterData current = charData.Where(cd => cd.name == activeCharacter).First();
         current.name = playerName;
         current.gold = gold;
+        current.baseHp = baseHp;
         current.hp = hp;
         current.maxHp = maxHp;
         current.mp = mp;
@@ -163,7 +166,7 @@ public static class Data
             }
 
             CharacterData cd = new CharacterData(p.name, p.floor, p.level, p.gold, p.strength, p.defense,
-                p.evasion, p.critical, p.hp, p.maxHp, p.exp, p.maxExp, gear, equips, consumes);
+                p.evasion, p.critical, p.baseHp, p.hp, p.maxHp, p.exp, p.maxExp, gear, equips, consumes);
 
             loadCharData.Add(cd);
         }

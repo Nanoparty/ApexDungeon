@@ -231,6 +231,7 @@ public class Player : MovingEntity
 
     public void saveCharacterData(){
         Data.playerName = playerName;
+        Data.baseHp = baseHp;
         Data.hp = hp;
         Data.maxHp = maxHp;
         Data.mp = mp;
@@ -254,6 +255,7 @@ public class Player : MovingEntity
 
     public void loadCharacterData(){
         playerName = Data.playerName;
+        baseHp = Data.baseHp;
         hp = Data.hp;
         maxHp = Data.maxHp;
         mp = Data.mp;

@@ -14,6 +14,7 @@ public class SavePlayer
     public int evasion;
     public int critical;
 
+    public int baseHp;
     public int hp;
     public int maxHp;
     public int exp;
@@ -44,6 +45,7 @@ public class SavePlayer
         evasion = data.evade;
         critical = data.crit;
 
+        baseHp = data.baseHp;
         hp = data.hp;
         maxHp = data.maxHp;
         exp = data.exp;

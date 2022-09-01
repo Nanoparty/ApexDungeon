@@ -8,6 +8,7 @@ public class CharacterData : MonoBehaviour
     public int floor;
     public int level;
     public int gold;
+    public int baseHp;
     public int hp;
     public int maxHp;
     public int mp;
@@ -36,6 +37,7 @@ public class CharacterData : MonoBehaviour
         floor = 1;
         level = 1;
         gold = 0;
+        baseHp = 100;
         hp = 100;
         maxHp = 100;
         mp = 100;
@@ -55,7 +57,7 @@ public class CharacterData : MonoBehaviour
     }
 
     public CharacterData(string name, int floor, int expLevel, int gold, int strength,
-        int defense, int evade, int crit, int hp, int maxHp, int exp, int maxExp, PlayerGear gear,
+        int defense, int evade, int crit,int baseHp, int hp, int maxHp, int exp, int maxExp, PlayerGear gear,
         List<Equipment> equipment, List<Consumable> consumables)
     {
         this.name = name;
@@ -66,6 +68,7 @@ public class CharacterData : MonoBehaviour
         this.defense = defense;
         this.evade = evade;
         this.crit = crit;
+        this.baseHp = baseHp;
         this.hp = hp;
         this.maxHp = maxHp;
         this.exp = exp;
