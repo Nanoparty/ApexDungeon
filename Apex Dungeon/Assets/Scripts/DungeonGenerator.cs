@@ -24,6 +24,8 @@ public class DungeonGenerator : ScriptableObject
     public int minHeight = 5;
     public int numRooms = 30;
 
+    public int border = 10;
+
     public static List<Room> rooms;
 
     private Transform dungeon;
@@ -77,6 +79,9 @@ public class DungeonGenerator : ScriptableObject
         op.transform.GetChild(0).transform.GetChild(0).gameObject.GetComponent<Text>().text = GameManager.gmInstance.DungeonName;
         op.transform.GetChild(1).transform.GetChild(0).gameObject.GetComponent<Text>().text = "Floor " + GameManager.gmInstance.level;
         op.transform.SetParent(GameObject.FindGameObjectWithTag("Canvas").transform, false);
+
+        width += 2 * border;
+        height += 2 * border;
 
         InitializeTileMap();
         InitializeShadowMap();
@@ -337,8 +342,8 @@ public class DungeonGenerator : ScriptableObject
                 tries++;
                 rWidth = Random.Range(minWidth, maxWidth);
                 rHeight = Random.Range(minHeight, maxHeight);
-                row = Random.Range(0, height - rHeight);
-                col = Random.Range(0, width - rWidth);
+                row = Random.Range(border, height - rHeight - border);
+                col = Random.Range(border, width - rWidth - border);
                 if(!checkRoomCollision(row, col, rWidth, rHeight))
                 {
                     valid = true;
