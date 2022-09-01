@@ -50,10 +50,9 @@ public class Player : MovingEntity
 
     void setInitialValues() {
         playerName = Data.activeCharacter ?? "bob";
-        hp = 100;
+        
         mp = 100;
         maxMp = 50;
-        maxHp = 100;
         expLevel = 1;
         exp = 0;
         maxExp = 100;
@@ -66,6 +65,10 @@ public class Player : MovingEntity
         blockStat = 10;
         type = 1;
         gold = 0;
+
+        baseHp = 100;
+        hp = baseHp + (int)((float)baseHp * 0.02f * defense);
+        maxHp = hp;
     }
 
     void initializeObjects() {
@@ -551,10 +554,13 @@ public class Player : MovingEntity
             hp = maxHp;
         }
     }
-    public void addTotalHP(int i)
+    public void addBaseHP(int i)
     {
-        maxHp += i;
-        hp += i;
+        baseHp += i;
+        int newHp = baseHp + (int)((float)baseHp * Mathf.Pow(0.02f, defense));
+        int diff = newHp - maxHp;
+        maxHp += diff;
+        hp += diff;
     }
     public void addExp(int i){
         exp += i;
@@ -565,8 +571,9 @@ public class Player : MovingEntity
             SoundManager.sm.PlayLevelUpSound();
             exp -= maxExp;
             expLevel++;
-            maxHp = (int)(maxHp * 1.1);
-            hp = maxHp;
+            baseHp = (int)(baseHp * 1.1);
+            hp = baseHp + (int)((float)baseHp * 0.02f * defense);
+            maxHp = hp;
             maxExp += (int)(0.5 * maxExp);
             didLevel = true;
             levelPoints++;
@@ -584,9 +591,13 @@ public class Player : MovingEntity
     {
         attack += i;
     }
-    public void addDefense(int i){
-        defense += i;
-    }
+    //public void addDefense(int i){
+    //    defense += i;
+    //    int newHp = baseHp + (int)((float)baseHp * Mathf.Pow(0.02f, defense));
+    //    int diff = newHp - maxHp;
+    //    maxHp += diff;
+    //    hp += diff;
+    //}
     public void addCrit(int i){
         critical += i;
     }
@@ -606,6 +617,12 @@ public class Player : MovingEntity
     public void setDefense(int i)
     {
         defense = i;
+        int newHp = baseHp + (int)((float)baseHp * 0.02f * defense);
+        int diff = newHp - maxHp;
+        maxHp += diff;
+        hp += diff;
+
+        
     }
     public void setCritical(int i)
     {

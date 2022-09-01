@@ -921,7 +921,7 @@ public class Journal : ScriptableObject
         int intel = e.intelligence;
 
         player.addAttack(att);
-        player.addTotalHP(hp);
+        player.addBaseHP(hp);
         player.addCrit(crit);
         player.addIntelligence(intel);
     }
@@ -936,7 +936,7 @@ public class Journal : ScriptableObject
         int intel = e.intelligence;
 
         player.addAttack(-att);
-        player.addMaxHP(-hp);
+        player.addBaseHP(-hp);
         player.addCrit(-crit);
         player.addIntelligence(-intel);
     }

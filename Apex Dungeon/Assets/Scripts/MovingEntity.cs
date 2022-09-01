@@ -6,6 +6,7 @@ public abstract class MovingEntity : MonoBehaviour
     protected int maxHp;
     protected int maxMp;
     protected int hp;
+    protected int baseHp;
     protected int mp;
     protected int expLevel;
     protected int exp;
