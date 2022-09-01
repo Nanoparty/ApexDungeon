@@ -6,6 +6,7 @@ public abstract class MovingEntity : MonoBehaviour
     protected int maxHp;
     protected int maxMp;
     protected int hp;
+    protected int baseHp;
     protected int mp;
     protected int expLevel;
     protected int exp;
@@ -230,8 +231,6 @@ public abstract class MovingEntity : MonoBehaviour
         }
         if (change < 0)
         {
-            GameObject damageNum = GameObject.Instantiate(damageText, new Vector3(this.transform.position.x, this.transform.position.y, 0), Quaternion.identity, this.transform);
-            damageNum.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = $"{change}";
             SpawnBlood();
         }
     }

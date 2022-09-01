@@ -16,6 +16,8 @@ public class DungeonObject
     public int height;
     private bool fullBright = false;
     private bool fullExplored = false;
+    private bool isFullExplored = false;
+    private bool isFullBright = false;
 
     public DungeonObject(){
         tileMap = null;
@@ -33,16 +35,17 @@ public class DungeonObject
     
     public void UpdateShadows(int r, int c)
     {
-        if(fullExplored){
+        if(fullExplored && !isFullExplored){
             for(int i = 0; i < width;i++){
                 for(int j = 0; j < height;j++){
                     visibleTiles.Add(new Vector2(i, j));
                     tileMap[i, j].explored = true;
                 }
             }
+            isFullExplored = true;
         }
 
-        if(fullBright){
+        if(fullBright && !isFullBright){
             for(int i = 0; i < width;i++){
                 for(int j = 0; j < height;j++){
                     GameObject o = shadowMap[i, j];
@@ -51,6 +54,7 @@ public class DungeonObject
                     tileMap[i,j].visible = true;
                 }
             }
+            isFullBright = true;
         }
 
         SetShadowsDark();        
@@ -128,13 +132,11 @@ public class DungeonObject
             activeShadows.Clear();
             activeShadowCoords.Clear();
         }
-        if(!fullExplored){
-            foreach(Vector2 v in visibleTiles)
-            {
-                tileMap[(int)v.x, (int)v.y].visible = false;
-            }
-            visibleTiles.Clear();
+        foreach(Vector2 v in visibleTiles)
+        {
+            tileMap[(int)v.x, (int)v.y].visible = false;
         }
+        visibleTiles.Clear();
         
     }
 

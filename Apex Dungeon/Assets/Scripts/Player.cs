@@ -7,51 +7,32 @@ using UnityEngine.SceneManagement;
 
 public class Player : MovingEntity
 {
-    private GameObject hpbar;
-    private GameObject xpbar;
-    private Button character;
-    private Button pause;
-    public GameObject characterPanel;
-    public GameObject pausePanel;
-    public GameObject slot;
-    public GameObject block;
-    public GameObject pblock;
-    public GameObject mapHolder;
-    public GameObject questLine;
-    public GameObject mapArea;
-    public GameObject itemPopup;
-    public GameObject levelPopup;
     public GameObject endingScreen;
-    public Sprite[] frames;
-    public Sprite[] tabs;
     public GameObject goldText;
+    public LevelUp levelUp;
+    public Pause pauseMenu;
+    public Journal journal;
 
-    private CharacterMenu charMenu;
-    private GameObject pauseMenu;
-    private GameObject levelPopHolder;
+    private GameObject hpBar;
+    private GameObject expBar;
+
+    private GameObject journalButton;
+    private GameObject pauseButton;
+
     private PlayerGear gear;
     private Animator animator;
     private GameObject stairsModal;
+    private GameObject endScreenHolder;
+
     private string playerName;
     private int gold;
-    private bool openCharacter = false;
-    private bool openLevel = false;
-    private bool openPause = false;
-    private bool opening = true;
+    public bool openJournal = false;
+    public bool openLevel = false;
+    public bool openPause = false;
     public bool ending = false;
-    private bool fadeOut = false;
     public bool fadeIn = true;
-    private float start;
-    private int prevLevel;
-    private int levelPoints;
-    private GameObject endScreenHolder;
     private bool interrupt = false;
     private bool attacking = false;
-
-    private int tempStrength;
-    private int tempDefense;
-    private int tempEvasion;
-    private int tempCritical;
 
     private bool stairsOpen = false;
 
@@ -69,16 +50,12 @@ public class Player : MovingEntity
 
     void setInitialValues() {
         playerName = Data.activeCharacter ?? "bob";
-        hp = 100;
+        
         mp = 100;
         maxMp = 50;
-        maxHp = 100;
-
         expLevel = 1;
         exp = 0;
         maxExp = 100;
-        levelPoints = 0;
-
         attack = 10;
         strength = 10;
         defense = 10;
@@ -86,10 +63,12 @@ public class Player : MovingEntity
         critical = 10;
         evade = 10;
         blockStat = 10;
-
         type = 1;
         gold = 0;
-        start = 0;
+
+        baseHp = 100;
+        hp = baseHp + (int)((float)baseHp * 0.02f * defense);
+        maxHp = hp;
     }
 
     void initializeObjects() {
@@ -97,20 +76,19 @@ public class Player : MovingEntity
 
         animator = transform.GetChild(1).gameObject.transform.GetComponent<Animator>();
         gear = new PlayerGear();
-        charMenu = new CharacterMenu(characterPanel, slot, questLine, mapArea, block, pblock, itemPopup, frames, tabs);
 
-        hpbar = GameObject.FindGameObjectWithTag("hpbar");
-        xpbar = GameObject.FindGameObjectWithTag("xpbar");
-        character = GameObject.FindGameObjectWithTag("characterButton").GetComponent<Button>();
-        pause = GameObject.FindGameObjectWithTag("PauseButton").GetComponent<Button>();
+        hpBar = GameObject.FindGameObjectWithTag("hpbar");
+        expBar = GameObject.FindGameObjectWithTag("xpbar");
+
+        journalButton = GameObject.FindGameObjectWithTag("characterButton");
+        pauseButton = GameObject.FindGameObjectWithTag("PauseButton");
+        journalButton.GetComponent<Button>().onClick.AddListener(journalListener);
+        pauseButton.GetComponent<Button>().onClick.AddListener(pauseListener);
 
         stairsModal = GameObject.FindGameObjectWithTag("stairspopup");
         stairsModal.SetActive(false);
         stairsModal.transform.GetChild(2).GetComponent<Button>().onClick.AddListener(stairsNo);
         stairsModal.transform.GetChild(3).GetComponent<Button>().onClick.AddListener(stairsYes);
-
-        character.onClick.AddListener(characterListener);
-        pause.onClick.AddListener(pauseListener);
     }
 
     void moveController(int clickRow, int clickCol)
@@ -191,14 +169,9 @@ public class Player : MovingEntity
 
         if (checkDead()) return;
 
-        if (openCharacter)
+        if (openJournal || journal.isOpen())
         {
-            charMenu.Update();
-            if (charMenu.getClosed())
-            {
-                charMenu.setClosed(false);
-                openCharacter = false;
-            }
+            journal.Update();
             return;
         }
 
@@ -211,7 +184,17 @@ public class Player : MovingEntity
         
         if (Input.GetButtonDown("Fire1"))
         {
+            Debug.Log("Detect Click");
             if (EventSystem.current.IsPointerOverGameObject())
+            {
+                Debug.Log("UI");
+                return;
+            }
+
+            //check for UI Button
+            if (openJournal || openPause ||
+                journalButton.GetComponent<Clickable>().getClicked() ||
+                pauseButton.GetComponent<Clickable>().getClicked())
             {
                 return;
             }
@@ -240,40 +223,15 @@ public class Player : MovingEntity
 
     void debugMenu(){
         //Debugging tool
-        if (Input.GetKeyDown("q"))
-        {
-            GameObject redbar = hpbar.transform.GetChild(0).gameObject;
-            Vector3 pos = redbar.transform.GetComponent<RectTransform>().position;
-
-            Vector2 sizeDelta = redbar.transform.GetComponent<RectTransform>().sizeDelta;
-            Canvas canvas = GameObject.FindGameObjectWithTag("Canvas").GetComponent<Canvas>();
-            Vector2 canvasScale = new Vector2(canvas.transform.localScale.x, canvas.transform.localScale.y);
-            Vector2 finalScale = new Vector2(sizeDelta.x * canvasScale.x, sizeDelta.y * canvasScale.y);
-            float lscale = hpbar.transform.GetComponent<RectTransform>().localScale.x;
-            float fullWidth = finalScale.x * 3;
-
-            float scale = redbar.transform.GetComponent<RectTransform>().localScale.x;
-            redbar.transform.GetComponent<RectTransform>().position = new Vector3((pos.x - fullWidth/2), pos.y, pos.z);
-        }
         if (Input.GetKeyDown("t"))
         {
             nextFloor();
-        }
-        if (Input.GetKeyDown("r"))
-        {
-            GameManager.gmInstance.FullReset();
-        }
-        if(Input.GetKeyDown("y")){
-            GameManager.gmInstance.scores = Data.scores ?? new List<(string, int)>();
-            GameManager.gmInstance.scores.Add((GameManager.gmInstance.playerName,GameManager.gmInstance.score));
-            GameManager.gmInstance.state = "score";
-            Data.inProgress = false;
-            SceneManager.LoadScene("Scores", LoadSceneMode.Single);
         }
     }
 
     public void saveCharacterData(){
         Data.playerName = playerName;
+        Data.baseHp = baseHp;
         Data.hp = hp;
         Data.maxHp = maxHp;
         Data.mp = mp;
@@ -289,16 +247,15 @@ public class Player : MovingEntity
         Data.block = blockStat;
         Data.gold = gold;
         Data.floor = GameManager.gmInstance.level;
-
-        Data.equipment = charMenu.equipment;
-        Data.consumables = charMenu.items;
+        Data.equipment = journal.getEquipment();
+        Data.consumables = journal.getItems();
         Data.gear = gear;
         Data.SaveCharacter();
     }
 
     public void loadCharacterData(){
-        
         playerName = Data.playerName;
+        baseHp = Data.baseHp;
         hp = Data.hp;
         maxHp = Data.maxHp;
         mp = Data.mp;
@@ -313,7 +270,6 @@ public class Player : MovingEntity
         evade = Data.evade;
         blockStat = Data.block;
         gold = Data.gold;
-
         gear = Data.gear;
     }
 
@@ -324,6 +280,11 @@ public class Player : MovingEntity
             saveCharacterData();
             Data.SaveToFile();
         }
+    }
+
+    public void CloseJournal()
+    {
+        journal.closeJournal();
     }
 
     public void nextFloor(){
@@ -345,8 +306,8 @@ public class Player : MovingEntity
         }
         if(other.gameObject.tag == "Consumable")
         {
-            if (charMenu.items.Count == charMenu.maxSlots) return;
-            charMenu.addItem(other.GetComponent<Pickup>().GetItem());
+            if (journal.getItems().Count == Journal.maxSlots) return;
+            journal.addItem(other.GetComponent<Pickup>().GetItem());
             Destroy(other.gameObject);
             GameManager.gmInstance.Dungeon.removeFromItemList(row, col);
             SoundManager.sm.PlayPickupSound();
@@ -358,13 +319,14 @@ public class Player : MovingEntity
             SoundManager.sm.PlayCoinSound();
             GameObject goldNum = GameObject.Instantiate(goldText, new Vector3(this.transform.position.x, this.transform.position.y, 0), Quaternion.identity, this.transform);
             goldNum.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = $"+{amount}";
+            GameManager.gmInstance.Dungeon.removeFromItemList(row, col);
             Destroy(other.gameObject);
 
         }
         if (other.gameObject.tag == "Equipment")
         {
-            if (charMenu.equipment.Count == charMenu.maxSlots) return;
-            charMenu.addEquipment(other.GetComponent<Pickup>().GetItem());
+            if (journal.getEquipment().Count == Journal.maxSlots) return;
+            journal.addEquipment(other.GetComponent<Pickup>().GetItem());
             Destroy(other.gameObject);
             GameManager.gmInstance.Dungeon.removeFromItemList(row, col);
             SoundManager.sm.PlayPickupSound();
@@ -384,76 +346,25 @@ public class Player : MovingEntity
         else return false;
     }
 
-    void characterListener()
+    void journalListener()
     {
-        if (!openCharacter && !openPause)
+        if (!openJournal && !openPause)
         {
-            charMenu.setClosed(false);
             SoundManager.sm.PlayBookOpen();
-            charMenu.openStats();
-            openCharacter = true;
+            journal.CreateJournal(this);
+            openJournal = true;
+            journalButton.GetComponent<Clickable>().setClicked(false);
         }
     }
 
     void pauseListener()
     {
-        if (!openCharacter && !openPause)
+        if (!openJournal && !openPause)
         {
-            SoundManager.sm.PlayMenuSound();
+            pauseMenu.CreatePause(this);
             openPause = true;
-            GameObject parent = GameObject.FindGameObjectWithTag("Pause");
-            pauseMenu = GameObject.Instantiate(pausePanel, Vector3.zero, Quaternion.identity);
-            pauseMenu.transform.SetParent(parent.transform, false);
-
-            GameObject buttons = pauseMenu.transform.GetChild(1).gameObject.transform.GetChild(1).gameObject;
-            GameObject options = pauseMenu.transform.GetChild(1).gameObject.transform.GetChild(2).gameObject;
-            GameObject music = options.transform.GetChild(0).gameObject;
-            GameObject sound = options.transform.GetChild(1).gameObject;
-
-            buttons.transform.GetChild(0).GetComponent<Button>().onClick.AddListener(ResumeListener);
-            buttons.transform.GetChild(1).GetComponent<Button>().onClick.AddListener(MenuListener);
-
-            Toggle musicToggle = music.transform.GetChild(1).gameObject.GetComponent<Toggle>();
-            Toggle soundToggle = sound.transform.GetChild(1).gameObject.GetComponent<Toggle>();
-            Slider musicSlider = music.transform.GetChild(2).gameObject.GetComponent<Slider>();
-            Slider soundSlider = sound.transform.GetChild(2).gameObject.GetComponent<Slider>();
-
-            musicToggle.isOn = Data.music;
-            soundToggle.isOn = Data.sound;
-            musicSlider.value = Data.musicVolume;
-            soundSlider.value = Data.soundVolume;
-
-            musicToggle.onValueChanged.AddListener((value) => { musicToggleListener(value); });
-            soundToggle.onValueChanged.AddListener((value) => { soundToggleListener(value); });
-            musicSlider.onValueChanged.AddListener((value) => { musicSliderListener(value); });
-            soundSlider.onValueChanged.AddListener((value) => { soundSliderListener(value); });
-
+            pauseButton.GetComponent<Clickable>().setClicked(false);
         }
-    }
-
-    void musicToggleListener(bool value)
-    {
-        Data.music = value;
-        SoundManager.sm.UpdatePlaying();
-        SoundManager.sm.PlayMenuSound();
-    }
-
-    void musicSliderListener(float value)
-    {
-        Data.musicVolume = value;
-        SoundManager.sm.UpdateMusicVolume();
-    }
-
-    void soundToggleListener(bool value)
-    {
-        SoundManager.sm.PlayMenuSound();
-        Data.sound = value;
-    }
-
-    void soundSliderListener(float value)
-    {
-        Data.soundVolume = value;
-        SoundManager.sm.UpdateSoundVolume();
     }
 
     void checkMoving()
@@ -548,177 +459,6 @@ public class Player : MovingEntity
         //INTERACTION
     }
 
-    void ResumeListener(){
-        SoundManager.sm.PlayMenuSound();
-        openPause = false;
-        GameObject.Destroy(pauseMenu);
-    }
-
-    void MenuListener(){
-        SoundManager.sm.PlayMenuSound();
-        saveCharacterData();
-        Data.SaveToFile();
-        Destroy(GameManager.gmInstance);
-        SceneManager.LoadScene("Title", LoadSceneMode.Single);
-    }
-
-    
-
-    void createLevelPopup(){
-        Vector3 pos = new Vector3(0, 0, 0);
-
-        GameObject levelPop = GameObject.Instantiate(levelPopup, pos, Quaternion.identity);
-        levelPop.transform.SetParent(GameObject.FindGameObjectWithTag("LevelUp").transform, false);
-        levelPopHolder = levelPop;
-
-        Util.setText(levelPop, prevLevel + "->" + expLevel, 1);
-        Util.setText(levelPop, "Points Remaining:" + levelPoints, 2);
-
-        GameObject Strength = Util.getChild(levelPop, 3);
-        GameObject Defense = Util.getChild(levelPop, 4);
-        GameObject Crit = Util.getChild(levelPop, 5);
-        //GameObject Intelligence = Util.getChild(levelPop, 6);
-        GameObject Evade = Util.getChild(levelPop, 6);
-        //GameObject Block = Util.getChild(levelPop, 8);
-
-        Util.setText(Strength, strength.ToString(), 1);
-        Util.setText(Defense, defense.ToString(), 1);
-        Util.setText(Crit, critical.ToString(), 1);
-        //Util.setText(Intelligence, intelligence.ToString(), 1);
-        Util.setText(Evade, evade.ToString(), 1);
-        //Util.setText(Block, blockStat.ToString(), 1);
-
-        Util.setListener(Strength, StrengthAddListener, 2);
-        Util.setListener(Strength, StrengthSubListener, 3);
-
-        Util.setListener(Defense, DefenseAddListener, 2);
-        Util.setListener(Defense, DefenseSubListener, 3);
-
-        Util.setListener(Crit, CritAddListener, 2);
-        Util.setListener(Crit, CritSubListener, 3);
-
-        //Util.setListener(Intelligence, IntelligenceListener, 2);
-
-        Util.setListener(Evade, EvadeAddListener, 2);
-        Util.setListener(Evade, EvadeSubListener, 3);
-
-        //Util.setListener(Block, BlockListener, 2);
-
-        Util.setListener(levelPop, LevelConfirmListener, 7);
-
-        tempStrength = strength;
-        tempDefense = defense;
-        tempCritical = critical;
-        tempEvasion = evade;
-    }
-
-    void StrengthAddListener(){
-        SoundManager.sm.PlayMenuSound();
-        if (levelPoints == 0) return;
-
-        tempStrength++;
-        levelPoints--;
-        Util.setText(levelPopHolder, (tempStrength).ToString(), 3, 1);
-        Util.setColor(levelPopHolder, Color.green, 3, 1);
-        Util.setText(levelPopHolder, "Points Remaining:" + levelPoints, 2);
-    }
-    void StrengthSubListener()
-    {
-        SoundManager.sm.PlayMenuSound();
-        if (tempStrength == strength) return;
-
-        tempStrength--;
-        levelPoints++;
-        if (tempStrength == strength)
-        {
-            Util.setColor(levelPopHolder, new Color(94f/255f,52f/255f,0f), 3, 1);
-        }
-        Util.setText(levelPopHolder, (tempStrength).ToString(), 3, 1);
-        Util.setText(levelPopHolder, "Points Remaining:" + levelPoints, 2);
-    }
-    void DefenseAddListener(){
-        SoundManager.sm.PlayMenuSound();
-        if (levelPoints == 0) return;
-
-        tempDefense++;
-        levelPoints--;
-        Util.setText(levelPopHolder, tempDefense.ToString(), 4, 1);
-        Util.setColor(levelPopHolder, Color.green, 4, 1);
-        Util.setText(levelPopHolder, "Points Remaining:" + levelPoints, 2);
-    }
-    void DefenseSubListener()
-    {
-        SoundManager.sm.PlayMenuSound();
-        if (tempDefense == defense) return;
-
-        tempDefense--;
-        levelPoints++;
-        Util.setText(levelPopHolder, tempDefense.ToString(), 4, 1);
-        if (tempDefense == defense)
-        {
-            Util.setColor(levelPopHolder, new Color(94f / 255f, 52f / 255f, 0f), 4, 1);
-        }
-        Util.setText(levelPopHolder, "Points Remaining:" + levelPoints, 2);
-    }
-    void CritAddListener(){
-        SoundManager.sm.PlayMenuSound();
-        if (levelPoints == 0) return;
-
-        tempCritical++;
-        levelPoints--;
-        Util.setText(levelPopHolder, tempCritical.ToString(), 5, 1);
-        Util.setColor(levelPopHolder, Color.green, 5, 1);
-        Util.setText(levelPopHolder, "Points Remaining:" + levelPoints, 2);
-    }
-    void CritSubListener()
-    {
-        SoundManager.sm.PlayMenuSound();
-        if (tempCritical == critical) return;
-
-        tempCritical--;
-        levelPoints++;
-        Util.setText(levelPopHolder, tempCritical.ToString(), 5, 1);
-        if (tempDefense == defense)
-        {
-            Util.setColor(levelPopHolder, new Color(94f / 255f, 52f / 255f, 0f), 5, 1);
-        }
-        Util.setText(levelPopHolder, "Points Remaining:" + levelPoints, 2);
-    }
-    void EvadeAddListener(){
-        SoundManager.sm.PlayMenuSound();
-        if (levelPoints == 0) return;
-
-        levelPoints--;
-        tempEvasion++;
-        Util.setText(levelPopHolder, tempEvasion.ToString(), 6, 1);
-        Util.setColor(levelPopHolder, Color.green, 6, 1);
-        Util.setText(levelPopHolder, "Points Remaining:" + levelPoints, 2);
-    }
-    void EvadeSubListener()
-    {
-        SoundManager.sm.PlayMenuSound();
-        if (tempEvasion == evade) return;
-
-        tempEvasion--;
-        levelPoints++;
-        Util.setText(levelPopHolder, tempEvasion.ToString(), 6, 1);
-        if (tempDefense == defense)
-        {
-            Util.setColor(levelPopHolder, new Color(94f / 255f, 52f / 255f, 0f), 6, 1);
-        }
-        Util.setText(levelPopHolder, "Points Remaining:" + levelPoints, 2);
-    }
-
-    void LevelConfirmListener(){
-        SoundManager.sm.PlayMenuSound();
-        strength = tempStrength;
-        defense = tempDefense;
-        critical = tempCritical;
-        evade = tempEvasion;
-        GameObject.Destroy(levelPopHolder);
-        openLevel = false;
-    }
-
     void updatePlayerStatus()
     {
         if (hp < 0) hp = 0;
@@ -727,30 +467,30 @@ public class Player : MovingEntity
         if (mp < 0) mp = 0;
         if (mp > maxMp) mp = maxMp;
 
-        hpbar.transform.GetChild(1).gameObject.GetComponent<TMP_Text>().text = hp + "/" + maxHp;
-        xpbar.transform.GetChild(1).gameObject.GetComponent<TMP_Text>().text = exp + "/" + maxExp;
+        hpBar.transform.GetChild(1).gameObject.GetComponent<TMP_Text>().text = hp + "/" + maxHp;
+        expBar.transform.GetChild(1).gameObject.GetComponent<TMP_Text>().text = exp + "/" + maxExp;
 
-        GameObject redbar = hpbar.transform.GetChild(0).gameObject;
-        GameObject greenbar = xpbar.transform.GetChild(0).gameObject;
+        GameObject redbar = hpBar.transform.GetChild(0).gameObject;
+        GameObject greenbar = expBar.transform.GetChild(0).gameObject;
 
         Canvas canvas = GameObject.FindGameObjectWithTag("Canvas").GetComponent<Canvas>();
         Vector2 canvasScale = new Vector2(canvas.transform.localScale.x, canvas.transform.localScale.y);
 
         Vector2 redSizeDelta = redbar.transform.GetComponent<RectTransform>().sizeDelta;
         Vector2 redFinalScale = new Vector2(redSizeDelta.x * canvasScale.x, redSizeDelta.y * canvasScale.y);
-        float redWidth = redFinalScale.x * hpbar.transform.GetComponent<RectTransform>().localScale.x;
+        float redWidth = redFinalScale.x * hpBar.transform.GetComponent<RectTransform>().localScale.x;
 
         Vector3 pos1 = redbar.transform.position;
-        float redStartingPos = hpbar.transform.GetChild(2).gameObject.transform.position.x;
+        float redStartingPos = hpBar.transform.GetChild(2).gameObject.transform.position.x;
         float redPos = redStartingPos - (redWidth - (((float)hp / (float)maxHp) * redWidth));
         redbar.transform.GetComponent<RectTransform>().position = new Vector3(redPos, pos1.y, pos1.z);
 
         Vector2 greenSizeDelta = greenbar.transform.GetComponent<RectTransform>().sizeDelta;
         Vector2 greenFinalScale = new Vector2(greenSizeDelta.x * canvasScale.x, greenSizeDelta.y * canvasScale.y);
-        float greenWidth = greenFinalScale.x * xpbar.transform.GetComponent<RectTransform>().localScale.x;
+        float greenWidth = greenFinalScale.x * expBar.transform.GetComponent<RectTransform>().localScale.x;
 
         Vector3 pos2 = greenbar.transform.position;
-        float greenStartingPos = xpbar.transform.GetChild(2).gameObject.transform.position.x;
+        float greenStartingPos = expBar.transform.GetChild(2).gameObject.transform.position.x;
         float greenPos = greenStartingPos + (((float)exp / (float)maxExp) * greenWidth);
         greenbar.transform.GetComponent<RectTransform>().position = new Vector3(greenPos, pos2.y, pos2.z);
 
@@ -816,29 +556,34 @@ public class Player : MovingEntity
             hp = maxHp;
         }
     }
-    public void addTotalHP(int i)
+    public void addBaseHP(int i)
     {
-        maxHp += i;
-        hp += i;
+        baseHp += i;
+        int newHp = baseHp + (int)((float)baseHp * Mathf.Pow(0.02f, defense));
+        int diff = newHp - maxHp;
+        maxHp += diff;
+        hp += diff;
     }
     public void addExp(int i){
         exp += i;
+        int levelPoints = 0;
         GameManager.gmInstance.score += i;
-        bool levelUp = false;
-        prevLevel = expLevel;
+        bool didLevel = false;
         while(exp >= maxExp){
             SoundManager.sm.PlayLevelUpSound();
             exp -= maxExp;
             expLevel++;
-            maxHp = (int)(maxHp * 1.1);
-            hp = maxHp;
+            baseHp = (int)(baseHp * 1.1);
+            hp = baseHp + (int)((float)baseHp * 0.02f * defense);
+            maxHp = hp;
             maxExp += (int)(0.5 * maxExp);
-            levelUp = true;
+            didLevel = true;
             levelPoints++;
         }
-        if(levelUp){
+        if(didLevel)
+        {
             openLevel = true;
-            createLevelPopup();
+            levelUp.CreatePopup(this, levelPoints);
         }
     }
     public void addStrength(int i){
@@ -848,9 +593,13 @@ public class Player : MovingEntity
     {
         attack += i;
     }
-    public void addDefense(int i){
-        defense += i;
-    }
+    //public void addDefense(int i){
+    //    defense += i;
+    //    int newHp = baseHp + (int)((float)baseHp * Mathf.Pow(0.02f, defense));
+    //    int diff = newHp - maxHp;
+    //    maxHp += diff;
+    //    hp += diff;
+    //}
     public void addCrit(int i){
         critical += i;
     }
@@ -863,10 +612,27 @@ public class Player : MovingEntity
     public void addEvade(int i){
         evade += i;
     }
-    public void closeInventory()
+    public void setStrength(int i)
     {
-        charMenu.closeInventory();
-        openCharacter = false;
+        strength = i;
+    }
+    public void setDefense(int i)
+    {
+        defense = i;
+        int newHp = baseHp + (int)((float)baseHp * 0.02f * defense);
+        int diff = newHp - maxHp;
+        maxHp += diff;
+        hp += diff;
+
+        
+    }
+    public void setCritical(int i)
+    {
+        critical = i;
+    }
+    public void setEvasion(int i)
+    {
+        evade = i;
     }
     public string getName()
     {

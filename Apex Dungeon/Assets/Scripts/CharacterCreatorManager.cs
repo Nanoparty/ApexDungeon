@@ -30,7 +30,7 @@ public class CharacterCreatorManager : MonoBehaviour
     void acceptListener()
     {
         SoundManager.sm.PlayMenuSound();
-        string name = menu.transform.GetChild(4).GetComponent<TMP_InputField>().text;
+        string name = menu.transform.GetChild(4).GetComponent<TMP_InputField>().text.ToUpper();
 
         if (!(name.Length > 0)) return;
         if (taken.Contains(name) && !done)

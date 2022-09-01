@@ -195,6 +195,8 @@ public class GameManager : MonoBehaviour
     {
         if(enemies.Count == 0)
         {
+            playersTurn = true;
+            enemiesTurn = false;
             return;
         }
         for(int i = 0;i < enemies.Count; i++)
