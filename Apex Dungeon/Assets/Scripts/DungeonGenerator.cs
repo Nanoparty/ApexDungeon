@@ -35,15 +35,17 @@ public class DungeonGenerator : ScriptableObject
     private Transform enemyContainer;
     private Transform furnitureContainer;
 
+    public Biome currentBiome;
+
     public GameObject Opening;
     public GameObject Shadow;
     public GameObject Player;
-    public GameObject Stairs;
-    public GameObject[] Enemy;
-    public GameObject[] floor;
-    public GameObject[] voidBlocks;
-    public GameObject[] wallH;
-    public GameObject[] wallV;
+    //public GameObject Stairs;
+    //public GameObject[] Enemy;
+    //public GameObject[] floor;
+    //public GameObject[] voidBlocks;
+    //public GameObject[] wallH;
+    //public GameObject[] wallV;
     public GameObject[] Furniture;
 
     public DungeonObject Initalize()
@@ -535,16 +537,16 @@ public class DungeonGenerator : ScriptableObject
                 switch (type)
                 {
                     case 0:
-                        InstantiateRandom(voidBlocks, row, col, mapContainer);
+                        InstantiateRandom(currentBiome.voidTiles, row, col, mapContainer);
                         break;
                     case 1:
-                        InstantiateRandom(floor, row, col, mapContainer);
+                        InstantiateRandom(currentBiome.floorTiles, row, col, mapContainer);
                         break;
                     case 2:
                         InstantiateSingle(getWall((int)row,(int)col), row, col, mapContainer); 
                         break;
                     case 3:
-                        InstantiateRandom(floor, row, col, mapContainer);
+                        InstantiateRandom(currentBiome.floorTiles, row, col, mapContainer);
                         break;
                 }
             }
@@ -584,7 +586,7 @@ public class DungeonGenerator : ScriptableObject
             }
             if (valid)
             {
-                InstantiateRandom(Enemy, row, col, enemyContainer);
+                InstantiateRandom(currentBiome.enemies, row, col, enemyContainer);
                 tileMap[row, col].occupied = 2;
             }
             
@@ -644,7 +646,7 @@ public class DungeonGenerator : ScriptableObject
         }
         if (valid)
         {
-            InstantiateSingle(Stairs, row, col, dungeon);
+            InstantiateSingle(currentBiome.stairs, row, col, dungeon);
             tileMap[row, col].stairs = true;
         }
     }
@@ -771,11 +773,11 @@ public class DungeonGenerator : ScriptableObject
             
         if (bottom)
         {
-            return getRandom(wallV,r,c);
+            return getRandom(currentBiome.verticalWallTiles,r,c);
         }
         else
         {
-            return getRandom(wallH, r, c);
+            return getRandom(currentBiome.horizontalWallTiles, r, c);
         }
         
     }
