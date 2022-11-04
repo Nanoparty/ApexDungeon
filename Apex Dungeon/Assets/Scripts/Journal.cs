@@ -41,6 +41,7 @@ public class Journal : ScriptableObject
     private bool popupOpen;
     private int selected, gearSelection;
     private bool open;
+    private bool trashConfirmOpen;
     
     private void OnEnable()
     {
@@ -119,6 +120,8 @@ public class Journal : ScriptableObject
 
     void CheckPopupClick()
     {
+        if (trashConfirmOpen) return;
+
         if (Input.GetButtonDown("Fire1"))
         {
             bool isClicked = false;
@@ -529,6 +532,8 @@ public class Journal : ScriptableObject
         Vector3 pos = new Vector3(0, 0, 0);
         GameObject popup = GameObject.Instantiate(popupPrefab, pos, Quaternion.identity);
         GameObject mainHolder = popup.transform.GetChild(0).gameObject;
+        GameObject confirmHolder = popup.transform.GetChild(1).gameObject;
+        confirmHolder.SetActive(false);
 
         GameObject primary = mainHolder.transform.GetChild(0).gameObject;
         GameObject modal1 = primary.transform.GetChild(0).gameObject;
@@ -567,7 +572,7 @@ public class Journal : ScriptableObject
             compareButton.SetActive(false);
 
             useButton.GetComponent<Button>().onClick.AddListener(useListener);
-            trashButton.GetComponent<Button>().onClick.AddListener(trashListener);
+            trashButton.GetComponent<Button>().onClick.AddListener(trashConfirmListener);
         }
         if (tab == 1)
         {
@@ -599,7 +604,7 @@ public class Journal : ScriptableObject
             secondary.SetActive(false);
 
             useButton.GetComponent<Button>().onClick.AddListener(equipListener);
-            trashButton.GetComponent<Button>().onClick.AddListener(trashListener);
+            trashButton.GetComponent<Button>().onClick.AddListener(trashConfirmListener);
             compareButton.GetComponent<Button>().onClick.AddListener(compareListener);
         }
 
@@ -623,6 +628,8 @@ public class Journal : ScriptableObject
         Vector3 pos = new Vector3(0, 0, 0);
         GameObject popup = GameObject.Instantiate(popupPrefab, pos, Quaternion.identity);
         GameObject mainHolder = popup.transform.GetChild(0).gameObject;
+        GameObject confirmHolder = popup.transform.GetChild(1).gameObject;
+        confirmHolder.SetActive(false);
 
         GameObject primary = mainHolder.transform.GetChild(0).gameObject;
         GameObject modal1 = primary.transform.GetChild(0).gameObject;
@@ -670,7 +677,7 @@ public class Journal : ScriptableObject
         useButton.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = "Unequip";
 
         useButton.GetComponent<Button>().onClick.AddListener(unequipListener);
-        trashButton.GetComponent<Button>().onClick.AddListener(trashEquipedListener);
+        trashButton.GetComponent<Button>().onClick.AddListener(trashEquipedConfirmListener);
     }
 
     void openComparePopup(Equipment alt)
@@ -942,8 +949,26 @@ public class Journal : ScriptableObject
         player.addIntelligence(-intel);
     }
 
+    void trashConfirmListener()
+    {
+        trashConfirmOpen = true;
+        GameObject ConfirmPopup = popupRoot.transform.GetChild(1).gameObject;
+        ConfirmPopup.SetActive(true);
+        ConfirmPopup.transform.GetChild(2).GetComponent<Button>().onClick.AddListener(confirmNoListener);
+        ConfirmPopup.transform.GetChild(3).GetComponent<Button>().onClick.AddListener(trashListener);
+    }
+
+    void confirmNoListener()
+    {
+        trashConfirmOpen = false;
+        popupRoot.transform.GetChild(1).gameObject.SetActive(false);
+    }
+
     void trashListener()
     {
+        trashConfirmOpen = false;
+        popupRoot.transform.GetChild(1).gameObject.SetActive(false);
+        Debug.Log("Trash Listener");
         SoundManager.sm.PlayMenuSound();
         if (tab == 0)
         {
@@ -960,8 +985,19 @@ public class Journal : ScriptableObject
         refreshTopicPanel();
     }
 
+    void trashEquipedConfirmListener()
+    {
+        trashConfirmOpen = true;
+        GameObject confirm = popupRoot.transform.GetChild(1).gameObject;
+        confirm.SetActive(true);
+        confirm.transform.GetChild(2).GetComponent<Button>().onClick.AddListener(confirmNoListener);
+        confirm.transform.GetChild(3).GetComponent<Button>().onClick.AddListener(trashEquipedListener);
+    }
+
     void trashEquipedListener()
     {
+        trashConfirmOpen = false;
+        popupRoot.transform.GetChild(1).gameObject.SetActive(false);
         SoundManager.sm.PlayMenuSound();
         Equipment e = new Equipment();
 
@@ -1005,6 +1041,8 @@ public class Journal : ScriptableObject
             e = gear.Ring;
             gear.Ring = null;
         }
+
+        removeGearStats(e);
 
         gearSelection = -1;
         GameObject.Destroy(popupRoot);
