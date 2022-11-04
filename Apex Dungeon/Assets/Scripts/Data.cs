@@ -37,6 +37,7 @@ public static class Data
     public static int maxExp;
     public static int expLevel;
     public static int strength;
+    public static int attack;
     public static int intelligence;
     public static int defense;
     public static int crit;
@@ -63,6 +64,7 @@ public static class Data
         maxExp = current.maxExp;
         expLevel = current.expLevel;
         strength = current.strength;
+        attack = current.attack;
         intelligence = current.intelligence;
         defense = current.defense;
         crit = current.defense;
@@ -97,6 +99,7 @@ public static class Data
         current.maxExp = maxExp;
         current.expLevel = expLevel;
         current.strength = strength;
+        current.attack = attack;
         current.intelligence = intelligence;
         current.defense = defense;
         current.evade = evade;
@@ -165,7 +168,7 @@ public static class Data
                 consumes.Add(item);
             }
 
-            CharacterData cd = new CharacterData(p.name, p.floor, p.level, p.gold, p.strength, p.defense,
+            CharacterData cd = new CharacterData(p.name, p.floor, p.level, p.gold, p.strength, p.attack, p.defense,
                 p.evasion, p.critical, p.baseHp, p.hp, p.maxHp, p.exp, p.maxExp, gear, equips, consumes);
 
             loadCharData.Add(cd);

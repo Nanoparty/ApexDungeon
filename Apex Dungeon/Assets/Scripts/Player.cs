@@ -58,6 +58,7 @@ public class Player : MovingEntity
         maxExp = 100;
         attack = 10;
         strength = 10;
+        attack = 10;
         defense = 10;
         intelligence = 10;
         critical = 10;
@@ -184,10 +185,10 @@ public class Player : MovingEntity
         
         if (Input.GetButtonDown("Fire1"))
         {
-            Debug.Log("Detect Click");
+            //Debug.Log("Detect Click");
             if (EventSystem.current.IsPointerOverGameObject())
             {
-                Debug.Log("UI");
+                //Debug.Log("UI");
                 return;
             }
 
@@ -240,6 +241,7 @@ public class Player : MovingEntity
         Data.maxExp = maxExp;
         Data.expLevel = expLevel;
         Data.strength = strength;
+        Data.attack = attack;
         Data.defense = defense;
         Data.intelligence = intelligence;
         Data.crit = critical;
@@ -264,6 +266,7 @@ public class Player : MovingEntity
         maxExp = Data.maxExp;
         expLevel = Data.expLevel;
         strength = Data.strength;
+        attack = Data.attack;
         defense = Data.defense;
         intelligence = Data.intelligence;
         critical = Data.crit;
@@ -388,7 +391,7 @@ public class Player : MovingEntity
 
     bool attackController(int clickRow, int clickCol)
     {
-        
+        Debug.Log($"Attacking attack:{attack} strength:{strength}");
         Enemy enemy = GameManager.gmInstance.getEnemyAtLoc(clickRow, clickCol);
         if (enemy != null && attacking == false)
         {
@@ -558,11 +561,14 @@ public class Player : MovingEntity
     }
     public void addBaseHP(int i)
     {
+        //Debug.Log($"Starting:{baseHp}:{maxHp}:{hp}");
         baseHp += i;
-        int newHp = baseHp + (int)((float)baseHp * Mathf.Pow(0.02f, defense));
+        int newHp = baseHp + (int)((float)baseHp * 0.02f * defense);
         int diff = newHp - maxHp;
         maxHp += diff;
         hp += diff;
+        //Debug.Log($"new:{newHp} diff{diff}");
+        //Debug.Log($"Ending:{baseHp}:{maxHp}:{hp}");
     }
     public void addExp(int i){
         exp += i;
@@ -591,7 +597,9 @@ public class Player : MovingEntity
     }
     public void addAttack(int i)
     {
+        Debug.Log($"Before Attack-- attack:{attack} strength:{strength}");
         attack += i;
+        Debug.Log($"After Attack-- attack:{attack} strength:{strength}");
     }
     //public void addDefense(int i){
     //    defense += i;

@@ -10,6 +10,7 @@ public class SavePlayer
     public int floor;
 
     public int strength;
+    public int attack;
     public int defense;
     public int evasion;
     public int critical;
@@ -41,6 +42,7 @@ public class SavePlayer
         floor = data.floor;
 
         strength = data.strength;
+        attack = data.attack;
         defense = data.defense;
         evasion = data.evade;
         critical = data.crit;

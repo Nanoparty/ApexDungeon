@@ -915,6 +915,7 @@ public class Journal : ScriptableObject
 
     void applyGearStats(Equipment e)
     {
+        Debug.Log($"Gear attac = {e.attack}");
         int att = e.attack;
         int hp = e.defense;
         int crit = e.crit;

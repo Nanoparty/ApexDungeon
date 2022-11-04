@@ -17,6 +17,7 @@ public class CharacterData : MonoBehaviour
     public int maxExp;
     public int expLevel;
     public int strength;
+    public int attack;
     public int intelligence;
     public int defense;
     public int crit;
@@ -46,6 +47,7 @@ public class CharacterData : MonoBehaviour
         maxExp = 100;
         expLevel = 1;
         strength = 10;
+        attack = 10;
         intelligence = 10;
         defense = 10;
         crit = 10;
@@ -56,7 +58,7 @@ public class CharacterData : MonoBehaviour
         consumables = new List<Consumable>();
     }
 
-    public CharacterData(string name, int floor, int expLevel, int gold, int strength,
+    public CharacterData(string name, int floor, int expLevel, int gold, int strength, int attack,
         int defense, int evade, int crit,int baseHp, int hp, int maxHp, int exp, int maxExp, PlayerGear gear,
         List<Equipment> equipment, List<Consumable> consumables)
     {
@@ -65,6 +67,7 @@ public class CharacterData : MonoBehaviour
         this.expLevel = expLevel;
         this.gold = gold;
         this.strength = strength;
+        this.attack = attack;
         this.defense = defense;
         this.evade = evade;
         this.crit = crit;
