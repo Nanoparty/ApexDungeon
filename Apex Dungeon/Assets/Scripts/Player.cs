@@ -149,7 +149,10 @@ public class Player : MovingEntity
 
     protected override void Update()
     {
-        if (!GameManager.gmInstance.playersTurn) return;
+        if (!GameManager.gmInstance.playersTurn)
+        {
+            return;
+        }
 
         updatePlayerStatus();
 
@@ -160,12 +163,14 @@ public class Player : MovingEntity
             if (animator.GetCurrentAnimatorStateInfo(0).IsName("PlayerDown")) {
                 attacking = false;
                 GameManager.gmInstance.playersTurn = false;
+                GameManager.gmInstance.UpdateCursor("Done");
             }
             return;
         }
 
         if (moving && Input.GetButtonDown("Fire1")) {
             interrupt = true;
+            GameManager.gmInstance.UpdateCursor("Interrupt");
         }
 
         if (checkDead()) return;
@@ -208,17 +213,39 @@ public class Player : MovingEntity
             {
                 if(isFurniture(clickRow, clickCol))
                 {
+                    GameManager.gmInstance.UpdateCursor("Furniture", clickRow, clickCol);
                     return;
                 }
                 else
                 {
                     if (attackController(clickRow, clickCol))
+                    {
+                        GameManager.gmInstance.UpdateCursor("Attack", clickRow, clickCol);
                         return;
+                    }
                 }
             }
 
             //move
-            moveController(clickRow, clickCol);
+            //if is player skip turn
+            if (isPlayer(clickRow, clickCol))
+            {
+                GameManager.gmInstance.UpdateCursor("Player", clickRow, clickCol);
+                moveController(clickRow, clickCol);
+                return;
+            }
+            //if valid location move
+            if (!isBlocked(clickRow, clickCol))
+            {
+                GameManager.gmInstance.UpdateCursor("Move", clickRow, clickCol);
+                moveController(clickRow, clickCol);
+                return;
+            }
+            else
+            {
+                GameManager.gmInstance.UpdateCursor("Blocked", clickRow, clickCol);
+                return;
+            }
         }
     }
 
@@ -228,6 +255,11 @@ public class Player : MovingEntity
         {
             nextFloor();
         }
+    }
+
+    public bool isBlocked(int r, int c)
+    {
+        return GameManager.gmInstance.Dungeon.tileMap[r, c].getWall();
     }
 
     public void saveCharacterData(){
@@ -347,6 +379,11 @@ public class Player : MovingEntity
             return true;
         }
         else return false;
+    }
+
+    bool isPlayer(int nRow, int nCol)
+    {
+        return (nRow == row && nCol == col);
     }
 
     void journalListener()

@@ -96,6 +96,8 @@ public class GameManager : MonoBehaviour
         mRow = Mathf.Round(pz.y);
         mCol = Mathf.Round(pz.x);
 
+        Player player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+
         //updating grid cursor image
         if (Input.GetButtonDown("Fire1"))
         {
@@ -103,8 +105,16 @@ public class GameManager : MonoBehaviour
             cursor.transform.position = new Vector3(mCol, mRow, 0f);
             cursorRow = (int)mRow;
             cursorCol = (int)mCol;
+            if (player.isBlocked((int)mRow, (int)mCol))
+            {
+                cursor.GetComponent<Cursor>().SetRed();
+            }
+            else
+            {
+                cursor.GetComponent<Cursor>().SetGreen();
+            }
         }
-        Player player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+        
         if (player.getRow() == cursorRow && player.getCol() == cursorCol)
         {
             cursor.SetActive(false);
@@ -206,5 +216,44 @@ public class GameManager : MonoBehaviour
         }
         playersTurn = true;
         enemiesTurn = false;        
+    }
+
+    public void UpdateCursor(string state, int row, int col)
+    {
+        //if (state == "Furniture")
+        //{
+        //    //look for nearest open square
+        //    cursor.SetActive(true);
+        //    cursor.transform.position = new Vector3(col, row, 0f);
+        //    cursor.GetComponent<Cursor>().SetRed();
+        //}
+        //if (state == "Attack")
+        //{
+        //    cursor.SetActive(true);
+        //    cursor.transform.position = new Vector3(col, row, 0f);
+        //    cursor.GetComponent<Cursor>().SetRed();
+        //    //cursorRow = (int)mRow;
+        //    //cursorCol = (int)mCol;
+        //}
+        //if (state == "Player")
+        //{
+        //    cursor.SetActive(true);
+        //    cursor.transform.position = new Vector3(col, row, 0f);
+        //    cursor.GetComponent<Cursor>().SetGreen();
+        //}
+        //if (state == "Blocked")
+        //{
+        //    cursor.SetActive(true);
+        //    cursor.transform.position = new Vector3(col, row, 0f);
+        //    cursor.GetComponent<Cursor>().SetRed();
+        //}
+    }
+
+    public void UpdateCursor(string state)
+    {
+        //if (state == "Interrupt")
+        //{
+        //    cursor.GetComponent<Cursor>().SetRed();
+        //}
     }
 }
