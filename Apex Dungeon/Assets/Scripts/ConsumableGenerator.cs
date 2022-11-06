@@ -40,7 +40,7 @@ public class ConsumableGenerator : ScriptableObject
         item.AddComponent<BoxCollider2D>();
         item.GetComponent<BoxCollider2D>().isTrigger = true;
 
-        int healAmount =(int)( 50 * Mathf.Pow(1.5f,level-1));
+        int healAmount = (int)(50 + 50 * 0.2 * (level - 1));
 
         Consumable potion = new Consumable("HealthPotion", "Health Potion Lvl " + level, "Cherry Flavor", "Heals " + healAmount + " HP", redPotion, level);
 

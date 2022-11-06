@@ -927,11 +927,13 @@ public class Journal : ScriptableObject
         int hp = e.defense;
         int crit = e.crit;
         int intel = e.intelligence;
+        int evade = e.evade;
 
         player.addAttack(att);
         player.addBaseHP(hp);
         player.addCrit(crit);
         player.addIntelligence(intel);
+        player.addEvade(evade);
     }
 
     void removeGearStats(Equipment e)
@@ -942,11 +944,13 @@ public class Journal : ScriptableObject
         int hp = e.defense;
         int crit = e.crit;
         int intel = e.intelligence;
+        int evade = e.evade;
 
         player.addAttack(-att);
         player.addBaseHP(-hp);
         player.addCrit(-crit);
         player.addIntelligence(-intel);
+        player.addEvade(-evade);
     }
 
     void trashConfirmListener()

@@ -219,38 +219,83 @@ public class EquipmentGenerator : ScriptableObject
         int critBoost = 0;
         int evadeBoost = 0;
 
-        attackDamage = (int)(attackDamage * Mathf.Pow(1.5f, level-1));
-        hpBoost = (int)(hpBoost * Mathf.Pow(1.5f,level-1));
+        attackDamage = (int)(attackDamage + attackDamage * 0.1 * (level -1 ));
+        hpBoost = (int)(hpBoost + hpBoost * 0.1 * (level -1));
 
-        int up = Random.Range(0, 20);
-        int down = Random.Range(0, 20);
+        int attackUpperRange = (int)(attackDamage * 0.5);
+        int attackLowerRange = (int)(attackDamage * 0.2);
 
-        attackDamage = (int)(attackDamage * (1 + (up - down) * 0.01));
-        hpBoost = (int)(hpBoost * (1 + (up - down) * 0.01));
+        int hpUpperRange = (int)(hpBoost * 0.5);
+        int hpLowerRange = (int)(hpBoost * 0.2);
+
+        int attackUp = Random.Range(0, attackUpperRange);
+        int attackDown = Random.Range(0, attackLowerRange);
+
+        int hpUp = Random.Range(0, hpUpperRange);
+        int hpDown = Random.Range(0, hpLowerRange);
+
+        attackDamage = (int)(attackDamage * (1 + (attackUp - attackDown) * 0.01));
+        hpBoost = (int)(hpBoost * (1 + (hpUp - hpDown) * 0.01));
+
+        //add crit
+        if (Random.Range(0, 100) > 75)
+        {
+            critBoost = Random.Range(1, 5);
+        }
+        //add evade
+        if (Random.Range(0, 100) > 75)
+        {
+            evadeBoost = Random.Range(1, 5);
+        }
 
         if (tier == 2)
         {
             attackDamage = (int)(attackDamage * 1.1);
             hpBoost = (int)(hpBoost * 1.1);
+            if (critBoost > 0)
+                critBoost += Random.Range(1, 2);
+            if (evadeBoost > 0)
+                evadeBoost += Random.Range(1, 2);
         }
         if(tier == 3)
         {
             attackDamage = (int)(attackDamage * 1.2);
             hpBoost = (int)(hpBoost * 1.2);
+            if (critBoost > 0)
+                critBoost += Random.Range(2, 3);
+            if (evadeBoost > 0)
+                evadeBoost += Random.Range(2, 3);
         }
         if(tier == 4)
         {
             attackDamage = (int)(attackDamage * 1.3);
             hpBoost = (int)(hpBoost * 1.3);
+            if (critBoost > 0)
+                critBoost += Random.Range(3, 5);
+            if (evadeBoost > 0)
+                evadeBoost += Random.Range(3, 5);
         }
 
         if(type == "weapon")
         {
-            hpBoost = 0;
+            if (Random.Range(0, 100) < 75)
+            {
+                hpBoost = 0;
+            }else
+            {
+                hpBoost = (int)(hpBoost * 0.5);
+            }
         }
         else
         {
-            attackDamage = 0;
+            if (Random.Range(0,100) < 75)
+            {
+                attackDamage = 0;
+            }
+            else
+            {
+                attackDamage = (int)(attackDamage * 0.5);
+            }
         }
 
         image = getEquipmentImage(tier, type);

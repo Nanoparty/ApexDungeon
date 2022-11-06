@@ -68,7 +68,7 @@ public class Player : MovingEntity
         gold = 0;
 
         baseHp = 100;
-        hp = baseHp + (int)((float)baseHp * 0.02f * defense);
+        hp = baseHp + (int)((float)baseHp * 0.05f * defense);
         maxHp = hp;
     }
 
@@ -600,7 +600,7 @@ public class Player : MovingEntity
     {
         //Debug.Log($"Starting:{baseHp}:{maxHp}:{hp}");
         baseHp += i;
-        int newHp = baseHp + (int)((float)baseHp * 0.02f * defense);
+        int newHp = baseHp + (int)((float)baseHp * 0.05f * defense);
         int diff = newHp - maxHp;
         maxHp += diff;
         hp += diff;
@@ -617,7 +617,7 @@ public class Player : MovingEntity
             exp -= maxExp;
             expLevel++;
             baseHp = (int)(baseHp * 1.1);
-            hp = baseHp + (int)((float)baseHp * 0.02f * defense);
+            hp = baseHp + (int)((float)baseHp * 0.05f * defense);
             maxHp = hp;
             maxExp += (int)(0.5 * maxExp);
             didLevel = true;
@@ -664,7 +664,7 @@ public class Player : MovingEntity
     public void setDefense(int i)
     {
         defense = i;
-        int newHp = baseHp + (int)((float)baseHp * 0.02f * defense);
+        int newHp = baseHp + (int)((float)baseHp * 0.05f * defense);
         int diff = newHp - maxHp;
         maxHp += diff;
         hp += diff;

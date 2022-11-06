@@ -7,6 +7,8 @@ public class SaveGear
 {
     public int attack;
     public int hpBoost;
+    public int crit;
+    public int evade;
     public int itemLevel;
     public string type;
     public int tier;
@@ -26,6 +28,8 @@ public class SaveGear
         empty = false;
         attack = e.attack;
         hpBoost = e.defense;
+        crit = e.crit;
+        evade = e.evade;
         itemLevel = e.level;
         type = e.type;
         tier = e.tier;

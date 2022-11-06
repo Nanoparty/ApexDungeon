@@ -69,14 +69,14 @@ public class Enemy : MovingEntity
 
     private void setStatsByFloor(int floor){
         int basehp = 30;
-        hp = (int)(basehp * Mathf.Pow(1.5f, floor-1));
+        hp = (int)(basehp + basehp * 0.1 * (floor-1));
         maxHp = hp;
 
         mp = 100 * floor;
         maxMp = mp;
 
         int basedamage = 10;
-        attack = (int)(basedamage * Mathf.Pow(1.5f, floor-1));
+        attack = (int)(basedamage + basedamage * 0.1 * (floor-1));
         defense = 5 + 1 * floor;
     }
 

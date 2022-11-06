@@ -214,7 +214,7 @@ public abstract class MovingEntity : MonoBehaviour
 
     public float calculateDamage(float m = 1f)
     {
-        float increase = (float)(attack * (strength * 0.02));
+        float increase = (float)(attack * (strength * 0.05));
         float attackDamage = (float)(attack + increase);
         attackDamage *= m;
         return -attackDamage;
