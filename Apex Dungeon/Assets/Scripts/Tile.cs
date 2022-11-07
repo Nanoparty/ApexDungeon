@@ -34,7 +34,7 @@ public class Tile
     //0 = empty
     //1 = player
     //2 = enemy
-    //3
+    //3 = furniture
     //4 = stairs
     public bool getOccupied()
     {
@@ -44,6 +44,11 @@ public class Tile
             return true;
         }
         return false;
+    }
+
+    public bool isEmpty()
+    {
+        return (type == 1 || type == 3) && occupied != 3;
     }
 
     public bool getStairs()

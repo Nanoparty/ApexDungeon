@@ -216,6 +216,11 @@ public class Player : MovingEntity
                     GameManager.gmInstance.UpdateCursor("Furniture", clickRow, clickCol);
                     return;
                 }
+                else if (isChest(clickRow, clickCol))
+                {
+                    //GameManager.gmInstance.UpdateCursor("Furniture", clickRo)
+                    return;
+                }
                 else
                 {
                     if (attackController(clickRow, clickCol))
@@ -374,6 +379,19 @@ public class Player : MovingEntity
         if (f != null)
         {
             f.setDamage(-1);
+            GameManager.gmInstance.playersTurn = false;
+            SoundManager.sm.PlayStickSounds();
+            return true;
+        }
+        else return false;
+    }
+
+    bool isChest(int row, int col)
+    {
+        Chest c = GameManager.gmInstance.getChestAtLoc(row, col);
+        if (c != null)
+        {
+            c.OpenChest();
             GameManager.gmInstance.playersTurn = false;
             SoundManager.sm.PlayStickSounds();
             return true;

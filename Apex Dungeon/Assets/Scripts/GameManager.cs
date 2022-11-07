@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     
     private List<Enemy> enemies;
     private List<Furniture> furniture;
+    private List<Chest> chests;
     private bool enemiesTurn;
     public bool doingSetup = true;
 
@@ -45,6 +46,7 @@ public class GameManager : MonoBehaviour
         
         enemies = new List<Enemy>();
         furniture = new List<Furniture>();
+        chests = new List<Chest>();
         Setup();
 
         Vector3 position = new Vector3(0f, 0f, 0f);
@@ -69,6 +71,7 @@ public class GameManager : MonoBehaviour
         score = 0;
         enemies.Clear();
         furniture.Clear();
+        chests.Clear();
     }
 
     void Update()
@@ -86,6 +89,7 @@ public class GameManager : MonoBehaviour
             score = 0;
             enemies.Clear();
             furniture.Clear();
+            chests.Clear();
             Vector3 position = new Vector3(0f, 0f, 0f);
             cursor = Instantiate(tileCursor, position, Quaternion.identity) as GameObject;
             Dungeon = DunGen.Initalize();
@@ -182,6 +186,11 @@ public class GameManager : MonoBehaviour
         furniture.Add(f);
     }
 
+    public void AddChestToList(Chest c)
+    {
+        chests.Add(c);
+    }
+
     public Furniture getFurnitureAtLoc(int r, int c)
     {
         if (furniture.Count == 0)
@@ -195,6 +204,25 @@ public class GameManager : MonoBehaviour
             if (r == er && c == ec)
             {
                 return furniture[i];
+            }
+
+        }
+        return null;
+    }
+
+    public Chest getChestAtLoc(int r, int c)
+    {
+        if (chests.Count == 0)
+        {
+            return null;
+        }
+        for (int i = 0; i < chests.Count; i++)
+        {
+            int er = chests[i].getRow();
+            int ec = chests[i].getCol();
+            if (r == er && c == ec)
+            {
+                return chests[i];
             }
 
         }

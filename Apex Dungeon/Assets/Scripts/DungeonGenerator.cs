@@ -47,6 +47,7 @@ public class DungeonGenerator : ScriptableObject
     //public GameObject[] wallH;
     //public GameObject[] wallV;
     public GameObject[] Furniture;
+    public GameObject Chest;
 
     public DungeonObject Initalize()
     {
@@ -106,6 +107,7 @@ public class DungeonGenerator : ScriptableObject
         SpawnStairs();
         SpawnEnemies();
         SpawnFurniture();
+        SpawnChests();
         SpawnItems();
         SpawnMoney();
         InstantiateShadowMap();
@@ -618,6 +620,38 @@ public class DungeonGenerator : ScriptableObject
                 if (valid)
                 {
                     InstantiateRandom(Furniture, row, col, furnitureContainer);
+                    tileMap[row, col].occupied = 3;
+
+                }
+            }
+        }
+    }
+
+    void SpawnChests()
+    {
+        for (int i = 0; i < rooms.Count; i++)
+        {
+            for (int j = 0; j <= 1; j++)
+            {
+                Room room = rooms[i];
+                bool valid = false;
+                int tries = 0;
+                int row = 0;
+                int col = 0;
+                while (!valid && tries < 10)
+                {
+                    tries++;
+                    row = Random.Range(room.row + 1, room.row + room.height - 2);
+                    col = Random.Range(room.col + 1, room.col + room.width - 2);
+                    if (!tileMap[row, col].getOccupied() && !tileMap[row, col].stairs)
+                    {
+                        valid = true;
+                    }
+                }
+                if (valid)
+                {
+                    GameObject chest = InstantiateSingle(Chest, row, col, furnitureContainer);
+                    chest.GetComponent<Chest>().SetPosition(row, col);
                     tileMap[row, col].occupied = 3;
 
                 }
