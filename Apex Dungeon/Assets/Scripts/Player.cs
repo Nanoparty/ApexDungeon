@@ -16,8 +16,8 @@ public class Player : MovingEntity
     private GameObject hpBar;
     private GameObject expBar;
 
-    private GameObject journalButton;
-    private GameObject pauseButton;
+    public GameObject journalButton;
+    public GameObject pauseButton;
 
     private PlayerGear gear;
     private Animator animator;
@@ -31,10 +31,10 @@ public class Player : MovingEntity
     public bool openPause = false;
     public bool ending = false;
     public bool fadeIn = true;
-    private bool interrupt = false;
-    private bool attacking = false;
+    public bool interrupt = false;
+    public bool attacking = false;
 
-    private bool stairsOpen = false;
+    public bool stairsOpen = false;
 
     protected override void Start()
     {
@@ -154,9 +154,15 @@ public class Player : MovingEntity
             return;
         }
 
+        //Debug.Log("PLayers Turn");
+
         updatePlayerStatus();
 
+        //Debug.Log("PLayers status");
+
         GameManager.gmInstance.Dungeon.UpdateShadows(row, col);
+
+        //Debug.Log("Update shadows");
 
         if (attacking)
         {
@@ -168,12 +174,18 @@ public class Player : MovingEntity
             return;
         }
 
+        //Debug.Log("Not Attacking");
+
         if (moving && Input.GetButtonDown("Fire1")) {
             interrupt = true;
             GameManager.gmInstance.UpdateCursor("Interrupt");
         }
 
+        //Debug.Log("Not Interrupt");
+
         if (checkDead()) return;
+
+        //Debug.Log("Not Dead");
 
         if (openJournal || journal.isOpen())
         {
@@ -181,7 +193,11 @@ public class Player : MovingEntity
             return;
         }
 
+        //Debug.Log("Not Journal");
+
         if (openLevel || openPause || stairsOpen) return;
+
+        //Debug.Log("Not Paused");
     
         debugMenu();
         
@@ -193,7 +209,7 @@ public class Player : MovingEntity
             //Debug.Log("Detect Click");
             if (EventSystem.current.IsPointerOverGameObject())
             {
-                //Debug.Log("UI");
+                Debug.Log("UI");
                 return;
             }
 
@@ -202,6 +218,7 @@ public class Player : MovingEntity
                 journalButton.GetComponent<Clickable>().getClicked() ||
                 pauseButton.GetComponent<Clickable>().getClicked())
             {
+                Debug.Log("OPen UI");
                 return;
             }
 
@@ -419,6 +436,7 @@ public class Player : MovingEntity
     {
         if (!openJournal && !openPause)
         {
+            Debug.Log("Pause");
             pauseMenu.CreatePause(this);
             openPause = true;
             pauseButton.GetComponent<Clickable>().setClicked(false);

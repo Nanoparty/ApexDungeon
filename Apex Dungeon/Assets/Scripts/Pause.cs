@@ -51,6 +51,7 @@ public class Pause : ScriptableObject
     {
         SoundManager.sm.PlayMenuSound();
         player.openPause = false;
+        player.pauseButton.GetComponent<Clickable>().setClicked(false);
         GameObject.Destroy(pauseRoot);
     }
 

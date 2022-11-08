@@ -76,7 +76,22 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if(state == "score"){
+        Debug.Log("ORIENTATION:" + Input.deviceOrientation);
+        if (Input.deviceOrientation == DeviceOrientation.Portrait
+            || Input.deviceOrientation == DeviceOrientation.PortraitUpsideDown)
+        {
+            Camera.main.GetComponent<UnityEngine.U2D.PixelPerfectCamera>().assetsPPU = 48;
+            //Debug.Log("Portrait");
+        }
+        else if (Input.deviceOrientation == DeviceOrientation.LandscapeLeft
+            || Input.deviceOrientation == DeviceOrientation.LandscapeRight)
+        {
+            Camera.main.GetComponent<UnityEngine.U2D.PixelPerfectCamera>().assetsPPU = 32;
+            //Debug.Log("Landscape");
+        }
+            
+
+        if (state == "score"){
 
             return;
         }

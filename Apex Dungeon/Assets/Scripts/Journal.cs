@@ -1115,6 +1115,7 @@ public class Journal : ScriptableObject
         player.setGear(gear);
         player.openJournal = false;
         open = false;
+        player.journalButton.GetComponent<Clickable>().setClicked(false);
         GameObject.Destroy(journalRoot);
     }
 
