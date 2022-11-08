@@ -1105,6 +1105,7 @@ public class Journal : ScriptableObject
 
     public void addEquipment(Item i)
     {
+        Debug.Log("Image:" + i.image);
         equipment.Add(i as Equipment);
     }
 
