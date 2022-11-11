@@ -71,6 +71,7 @@ public class Chest : MonoBehaviour
     {
         List<Vector2> positions = new List<Vector2>();
         int radius = 1;
+        Player player = GameObject.FindObjectOfType<Player>();
 
         while (positions.Count < num)
         {
@@ -81,7 +82,8 @@ public class Chest : MonoBehaviour
                     if (inside_circle(new Vector2(row, col), new Vector2(r, c), radius))
                     {
                         if (GameManager.gmInstance.Dungeon.tileMap[r, c].isEmpty()
-                            && !positions.Contains(new Vector2(r, c)))
+                            && !positions.Contains(new Vector2(r, c))
+                            && (player.getRow() != r && player.getCol() != c))
                         {
                             positions.Add(new Vector2(r, c));
                         }
