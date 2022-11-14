@@ -9,4 +9,9 @@ public class LayoutUpdate : MonoBehaviour
     {
         LayoutRebuilder.ForceRebuildLayoutImmediate(this.GetComponent<RectTransform>());
     }
+
+    public void Manual()
+    {
+        LayoutRebuilder.ForceRebuildLayoutImmediate(this.GetComponent<RectTransform>());
+    }
 }

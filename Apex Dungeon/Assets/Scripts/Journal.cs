@@ -694,6 +694,8 @@ public class Journal : ScriptableObject
         GameObject itemDesc2 = modal2.transform.GetChild(1).gameObject;
 
         secondary.SetActive(true);
+        mainHolder.GetComponent<LayoutUpdate>().Manual();
+        secondary.GetComponent<LayoutUpdate>().Manual();
 
         itemName2.transform.gameObject.GetComponent<TMP_Text>().text = alt.itemName;
         if (alt.tier == 1) itemRank2.transform.gameObject.GetComponent<TMP_Text>().text = "Common";
@@ -955,6 +957,7 @@ public class Journal : ScriptableObject
 
     void trashConfirmListener()
     {
+        Debug.Log("Selected " + selected);
         trashConfirmOpen = true;
         GameObject ConfirmPopup = popupRoot.transform.GetChild(1).gameObject;
         ConfirmPopup.SetActive(true);
@@ -965,11 +968,18 @@ public class Journal : ScriptableObject
     void confirmNoListener()
     {
         trashConfirmOpen = false;
+
+        trashButton.GetComponent<Button>().onClick.RemoveListener(trashEquipedConfirmListener);
+        GameObject ConfirmPopup = popupRoot.transform.GetChild(1).gameObject;
+        ConfirmPopup.transform.GetChild(2).GetComponent<Button>().onClick.RemoveListener(confirmNoListener);
+        ConfirmPopup.transform.GetChild(3).GetComponent<Button>().onClick.RemoveListener(trashListener);
+
         popupRoot.transform.GetChild(1).gameObject.SetActive(false);
     }
 
     void trashListener()
     {
+        Debug.Log($"Trash Selected = {selected}");
         trashConfirmOpen = false;
         popupRoot.transform.GetChild(1).gameObject.SetActive(false);
         Debug.Log("Trash Listener");
