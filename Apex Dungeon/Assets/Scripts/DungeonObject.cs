@@ -123,7 +123,8 @@ public class DungeonObject
 
     public void SetShadowsDark()
     {
-        if(!fullBright){
+        if (fullBright) return;
+
             foreach(GameObject o in activeShadows)
             {
                 o.SetActive(true);
@@ -131,7 +132,7 @@ public class DungeonObject
             }
             activeShadows.Clear();
             activeShadowCoords.Clear();
-        }
+        
         foreach(Vector2 v in visibleTiles)
         {
             tileMap[(int)v.x, (int)v.y].visible = false;

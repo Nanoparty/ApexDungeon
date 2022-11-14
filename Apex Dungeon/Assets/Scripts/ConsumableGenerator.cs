@@ -248,11 +248,11 @@ public class ConsumableGenerator : ScriptableObject
         if (rand == 5) consumable = CreateTeleportOrb();
         if (rand == 6) consumable = CreateMap();
         if (rand == 7) consumable = CreateSkipOrb();
-        
+
 
         if (consumable == null) consumable = new GameObject();
 
-        return consumable;
+        return CreateLightOrb();
     }
 
     public GameObject CreateRandomMoney(int level)
