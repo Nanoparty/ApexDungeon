@@ -68,14 +68,14 @@ public class Enemy : MovingEntity
     }
 
     private void setStatsByFloor(int floor){
-        int basehp = 30;
+        int basehp = 50;
         hp = (int)(basehp + basehp * 0.1 * (floor-1));
         maxHp = hp;
 
         mp = 100 * floor;
         maxMp = mp;
 
-        int basedamage = 10;
+        int basedamage = 15;
         attack = (int)(basedamage + basedamage * 0.1 * (floor-1));
         defense = 5 + 1 * floor;
     }

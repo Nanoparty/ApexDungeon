@@ -107,7 +107,7 @@ public class DungeonGenerator : ScriptableObject
         SpawnStairs();
         SpawnEnemies();
         SpawnFurniture();
-        SpawnChests();
+        //SpawnChests();
         SpawnItems();
         SpawnMoney();
         InstantiateShadowMap();
