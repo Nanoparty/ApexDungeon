@@ -252,7 +252,7 @@ public class ConsumableGenerator : ScriptableObject
 
         if (consumable == null) consumable = new GameObject();
 
-        return CreateLightOrb();
+        return consumable;
     }
 
     public GameObject CreateRandomMoney(int level)
