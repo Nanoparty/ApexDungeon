@@ -7,6 +7,8 @@ public class Biome : ScriptableObject
 {
     public string biomeName;
 
+    public bool top_bottom;
+
     public GameObject[] floorTiles;
     public GameObject[] verticalWallTiles;
     public GameObject[] horizontalWallTiles;
@@ -18,4 +20,7 @@ public class Biome : ScriptableObject
     public GameObject[] obstacles;
 
     public GameObject stairs;
+
+    public GameObject[] topWalls;
+    public GameObject[] bottomWalls;
 }

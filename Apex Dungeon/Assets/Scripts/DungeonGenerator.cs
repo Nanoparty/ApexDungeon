@@ -536,6 +536,12 @@ public class DungeonGenerator : ScriptableObject
                 float row = dungeon.position.y + i;
                 float col = dungeon.position.x + j;
                 int type = tileMap[(int)row, (int)col].type;
+
+                if (currentBiome.top_bottom && type == 2)
+                {
+                    InstantiateSingle(getWallInverted((int)row, (int)col), row, col, mapContainer);
+                    continue;
+                }
                 
                 switch (type)
                 {
@@ -740,6 +746,7 @@ public class DungeonGenerator : ScriptableObject
                         GameObject item = equipmentGenerator.GenerateEquipment(GameManager.gmInstance.level);
                         item.transform.parent = itemContainer.transform;
                         item.transform.position = position;
+                        item.GetComponent<Pickup>().SetLocation(row, col);
                         itemList.Add(new Vector2(row, col));
                     }
                     else
@@ -747,6 +754,7 @@ public class DungeonGenerator : ScriptableObject
                         GameObject item = consumableGenerator.CreateRandomConsumable(GameManager.gmInstance.level);
                         item.transform.parent = itemContainer.transform;
                         item.transform.position = position;
+                        item.GetComponent<Pickup>().SetLocation(row, col);
                         itemList.Add(new Vector2(row, col));
                     }
                 }
@@ -782,6 +790,7 @@ public class DungeonGenerator : ScriptableObject
                     GameObject item = consumableGenerator.CreateRandomMoney(GameManager.gmInstance.level);
                     item.transform.parent = itemContainer.transform;
                     item.transform.position = position;
+                    item.GetComponent<Money>().SetLocation(row, col);
                     itemList.Add(new Vector2(row, col));
                 }
             }
@@ -839,5 +848,29 @@ public class DungeonGenerator : ScriptableObject
             return getRandom(currentBiome.horizontalWallTiles, r, c);
         }
         
+    }
+
+    GameObject getWallInverted(int r, int c)
+    {
+
+        bool top = true;
+
+        if (r > 0)
+        {
+            if (tileMap[r + 1, c].type == 1 || tileMap[r + 1, c].type == 3)
+            {
+                top = false;
+            }
+        }
+
+        if (top)
+        {
+            return getRandom(currentBiome.verticalWallTiles, r, c);
+        }
+        else
+        {
+            return getRandom(currentBiome.horizontalWallTiles, r, c);
+        }
+
     }
 }

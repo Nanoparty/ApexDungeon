@@ -15,6 +15,9 @@ public class Equipment : Item
     public int evade;
 
     public string modifier;
+
+
+
     public Equipment(){
 
     }
