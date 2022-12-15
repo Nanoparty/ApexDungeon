@@ -79,7 +79,7 @@ public class DungeonGenerator : ScriptableObject
         furnitureContainer.parent = dungeon.transform;
 
         GameObject op = GameObject.Instantiate(Opening, new Vector3(0, 0, 0), Quaternion.identity);
-        op.transform.GetChild(0).transform.GetChild(0).gameObject.GetComponent<Text>().text = GameManager.gmInstance.DungeonName;
+        op.transform.GetChild(0).transform.GetChild(0).gameObject.GetComponent<Text>().text = currentBiome.biomeName;
         op.transform.GetChild(1).transform.GetChild(0).gameObject.GetComponent<Text>().text = "Floor " + GameManager.gmInstance.level;
         op.transform.SetParent(GameObject.FindGameObjectWithTag("Canvas").transform, false);
 
@@ -106,6 +106,7 @@ public class DungeonGenerator : ScriptableObject
         SpawnPlayer();
         SpawnStairs();
         SpawnEnemies();
+        SpawnDecoration();
         SpawnFurniture();
         //SpawnChests();
         SpawnItems();
@@ -596,6 +597,26 @@ public class DungeonGenerator : ScriptableObject
         
     }
 
+    void SpawnDecoration()
+    {
+        for (int i = 0; i < rooms.Count; i++)
+        {
+            Room room = rooms[i];
+            int roomSize = room.width * room.height;
+            int numDecorations = (int)(roomSize * currentBiome.decorationPercentage);
+            int tries = 0;
+            int row = 0;
+            int col = 0;
+            while (tries < numDecorations)
+            {
+                tries++;
+                row = Random.Range(room.row + 1, room.row + room.height - 2);
+                col = Random.Range(room.col + 1, room.col + room.width - 2);
+                InstantiateRandom(currentBiome.decorations, row, col, furnitureContainer);
+            }
+        }
+    }
+
     void SpawnFurniture()
     {
         for (int i = 0; i < rooms.Count; i++)
@@ -619,7 +640,7 @@ public class DungeonGenerator : ScriptableObject
                 }
                 if (valid)
                 {
-                    InstantiateRandom(Furniture, row, col, furnitureContainer);
+                    InstantiateRandom(currentBiome.obstacles, row, col, furnitureContainer);
                     tileMap[row, col].occupied = 3;
 
                 }
