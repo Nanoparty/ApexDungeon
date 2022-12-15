@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Chest : MonoBehaviour
 {
@@ -12,6 +13,7 @@ public class Chest : MonoBehaviour
     public int row, col;
 
     public ParticleSystem shine;
+    public ParticleSystem wood;
 
     private SpriteRenderer sr;
     private GameObject itemContainer;
@@ -37,11 +39,19 @@ public class Chest : MonoBehaviour
 
     public void OpenChest()
     {
-        if (isOpen) return;
+        if (isOpen)
+        {
+            Instantiate(wood, new Vector2(col, row), Quaternion.identity);
+            GameManager.gmInstance.removeChest(this);
+            GameManager.gmInstance.Dungeon.tileMap[row, col].occupied = 0;
+            Destroy(gameObject);
+            return;
+        }
 
         sr.sprite = open;
         Instantiate(shine, new Vector3(col, row, 0f), Quaternion.identity);
         SpawnLoot();
+        isOpen = true;
     }
 
     private void SpawnLoot()
@@ -56,6 +66,7 @@ public class Chest : MonoBehaviour
             GameObject item = equipmentGenerator.GenerateEquipment(GameManager.gmInstance.level);
             item.transform.parent = itemContainer.transform;
             item.transform.position = position;
+            item.GetComponent<Pickup>().SetLocation((int)pos.x, (int)pos.y);
         }
     }
 

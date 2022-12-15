@@ -172,6 +172,11 @@ public class GameManager : MonoBehaviour
         furniture.Remove(e);
     }
 
+    public void removeChest(Chest e)
+    {
+        chests.Remove(e);
+    }
+
     public Enemy getEnemyAtLoc(int r, int c)
     {
         if (enemies.Count == 0)
