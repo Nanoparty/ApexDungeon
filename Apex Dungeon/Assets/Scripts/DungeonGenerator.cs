@@ -599,6 +599,8 @@ public class DungeonGenerator : ScriptableObject
 
     void SpawnDecoration()
     {
+        if (currentBiome.decorations.Length == 0) return;
+
         for (int i = 0; i < rooms.Count; i++)
         {
             Room room = rooms[i];
@@ -619,6 +621,8 @@ public class DungeonGenerator : ScriptableObject
 
     void SpawnFurniture()
     {
+        if (currentBiome.obstacles.Length == 0) return;
+
         for (int i = 0; i < rooms.Count; i++)
         {
             for (int j = 0; j < 3; j++)
