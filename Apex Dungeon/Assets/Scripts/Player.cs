@@ -154,15 +154,12 @@ public class Player : MovingEntity
             return;
         }
 
-        //Debug.Log("PLayers Turn");
 
         updatePlayerStatus();
 
-        //Debug.Log("PLayers status");
 
         GameManager.gmInstance.Dungeon.UpdateShadows(row, col);
 
-        //Debug.Log("Update shadows");
 
         if (attacking)
         {
@@ -174,18 +171,15 @@ public class Player : MovingEntity
             return;
         }
 
-        //Debug.Log("Not Attacking");
 
         if (moving && Input.GetButtonDown("Fire1")) {
             interrupt = true;
             GameManager.gmInstance.UpdateCursor("Interrupt");
         }
 
-        //Debug.Log("Not Interrupt");
 
         if (checkDead()) return;
 
-        //Debug.Log("Not Dead");
 
         if (openJournal || journal.isOpen())
         {
@@ -193,11 +187,9 @@ public class Player : MovingEntity
             return;
         }
 
-        //Debug.Log("Not Journal");
 
         if (openLevel || openPause || stairsOpen) return;
 
-        //Debug.Log("Not Paused");
     
         debugMenu();
         
@@ -206,7 +198,6 @@ public class Player : MovingEntity
         
         if (Input.GetButtonDown("Fire1"))
         {
-            //Debug.Log("Detect Click");
             if (EventSystem.current.IsPointerOverGameObject())
             {
                 Debug.Log("UI");
@@ -228,6 +219,13 @@ public class Player : MovingEntity
             //attack or interact
             if (isAdjacent(clickRow, clickCol))
             {
+                // Check for trap disarm
+                Trap t = GameManager.gmInstance.GetTrapAtLoc(clickRow, clickCol);
+                if (t != null) { 
+                    t.DisarmTrap();
+                    return;
+                }
+
                 if(isFurniture(clickRow, clickCol))
                 {
                     GameManager.gmInstance.UpdateCursor("Furniture", clickRow, clickCol);
@@ -235,7 +233,6 @@ public class Player : MovingEntity
                 }
                 else if (isChest(clickRow, clickCol))
                 {
-                    //GameManager.gmInstance.UpdateCursor("Furniture", clickRo)
                     return;
                 }
                 else
@@ -388,6 +385,10 @@ public class Player : MovingEntity
             GameManager.gmInstance.Dungeon.removeFromItemList(row, col);
             SoundManager.sm.PlayPickupSound();
         }
+        if (other.gameObject.CompareTag("Trap"))
+        {
+            other.GetComponent<Trap>().TriggerTrap();
+        }
     }
 
     bool isFurniture(int row, int col)
@@ -503,6 +504,11 @@ public class Player : MovingEntity
             evadeText.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = $"Evade";
             evadeText.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().color = new Color(50f / 255f, 205f / 255f, 50f / 255f);
             return;
+        }
+        else
+        {
+            GameObject damageNums = GameObject.Instantiate(damageText, new Vector3(this.transform.position.x, this.transform.position.y, 0), Quaternion.identity);
+            damageNums.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = $"{d}";
         }
         base.takeDamage(d);
     }

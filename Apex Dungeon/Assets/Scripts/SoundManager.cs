@@ -31,6 +31,7 @@ public class SoundManager: MonoBehaviour
     public AudioClip potionSound;
     public AudioClip magicSound;
     public AudioClip mapSound;
+    public AudioClip trapSound;
 
     private AudioSource musicSource;
     private AudioSource soundSource;
@@ -211,6 +212,12 @@ public class SoundManager: MonoBehaviour
     {
         if (!Data.sound) return;
         soundSource.PlayOneShot(randomClip(monsterSounds), 0.3f);
+    }
+
+    public void PlayTrapSound()
+    {
+        if (!Data.sound) return;
+        soundSource.PlayOneShot(trapSound, 0.3f);
     }
 
     public AudioClip randomClip(AudioClip[] clips){

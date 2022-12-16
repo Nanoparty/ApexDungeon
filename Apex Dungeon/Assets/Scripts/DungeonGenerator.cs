@@ -107,6 +107,7 @@ public class DungeonGenerator : ScriptableObject
         SpawnStairs();
         SpawnEnemies();
         SpawnDecoration();
+        SpawnTraps();
         SpawnFurniture();
         SpawnChests();
         //SpawnItems();
@@ -625,6 +626,22 @@ public class DungeonGenerator : ScriptableObject
         }
     }
 
+    void SpawnTraps()
+    {
+        if (currentBiome.traps.Length == 0) return;
+
+        for (int i = 0; i < rooms.Count; i++)
+        {
+            Room room = rooms[i];
+            if (Random.Range(0, 1) > currentBiome.trapChance) continue;
+
+            int row = Random.Range(room.row + 1, room.row + room.height - 2);
+            int col = Random.Range(room.col + 1, room.col + room.width - 2);
+            GameObject trap = InstantiateRandom(currentBiome.traps, row, col, furnitureContainer);
+            trap.GetComponent<Trap>().Setup(row, col, GameManager.gmInstance.level);
+        }
+    }
+
     void SpawnFurniture()
     {
         if (currentBiome.obstacles.Length == 0) return;
@@ -805,10 +822,10 @@ public class DungeonGenerator : ScriptableObject
         return tileInstance;
     }
 
-    void InstantiateRandom(GameObject[] tileArray, float row, float col, Transform parent)
+    GameObject InstantiateRandom(GameObject[] tileArray, float row, float col, Transform parent)
     {
         GameObject tileChoice = tileArray[Random.Range(0, tileArray.Length)];
-        InstantiateSingle(tileChoice, row, col, parent);
+        return InstantiateSingle(tileChoice, row, col, parent);
     }
 
     GameObject getRandom(GameObject[] tileArray, float row, float col)

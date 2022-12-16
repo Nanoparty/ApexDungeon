@@ -12,6 +12,8 @@ public class GameManager : MonoBehaviour
     private List<Enemy> enemies;
     private List<Furniture> furniture;
     private List<Chest> chests;
+    private List<Trap> traps;
+
     private bool enemiesTurn;
     public bool doingSetup = true;
 
@@ -47,6 +49,7 @@ public class GameManager : MonoBehaviour
         enemies = new List<Enemy>();
         furniture = new List<Furniture>();
         chests = new List<Chest>();
+        traps = new List<Trap>();
         Setup();
 
         Vector3 position = new Vector3(0f, 0f, 0f);
@@ -72,6 +75,7 @@ public class GameManager : MonoBehaviour
         enemies.Clear();
         furniture.Clear();
         chests.Clear();
+        traps.Clear();
     }
 
     void Update()
@@ -105,6 +109,7 @@ public class GameManager : MonoBehaviour
             enemies.Clear();
             furniture.Clear();
             chests.Clear();
+            traps.Clear();
             Vector3 position = new Vector3(0f, 0f, 0f);
             cursor = Instantiate(tileCursor, position, Quaternion.identity) as GameObject;
             Dungeon = DunGen.Initalize();
@@ -177,6 +182,11 @@ public class GameManager : MonoBehaviour
         chests.Remove(e);
     }
 
+    public void removeTrap(Trap t)
+    {
+        traps.Remove(t);
+    }
+
     public Enemy getEnemyAtLoc(int r, int c)
     {
         if (enemies.Count == 0)
@@ -196,9 +206,33 @@ public class GameManager : MonoBehaviour
         return null;
     }
 
+    public Trap GetTrapAtLoc(int r, int c)
+    {
+        if (traps.Count == 0)
+        {
+            return null;
+        }
+        for (int i = 0; i < traps.Count; i++)
+        {
+            int tr = traps[i].GetRow();
+            int tc = traps[i].GetCol();
+            if (r == tr && c == tc)
+            {
+                return traps[i];
+            }
+
+        }
+        return null;
+    }
+
     public void AddEnemyToList(Enemy script)
     {
         enemies.Add(script);
+    }
+
+    public void AddTrapToList(Trap trap)
+    {
+        traps.Add(trap);
     }
 
     public void AddFurnitureToList(Furniture f)

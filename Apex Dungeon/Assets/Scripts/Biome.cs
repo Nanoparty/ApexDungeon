@@ -19,8 +19,9 @@ public class Biome : ScriptableObject
     public GameObject[] decorations;
     public GameObject[] obstacles;
 
+    public float trapChance;
+    public GameObject[] traps;
+
     public GameObject stairs;
 
-    public GameObject[] topWalls;
-    public GameObject[] bottomWalls;
 }
