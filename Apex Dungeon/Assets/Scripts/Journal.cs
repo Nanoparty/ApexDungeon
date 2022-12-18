@@ -19,6 +19,7 @@ public class Journal : ScriptableObject
     public GameObject popupPrefab;
     public Sprite[] itemFrames;
     public Sprite[] journalTabs;
+    public GameObject statusEffectCard;
 
     private Player player;
 
@@ -32,8 +33,8 @@ public class Journal : ScriptableObject
     private GameObject journalRoot;
     private GameObject popupRoot;
     private GameObject useButton, trashButton, compareButton;
-    private GameObject charPanel, statusPanel, equipmentPanel, mapPanel, inventoryPanel;
-    private Button inventoryTab, equipmentTab, mapTab, closeTab;
+    private GameObject charPanel, statusPanel, equipmentPanel, mapPanel, inventoryPanel, effectsPanel;
+    private Button inventoryTab, equipmentTab, mapTab, effectsTab, closeTab;
     private Animator anim;
     private Sprite[] icons;
     
@@ -92,12 +93,14 @@ public class Journal : ScriptableObject
         inventoryTab = journalRoot.transform.GetChild(0).transform.GetChild(0).gameObject.GetComponent<Button>();
         equipmentTab = journalRoot.transform.GetChild(0).transform.GetChild(1).gameObject.GetComponent<Button>();
         mapTab = journalRoot.transform.GetChild(0).transform.GetChild(2).gameObject.GetComponent<Button>();
-        closeTab = journalRoot.transform.GetChild(0).transform.GetChild(3).gameObject.GetComponent<Button>();
+        effectsTab = journalRoot.transform.GetChild(0).transform.GetChild(3).gameObject.GetComponent<Button>();
+        closeTab = journalRoot.transform.GetChild(0).transform.GetChild(4).gameObject.GetComponent<Button>();
 
         inventoryTab.onClick.AddListener(itemListener);
         equipmentTab.onClick.AddListener(equipmentListener);
         mapTab.onClick.AddListener(mapListener);
         closeTab.onClick.AddListener(closeListener);
+        effectsTab.onClick.AddListener(effectsListener);
 
         anim = journalRoot.GetComponent<Animator>();
 
@@ -425,15 +428,18 @@ public class Journal : ScriptableObject
         inventoryPanel = journalRoot.transform.GetChild(2).gameObject;
         equipmentPanel = journalRoot.transform.GetChild(3).gameObject;
         mapPanel = journalRoot.transform.GetChild(4).gameObject;
+        effectsPanel = journalRoot.transform.GetChild(5).gameObject;
 
         statusPanel.SetActive(true);
         inventoryPanel.SetActive(false);
         equipmentPanel.SetActive(false);
         mapPanel.SetActive(false);
+        effectsPanel.SetActive(false);
 
         inventoryTab.transform.GetComponent<Image>().sprite = journalTabs[1];
         equipmentTab.transform.GetComponent<Image>().sprite = journalTabs[1];
         mapTab.transform.GetComponent<Image>().sprite = journalTabs[1];
+        effectsTab.transform.GetComponent<Image>().sprite = journalTabs[1];
 
         if (tab == 0)
         {
@@ -450,6 +456,11 @@ public class Journal : ScriptableObject
             mapPanel.SetActive(true);
             mapTab.transform.GetComponent<Image>().sprite = journalTabs[0];
         }
+        else if (tab == 4)
+        {
+            effectsPanel.SetActive(true);
+            effectsTab.transform.GetComponent<Image>().sprite = journalTabs[0];
+        }
     }
 
     void populateTopicArea()
@@ -465,6 +476,10 @@ public class Journal : ScriptableObject
         else if (tab == 3)
         {
             populateMap();
+        }
+        else if (tab == 4)
+        {
+            populateEffects();
         }
     }
 
@@ -591,6 +606,16 @@ public class Journal : ScriptableObject
                 }
 
             }
+        }
+    }
+
+    private void populateEffects()
+    {
+        GameObject content = effectsPanel.GetComponentInChildren<ScrollRect>().gameObject.transform.GetChild(0).transform.GetChild(0).gameObject;
+        foreach (StatusEffect e in player.statusEffects)
+        {
+            GameObject effectCard = Instantiate(statusEffectCard, new Vector3(0,0,0), Quaternion.identity);
+            effectCard.GetComponent<StatusEffectCard>().Setup(e.effectId, e.duration);
         }
     }
 
@@ -794,6 +819,7 @@ public class Journal : ScriptableObject
         inventoryPanel.SetActive(false);
         equipmentPanel.SetActive(false);
         mapPanel.SetActive(false);
+        effectsPanel.SetActive(false);
 
         anim.Play(flipDirection(0));
         flipping = true;
@@ -810,6 +836,7 @@ public class Journal : ScriptableObject
         inventoryPanel.SetActive(false);
         equipmentPanel.SetActive(false);
         mapPanel.SetActive(false);
+        effectsPanel.SetActive(false);
 
         anim.Play(flipDirection(1));
         flipping = true;
@@ -825,11 +852,28 @@ public class Journal : ScriptableObject
         inventoryPanel.SetActive(false);
         equipmentPanel.SetActive(false);
         mapPanel.SetActive(false);
+        effectsPanel.SetActive(false);
 
         anim.Play(flipDirection(3));
         flipping = true;
 
         tab = 3;
+    }
+
+    void effectsListener()
+    {
+        if (tab == 4) return;
+        SoundManager.sm.PlayPageTurn();
+
+        statusPanel.SetActive(false);
+        inventoryPanel.SetActive(false);
+        equipmentPanel.SetActive(false);
+        mapPanel.SetActive(false);
+
+        anim.Play(flipDirection(4));
+        flipping = true;
+
+        tab = 4;
     }
 
     void closeListener()

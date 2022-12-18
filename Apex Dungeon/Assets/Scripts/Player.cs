@@ -55,6 +55,8 @@ public class Player : MovingEntity
 
     protected override void Start()
     {
+        base.Start();
+
         initializeObjects();
         setInitialValues();
         
@@ -63,7 +65,7 @@ public class Player : MovingEntity
             loadCharacterData();
         }
 
-        base.Start();
+        statusEffects.Add(new StatusEffect("hp_regeneration", 5));
     }
 
     void setInitialValues() {

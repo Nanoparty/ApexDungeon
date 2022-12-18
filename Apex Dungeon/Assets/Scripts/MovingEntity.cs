@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public abstract class MovingEntity : MonoBehaviour
@@ -22,6 +23,8 @@ public abstract class MovingEntity : MonoBehaviour
     protected int blockStat;
 
     protected bool dead;
+
+    public List<StatusEffect> statusEffects;
 
     public float moveTime = 0.1f;
     public float speed = 3f;
@@ -52,6 +55,8 @@ public abstract class MovingEntity : MonoBehaviour
         boxCollider = GetComponent<BoxCollider2D>();
         row = (int)transform.position.y;
         col = (int)transform.position.x;
+
+        statusEffects = new List<StatusEffect>();
     }
 
     bool checkValidPath()
