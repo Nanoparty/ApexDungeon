@@ -89,8 +89,6 @@ public class Player : MovingEntity
         hp = baseHp + (int)((float)baseHp * 0.05f * defense);
         maxHp = hp;
 
-        Debug.Log("Loading player class:" + Data.characterClass);
-
         // Set ClassType Variables
         if (Data.characterClass == ClassType.Archer)
         {
@@ -228,13 +226,15 @@ public class Player : MovingEntity
 
         updatePlayerStatus();
 
+        Debug.Log("1");
+
 
         GameManager.gmInstance.Dungeon.UpdateShadows(row, col);
 
 
         if (attacking)
         {
-            if (animator.GetCurrentAnimatorStateInfo(0).IsName("PlayerDown")) {
+            if (animator.GetCurrentAnimatorStateInfo(0).IsName("Idle")) {
                 attacking = false;
                 GameManager.gmInstance.playersTurn = false;
                 GameManager.gmInstance.UpdateCursor("Done");

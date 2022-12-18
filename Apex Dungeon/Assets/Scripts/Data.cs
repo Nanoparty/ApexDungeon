@@ -171,11 +171,11 @@ public static class Data
                 consumes.Add(item);
             }
 
-            Debug.Log("STRING:" + p.classType);
+            //Debug.Log("STRING:" + p.classType);
             
             ClassType classType = Enum.Parse<ClassType>(p.classType ?? "Archer");
             if (classType == null) classType = ClassType.Archer;
-            Debug.Log("ENUM:" + classType);
+            //Debug.Log("ENUM:" + classType);
 
             CharacterData cd = new CharacterData(p.name, p.floor, p.level, p.gold, p.strength, p.attack, p.defense,
                 p.evasion, p.critical, p.baseHp, p.hp, p.maxHp, p.exp, p.maxExp, gear, equips, consumes, classType);

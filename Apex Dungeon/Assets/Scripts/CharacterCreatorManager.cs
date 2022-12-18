@@ -76,31 +76,31 @@ public class CharacterCreatorManager : MonoBehaviour
             ClassAnimator.runtimeAnimatorController = Warrior;
             DisableAllClasses();
             WarriorButton.gameObject.GetComponent<Image>().color = Color.green;
-            characterClass = ClassType.Archer;
+            characterClass = ClassType.Warrior;
         });
         PaladinButton.onClick.AddListener(() => {
             ClassAnimator.runtimeAnimatorController = Paladin;
             DisableAllClasses();
             PaladinButton.gameObject.GetComponent<Image>().color = Color.green;
-            characterClass = ClassType.Archer;
+            characterClass = ClassType.Paladin;
         });
         ThiefButton.onClick.AddListener(() => {
             ClassAnimator.runtimeAnimatorController = Thief;
             DisableAllClasses();
             ThiefButton.gameObject.GetComponent<Image>().color = Color.green;
-            characterClass = ClassType.Archer;
+            characterClass = ClassType.Thief;
         });
         PriestButton.onClick.AddListener(() => {
             ClassAnimator.runtimeAnimatorController = Priest;
             DisableAllClasses();
             PriestButton.gameObject.GetComponent<Image>().color = Color.green;
-            characterClass = ClassType.Archer;
+            characterClass = ClassType.Priest;
         });
         MageButton.onClick.AddListener(() => {
             ClassAnimator.runtimeAnimatorController = Mage;
             DisableAllClasses();
             MageButton.gameObject.GetComponent<Image>().color = Color.green;
-            characterClass = ClassType.Archer;
+            characterClass = ClassType.Mage;
         });
         MonkButton.onClick.AddListener(() => {
             ClassAnimator.runtimeAnimatorController = Monk;
@@ -140,6 +140,11 @@ public class CharacterCreatorManager : MonoBehaviour
         });
     }
 
+    private void Update()
+    {
+        Debug.Log("Class: " + characterClass);
+    }
+
     void acceptListener()
     {
         SoundManager.sm.PlayMenuSound();
@@ -157,8 +162,8 @@ public class CharacterCreatorManager : MonoBehaviour
         taken.Add(name);
         Data.names = taken;
         Data.activeCharacter = name;
-        
-        
+
+        Debug.Log("CCM:" + characterClass);
         charData.Add(new CharacterData(name, characterClass));
         Data.charData = charData;
         Data.LoadActiveData();
