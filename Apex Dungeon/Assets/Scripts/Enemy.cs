@@ -62,6 +62,15 @@ public class Enemy : MovingEntity
         }
     }
 
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        Debug.Log("Enemy Trigger Enter");
+        if (other.gameObject.CompareTag("Trap"))
+        {
+            other.GetComponent<Trap>().TriggerTrap(this);
+        }
+    }
+
     protected override bool AttemptMove<T>(int r, int c)
     {
         return base.AttemptMove<T>(r, c);

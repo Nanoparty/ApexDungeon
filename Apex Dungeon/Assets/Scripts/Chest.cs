@@ -31,6 +31,20 @@ public class Chest : MonoBehaviour
         itemContainer = GameObject.Find("ItemContainer");
     }
 
+    private void Update()
+    {
+        if (GameManager.gmInstance.Dungeon == null) return;
+
+        if (!GameManager.gmInstance.Dungeon.tileMap[row, col].visible)
+        {
+            sr.enabled = false;
+        }
+        else
+        {
+            sr.enabled = true;
+        }
+    }
+
     public void SetPosition(int row, int col)
     {
         this.row = row;

@@ -453,7 +453,7 @@ public class Player : MovingEntity
         }
         if (other.gameObject.CompareTag("Trap"))
         {
-            other.GetComponent<Trap>().TriggerTrap();
+            other.GetComponent<Trap>().TriggerTrap(this);
         }
     }
 

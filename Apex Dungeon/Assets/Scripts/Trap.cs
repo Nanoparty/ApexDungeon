@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Drawing;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -13,8 +13,9 @@ public class Trap : MonoBehaviour
 
     private SpriteRenderer sr;
 
-    [SerializeField] public int baseDamage = 15;
-    [SerializeField] public ParticleSystem destruction;
+    [SerializeField] private int baseDamage = 15;
+    [SerializeField] private ParticleSystem destruction;
+    [SerializeField] GameObject disarmText;
 
     private void Awake()
     {
@@ -43,17 +44,30 @@ public class Trap : MonoBehaviour
         GameManager.gmInstance.AddTrapToList(this);
     }
 
-    public void TriggerTrap()
+    public void TriggerTrap(MovingEntity me)
     {
         if (disarmed) return;
 
-        Player player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
-        player.takeAttack(-damage);
+        if (typeof(Player).IsInstanceOfType(me))
+        {
+            Debug.Log("Player Trap");
+            Player player = (Player)me;
+            player.takeAttack(-damage);
+        }
+        if (typeof(Enemy).IsInstanceOfType(me)){
+            Debug.Log("Enemy Trap");
+            Enemy enemy = (Enemy)me;
+            enemy.takeDamage(-damage);
+        }
+
         DestroyTrap();
     }
 
     public void DisarmTrap()
     {
+        GameObject text = Instantiate(disarmText, new Vector2(col, row), Quaternion.identity);
+        text.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = $"DISARM";
+        text.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().color = Color.white;
         DestroyTrap();   
     }
 
