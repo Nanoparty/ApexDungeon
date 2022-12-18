@@ -118,11 +118,36 @@ MonoBehaviour:
   levelUp: {fileID: 11400000, guid: e76addbe5294e42359f0cfb462e02440, type: 2}
   pauseMenu: {fileID: 11400000, guid: 1d4665690a0924fd8b56177081281cf2, type: 2}
   journal: {fileID: 11400000, guid: 17df05a7ae0c746d4a6f9d808c25ca91, type: 2}
+  journalButton: {fileID: 0}
+  pauseButton: {fileID: 0}
   openJournal: 0
   openLevel: 0
   openPause: 0
   ending: 0
   fadeIn: 1
+  interrupt: 0
+  attacking: 0
+  stairsOpen: 0
+  ArcherLibrary: {fileID: 7108339969198208228, guid: 888e87777464fbf4086a10498c189b42,
+    type: 3}
+  WarriorLibrary: {fileID: 7108339969198208228, guid: 0a0d909ff7b4de044a3c748b960c1f9b,
+    type: 3}
+  PaladinLibrary: {fileID: 7108339969198208228, guid: ee24e1102027ef541868eebc39c03408,
+    type: 3}
+  KnightLibrary: {fileID: 7108339969198208228, guid: bd5d3c594da39964fa37bc07a13d84bf,
+    type: 3}
+  MonkLibrary: {fileID: 7108339969198208228, guid: 649376a18680dc34da25d05060b10fe1,
+    type: 3}
+  NecromancerLibrary: {fileID: 7108339969198208228, guid: d126195da86f7264e8a2eab915abbe55,
+    type: 3}
+  DruidLibrary: {fileID: 7108339969198208228, guid: 5150f04b326da894499951b5bcf4ce4f,
+    type: 3}
+  SwordsmanLibrary: {fileID: 7108339969198208228, guid: 3f3c304a2b7176f45ac41a305be72ac1,
+    type: 3}
+  BardLibrary: {fileID: 7108339969198208228, guid: d38b5739bc9be7747972ae4a63566e2f,
+    type: 3}
+  MageLibrary: {fileID: 7108339969198208228, guid: 0a6bcce723891f4499ac54a52a564d63,
+    type: 3}
 --- !u!61 &1418465858329644803
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -382,6 +407,8 @@ GameObject:
   - component: {fileID: 8560131702342369034}
   - component: {fileID: 7929158301694108437}
   - component: {fileID: 4957212814704960177}
+  - component: {fileID: 8468299879883598549}
+  - component: {fileID: 3058052935765632508}
   m_Layer: 0
   m_Name: PlayerAnimation
   m_TagString: Untagged
@@ -414,7 +441,7 @@ Animator:
   m_GameObject: {fileID: 7124371321813346127}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: c9d1ea6e3a450744ca9eef69a20fdaf2, type: 2}
+  m_Controller: {fileID: 9100000, guid: 9eeaedcc32dba514e9ffae16c0a98a3d, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -477,3 +504,33 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &8468299879883598549
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7124371321813346127}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c29cff538c195c249b69c6f2236de67b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Library: []
+  m_SpriteLibraryAsset: {fileID: 7108339969198208228, guid: 888e87777464fbf4086a10498c189b42,
+    type: 3}
+--- !u!114 &3058052935765632508
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7124371321813346127}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed8b1ae4e4e52b34ea557c1c11e076fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_CategoryHash: 0
+  m_labelHash: 0
+  m_SpriteKey: 4.441278e-26

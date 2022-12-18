@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-
+using static CharacterClass;
 
 public static class Data
 {
@@ -45,6 +46,7 @@ public static class Data
     public static int block;
     public static int floor = 1;
     public static PlayerGear gear;
+    public static ClassType characterClass;
 
     public static void reset(){
         
@@ -54,6 +56,7 @@ public static class Data
         CharacterData current = charData.Where(cd => cd.name == activeCharacter).FirstOrDefault();
 
         playerName = activeCharacter;
+        characterClass = current.classType;
         gold = current.gold;
         baseHp = current.baseHp;
         hp = current.hp;
@@ -82,7 +85,7 @@ public static class Data
         if(charData == null) {
             charData = new List<CharacterData>();
             activeCharacter = "bob";
-            charData.Add(new CharacterData(activeCharacter));
+            charData.Add(new CharacterData(activeCharacter, ClassType.Archer));
             playerName = activeCharacter;
             Debug.Log("NULL CHARACTER DATA");
         }
@@ -115,7 +118,7 @@ public static class Data
         {
             charData = new List<CharacterData>();
             activeCharacter = "bob";
-            charData.Add(new CharacterData(activeCharacter));
+            charData.Add(new CharacterData(activeCharacter, ClassType.Archer));
             playerName = activeCharacter;
             Debug.Log("NULL CHARACTER DATA");
         }
@@ -168,8 +171,14 @@ public static class Data
                 consumes.Add(item);
             }
 
+            Debug.Log("STRING:" + p.classType);
+            
+            ClassType classType = Enum.Parse<ClassType>(p.classType ?? "Archer");
+            if (classType == null) classType = ClassType.Archer;
+            Debug.Log("ENUM:" + classType);
+
             CharacterData cd = new CharacterData(p.name, p.floor, p.level, p.gold, p.strength, p.attack, p.defense,
-                p.evasion, p.critical, p.baseHp, p.hp, p.maxHp, p.exp, p.maxExp, gear, equips, consumes);
+                p.evasion, p.critical, p.baseHp, p.hp, p.maxHp, p.exp, p.maxExp, gear, equips, consumes, classType);
 
             loadCharData.Add(cd);
         }

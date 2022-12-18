@@ -6,6 +6,7 @@ using UnityEngine;
 public class SavePlayer
 {
     public string name;
+    public string classType;
     public int level;
     public int floor;
 
@@ -38,6 +39,7 @@ public class SavePlayer
     public SavePlayer(CharacterData data)
     {
         name = data.name;
+        classType = data.classType.ToString();
         level = data.expLevel;
         floor = data.floor;
 

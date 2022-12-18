@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using static CharacterClass;
 using UnityEngine;
 
 public class CharacterData : MonoBehaviour
@@ -26,6 +27,7 @@ public class CharacterData : MonoBehaviour
     public PlayerGear gear;
     public List<Equipment> equipment;
     public List<Consumable> consumables;
+    public ClassType classType;
 
     public CharacterData(){
         name = "";
@@ -33,7 +35,7 @@ public class CharacterData : MonoBehaviour
         level = 1;        
     }
 
-    public CharacterData(string n){
+    public CharacterData(string n, ClassType ct){
         name = n;
         floor = 1;
         level = 1;
@@ -56,11 +58,12 @@ public class CharacterData : MonoBehaviour
         gear = new PlayerGear();
         equipment = new List<Equipment>();
         consumables = new List<Consumable>();
+        classType = ct;
     }
 
     public CharacterData(string name, int floor, int expLevel, int gold, int strength, int attack,
         int defense, int evade, int crit,int baseHp, int hp, int maxHp, int exp, int maxExp, PlayerGear gear,
-        List<Equipment> equipment, List<Consumable> consumables)
+        List<Equipment> equipment, List<Consumable> consumables, ClassType classType)
     {
         this.name = name;
         this.floor = floor;
@@ -79,5 +82,6 @@ public class CharacterData : MonoBehaviour
         this.gear = gear;
         this.equipment = equipment;
         this.consumables = consumables;
+        this.classType = classType;
     }
 }

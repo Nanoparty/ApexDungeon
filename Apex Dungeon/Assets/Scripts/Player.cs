@@ -4,6 +4,8 @@ using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
+using UnityEngine.U2D.Animation;
+using static CharacterClass;
 
 public class Player : MovingEntity
 {
@@ -21,6 +23,7 @@ public class Player : MovingEntity
 
     private PlayerGear gear;
     private Animator animator;
+    private SpriteLibrary sl;
     private GameObject stairsModal;
     private GameObject endScreenHolder;
 
@@ -36,10 +39,25 @@ public class Player : MovingEntity
 
     public bool stairsOpen = false;
 
+    [Header("Character Sprite Libraries")]
+    [SerializeField] private SpriteLibraryAsset ArcherLibrary;
+    [SerializeField] private SpriteLibraryAsset WarriorLibrary;
+    [SerializeField] private SpriteLibraryAsset PaladinLibrary;
+    [SerializeField] private SpriteLibraryAsset KnightLibrary;
+    [SerializeField] private SpriteLibraryAsset MonkLibrary;
+    [SerializeField] private SpriteLibraryAsset NecromancerLibrary;
+    [SerializeField] private SpriteLibraryAsset DruidLibrary;
+    [SerializeField] private SpriteLibraryAsset SwordsmanLibrary;
+    [SerializeField] private SpriteLibraryAsset BardLibrary;
+    [SerializeField] private SpriteLibraryAsset MageLibrary;
+    [SerializeField] private SpriteLibraryAsset ThiefLibrary;
+    [SerializeField] private SpriteLibraryAsset PriestLibrary;
+
     protected override void Start()
     {
-        setInitialValues();
         initializeObjects();
+        setInitialValues();
+        
         if (GameManager.gmInstance.level > 1 || Data.loadData)
         {
             loadCharacterData();
@@ -70,12 +88,65 @@ public class Player : MovingEntity
         baseHp = 100;
         hp = baseHp + (int)((float)baseHp * 0.05f * defense);
         maxHp = hp;
+
+        Debug.Log("Loading player class:" + Data.characterClass);
+
+        // Set ClassType Variables
+        if (Data.characterClass == ClassType.Archer)
+        {
+            sl.spriteLibraryAsset = ArcherLibrary;
+        }
+        if (Data.characterClass == ClassType.Warrior)
+        {
+            sl.spriteLibraryAsset = WarriorLibrary;
+        }
+        if (Data.characterClass == ClassType.Paladin)
+        {
+            sl.spriteLibraryAsset = PaladinLibrary;
+        }
+        if (Data.characterClass == ClassType.Thief)
+        {
+            sl.spriteLibraryAsset = ThiefLibrary;
+        }
+        if (Data.characterClass == ClassType.Mage)
+        {
+            sl.spriteLibraryAsset = MageLibrary;
+        }
+        if (Data.characterClass == ClassType.Necromancer)
+        {
+            sl.spriteLibraryAsset = NecromancerLibrary;
+        }
+        if (Data.characterClass == ClassType.Druid)
+        {
+            sl.spriteLibraryAsset = DruidLibrary;
+        }
+        if (Data.characterClass == ClassType.Monk)
+        {
+            sl.spriteLibraryAsset = MonkLibrary;
+        }
+        if (Data.characterClass == ClassType.Bard)
+        {
+            sl.spriteLibraryAsset = BardLibrary;
+        }
+        if (Data.characterClass == ClassType.Knight)
+        {
+            sl.spriteLibraryAsset = KnightLibrary;
+        }
+        if (Data.characterClass == ClassType.Swordsman)
+        {
+            sl.spriteLibraryAsset = SwordsmanLibrary;
+        }
+        if (Data.characterClass == ClassType.Priest)
+        {
+            sl.spriteLibraryAsset = PriestLibrary;
+        }
     }
 
     void initializeObjects() {
         SoundManager.sm.PlayDungeonMusic();
 
         animator = transform.GetChild(1).gameObject.transform.GetComponent<Animator>();
+        sl = transform.GetChild(1).gameObject.GetComponent<SpriteLibrary>();
         gear = new PlayerGear();
 
         hpBar = GameObject.FindGameObjectWithTag("hpbar");
