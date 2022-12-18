@@ -611,11 +611,24 @@ public class Journal : ScriptableObject
 
     private void populateEffects()
     {
-        GameObject content = effectsPanel.GetComponentInChildren<ScrollRect>().gameObject.transform.GetChild(0).transform.GetChild(0).gameObject;
+        Debug.Log("Populate Effects");
+        GameObject content = effectsPanel.GetComponentInChildren<ScrollRect>().gameObject.transform.GetChild(0).transform.GetChild(0).transform.GetChild(0).gameObject;
+
+        if (player.statusEffects.Count == 0)
+        {
+            effectsPanel.transform.GetChild(5).gameObject.SetActive(true);
+            return;
+        }
+
+        effectsPanel.transform.GetChild(5).gameObject.SetActive(false);
+
         foreach (StatusEffect e in player.statusEffects)
         {
-            GameObject effectCard = Instantiate(statusEffectCard, new Vector3(0,0,0), Quaternion.identity);
+            Debug.Log($"{e.effectId}");
+            GameObject effectCard = Instantiate(statusEffectCard, new Vector3(0, 0, 0), Quaternion.identity);
             effectCard.GetComponent<StatusEffectCard>().Setup(e.effectId, e.duration);
+            effectCard.transform.SetParent(content.transform);
+            effectCard.transform.localScale = new Vector3(1.2f, 1.2f, 1f);
         }
     }
 

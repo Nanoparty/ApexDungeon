@@ -66,6 +66,11 @@ public class Player : MovingEntity
         }
 
         statusEffects.Add(new StatusEffect("hp_regeneration", 5));
+        statusEffects.Add(new StatusEffect("bleed", 5));
+        statusEffects.Add(new StatusEffect("poison", 5));
+        statusEffects.Add(new StatusEffect("paralysis", 5));
+        statusEffects.Add(new StatusEffect("strength_up", 5));
+        statusEffects.Add(new StatusEffect("strength_down", 5));
     }
 
     void setInitialValues() {

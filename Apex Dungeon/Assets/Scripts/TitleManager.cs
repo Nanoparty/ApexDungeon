@@ -13,8 +13,12 @@ public class TitleManager : MonoBehaviour
     public Button Options;
     public ImageLookup imageLookup;
 
+    public bool skipLoad;
+
     private void Awake()
     {
+        if (skipLoad) return;
+
         Data.LoadFromFile(imageLookup);
     }
 
