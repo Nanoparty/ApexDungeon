@@ -223,14 +223,9 @@ public class Player : MovingEntity
             return;
         }
 
-
         updatePlayerStatus();
 
-        Debug.Log("1");
-
-
         GameManager.gmInstance.Dungeon.UpdateShadows(row, col);
-
 
         if (attacking)
         {

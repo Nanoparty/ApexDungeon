@@ -1,8 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor.Animations;
 using UnityEngine;
+using UnityEngine.U2D.Animation;
 using UnityEngine.UI;
+using static CharacterClass;
 
 [CreateAssetMenu(fileName = "Journal", menuName = "ScriptableObjects/Journal")]
 public class Journal : ScriptableObject
@@ -42,7 +45,20 @@ public class Journal : ScriptableObject
     private int selected, gearSelection;
     private bool open;
     private bool trashConfirmOpen;
-    
+
+    [SerializeField] private AnimatorController ArcherController;
+    [SerializeField] private AnimatorController WarriorController;
+    [SerializeField] private AnimatorController PaladinController;
+    [SerializeField] private AnimatorController KnightController;
+    [SerializeField] private AnimatorController ThiefController;
+    [SerializeField] private AnimatorController MageController;
+    [SerializeField] private AnimatorController MonkController;
+    [SerializeField] private AnimatorController NecromancerController;
+    [SerializeField] private AnimatorController BardController;
+    [SerializeField] private AnimatorController DruidController;
+    [SerializeField] private AnimatorController SwordsmanController;
+    [SerializeField] private AnimatorController PriestController;
+
     private void OnEnable()
     {
         items = Data.consumables ?? new List<Consumable>();
@@ -256,6 +272,57 @@ public class Journal : ScriptableObject
 
         //set name
         nameBanner.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = player.getName();
+
+        // Set Player Profile Image
+        Animator profileAnim = playerProfile.GetComponentInChildren<Animator>();
+        if (Data.characterClass == ClassType.Archer)
+        {
+            profileAnim.runtimeAnimatorController = ArcherController;
+        }
+        if (Data.characterClass == ClassType.Warrior)
+        {
+            profileAnim.runtimeAnimatorController = WarriorController;
+        }
+        if (Data.characterClass == ClassType.Knight)
+        {
+            profileAnim.runtimeAnimatorController = KnightController;
+        }
+        if (Data.characterClass == ClassType.Paladin)
+        {
+            profileAnim.runtimeAnimatorController = PaladinController;
+        }
+        if (Data.characterClass == ClassType.Thief)
+        {
+            profileAnim.runtimeAnimatorController = ThiefController;
+        }
+        if (Data.characterClass == ClassType.Mage)
+        {
+            profileAnim.runtimeAnimatorController = MageController;
+        }
+        if (Data.characterClass == ClassType.Monk)
+        {
+            profileAnim.runtimeAnimatorController = MonkController;
+        }
+        if (Data.characterClass == ClassType.Necromancer)
+        {
+            profileAnim.runtimeAnimatorController = NecromancerController;
+        }
+        if (Data.characterClass == ClassType.Bard)
+        {
+            profileAnim.runtimeAnimatorController = BardController;
+        }
+        if (Data.characterClass == ClassType.Priest)
+        {
+            profileAnim.runtimeAnimatorController = PriestController;
+        }
+        if (Data.characterClass == ClassType.Druid)
+        {
+            profileAnim.runtimeAnimatorController = DruidController;
+        }
+        if (Data.characterClass == ClassType.Swordsman)
+        {
+            profileAnim.runtimeAnimatorController = SwordsmanController;
+        }
 
         //Set HP and MP
         GameObject hpText = healthBanner.transform.GetChild(0).gameObject;
