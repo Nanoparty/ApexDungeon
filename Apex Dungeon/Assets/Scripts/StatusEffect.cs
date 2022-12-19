@@ -6,6 +6,7 @@ public class StatusEffect
 {
     public string effectId;
     public int duration;
+    public bool spawned;
 
     public StatusEffect(string id, int duration)
     {

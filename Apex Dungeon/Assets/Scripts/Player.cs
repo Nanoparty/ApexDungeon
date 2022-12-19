@@ -53,6 +53,9 @@ public class Player : MovingEntity
     [SerializeField] private SpriteLibraryAsset ThiefLibrary;
     [SerializeField] private SpriteLibraryAsset PriestLibrary;
 
+    [Header("Status Effects")]
+    [SerializeField] private GameObject StatusEffectAlert;
+
     protected override void Start()
     {
         base.Start();
@@ -231,6 +234,7 @@ public class Player : MovingEntity
         }
 
         updatePlayerStatus();
+        updatePlayerStatusEffects();
 
         GameManager.gmInstance.Dungeon.UpdateShadows(row, col);
 
@@ -649,6 +653,21 @@ public class Player : MovingEntity
         float greenPos = greenStartingPos + (((float)exp / (float)maxExp) * greenWidth);
         greenbar.transform.GetComponent<RectTransform>().position = new Vector3(greenPos, pos2.y, pos2.z);
 
+    }
+
+    private void updatePlayerStatusEffects()
+    {
+        GameObject StatusEffectBar = GameObject.FindGameObjectWithTag("StatusBar");
+        
+        foreach (StatusEffect e in statusEffects)
+        {
+            if (e.spawned) return;
+
+            e.spawned = true;
+            GameObject alert = Instantiate(StatusEffectAlert, new Vector3(0,0,0), Quaternion.identity);
+            alert.transform.parent = StatusEffectBar.transform;
+            alert.GetComponent<StatusEffectAlert>().Setup(e.effectId, e.duration);
+        }
     }
 
     public int getStrength(){
