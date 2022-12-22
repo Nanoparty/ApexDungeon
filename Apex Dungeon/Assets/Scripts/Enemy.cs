@@ -1,5 +1,6 @@
 ﻿using TMPro;
 using UnityEngine;
+using static StatusEffect;
 
 public class Enemy : MovingEntity
 {
@@ -20,6 +21,8 @@ public class Enemy : MovingEntity
     private Path path;
     private Pathfinder finder;
     private int floor;
+
+    [SerializeField] private float poisonChance = 1f;
 
     protected override void Start()
     {
@@ -171,6 +174,12 @@ public class Enemy : MovingEntity
         if (isAdjacent(player))
         {
             player.takeAttack(calculateDamageOut());
+
+            //poison roll
+            if (Random.Range(0f, 1f) <= poisonChance)
+            {
+                player.AddStatusEffect(new StatusEffect(EffectType.strength_up, 5, EffectOrder.Update));
+            }
             setAttackAnimation(player.getRow(), player.getCol());
         }
     }

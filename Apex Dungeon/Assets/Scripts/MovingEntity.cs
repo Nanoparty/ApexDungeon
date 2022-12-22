@@ -13,7 +13,7 @@ public abstract class MovingEntity : MonoBehaviour
     protected int exp;
     protected int maxExp;
 
-    
+    // Entity Stats
     protected int attack;
     protected int defense;
     protected int strength;
@@ -21,6 +21,14 @@ public abstract class MovingEntity : MonoBehaviour
     protected int critical;
     protected int evade;
     protected int blockStat;
+
+    protected int appliedAttack;
+    protected int appliedDefense;
+    protected int appliedStrength;
+    protected int appliedIntelligence;
+    protected int appliedCritical;
+    protected int appliedEvade;
+    protected int appliedBlock;
 
     protected bool dead;
 
@@ -238,12 +246,62 @@ public abstract class MovingEntity : MonoBehaviour
         {
             SpawnBlood();
         }
+        if (hp > maxHp)
+        {
+            hp = maxHp;
+        }
+    }
+
+    public virtual void takeDamage(float d, Color color)
+    {
+        if (d > 0)
+        {
+            SoundManager.sm.PlayHealSound();
+        }
+
+        if (d < 0)
+        {
+            SoundManager.sm.PlayHitSound();
+
+        }
+
+        takeDamage(d);
+        GameObject damageT = GameObject.Instantiate(damageText, new Vector3(this.transform.position.x, this.transform.position.y, 0), Quaternion.identity);
+        damageT.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = $"{(int)d}";
+        damageT.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().color = color;
+        return;
+    }
+
+    public virtual void AddTextPopup(string text, Color color)
+    {
+        GameObject popup = GameObject.Instantiate(damageText, new Vector3(this.transform.position.x, this.transform.position.y, 0), Quaternion.identity);
+        popup.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = $"{text}";
+        popup.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().color = color;
     }
 
     protected void SpawnBlood()
     {
-        Vector3 position = new Vector3(col, row, 0f);
-        Instantiate(blood, position, Quaternion.identity);
+        ParticleSystem bloodSpray = Instantiate(blood, transform.position, Quaternion.identity);
+        bloodSpray.transform.parent = transform;
+    }
+
+    public virtual void AddStatusEffect(StatusEffect se)
+    {
+        statusEffects.Add(se);
+        
+        GameObject statusEffectText = GameObject.Instantiate(damageText, new Vector3(this.transform.position.x, this.transform.position.y, 0), Quaternion.identity);
+        statusEffectText.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = $"{se.popupText}";
+        statusEffectText.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().color = se.textColor;
+    }
+
+    public virtual void SkipTurn()
+    {
+        Debug.Log("ENTITY SKIP TURN");
+    }
+
+    public virtual void CalculateStats()
+    {
+
     }
 
     public void addMP(float change)

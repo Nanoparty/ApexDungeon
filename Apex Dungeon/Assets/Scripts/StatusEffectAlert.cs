@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static StatusEffect;
 
 public class StatusEffectAlert : MonoBehaviour
 {
@@ -22,46 +23,46 @@ public class StatusEffectAlert : MonoBehaviour
     [SerializeField] private Sprite evasion_up;
     [SerializeField] private Sprite evasion_down;
 
-    public void Setup(string effect, int duration)
+    public void Setup(EffectType effect, int duration)
     {
         DurationText.SetText(duration.ToString());
 
         switch (effect)
         {
-            case "hp_regeneration":
+            case EffectType.health_regen:
                 EffectIcon.sprite = hp_regen;
                 break;
-            case "bleed":
+            case EffectType.bleed:
                 EffectIcon.sprite = bleed;
                 break;
-            case "poison":
+            case EffectType.poison:
                 EffectIcon.sprite = poison;
                 break;
-            case "paralysis":
+            case EffectType.paralysis:
                 EffectIcon.sprite = paralysis;
                 break;
-            case "strength_up":
+            case EffectType.strength_up:
                 EffectIcon.sprite = strength_up;
                 break;
-            case "defense_up":
+            case EffectType.defense_up:
                 EffectIcon.sprite = defense_up;
                 break;
-            case "evasion_up":
+            case EffectType.evasion_up:
                 EffectIcon.sprite = evasion_up;
                 break;
-            case "critical_up":
+            case EffectType.critical_up:
                 EffectIcon.sprite = critical_up;
                 break;
-            case "strength_down":
+            case EffectType.strength_down:
                 EffectIcon.sprite = strength_down;
                 break;
-            case "defense_down":
+            case EffectType.defense_down:
                 EffectIcon.sprite = defense_down;
                 break;
-            case "evasion_down":
+            case EffectType.evasion_down:
                 EffectIcon.sprite = evasion_down;
                 break;
-            case "critical_down":
+            case EffectType.critical_down:
                 EffectIcon.sprite = critical_down;
                 break;
         }

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine.U2D.Animation;
 using static CharacterClass;
+using static StatusEffect;
 
 public class Player : MovingEntity
 {
@@ -36,6 +37,9 @@ public class Player : MovingEntity
     public bool fadeIn = true;
     public bool interrupt = false;
     public bool attacking = false;
+
+    private bool turnStart = true;
+    private bool turnEnd = false;
 
     public bool stairsOpen = false;
 
@@ -68,12 +72,12 @@ public class Player : MovingEntity
             loadCharacterData();
         }
 
-        statusEffects.Add(new StatusEffect("hp_regeneration", 5));
-        statusEffects.Add(new StatusEffect("bleed", 5));
-        statusEffects.Add(new StatusEffect("poison", 5));
-        statusEffects.Add(new StatusEffect("paralysis", 5));
-        statusEffects.Add(new StatusEffect("strength_up", 5));
-        statusEffects.Add(new StatusEffect("strength_down", 5));
+        //statusEffects.Add(new StatusEffect(EffectType.health_regen, 5, EffectOrder.Start));
+        //statusEffects.Add(new StatusEffect(EffectType.bleed, 4, EffectOrder.End));
+        //statusEffects.Add(new StatusEffect(EffectType.poison, 3, EffectOrder.End));
+        //statusEffects.Add(new StatusEffect(EffectType.paralysis, 2, EffectOrder.Start));
+        //statusEffects.Add(new StatusEffect(EffectType.strength_up, 1, EffectOrder.Update));
+        //statusEffects.Add(new StatusEffect(EffectType.critical_down, 5, EffectOrder.Update));
     }
 
     void setInitialValues() {
@@ -175,7 +179,8 @@ public class Player : MovingEntity
     {
         bool val;
         val = AttemptMove<Player>(clickRow, clickCol);
-        GameManager.gmInstance.playersTurn = false;
+        //GameManager.gmInstance.playersTurn = false;
+        PlayerEnd();
     }
 
     void stairsYes()
@@ -233,8 +238,14 @@ public class Player : MovingEntity
             return;
         }
 
+        if (turnStart)
+        {
+            turnStart = false;
+            PlayerStart();
+        }
+
         updatePlayerStatus();
-        updatePlayerStatusEffects();
+        
 
         GameManager.gmInstance.Dungeon.UpdateShadows(row, col);
 
@@ -242,7 +253,8 @@ public class Player : MovingEntity
         {
             if (animator.GetCurrentAnimatorStateInfo(0).IsName("Idle")) {
                 attacking = false;
-                GameManager.gmInstance.playersTurn = false;
+                //GameManager.gmInstance.playersTurn = false;
+                PlayerEnd();
                 GameManager.gmInstance.UpdateCursor("Done");
             }
             return;
@@ -343,6 +355,23 @@ public class Player : MovingEntity
                 return;
             }
         }
+    }
+
+    public void PlayerStart()
+    {
+        Debug.Log("Player Turn Start");
+        ApplyStatusEffects("start");
+        UpdatePlayerStatusEffectAlerts();
+    }
+
+    public void PlayerEnd()
+    {
+        Debug.Log("Player Turn End");
+        GameManager.gmInstance.playersTurn = false;
+        turnStart = true;
+        ApplyStatusEffects("end");
+        UpdateStatusEffectDuration();
+        UpdatePlayerStatusEffectAlerts();
     }
 
     void debugMenu(){
@@ -474,7 +503,8 @@ public class Player : MovingEntity
         if (f != null)
         {
             f.setDamage(-1);
-            GameManager.gmInstance.playersTurn = false;
+            //GameManager.gmInstance.playersTurn = false;
+            PlayerEnd();
             SoundManager.sm.PlayStickSounds();
             return true;
         }
@@ -487,7 +517,8 @@ public class Player : MovingEntity
         if (c != null)
         {
             c.OpenChest();
-            GameManager.gmInstance.playersTurn = false;
+            //GameManager.gmInstance.playersTurn = false;
+            PlayerEnd();
             SoundManager.sm.PlayStickSounds();
             return true;
         }
@@ -528,7 +559,8 @@ public class Player : MovingEntity
             if (atTarget && !interrupt)
             {
                 setNextTarget();
-                GameManager.gmInstance.playersTurn = false;
+                //GameManager.gmInstance.playersTurn = false;
+                PlayerEnd();
                 SoundManager.sm.PlayStepSound();
             }
             else if(atTarget){
@@ -589,6 +621,14 @@ public class Player : MovingEntity
         }
         base.takeDamage(d);
     }
+
+    public override void AddStatusEffect(StatusEffect se)
+    {
+        base.AddStatusEffect(se);
+        UpdatePlayerStatusEffectAlerts();
+    }
+
+    
 
     bool isAdjacent(int r, int c)
     {
@@ -655,19 +695,54 @@ public class Player : MovingEntity
 
     }
 
-    private void updatePlayerStatusEffects()
+    private void UpdatePlayerStatusEffectAlerts()
     {
         GameObject StatusEffectBar = GameObject.FindGameObjectWithTag("StatusBar");
+
+        foreach (Transform t in StatusEffectBar.transform)
+        {
+            Destroy(t.gameObject);
+        }
         
         foreach (StatusEffect e in statusEffects)
         {
-            if (e.spawned) return;
-
-            e.spawned = true;
             GameObject alert = Instantiate(StatusEffectAlert, new Vector3(0,0,0), Quaternion.identity);
             alert.transform.parent = StatusEffectBar.transform;
             alert.GetComponent<StatusEffectAlert>().Setup(e.effectId, e.duration);
         }
+    }
+
+    private void UpdateStatusEffectDuration()
+    {
+        foreach (StatusEffect e in statusEffects)
+        {
+            e.duration -= 1;
+        }
+        statusEffects.RemoveAll(e => e.duration == 0);
+    }
+
+    private void ApplyStatusEffects(string time)
+    {
+        if (time == "start")
+        {
+            foreach (StatusEffect e in statusEffects)
+            {
+                Debug.Log("Activate:" + e.effectId.ToString());
+                if (e.order == EffectOrder.Start) e.Activate(this);
+            }
+        }
+        if (time == "end")
+        {
+            foreach (StatusEffect e in statusEffects)
+            {
+                if (e.order == EffectOrder.End) e.Activate(this);
+            }
+        }
+    }
+
+    public override void SkipTurn()
+    {
+        PlayerEnd();
     }
 
     public int getStrength(){

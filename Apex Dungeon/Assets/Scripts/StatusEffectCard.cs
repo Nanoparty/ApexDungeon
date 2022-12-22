@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static StatusEffect;
 
 public class StatusEffectCard : MonoBehaviour
 {
@@ -31,66 +32,66 @@ public class StatusEffectCard : MonoBehaviour
     private string description;
     private Sprite iconSprite;
 
-    public void Setup(string effect, int turns)
+    public void Setup(EffectType effect, int turns)
     {
         switch (effect)
         {
-            case "hp_regeneration":
+            case EffectType.health_regen:
                 effectName = "HP Regeneration";
                 description = "Restores 10% of Max HP Each Turn";
                 iconSprite = hp_regen_sprite;
                 break;
-            case "bleed":
+            case EffectType.bleed:
                 effectName = "Bleeding";
                 description = "Lose 5% of Max HP Each Turn";
                 iconSprite = bleed_sprite;
                 break;
-            case "poison":
+            case EffectType.poison:
                 effectName = "Poisoned";
                 description = "Lose 10% of Max HP Each Turn";
                 iconSprite = poison_sprite;
                 break;
-            case "paralysis":
+            case EffectType.paralysis:
                 effectName = "Paralyzed";
                 description = "50% Chance to Skip Turn";
                 iconSprite = paralysis_sprite;
                 break;
-            case "strength_up":
+            case EffectType.strength_up:
                 effectName = "Strength Up";
                 description = "Strength Increased by 10%";
                 iconSprite = strength_up_sprite;
                 break;
-            case "critical_up":
+            case EffectType.critical_up:
                 effectName = "Critical Up";
                 description = "Critical Increased by 10%";
                 iconSprite = critical_up_sprite;
                 break;
-            case "evasion_up":
+            case EffectType.evasion_up:
                 effectName = "Evasion Up";
                 description = "Evasion Increased by 10%";
                 iconSprite = evasion_up_sprite;
                 break;
-            case "defense_up":
+            case EffectType.defense_up:
                 effectName = "Defense Up";
                 description = "Defense Increased by 10%";
                 iconSprite = defense_up_sprite;
                 break;
-            case "strength_down":
+            case EffectType.strength_down:
                 effectName = "Strength Down";
                 description = "Strength Decreased by 10%";
                 iconSprite = strength_down_sprite;
                 break;
-            case "critical_down":
+            case EffectType.critical_down:
                 effectName = "Critical Down";
                 description = "Critical Decreased by 10%";
                 iconSprite = critical_down_sprite;
                 break;
-            case "evasion_down":
+            case EffectType.evasion_down:
                 effectName = "Evasion Down";
                 description = "Evasion Decreased by 10%";
                 iconSprite = evasion_down_sprite;
                 break;
-            case "defense_down":
+            case EffectType.defense_down:
                 effectName = "Defense Down";
                 description = "Defense Decreased by 10%";
                 iconSprite = defense_down_sprite;

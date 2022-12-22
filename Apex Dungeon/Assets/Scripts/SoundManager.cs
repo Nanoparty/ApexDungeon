@@ -124,6 +124,12 @@ public class SoundManager: MonoBehaviour
         soundSource.PlayOneShot(randomClip(hitSounds), 0.3f);
     }
 
+    public void PlayHealSound()
+    {
+        if (!Data.sound) return;
+        //soundSource.PlayOneShot(randomClip(hitSounds), 0.3f);
+    }
+
     public void PlayBookOpen()
     {
         if (!Data.sound) return;
