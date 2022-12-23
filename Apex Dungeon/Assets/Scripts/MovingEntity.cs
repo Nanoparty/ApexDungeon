@@ -2,6 +2,7 @@
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using static StatusEffect;
 
 public abstract class MovingEntity : MonoBehaviour
 {
@@ -76,6 +77,12 @@ public abstract class MovingEntity : MonoBehaviour
             return false;
         }
         return true;
+    }
+
+    public void CancelPath()
+    {
+        moving = false;
+        atTarget = true;
     }
 
     bool checkValidTile(Vector2 next)
@@ -298,6 +305,46 @@ public abstract class MovingEntity : MonoBehaviour
         if (se.order == StatusEffect.EffectOrder.Status)
         {
             se.Activate(this);
+        }
+    }
+
+    protected void UpdateStatusEffectDuration()
+    {
+        foreach (StatusEffect e in statusEffects)
+        {
+            e.duration -= 1;
+            if (e.duration == 0) e.Deactivate(this);
+        }
+        statusEffects.RemoveAll(e => e.duration == 0);
+    }
+
+    public virtual void RemoveAllStatusEffect(EffectType type)
+    {
+        foreach (StatusEffect e in statusEffects)
+        {
+            if (e.effectId == type)
+            {
+                e.Deactivate(this);
+            }
+        }
+        statusEffects.RemoveAll(e => e.effectId == type);
+    }
+
+    protected virtual void ApplyStatusEffects(string time)
+    {
+        if (time == "start")
+        {
+            foreach (StatusEffect e in statusEffects)
+            {
+                if (e.order == EffectOrder.Start) e.Activate(this);
+            }
+        }
+        if (time == "end")
+        {
+            foreach (StatusEffect e in statusEffects)
+            {
+                if (e.order == EffectOrder.End) e.Activate(this);
+            }
         }
     }
 

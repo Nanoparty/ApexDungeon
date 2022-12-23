@@ -17,7 +17,7 @@ public class MagicTrap : Trap
     {
         poison,
         bleed,
-        //teleport,
+        teleport,
         hp_regen,
         strength_up,
         strength_down,
@@ -45,7 +45,8 @@ public class MagicTrap : Trap
         this.row = row;
         this.col = col;
         System.Array values = System.Enum.GetValues(typeof(TrapType));
-        type = (TrapType)values.GetValue(Random.Range(0, values.Length));
+        //type = (TrapType)values.GetValue(Random.Range(0, values.Length));
+        type = TrapType.teleport;
         GameManager.gmInstance.AddTrapToList(this);
         Debug.Log("TRAP TYPE: " + type.ToString());
     }
@@ -54,12 +55,18 @@ public class MagicTrap : Trap
     {
         if (disarmed) return;
 
+        if (!typeof(Player).IsInstanceOfType(me))
+        {
+            return;
+        }
+
         disarmed = true;
 
         if (typeof(Player).IsInstanceOfType(me))
         {
             Player player = (Player)me;
             anim.enabled = false;
+            SoundManager.sm.PlayMagicSound();
 
             if (type == TrapType.bleed)
             {
@@ -70,6 +77,16 @@ public class MagicTrap : Trap
             {
                 player.AddStatusEffect(new StatusEffect(StatusEffect.EffectType.poison, 5, StatusEffect.EffectOrder.End));
                 sr.sprite = redCircle;
+            }
+            if (type == TrapType.teleport)
+            {
+                Debug.Log("Teleport");
+                Vector2 pos = GameManager.gmInstance.Dungeon.getRandomUnoccupiedTile();
+                player.setPosition((int)pos.x, (int)pos.y);
+                player.CancelPath();
+                player.interrupt = false;
+                
+                sr.sprite = whiteCircle;
             }
             if (type == TrapType.hp_regen)
             {

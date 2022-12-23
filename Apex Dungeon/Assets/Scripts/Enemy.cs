@@ -127,8 +127,21 @@ public class Enemy : MovingEntity
         Destroy(this.gameObject);
     }
 
+    private void StartTurn()
+    {
+        ApplyStatusEffects("start");
+    }
+
+    private void EndTurn()
+    {
+        ApplyStatusEffects("end");
+        UpdateStatusEffectDuration();
+    }
+
     public void MoveEnemy()
     {
+        StartTurn();
+
         if (dead || hp <= 0)
         {
             die();
@@ -158,6 +171,8 @@ public class Enemy : MovingEntity
             checkAgro();
             moveRandom();
         }
+
+        EndTurn();
     }
 
     void checkPlayerMoved(Player player)

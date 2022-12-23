@@ -593,6 +593,8 @@ public class Player : MovingEntity
             {
                 enemy.takeDamage(calculateDamage());
             }
+
+            enemy.AddStatusEffect(new StatusEffect(EffectType.bleed, 5, EffectOrder.End));
                 
             return true;
         }
@@ -631,8 +633,6 @@ public class Player : MovingEntity
         base.AddStatusEffect(se);
         UpdatePlayerStatusEffectAlerts();
     }
-
-    
 
     bool isAdjacent(int r, int c)
     {
@@ -716,46 +716,10 @@ public class Player : MovingEntity
         }
     }
 
-    private void UpdateStatusEffectDuration()
+    public override void RemoveAllStatusEffect(EffectType type)
     {
-        foreach (StatusEffect e in statusEffects)
-        {
-            e.duration -= 1;
-            if (e.duration == 0) e.Deactivate(this);
-        }
-        statusEffects.RemoveAll(e => e.duration == 0);
-    }
-
-    public void RemoveAllStatusEffect(EffectType type)
-    {
-        foreach(StatusEffect e in statusEffects)
-        {
-            if (e.effectId == type)
-            {
-                e.Deactivate(this);
-            }
-        }
-        statusEffects.RemoveAll(e => e.effectId == type);
+        base.RemoveAllStatusEffect(type);
         UpdatePlayerStatusEffectAlerts();
-    }
-
-    private void ApplyStatusEffects(string time)
-    {
-        if (time == "start")
-        {
-            foreach (StatusEffect e in statusEffects)
-            {
-                Debug.Log("Activate:" + e.effectId.ToString());
-                if (e.order == EffectOrder.Start) e.Activate(this);
-            }
-        }
-        if (time == "end")
-        {
-            foreach (StatusEffect e in statusEffects)
-            {
-                if (e.order == EffectOrder.End) e.Activate(this);
-            }
-        }
     }
 
     public override void SkipTurn()
