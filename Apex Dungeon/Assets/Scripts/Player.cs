@@ -313,8 +313,10 @@ public class Player : MovingEntity
                 // Check for trap disarm
                 Trap t = GameManager.gmInstance.GetTrapAtLoc(clickRow, clickCol);
                 if (t != null) {
-                    t.DisarmTrap();
-                    return;
+                    if (t.DisarmTrap())
+                    {
+                        return;
+                    }
                 }
 
                 if (isFurniture(clickRow, clickCol))

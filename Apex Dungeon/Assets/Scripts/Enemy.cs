@@ -22,7 +22,8 @@ public class Enemy : MovingEntity
     private Pathfinder finder;
     private int floor;
 
-    [SerializeField] private float poisonChance = 1f;
+    [SerializeField] private float poisonChance = 0.01f;
+    [SerializeField] private float bleedChance = 0.05f;
 
     protected override void Start()
     {
@@ -175,10 +176,15 @@ public class Enemy : MovingEntity
         {
             player.takeAttack(calculateDamageOut());
 
-            //poison roll
-            if (Random.Range(0f, 1f) <= poisonChance)
+            // Status Effect Roll
+            float roll = Random.Range(0f, 1f);
+            if (roll <= poisonChance)
             {
                 player.AddStatusEffect(new StatusEffect(EffectType.poison, 5, EffectOrder.End));
+            }
+            else if (roll <= bleedChance)
+            {
+                player.AddStatusEffect(new StatusEffect(EffectType.bleed, 5, EffectOrder.End));
             }
             setAttackAnimation(player.getRow(), player.getCol());
         }

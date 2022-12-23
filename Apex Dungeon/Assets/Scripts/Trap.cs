@@ -6,23 +6,23 @@ using UnityEngine.UIElements;
 
 public class Trap : MonoBehaviour
 {
-    private int row;
-    private int col;
-    private bool disarmed;
-    private int damage;
+    protected int row;
+    protected int col;
+    protected bool disarmed;
+    protected int damage;
 
-    private SpriteRenderer sr;
+    protected SpriteRenderer sr;
 
-    [SerializeField] private int baseDamage = 15;
-    [SerializeField] private ParticleSystem destruction;
-    [SerializeField] GameObject disarmText;
+    [SerializeField] protected int baseDamage = 15;
+    [SerializeField] protected ParticleSystem destruction;
+    [SerializeField] protected GameObject disarmText;
 
     private void Awake()
     {
         sr = GetComponent<SpriteRenderer>();
     }
 
-    private void Update()
+    protected virtual void Update()
     {
         if (GameManager.gmInstance.Dungeon == null) return;
 
@@ -36,7 +36,7 @@ public class Trap : MonoBehaviour
         }
     }
 
-    public void Setup(int row, int col, int floor)
+    public virtual void Setup(int row, int col, int floor)
     {
         this.row = row;
         this.col = col;
@@ -44,7 +44,7 @@ public class Trap : MonoBehaviour
         GameManager.gmInstance.AddTrapToList(this);
     }
 
-    public void TriggerTrap(MovingEntity me)
+    public virtual void TriggerTrap(MovingEntity me)
     {
         if (disarmed) return;
 
@@ -53,6 +53,7 @@ public class Trap : MonoBehaviour
             Debug.Log("Player Trap");
             Player player = (Player)me;
             player.takeAttack(-damage);
+            player.AddStatusEffect(new StatusEffect(StatusEffect.EffectType.bleed, 5, StatusEffect.EffectOrder.End));
         }
         if (typeof(Enemy).IsInstanceOfType(me)){
             Debug.Log("Enemy Trap");
@@ -63,15 +64,16 @@ public class Trap : MonoBehaviour
         DestroyTrap();
     }
 
-    public void DisarmTrap()
+    public virtual bool DisarmTrap()
     {
         GameObject text = Instantiate(disarmText, new Vector2(col, row), Quaternion.identity);
         text.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = $"DISARM";
         text.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().color = Color.white;
-        DestroyTrap();   
+        DestroyTrap();
+        return true;
     }
 
-    public void DestroyTrap()
+    public virtual void DestroyTrap()
     {
         SoundManager.sm.PlayTrapSound();
         disarmed = true;
