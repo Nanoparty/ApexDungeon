@@ -611,8 +611,13 @@ public class Journal : ScriptableObject
 
     private void populateEffects()
     {
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         Debug.Log("Populate Effects");
         GameObject content = effectsPanel.GetComponentInChildren<ScrollRect>().gameObject.transform.GetChild(0).transform.GetChild(0).transform.GetChild(0).gameObject;
+        foreach(Transform t in content.transform)
+        {
+            Destroy(t.gameObject);
+        }
 
         if (player.statusEffects.Count == 0)
         {

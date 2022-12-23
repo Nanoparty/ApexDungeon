@@ -178,7 +178,7 @@ public class Enemy : MovingEntity
             //poison roll
             if (Random.Range(0f, 1f) <= poisonChance)
             {
-                player.AddStatusEffect(new StatusEffect(EffectType.strength_up, 5, EffectOrder.Status));
+                player.AddStatusEffect(new StatusEffect(EffectType.poison, 5, EffectOrder.End));
             }
             setAttackAnimation(player.getRow(), player.getCol());
         }

@@ -6,6 +6,7 @@ public class ConsumableGenerator : ScriptableObject
     public Sprite redPotion;
     public Sprite bluePotion;
     public Sprite greenPotion;
+    public Sprite yellowPotion;
 
     public Sprite redBook;
     public Sprite blackBook;
@@ -20,6 +21,7 @@ public class ConsumableGenerator : ScriptableObject
     public Sprite redFlask;
     public Sprite blueFlask;
     public Sprite greenFlask;
+    public Sprite yellowFlask;
 
     public Sprite redLeaf;
     public Sprite greenLeaf;
@@ -28,6 +30,9 @@ public class ConsumableGenerator : ScriptableObject
     public Sprite gold;
     public Sprite silver;
     public Sprite copper;
+
+    public Sprite bandage;
+
 
     public GameObject CreateHealthPotion(int level)
     {
@@ -43,6 +48,27 @@ public class ConsumableGenerator : ScriptableObject
         int healAmount = (int)(50 + 50 * 0.2 * (level - 1));
 
         Consumable potion = new Consumable("HealthPotion", "Health Potion Lvl " + level, "Cherry Flavor", "Heals " + healAmount + " HP", redPotion, level);
+
+        item.AddComponent<Pickup>();
+        item.GetComponent<Pickup>().SetItem(potion);
+
+        item.tag = "Consumable";
+
+        return item;
+    }
+
+    public GameObject CreateHealthRegenPotion()
+    {
+        GameObject item = new GameObject("HealthRegenPotion");
+
+        item.AddComponent<SpriteRenderer>();
+        item.GetComponent<SpriteRenderer>().sprite = redFlask;
+        item.GetComponent<SpriteRenderer>().sortingLayerName = "Items";
+
+        item.AddComponent<BoxCollider2D>();
+        item.GetComponent<BoxCollider2D>().isTrigger = true;
+
+        Consumable potion = new Consumable("HealthRegenPotion", "Health Regen Potion", "Strawberry Flavor", "Restores 10% of Max Health per turn for 5 turns.", redFlask);
 
         item.AddComponent<Pickup>();
         item.GetComponent<Pickup>().SetItem(potion);
@@ -178,6 +204,50 @@ public class ConsumableGenerator : ScriptableObject
         return item;
     }
 
+    public GameObject CreateBandage()
+    {
+        GameObject item = new GameObject("Bandage");
+        string id = "Bandage";
+
+        item.AddComponent<SpriteRenderer>();
+        item.GetComponent<SpriteRenderer>().sprite = bandage;
+        item.GetComponent<SpriteRenderer>().sortingLayerName = "Items";
+
+        item.AddComponent<BoxCollider2D>();
+        item.GetComponent<BoxCollider2D>().isTrigger = true;
+
+        Consumable orb = new Consumable(id, "Bandage", "Just a flesh wound", "Cleanse user of bleeding", bandage);
+
+        item.AddComponent<Pickup>();
+        item.GetComponent<Pickup>().SetItem(orb);
+
+        item.tag = "Consumable";
+
+        return item;
+    }
+
+    public GameObject CreateAntidote()
+    {
+        GameObject item = new GameObject("Antidote");
+        string id = "Antidote";
+
+        item.AddComponent<SpriteRenderer>();
+        item.GetComponent<SpriteRenderer>().sprite = yellowPotion;
+        item.GetComponent<SpriteRenderer>().sortingLayerName = "Items";
+
+        item.AddComponent<BoxCollider2D>();
+        item.GetComponent<BoxCollider2D>().isTrigger = true;
+
+        Consumable orb = new Consumable(id, "Antidote", "I don't feel so good...", "Cleanse user of poison", yellowPotion);
+
+        item.AddComponent<Pickup>();
+        item.GetComponent<Pickup>().SetItem(orb);
+
+        item.tag = "Consumable";
+
+        return item;
+    }
+
     public GameObject CreateGold(int level)
     {
         GameObject item = new GameObject("Gold");
@@ -239,7 +309,7 @@ public class ConsumableGenerator : ScriptableObject
     {
         GameObject consumable = null;
 
-        int rand = Random.Range(1, 8);
+        int rand = Random.Range(1, 11);
 
         if (rand == 1) consumable = CreateHealthPotion(level);
         if (rand == 2) consumable = CreateHealthPotion(level);
@@ -248,7 +318,9 @@ public class ConsumableGenerator : ScriptableObject
         if (rand == 5) consumable = CreateTeleportOrb();
         if (rand == 6) consumable = CreateMap();
         if (rand == 7) consumable = CreateSkipOrb();
-
+        if (rand == 8) consumable = CreateAntidote();
+        if (rand == 9) consumable = CreateBandage();
+        if (rand == 10) consumable = CreateHealthRegenPotion();
 
         if (consumable == null) consumable = new GameObject();
 

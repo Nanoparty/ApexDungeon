@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using static StatusEffect;
 
 public class Consumable : Item
 {
@@ -42,6 +43,10 @@ public class Consumable : Item
             p.addHP((int)appliedHP);
             SoundManager.sm.PlayPotionSound();
         }
+        if (id == "HealthRegenPotion")
+        {
+            p.AddStatusEffect(new StatusEffect(EffectType.health_regen, 5, EffectOrder.Start));
+        }
         if(id == "ManaPotion"){
             p.addMP(20);
         }
@@ -75,6 +80,14 @@ public class Consumable : Item
             GameManager.gmInstance.Dungeon.setFullBright(true);
             SoundManager.sm.PlayMagicSound();
             p.CloseJournal();
+        }
+        if(id == "Bandage")
+        {
+            p.RemoveAllStatusEffect(EffectType.bleed);
+        }
+        if(id == "Antidote")
+        {
+            p.RemoveAllStatusEffect(EffectType.poison);
         }
     }
 }

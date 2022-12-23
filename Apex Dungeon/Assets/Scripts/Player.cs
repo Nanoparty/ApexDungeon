@@ -724,6 +724,19 @@ public class Player : MovingEntity
         statusEffects.RemoveAll(e => e.duration == 0);
     }
 
+    public void RemoveAllStatusEffect(EffectType type)
+    {
+        foreach(StatusEffect e in statusEffects)
+        {
+            if (e.effectId == type)
+            {
+                e.Deactivate(this);
+            }
+        }
+        statusEffects.RemoveAll(e => e.effectId == type);
+        UpdatePlayerStatusEffectAlerts();
+    }
+
     private void ApplyStatusEffects(string time)
     {
         if (time == "start")

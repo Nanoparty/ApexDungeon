@@ -256,9 +256,15 @@ public abstract class MovingEntity : MonoBehaviour
 
     public virtual void takeDamage(float d, Color color)
     {
+        takeDamage(d);
+        GameObject damageT = GameObject.Instantiate(damageText, new Vector3(this.transform.position.x, this.transform.position.y, 0), Quaternion.identity);
+        damageT.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = $"{(int)d}";
+        damageT.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().color = color;
+
         if (d > 0)
         {
             SoundManager.sm.PlayHealSound();
+            damageT.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = $"+{(int)d}";
         }
 
         if (d < 0)
@@ -266,12 +272,6 @@ public abstract class MovingEntity : MonoBehaviour
             SoundManager.sm.PlayHitSound();
 
         }
-
-        takeDamage(d);
-        GameObject damageT = GameObject.Instantiate(damageText, new Vector3(this.transform.position.x, this.transform.position.y, 0), Quaternion.identity);
-        damageT.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = $"{(int)d}";
-        damageT.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().color = color;
-        return;
     }
 
     public virtual void AddTextPopup(string text, Color color)

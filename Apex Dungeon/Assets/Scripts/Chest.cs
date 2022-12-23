@@ -20,6 +20,7 @@ public class Chest : MonoBehaviour
 
     private List<GameObject> loot;
     public EquipmentGenerator equipmentGenerator;
+    public ConsumableGenerator consumableGenerator;
 
     private void Start()
     {
@@ -77,7 +78,16 @@ public class Chest : MonoBehaviour
         foreach (Vector2 pos in positions)
         {
             Vector3 position = new Vector3(pos.y, pos.x, 0f);
-            GameObject item = equipmentGenerator.GenerateEquipment(GameManager.gmInstance.level);
+            GameObject item = new GameObject();
+            if (Random.Range(0f,1f) > 0.5)
+            {
+                item = equipmentGenerator.GenerateEquipment(GameManager.gmInstance.level);
+            }
+            else
+            {
+                item = consumableGenerator.CreateRandomConsumable(GameManager.gmInstance.level);
+            }
+            
             item.transform.parent = itemContainer.transform;
             item.transform.position = position;
             item.GetComponent<Pickup>().SetLocation((int)pos.x, (int)pos.y);
