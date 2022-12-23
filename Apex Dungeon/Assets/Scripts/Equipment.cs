@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System;
+using System.Collections.Generic;
 
 public class Equipment : Item
 {
@@ -16,11 +17,12 @@ public class Equipment : Item
 
     public string modifier;
 
-
+    public List<StatusEffect> inflictions;
 
     public Equipment(){
 
     }
+
     public Equipment(int lvl, string type, int tier, Sprite image, int hpBoost, int attackBoost, int critBoost, int evadeBoost)
     {
         setStats(lvl, type, tier, image, hpBoost, attackBoost, critBoost, evadeBoost);
@@ -135,6 +137,11 @@ public class Equipment : Item
 
     public override void UseItem()
     {
+    }
+
+    public void AddInfliction(StatusEffect e)
+    {
+        inflictions.Add(e);
     }
 
     public int getTier(){

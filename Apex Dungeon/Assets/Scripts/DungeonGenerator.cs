@@ -40,14 +40,9 @@ public class DungeonGenerator : ScriptableObject
     public GameObject Opening;
     public GameObject Shadow;
     public GameObject Player;
-    //public GameObject Stairs;
-    //public GameObject[] Enemy;
-    //public GameObject[] floor;
-    //public GameObject[] voidBlocks;
-    //public GameObject[] wallH;
-    //public GameObject[] wallV;
     public GameObject[] Furniture;
     public GameObject Chest;
+    public Biome[] Biomes;
 
     public DungeonObject Initalize()
     {
@@ -77,6 +72,8 @@ public class DungeonGenerator : ScriptableObject
         itemContainer.parent = dungeon.transform;
         enemyContainer.parent = dungeon.transform;
         furnitureContainer.parent = dungeon.transform;
+
+        currentBiome = Biomes[Random.Range(0, Biomes.Length)];
 
         GameObject op = GameObject.Instantiate(Opening, new Vector3(0, 0, 0), Quaternion.identity);
         op.transform.GetChild(0).transform.GetChild(0).gameObject.GetComponent<Text>().text = currentBiome.biomeName;
