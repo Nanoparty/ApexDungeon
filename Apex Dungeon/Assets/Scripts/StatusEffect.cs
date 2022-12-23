@@ -26,7 +26,8 @@ public class StatusEffect
     {
         Start,
         Update,
-        End
+        End,
+        Status
     }
 
     public EffectType effectId;
@@ -121,24 +122,71 @@ public class StatusEffect
                 {
                     Debug.Log("ZAP");
                     entity.AddTextPopup("Paralyzed", textColor);
-                    //entity.SkipTurn();
+                    entity.SkipTurn();
                 }
                 break;
             case EffectType.strength_up:
+                // Increase player strength by 10%
+                entity.setStrengthScale(entity.getStrengthScale() + 0.1f);
                 break;
             case EffectType.defense_up:
+                // Increase player defense by 10%
+                entity.setDefenseScale(entity.getDefenseScale() + 0.1f);
                 break;
             case EffectType.critical_up:
+                // Increase player critical by 10%
+                entity.setCriticalScale(entity.getCriticalScale() + 0.1f);
                 break;
             case EffectType.evasion_up:
+                // Increase player evasion by 10%
+                entity.setEvadeScale(entity.getEvadeScale() + 0.1f);
                 break;
             case EffectType.strength_down:
+                // Decrease player strength by 10%
+                entity.setStrengthScale(entity.getStrengthScale() - 0.1f);
                 break;
             case EffectType.defense_down:
+                // Decrease player defense by 10%
+                entity.setDefenseScale(entity.getDefenseScale() - 0.1f);
                 break;
             case EffectType.critical_down:
+                // Decrease player critical by 10%
+                entity.setCriticalScale(entity.getCriticalScale() - 0.1f);
                 break;
             case EffectType.evasion_down:
+                // Decrease player evasion by 10%
+                entity.setEvadeScale(entity.getEvadeScale() - 0.1f);
+                break;
+        }
+    }
+
+    public void Deactivate(MovingEntity entity)
+    {
+        switch (effectId)
+        {
+            case EffectType.strength_up:
+                entity.setStrengthScale(entity.getStrengthScale() - 0.1f);
+                break;
+            case EffectType.strength_down:
+                entity.setStrengthScale(entity.getStrengthScale() + 0.1f);
+                break;
+            case EffectType.defense_up:
+                entity.setDefenseScale(entity.getDefenseScale() - 0.1f);
+                break;
+            case EffectType.defense_down:
+                entity.setDefenseScale(entity.getDefenseScale() + 0.1f);
+                break;
+            case EffectType.critical_up:
+                entity.setCriticalScale(entity.getCriticalScale() - 0.1f);
+                break;
+            case EffectType.critical_down:
+                entity.setCriticalScale(entity.getCriticalScale() + 0.1f);
+                break;
+            case EffectType.evasion_up:
+                entity.setEvadeScale(entity.getEvadeScale() - 0.1f);
+                break;
+            case EffectType.evasion_down:
+                entity.setEvadeScale(entity.getEvadeScale() + 0.1f);
                 break;
         }
     }

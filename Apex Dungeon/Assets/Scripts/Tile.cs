@@ -69,6 +69,16 @@ public class Tile
         return false;
     }
 
+    public bool getVoid()
+    {
+        if (type == 0)
+        {
+            return true;
+        }
+        
+        return false;
+    }
+
     public bool getBlocked()
     {
         if(getWall() || occupied != 0)

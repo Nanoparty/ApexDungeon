@@ -66,7 +66,7 @@ public class Player : MovingEntity
 
         initializeObjects();
         setInitialValues();
-        
+
         if (GameManager.gmInstance.level > 1 || Data.loadData)
         {
             loadCharacterData();
@@ -82,7 +82,7 @@ public class Player : MovingEntity
 
     void setInitialValues() {
         playerName = Data.activeCharacter ?? "bob";
-        
+
         mp = 100;
         maxMp = 50;
         expLevel = 1;
@@ -100,8 +100,10 @@ public class Player : MovingEntity
         gold = 0;
 
         baseHp = 100;
-        hp = baseHp + (int)((float)baseHp * 0.05f * defense);
+        hp = baseHp + (int)((float)baseHp * 0.05f * (int)(defense * defenseScale));
         maxHp = hp;
+
+        //strengthScale = 1.5f;
 
         // Set ClassType Variables
         if (Data.characterClass == ClassType.Archer)
@@ -206,7 +208,7 @@ public class Player : MovingEntity
     {
         if (dead)
         {
-            
+
             if (fadeIn) {
                 SoundManager.sm.PlayDeathSound();
                 //calculate and save score
@@ -225,7 +227,7 @@ public class Player : MovingEntity
                 op.transform.GetChild(4).gameObject.SetActive(false);
                 endScreenHolder = op;
             }
-            
+
             return true;
         }
         return false;
@@ -245,7 +247,7 @@ public class Player : MovingEntity
         }
 
         updatePlayerStatus();
-        
+
 
         GameManager.gmInstance.Dungeon.UpdateShadows(row, col);
 
@@ -279,12 +281,12 @@ public class Player : MovingEntity
 
         if (openLevel || openPause || stairsOpen) return;
 
-    
+
         debugMenu();
-        
+
         base.Update();
         checkMoving();
-        
+
         if (Input.GetButtonDown("Fire1"))
         {
             if (EventSystem.current.IsPointerOverGameObject())
@@ -310,12 +312,12 @@ public class Player : MovingEntity
             {
                 // Check for trap disarm
                 Trap t = GameManager.gmInstance.GetTrapAtLoc(clickRow, clickCol);
-                if (t != null) { 
+                if (t != null) {
                     t.DisarmTrap();
                     return;
                 }
 
-                if(isFurniture(clickRow, clickCol))
+                if (isFurniture(clickRow, clickCol))
                 {
                     GameManager.gmInstance.UpdateCursor("Furniture", clickRow, clickCol);
                     return;
@@ -374,7 +376,7 @@ public class Player : MovingEntity
         UpdatePlayerStatusEffectAlerts();
     }
 
-    void debugMenu(){
+    void debugMenu() {
         //Debugging tool
         if (Input.GetKeyDown("t"))
         {
@@ -384,7 +386,7 @@ public class Player : MovingEntity
 
     public bool isBlocked(int r, int c)
     {
-        return GameManager.gmInstance.Dungeon.tileMap[r, c].getWall();
+        return GameManager.gmInstance.Dungeon.tileMap[r, c].getWall() || GameManager.gmInstance.Dungeon.tileMap[r,c].getVoid();
     }
 
     public void saveCharacterData(){
@@ -438,7 +440,7 @@ public class Player : MovingEntity
         if (!hasFocus)
         {
             saveCharacterData();
-            Data.SaveToFile();
+            //Data.SaveToFile();
         }
     }
 
@@ -581,7 +583,7 @@ public class Player : MovingEntity
             setAttackAnimation(clickRow, clickCol);
             attacking = true;
             int dice = Random.Range(0, 100);
-            if (dice <= critical)
+            if (dice <= (int)(critical * criticalScale))
             {
                 enemy.takeDamage(calculateDamage(3), true);
             }
@@ -607,7 +609,7 @@ public class Player : MovingEntity
         SoundManager.sm.PlayHitSound();
         
         int dice = Random.Range(1, 101);
-        if(dice <= evade)
+        if(dice <= (int)(evade * evadeScale))
         {
             GameObject evadeText = GameObject.Instantiate(damageText, new Vector3(this.transform.position.x, this.transform.position.y, 0), Quaternion.identity);
             evadeText.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = $"Evade";
@@ -717,6 +719,7 @@ public class Player : MovingEntity
         foreach (StatusEffect e in statusEffects)
         {
             e.duration -= 1;
+            if (e.duration == 0) e.Deactivate(this);
         }
         statusEffects.RemoveAll(e => e.duration == 0);
     }
@@ -763,6 +766,7 @@ public class Player : MovingEntity
     public int getBlock(){
         return blockStat;
     }
+    
     public int getGold(){
         return gold;
     }
@@ -809,7 +813,7 @@ public class Player : MovingEntity
     {
         //Debug.Log($"Starting:{baseHp}:{maxHp}:{hp}");
         baseHp += i;
-        int newHp = baseHp + (int)((float)baseHp * 0.05f * defense);
+        int newHp = baseHp + (int)((float)baseHp * 0.05f * (int)(defense * defenseScale));
         int diff = newHp - maxHp;
         maxHp += diff;
         hp += diff;
@@ -826,7 +830,7 @@ public class Player : MovingEntity
             exp -= maxExp;
             expLevel++;
             baseHp = (int)(baseHp * 1.1);
-            hp = baseHp + (int)((float)baseHp * 0.05f * defense);
+            hp = baseHp + (int)((float)baseHp * 0.05f * (int)(defense * defenseScale));
             maxHp = hp;
             maxExp += (int)(0.5 * maxExp);
             didLevel = true;
@@ -873,7 +877,7 @@ public class Player : MovingEntity
     public void setDefense(int i)
     {
         defense = i;
-        int newHp = baseHp + (int)((float)baseHp * 0.05f * defense);
+        int newHp = baseHp + (int)((float)baseHp * 0.05f * (int)(defense * defenseScale));
         int diff = newHp - maxHp;
         maxHp += diff;
         hp += diff;

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 
@@ -22,13 +23,13 @@ public abstract class MovingEntity : MonoBehaviour
     protected int evade;
     protected int blockStat;
 
-    protected int appliedAttack;
-    protected int appliedDefense;
-    protected int appliedStrength;
-    protected int appliedIntelligence;
-    protected int appliedCritical;
-    protected int appliedEvade;
-    protected int appliedBlock;
+    protected float attackScale = 1f;
+    protected float defenseScale = 1f;
+    protected float strengthScale = 1f;
+    protected float intelligenceScale = 1f;
+    protected float criticalScale = 1f;
+    protected float evadeScale = 1f;
+    protected float blockScale = 1f;
 
     protected bool dead;
 
@@ -227,7 +228,8 @@ public abstract class MovingEntity : MonoBehaviour
 
     public float calculateDamage(float m = 1f)
     {
-        float increase = (float)(attack * (strength * 0.05));
+        int scaledStrength = (int)(strength * strengthScale);
+        float increase = (float)(attack * (scaledStrength * 0.05));
         float attackDamage = (float)(attack + increase);
         attackDamage *= m;
         return -attackDamage;
@@ -292,12 +294,22 @@ public abstract class MovingEntity : MonoBehaviour
         GameObject statusEffectText = GameObject.Instantiate(damageText, new Vector3(this.transform.position.x, this.transform.position.y, 0), Quaternion.identity);
         statusEffectText.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = $"{se.popupText}";
         statusEffectText.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().color = se.textColor;
+
+        if (se.order == StatusEffect.EffectOrder.Status)
+        {
+            se.Activate(this);
+        }
     }
 
     public virtual void SkipTurn()
     {
         Debug.Log("ENTITY SKIP TURN");
     }
+
+    //public Enumerable PauseForSeconds(float seconds)
+    //{
+
+    //}
 
     public virtual void CalculateStats()
     {
@@ -343,6 +355,40 @@ public abstract class MovingEntity : MonoBehaviour
     {
         moving = false;
         atTarget = true;
+    }
+
+    public float getStrengthScale()
+    {
+        return strengthScale;
+    }
+    public float getCriticalScale()
+    {
+        return criticalScale;
+    }
+    public float getDefenseScale()
+    {
+        return defenseScale;
+    }
+    public float getEvadeScale()
+    {
+        return evadeScale;
+    }
+
+    public void setStrengthScale(float f)
+    {
+        strengthScale = f;
+    }
+    public void setDefenseScale(float f)
+    {
+        defenseScale = f;
+    }
+    public void setCriticalScale(float f)
+    {
+        criticalScale = f;
+    }
+    public void setEvadeScale(float f)
+    {
+        evadeScale = f;
     }
 
     private void UpdateShadows(int r, int c)

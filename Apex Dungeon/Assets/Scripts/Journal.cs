@@ -375,10 +375,10 @@ public class Journal : ScriptableObject
         TMP_Text evasionText = statusBanner.transform.GetChild(3).gameObject.GetComponent<TMP_Text>();
         TMP_Text goldText = statusBanner.transform.GetChild(4).gameObject.GetComponent<TMP_Text>();
 
-        strengthText.text = "Strength:" + player.getStrength();
-        defenseText.text = "Defense:" + player.getDefense();
-        criticalText.text = "Critical:" + player.getCritical();
-        evasionText.text = "Evasion:" + player.getEvade();
+        strengthText.text = "Strength:" + (int)(player.getStrength() * player.getStrengthScale());
+        defenseText.text = "Defense:" + (int)(player.getDefense() * player.getDefenseScale());
+        criticalText.text = "Critical:" + (int)(player.getCritical() * player.getCriticalScale());
+        evasionText.text = "Evasion:" + (int)(player.getEvade() * player.getEvadeScale());
         goldText.text = "Gold:" + player.getGold();
 
         //set equipment
