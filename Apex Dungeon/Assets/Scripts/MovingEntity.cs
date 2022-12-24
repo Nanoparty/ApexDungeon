@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json.Linq;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -36,6 +38,10 @@ public abstract class MovingEntity : MonoBehaviour
 
     public List<StatusEffect> statusEffects;
 
+    public Queue<(string, Color)> popupTexts;
+    public bool canDisplayPopupText = true;
+    public float popupTextDelay = 0.1f;
+
     public float moveTime = 0.1f;
     public float speed = 3f;
     public LayerMask blockingLayer;
@@ -67,6 +73,8 @@ public abstract class MovingEntity : MonoBehaviour
         col = (int)transform.position.x;
 
         statusEffects = new List<StatusEffect>();
+        popupTexts = new Queue<(string, Color)> ();
+        canDisplayPopupText = true;
     }
 
     bool checkValidPath()
@@ -184,7 +192,15 @@ public abstract class MovingEntity : MonoBehaviour
         if (!atTarget)
         {
             moveToTarget();
-        }  
+        }
+
+        if (canDisplayPopupText && popupTexts.Count > 0)
+        {
+            canDisplayPopupText = false;
+            var values = popupTexts.Dequeue();
+            Debug.Log("About to spawn text: " + values.Item1 + " " + values.Item2);
+            StartCoroutine(SpawnText(values.Item1, values.Item2));
+        }
     }
 
     protected void moveToTarget()
@@ -242,21 +258,33 @@ public abstract class MovingEntity : MonoBehaviour
         return -attackDamage;
     }
 
-    public virtual void takeDamage(float change)
+    public virtual void takeDamage(float change, Color color, bool critical = false)
     {
         hp += (int)change;
+
         if (change < 0)
         {
+            if (critical)
+            {
+                AddTextPopup($"CRIT! {change}", color);
+            }
+            else
+            {
+                AddTextPopup($"{change}", color);
+            }
             moving = false;
+           
+            SpawnBlood();
+        }
+        else
+        {
+            SoundManager.sm.PlayHealSound();
+            AddTextPopup($"+{change}", color);
         }
         
         if(hp <= 0)
         {
             dead = true;
-            SpawnBlood();
-        }
-        if (change < 0)
-        {
             SpawnBlood();
         }
         if (hp > maxHp)
@@ -265,31 +293,19 @@ public abstract class MovingEntity : MonoBehaviour
         }
     }
 
-    public virtual void takeDamage(float d, Color color)
-    {
-        takeDamage(d);
-        GameObject damageT = GameObject.Instantiate(damageText, new Vector3(this.transform.position.x, this.transform.position.y, 0), Quaternion.identity);
-        damageT.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = $"{(int)d}";
-        damageT.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().color = color;
-
-        if (d > 0)
-        {
-            SoundManager.sm.PlayHealSound();
-            damageT.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = $"+{(int)d}";
-        }
-
-        if (d < 0)
-        {
-            SoundManager.sm.PlayHitSound();
-
-        }
-    }
-
     public virtual void AddTextPopup(string text, Color color)
     {
+        popupTexts.Enqueue((text, color));
+    }
+
+    private IEnumerator SpawnText(string text, Color color)
+    {
+        canDisplayPopupText = false;
         GameObject popup = GameObject.Instantiate(damageText, new Vector3(this.transform.position.x, this.transform.position.y, 0), Quaternion.identity);
         popup.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = $"{text}";
         popup.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().color = color;
+        yield return new WaitForSeconds(popupTextDelay);
+        canDisplayPopupText = true;
     }
 
     protected void SpawnBlood()
@@ -301,10 +317,12 @@ public abstract class MovingEntity : MonoBehaviour
     public virtual void AddStatusEffect(StatusEffect se)
     {
         statusEffects.Add(se);
+
+        AddTextPopup(se.popupText, se.textColor);
         
-        GameObject statusEffectText = GameObject.Instantiate(damageText, new Vector3(this.transform.position.x, this.transform.position.y, 0), Quaternion.identity);
-        statusEffectText.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = $"{se.popupText}";
-        statusEffectText.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().color = se.textColor;
+        //GameObject statusEffectText = GameObject.Instantiate(damageText, new Vector3(this.transform.position.x, this.transform.position.y, 0), Quaternion.identity);
+        //statusEffectText.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = $"{se.popupText}";
+        //statusEffectText.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().color = se.textColor;
 
         if (se.order == StatusEffect.EffectOrder.Status)
         {

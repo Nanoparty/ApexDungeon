@@ -52,12 +52,12 @@ public class Trap : MonoBehaviour
         {
             Debug.Log("Player Trap");
             Player player = (Player)me;
-            player.takeAttack(-damage);
+            player.takeDamage(-damage, Color.red);
             player.AddStatusEffect(new StatusEffect(StatusEffect.EffectType.bleed, 5, StatusEffect.EffectOrder.End));
         }
         if (typeof(Enemy).IsInstanceOfType(me)){
             Enemy enemy = (Enemy)me;
-            enemy.takeDamage(-damage);
+            enemy.takeDamage(-damage, Color.red);
             enemy.AddStatusEffect(new StatusEffect(StatusEffect.EffectType.bleed, 5, StatusEffect.EffectOrder.End));
         }
 

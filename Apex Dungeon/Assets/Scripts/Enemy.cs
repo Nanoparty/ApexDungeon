@@ -96,21 +96,18 @@ public class Enemy : MovingEntity
         return 50 + 50 * floor;
     }
 
-    public new void takeDamage(float d, bool critical = false){        
+    public override void takeDamage(float d, Color c, bool critical = false){        
         int netDamage = (int)calculateDamageIn(d);
-        GameObject damageNum = GameObject.Instantiate(damageText, new Vector3(this.transform.position.x, this.transform.position.y, 0), Quaternion.identity);
         if (critical)
         {
             SoundManager.sm.PlayCriticalSound();
-            damageNum.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = $"CRIT! {netDamage}";
-            damageNum.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().color = new Color(1.0f, 0.64f, 0.0f);
+            c = new Color(1.0f, 0.64f, 0.0f);
         }
-        else
+        else if (d < 0)
         {
             SoundManager.sm.PlayHitSound();
-            damageNum.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = $"{netDamage}";
         }
-        base.takeDamage(netDamage);
+        base.takeDamage(netDamage, c, critical);
     }
 
     public void die(){
@@ -186,7 +183,7 @@ public class Enemy : MovingEntity
     {
         if (isAdjacent(player))
         {
-            player.takeAttack(calculateDamageOut());
+            player.takeDamage(calculateDamageOut(), Color.red);
 
             // Status Effect Roll
             float roll = Random.Range(0f, 1f);

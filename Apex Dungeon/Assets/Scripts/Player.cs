@@ -379,6 +379,10 @@ public class Player : MovingEntity
         {
             nextFloor();
         }
+        if (Input.GetKeyDown("b"))
+        {
+            AddStatusEffect(new StatusEffect(EffectType.bleed, 5, EffectOrder.End));
+        }
     }
 
     public bool isBlocked(int r, int c)
@@ -583,11 +587,11 @@ public class Player : MovingEntity
             int dice = Random.Range(0, 100);
             if (dice <= (int)(critical * criticalScale))
             {
-                enemy.takeDamage(calculateDamage(3), true);
+                enemy.takeDamage(calculateDamage(3), Color.red, true);
             }
             else
             {
-                enemy.takeDamage(calculateDamage());
+                enemy.takeDamage(calculateDamage(), Color.red);
             }
 
             if (Random.Range(0f, 1f) <= 0.05f)
@@ -609,23 +613,39 @@ public class Player : MovingEntity
         if (enemyCol < col) animator.Play("AttackLeft");
     }
 
-    public void takeAttack(float d){
-        SoundManager.sm.PlayHitSound();
-        
+    public override void takeDamage(float d, Color c, bool critical = false){
         int dice = Random.Range(1, 101);
         if(dice <= (int)(evade * evadeScale))
         {
-            GameObject evadeText = GameObject.Instantiate(damageText, new Vector3(this.transform.position.x, this.transform.position.y, 0), Quaternion.identity);
-            evadeText.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = $"Evade";
-            evadeText.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().color = new Color(50f / 255f, 205f / 255f, 50f / 255f);
+            AddTextPopup("Evade", new Color(50f / 255f, 205f / 255f, 50f / 255f));
             return;
+        }
+
+        hp += (int)d;
+
+        if (d < 0)
+        {
+            SoundManager.sm.PlayHitSound();
+            moving = false;
+            AddTextPopup($"{d}", Color.red);
+            SpawnBlood();
         }
         else
         {
-            GameObject damageNums = GameObject.Instantiate(damageText, new Vector3(this.transform.position.x, this.transform.position.y, 0), Quaternion.identity);
-            damageNums.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = $"{d}";
+            SoundManager.sm.PlayHealSound();
+            AddTextPopup($"+{d}", Color.green);
         }
-        base.takeDamage(d);
+
+        if (hp <= 0)
+        {
+            dead = true;
+            SpawnBlood();
+        }
+        if (hp > maxHp)
+        {
+            hp = maxHp;
+        }
+        
     }
 
     public override void AddStatusEffect(StatusEffect se)
@@ -790,14 +810,12 @@ public class Player : MovingEntity
     }
     public void addBaseHP(int i)
     {
-        //Debug.Log($"Starting:{baseHp}:{maxHp}:{hp}");
         baseHp += i;
         int newHp = baseHp + (int)((float)baseHp * 0.05f * (int)(defense * defenseScale));
         int diff = newHp - maxHp;
         maxHp += diff;
         hp += diff;
-        //Debug.Log($"new:{newHp} diff{diff}");
-        //Debug.Log($"Ending:{baseHp}:{maxHp}:{hp}");
+       
     }
     public void addExp(int i){
         exp += i;
@@ -826,17 +844,9 @@ public class Player : MovingEntity
     }
     public void addAttack(int i)
     {
-        Debug.Log($"Before Attack-- attack:{attack} strength:{strength}");
         attack += i;
-        Debug.Log($"After Attack-- attack:{attack} strength:{strength}");
     }
-    //public void addDefense(int i){
-    //    defense += i;
-    //    int newHp = baseHp + (int)((float)baseHp * Mathf.Pow(0.02f, defense));
-    //    int diff = newHp - maxHp;
-    //    maxHp += diff;
-    //    hp += diff;
-    //}
+    
     public void addCrit(int i){
         critical += i;
     }
