@@ -676,7 +676,7 @@ public class DungeonGenerator : ScriptableObject
     {
         for (int i = 0; i < rooms.Count; i++)
         {
-            for (int j = 0; j <= 1; j++)
+            if (Random.Range(0f, 1f) <= 0.3f)
             {
                 Room room = rooms[i];
                 bool valid = false;
@@ -701,6 +701,7 @@ public class DungeonGenerator : ScriptableObject
 
                 }
             }
+                
         }
     }
 
@@ -734,7 +735,8 @@ public class DungeonGenerator : ScriptableObject
     {
         for (int i = 0; i < rooms.Count; i++)
         {
-            for (int j = 0; j < 2; j++)
+            // Spawn Consumable
+            if (Random.Range(0f, 1f) <= .3f)
             {
                 Room room = rooms[i];
                 bool valid = false;
@@ -753,24 +755,41 @@ public class DungeonGenerator : ScriptableObject
                 }
                 if (valid)
                 {
-                    float coin = Random.Range(0f, 1f);
                     Vector3 position = new Vector3(col, row, 0f);
-                    if (coin > 0.5)
+                    GameObject item = consumableGenerator.CreateRandomConsumable(GameManager.gmInstance.level);
+                    item.transform.parent = itemContainer.transform;
+                    item.transform.position = position;
+                    item.GetComponent<Pickup>().SetLocation(row, col);
+                    itemList.Add(new Vector2(row, col));
+                }
+            }
+
+            // Spawn Equipment
+            if (Random.Range(0f, 1f) <= .3f)
+            {
+                Room room = rooms[i];
+                bool valid = false;
+                int tries = 0;
+                int row = 0;
+                int col = 0;
+                while (!valid && tries < 10)
+                {
+                    tries++;
+                    row = Random.Range(room.row + 1, room.row + room.height - 2);
+                    col = Random.Range(room.col + 1, room.col + room.width - 2);
+                    if (!tileMap[row, col].getOccupied() && !tileMap[row, col].stairs)
                     {
-                        GameObject item = equipmentGenerator.GenerateEquipment(GameManager.gmInstance.level);
-                        item.transform.parent = itemContainer.transform;
-                        item.transform.position = position;
-                        item.GetComponent<Pickup>().SetLocation(row, col);
-                        itemList.Add(new Vector2(row, col));
+                        valid = true;
                     }
-                    else
-                    {
-                        GameObject item = consumableGenerator.CreateRandomConsumable(GameManager.gmInstance.level);
-                        item.transform.parent = itemContainer.transform;
-                        item.transform.position = position;
-                        item.GetComponent<Pickup>().SetLocation(row, col);
-                        itemList.Add(new Vector2(row, col));
-                    }
+                }
+                if (valid)
+                {
+                    Vector3 position = new Vector3(col, row, 0f);
+                    GameObject item = equipmentGenerator.GenerateEquipment(GameManager.gmInstance.level);
+                    item.transform.parent = itemContainer.transform;
+                    item.transform.position = position;
+                    item.GetComponent<Pickup>().SetLocation(row, col);
+                    itemList.Add(new Vector2(row, col));
                 }
             }
         }
