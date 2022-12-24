@@ -255,7 +255,6 @@ public class Player : MovingEntity
         {
             if (animator.GetCurrentAnimatorStateInfo(0).IsName("Idle")) {
                 attacking = false;
-                //GameManager.gmInstance.playersTurn = false;
                 PlayerEnd();
                 GameManager.gmInstance.UpdateCursor("Done");
             }
@@ -291,7 +290,6 @@ public class Player : MovingEntity
         {
             if (EventSystem.current.IsPointerOverGameObject())
             {
-                Debug.Log("UI");
                 return;
             }
 
@@ -300,7 +298,6 @@ public class Player : MovingEntity
                 journalButton.GetComponent<Clickable>().getClicked() ||
                 pauseButton.GetComponent<Clickable>().getClicked())
             {
-                Debug.Log("OPen UI");
                 return;
             }
 
@@ -363,14 +360,12 @@ public class Player : MovingEntity
 
     public void PlayerStart()
     {
-        Debug.Log("Player Turn Start");
         ApplyStatusEffects("start");
         UpdatePlayerStatusEffectAlerts();
     }
 
     public void PlayerEnd()
     {
-        Debug.Log("Player Turn End");
         GameManager.gmInstance.playersTurn = false;
         turnStart = true;
         ApplyStatusEffects("end");
@@ -578,7 +573,6 @@ public class Player : MovingEntity
 
     bool attackController(int clickRow, int clickCol)
     {
-        Debug.Log($"Attacking attack:{attack} strength:{strength}");
         Enemy enemy = GameManager.gmInstance.getEnemyAtLoc(clickRow, clickCol);
         if (enemy != null && attacking == false)
         {
@@ -594,7 +588,11 @@ public class Player : MovingEntity
                 enemy.takeDamage(calculateDamage());
             }
 
-            enemy.AddStatusEffect(new StatusEffect(EffectType.bleed, 5, EffectOrder.End));
+            if (Random.Range(0f, 1f) <= 0.05f)
+            {
+                enemy.AddStatusEffect(new StatusEffect(EffectType.bleed, 5, EffectOrder.End));
+            }
+            
                 
             return true;
         }

@@ -59,7 +59,6 @@ public class CharacterData : MonoBehaviour
         equipment = new List<Equipment>();
         consumables = new List<Consumable>();
         classType = ct;
-        Debug.Log("New CharData: " + classType);
     }
 
     public CharacterData(string name, int floor, int expLevel, int gold, int strength, int attack,

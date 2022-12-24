@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using UnityEngine.UIElements;
+using static UnityEditor.PlayerSettings;
 
 public class Furniture : MonoBehaviour
 {
@@ -12,6 +14,7 @@ public class Furniture : MonoBehaviour
 
     public ParticleSystem wood;
     public ConsumableGenerator consumableGenerator;
+    public EquipmentGenerator equipmentGenerator;
 
     private GameObject itemContainer;
 
@@ -37,19 +40,45 @@ public class Furniture : MonoBehaviour
         }
         if(health <= 0)
         {
-            float coin = Random.Range(0f, 1f);
-            if (coin > 0.5f)
-            {
-                Vector3 localPosition = new Vector3(col, row, 0f);
-                GameObject item = consumableGenerator.CreateRandomMoney(GameManager.gmInstance.level);
-                item.transform.parent = itemContainer.transform;
-                item.transform.position = position;
-            }
-
+            DropLoot();
             GameManager.gmInstance.Dungeon.tileMap[row, col].occupied = 0;
             GameManager.gmInstance.removeFurniture(this);
             Destroy(this.gameObject);
         }
+    }
+
+    void DropLoot()
+    {
+        Debug.Log("FURNITURE DROP LOOT");
+        Vector3 position = new Vector3(col, row, 0f);
+        float roll = Random.Range(0f, 1f);
+        GameObject item = null;
+
+        //Drop Equipment
+        if (roll <= 0.2f)
+        {
+            item = equipmentGenerator.GenerateEquipment(GameManager.gmInstance.level);
+        }
+        else if (roll <= 0.6f)
+        {
+            item = consumableGenerator.CreateRandomConsumable(GameManager.gmInstance.level);
+        }
+        else
+        {
+            item = consumableGenerator.CreateRandomMoney(GameManager.gmInstance.level);
+        }
+
+        item.transform.position = position;
+        item.transform.parent = itemContainer.transform;
+        if (item.GetComponent<Pickup>() != null)
+        {
+            item.GetComponent<Pickup>().SetLocation((int)row, (int)col);
+        }
+        if (item.GetComponent<Money>() != null)
+        {
+            item.GetComponent<Money>().SetLocation((int)row, (int)col);
+        }
+
     }
 
     public int getRow()

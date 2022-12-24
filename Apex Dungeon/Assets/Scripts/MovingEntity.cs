@@ -245,7 +245,11 @@ public abstract class MovingEntity : MonoBehaviour
     public virtual void takeDamage(float change)
     {
         hp += (int)change;
-        moving = false;
+        if (change < 0)
+        {
+            moving = false;
+        }
+        
         if(hp <= 0)
         {
             dead = true;

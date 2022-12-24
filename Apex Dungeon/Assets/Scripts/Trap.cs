@@ -56,9 +56,9 @@ public class Trap : MonoBehaviour
             player.AddStatusEffect(new StatusEffect(StatusEffect.EffectType.bleed, 5, StatusEffect.EffectOrder.End));
         }
         if (typeof(Enemy).IsInstanceOfType(me)){
-            Debug.Log("Enemy Trap");
             Enemy enemy = (Enemy)me;
             enemy.takeDamage(-damage);
+            enemy.AddStatusEffect(new StatusEffect(StatusEffect.EffectType.bleed, 5, StatusEffect.EffectOrder.End));
         }
 
         DestroyTrap();

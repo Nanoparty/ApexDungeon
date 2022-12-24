@@ -79,7 +79,7 @@ public class Chest : MonoBehaviour
         {
             Vector3 position = new Vector3(pos.y, pos.x, 0f);
             GameObject item = new GameObject();
-            if (Random.Range(0f,1f) > 0.5)
+            if (Random.Range(0f,1f) >= 0.2)
             {
                 item = equipmentGenerator.GenerateEquipment(GameManager.gmInstance.level);
             }

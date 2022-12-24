@@ -45,10 +45,8 @@ public class MagicTrap : Trap
         this.row = row;
         this.col = col;
         System.Array values = System.Enum.GetValues(typeof(TrapType));
-        //type = (TrapType)values.GetValue(Random.Range(0, values.Length));
-        type = TrapType.teleport;
+        type = (TrapType)values.GetValue(Random.Range(0, values.Length));
         GameManager.gmInstance.AddTrapToList(this);
-        Debug.Log("TRAP TYPE: " + type.ToString());
     }
 
     public override void TriggerTrap(MovingEntity me)
@@ -80,7 +78,6 @@ public class MagicTrap : Trap
             }
             if (type == TrapType.teleport)
             {
-                Debug.Log("Teleport");
                 Vector2 pos = GameManager.gmInstance.Dungeon.getRandomUnoccupiedTile();
                 player.setPosition((int)pos.x, (int)pos.y);
                 player.CancelPath();
@@ -133,7 +130,6 @@ public class MagicTrap : Trap
                 player.AddStatusEffect(new StatusEffect(StatusEffect.EffectType.evasion_down, 20, StatusEffect.EffectOrder.Status));
                 sr.sprite = redCircle;
             }
-            Debug.Log("TRIGGER MAGIC TRAP");
         }
         
 

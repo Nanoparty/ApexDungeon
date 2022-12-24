@@ -107,7 +107,7 @@ public class DungeonGenerator : ScriptableObject
         SpawnTraps();
         SpawnFurniture();
         SpawnChests();
-        //SpawnItems();
+        SpawnItems();
         SpawnMoney();
         InstantiateShadowMap();
 
@@ -736,8 +736,11 @@ public class DungeonGenerator : ScriptableObject
         for (int i = 0; i < rooms.Count; i++)
         {
             // Spawn Consumable
-            if (Random.Range(0f, 1f) <= .3f)
+            float coin = Random.Range(0f, 1f);
+            Debug.Log("Coin1");
+            if (coin <= .3f)
             {
+                Debug.Log("Spawn Consumable");
                 Room room = rooms[i];
                 bool valid = false;
                 int tries = 0;
@@ -765,8 +768,11 @@ public class DungeonGenerator : ScriptableObject
             }
 
             // Spawn Equipment
-            if (Random.Range(0f, 1f) <= .3f)
+            coin = Random.Range(0f, 1f);
+            Debug.Log("Coin2");
+            if (coin <= .3f)
             {
+                Debug.Log("Spawn Equipment");
                 Room room = rooms[i];
                 bool valid = false;
                 int tries = 0;

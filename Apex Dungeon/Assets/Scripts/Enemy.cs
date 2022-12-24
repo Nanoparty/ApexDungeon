@@ -68,7 +68,6 @@ public class Enemy : MovingEntity
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log("Enemy Trigger Enter");
         if (other.gameObject.CompareTag("Trap"))
         {
             other.GetComponent<Trap>().TriggerTrap(this);
@@ -121,8 +120,6 @@ public class Enemy : MovingEntity
         GameManager.gmInstance.Dungeon.tileMap[row, col].occupied = 0;
         GameManager.gmInstance.removeEnemy(this);
         int givenExp = calculateExp();
-        Debug.Log("EXP:" + givenExp);
-        Debug.Log("Player:" + player);
         player.addExp(givenExp);
         Destroy(this.gameObject);
     }

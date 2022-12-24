@@ -87,7 +87,6 @@ public static class Data
             activeCharacter = "bob";
             charData.Add(new CharacterData(activeCharacter, ClassType.Archer));
             playerName = activeCharacter;
-            Debug.Log("NULL CHARACTER DATA");
         }
 
         CharacterData current = charData.Where(cd => cd.name == activeCharacter).First();
