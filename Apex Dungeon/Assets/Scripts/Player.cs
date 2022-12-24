@@ -310,7 +310,7 @@ public class Player : MovingEntity
                 // Check for trap disarm
                 Trap t = GameManager.gmInstance.GetTrapAtLoc(clickRow, clickCol);
                 if (t != null) {
-                    if (t.DisarmTrap())
+                    if (t.DisarmTrap(this))
                     {
                         return;
                     }
@@ -482,8 +482,7 @@ public class Player : MovingEntity
             int amount = other.GetComponent<Money>().amount;
             gold += amount;
             SoundManager.sm.PlayCoinSound();
-            GameObject goldNum = GameObject.Instantiate(goldText, new Vector3(this.transform.position.x, this.transform.position.y, 0), Quaternion.identity, this.transform);
-            goldNum.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = $"+{amount}";
+            AddTextPopup($"+{amount}", new Color(255f / 255f, 238f / 255f, 0f / 255f));
             GameManager.gmInstance.Dungeon.removeFromItemList(row, col);
             Destroy(other.gameObject);
 
@@ -508,7 +507,6 @@ public class Player : MovingEntity
         if (f != null)
         {
             f.setDamage(-1);
-            //GameManager.gmInstance.playersTurn = false;
             PlayerEnd();
             SoundManager.sm.PlayStickSounds();
             return true;
@@ -522,7 +520,6 @@ public class Player : MovingEntity
         if (c != null)
         {
             c.OpenChest();
-            //GameManager.gmInstance.playersTurn = false;
             PlayerEnd();
             SoundManager.sm.PlayStickSounds();
             return true;
@@ -564,7 +561,6 @@ public class Player : MovingEntity
             if (atTarget && !interrupt)
             {
                 setNextTarget();
-                //GameManager.gmInstance.playersTurn = false;
                 PlayerEnd();
                 SoundManager.sm.PlayStepSound();
             }
@@ -797,9 +793,7 @@ public class Player : MovingEntity
     {
         hp += i;
         if(hp > maxHp) hp = maxHp;
-        GameObject damageNum = GameObject.Instantiate(damageText, new Vector3(this.transform.position.x, this.transform.position.y, 0), Quaternion.identity, this.transform);
-        damageNum.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().color = new Color(50f / 255f, 205f / 255f, 50f / 255f);
-        damageNum.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = $"+{i}";
+        AddTextPopup($"+{i}", new Color(50f / 255f, 205f / 255f, 50f / 255f));
     }
     public void addMaxHP(int i){
         maxHp += i;

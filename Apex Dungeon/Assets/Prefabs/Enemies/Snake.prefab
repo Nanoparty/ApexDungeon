@@ -72,7 +72,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1980713789
-  m_SortingLayer: 9
+  m_SortingLayer: 10
   m_SortingOrder: 0
   m_Sprite: {fileID: 6254649218150339109, guid: 278b2cdaf90af234aa7c1f46f3637444,
     type: 3}
@@ -172,7 +172,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 2101249919
-  m_SortingLayer: 7
+  m_SortingLayer: 8
   m_SortingOrder: 0
   m_Sprite: {fileID: 3543595414041277741, guid: ad61afe0b8dcf514fa99c6bd5adce9d7,
     type: 3}
@@ -313,7 +313,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 2101249919
-  m_SortingLayer: 7
+  m_SortingLayer: 8
   m_SortingOrder: 0
   m_Sprite: {fileID: -9203014761090062380, guid: ad61afe0b8dcf514fa99c6bd5adce9d7,
     type: 3}
@@ -359,6 +359,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57069bc9e6c5bf94f8a86fa4bd21c13d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canDisplayPopupText: 1
+  popupTextDelay: 0.4
   moveTime: 0.1
   speed: 3
   blockingLayer:
@@ -367,6 +369,8 @@ MonoBehaviour:
   blood: {fileID: 6035910965898688361, guid: a4a0b7d015bed704c806ff555bd7f1a3, type: 3}
   damageText: {fileID: 3475315571993695346, guid: 2786e48bb15534cd281c669e73be8cdf,
     type: 3}
+  poisonChance: 0.01
+  bleedChance: 0.05
 --- !u!61 &-6508178567142258109
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -136,7 +136,7 @@ public class MagicTrap : Trap
         
     }
 
-    public override bool DisarmTrap()
+    public override bool DisarmTrap(MovingEntity e)
     {
         return false;
     }

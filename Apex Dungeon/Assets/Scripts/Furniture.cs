@@ -49,7 +49,6 @@ public class Furniture : MonoBehaviour
 
     void DropLoot()
     {
-        Debug.Log("FURNITURE DROP LOOT");
         Vector3 position = new Vector3(col, row, 0f);
         float roll = Random.Range(0f, 1f);
         GameObject item = null;

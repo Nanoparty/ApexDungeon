@@ -40,7 +40,7 @@ public abstract class MovingEntity : MonoBehaviour
 
     public Queue<(string, Color)> popupTexts;
     public bool canDisplayPopupText = true;
-    public float popupTextDelay = 0.1f;
+    [SerializeField] public float popupTextDelay = .4f;
 
     public float moveTime = 0.1f;
     public float speed = 3f;
@@ -198,7 +198,6 @@ public abstract class MovingEntity : MonoBehaviour
         {
             canDisplayPopupText = false;
             var values = popupTexts.Dequeue();
-            Debug.Log("About to spawn text: " + values.Item1 + " " + values.Item2);
             StartCoroutine(SpawnText(values.Item1, values.Item2));
         }
     }

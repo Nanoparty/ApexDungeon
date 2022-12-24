@@ -737,10 +737,8 @@ public class DungeonGenerator : ScriptableObject
         {
             // Spawn Consumable
             float coin = Random.Range(0f, 1f);
-            Debug.Log("Coin1");
             if (coin <= .3f)
             {
-                Debug.Log("Spawn Consumable");
                 Room room = rooms[i];
                 bool valid = false;
                 int tries = 0;
@@ -769,10 +767,8 @@ public class DungeonGenerator : ScriptableObject
 
             // Spawn Equipment
             coin = Random.Range(0f, 1f);
-            Debug.Log("Coin2");
             if (coin <= .3f)
             {
-                Debug.Log("Spawn Equipment");
                 Room room = rooms[i];
                 bool valid = false;
                 int tries = 0;

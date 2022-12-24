@@ -64,11 +64,9 @@ public class Trap : MonoBehaviour
         DestroyTrap();
     }
 
-    public virtual bool DisarmTrap()
+    public virtual bool DisarmTrap(MovingEntity e)
     {
-        GameObject text = Instantiate(disarmText, new Vector2(col, row), Quaternion.identity);
-        text.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = $"DISARM";
-        text.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().color = Color.white;
+        e.AddTextPopup("DISARM", Color.white);
         DestroyTrap();
         return true;
     }
