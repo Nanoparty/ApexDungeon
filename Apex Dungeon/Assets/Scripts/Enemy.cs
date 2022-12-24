@@ -100,19 +100,28 @@ public class Enemy : MovingEntity
         int netDamage = (int)calculateDamageIn(d);
         if (critical)
         {
-            SoundManager.sm.PlayCriticalSound();
+            if (GameManager.gmInstance.Dungeon.tileMap[row, col].visible)
+            {
+                SoundManager.sm.PlayCriticalSound();
+            }
             c = new Color(1.0f, 0.64f, 0.0f);
         }
         else if (d < 0)
         {
-            SoundManager.sm.PlayHitSound();
+            if (GameManager.gmInstance.Dungeon.tileMap[row, col].visible)
+            {
+                SoundManager.sm.PlayHitSound();
+            }
         }
         base.takeDamage(netDamage, c, critical);
     }
 
     public void die(){
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
-        SoundManager.sm.PlayMonsterSounds();
+        if (GameManager.gmInstance.Dungeon.tileMap[row, col].visible)
+        {
+            SoundManager.sm.PlayMonsterSounds();
+        }
         SpawnBlood();
         GameManager.gmInstance.Dungeon.tileMap[row, col].occupied = 0;
         GameManager.gmInstance.removeEnemy(this);

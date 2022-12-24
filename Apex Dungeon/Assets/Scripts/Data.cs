@@ -126,6 +126,7 @@ public static class Data
         current.equipment = equipment;
         current.consumables = consumables;
         current.statusEffects = statusEffects;
+        current.classType = characterClass;
     }
 
     public static void RemoveActive(){

@@ -50,7 +50,6 @@ public class Trap : MonoBehaviour
 
         if (typeof(Player).IsInstanceOfType(me))
         {
-            Debug.Log("Player Trap");
             Player player = (Player)me;
             player.takeDamage(-damage, Color.red);
             player.AddStatusEffect(new StatusEffect(StatusEffect.EffectType.bleed, 5, StatusEffect.EffectOrder.End));
@@ -73,7 +72,10 @@ public class Trap : MonoBehaviour
 
     public virtual void DestroyTrap()
     {
-        SoundManager.sm.PlayTrapSound();
+        if (GameManager.gmInstance.Dungeon.tileMap[row, col].visible)
+        {
+            SoundManager.sm.PlayTrapSound();
+        }
         disarmed = true;
         Instantiate(destruction, new Vector2(col, row), Quaternion.identity);
         GameManager.gmInstance.removeTrap(this);

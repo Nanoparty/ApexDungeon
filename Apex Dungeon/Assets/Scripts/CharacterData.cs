@@ -68,6 +68,7 @@ public class CharacterData : MonoBehaviour
         equipment = new List<Equipment>();
         consumables = new List<Consumable>();
         classType = ct;
+        statusEffects = new List<StatusEffect>();
     }
 
     public CharacterData(string name, int floor, int expLevel, int gold, int strength, int attack,

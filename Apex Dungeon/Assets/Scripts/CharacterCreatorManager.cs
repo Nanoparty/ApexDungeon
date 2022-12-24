@@ -142,7 +142,6 @@ public class CharacterCreatorManager : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log("Class: " + characterClass);
     }
 
     void acceptListener()
@@ -163,7 +162,6 @@ public class CharacterCreatorManager : MonoBehaviour
         Data.names = taken;
         Data.activeCharacter = name;
 
-        Debug.Log("CCM:" + characterClass);
         charData.Add(new CharacterData(name, characterClass));
         Data.charData = charData;
         Data.LoadActiveData();

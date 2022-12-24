@@ -1053,7 +1053,6 @@ public class Journal : ScriptableObject
 
     void applyGearStats(Equipment e)
     {
-        Debug.Log($"Gear attac = {e.attack}");
         int att = e.attack;
         int hp = e.defense;
         int crit = e.crit;
@@ -1086,7 +1085,6 @@ public class Journal : ScriptableObject
 
     void trashConfirmListener()
     {
-        Debug.Log("Selected " + selected);
         trashConfirmOpen = true;
         GameObject ConfirmPopup = popupRoot.transform.GetChild(1).gameObject;
         ConfirmPopup.SetActive(true);
@@ -1108,10 +1106,8 @@ public class Journal : ScriptableObject
 
     void trashListener()
     {
-        Debug.Log($"Trash Selected = {selected}");
         trashConfirmOpen = false;
         popupRoot.transform.GetChild(1).gameObject.SetActive(false);
-        Debug.Log("Trash Listener");
         SoundManager.sm.PlayMenuSound();
         if (tab == 0)
         {
@@ -1244,7 +1240,6 @@ public class Journal : ScriptableObject
 
     public void addEquipment(Item i)
     {
-        Debug.Log("Image:" + i.image);
         equipment.Add(i as Equipment);
     }
 
