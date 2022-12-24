@@ -16,6 +16,11 @@ public class SavePlayer
     public int evasion;
     public int critical;
 
+    public float strengthScale;
+    public float defenseScale;
+    public float criticalScale;
+    public float evadeScale;
+
     public int baseHp;
     public int hp;
     public int maxHp;
@@ -35,6 +40,7 @@ public class SavePlayer
 
     public List<SaveGear> equipment;
     public List<SaveConsumable> consumables;
+    public List<SaveStatusEffect> statusEffects;
 
     public SavePlayer(CharacterData data)
     {
@@ -48,6 +54,11 @@ public class SavePlayer
         defense = data.defense;
         evasion = data.evade;
         critical = data.crit;
+
+        strengthScale = data.strengthScale;
+        defenseScale = data.defenseScale;
+        criticalScale = data.criticalScale;
+        evadeScale = data.evadeScale;
 
         baseHp = data.baseHp;
         hp = data.hp;
@@ -75,6 +86,10 @@ public class SavePlayer
         foreach(Consumable c in data.consumables)
         {
             consumables.Add(new SaveConsumable(c));
+        }
+        foreach (StatusEffect se in data.statusEffects)
+        {
+            statusEffects.Add(new SaveStatusEffect(se.effectId.ToString(), se.order.ToString(), se.duration));
         }
     }
 }

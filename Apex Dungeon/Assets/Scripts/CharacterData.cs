@@ -24,9 +24,14 @@ public class CharacterData : MonoBehaviour
     public int crit;
     public int evade;
     public int block;
+    public float strengthScale;
+    public float defenseScale;
+    public float criticalScale;
+    public float evadeScale;
     public PlayerGear gear;
     public List<Equipment> equipment;
     public List<Consumable> consumables;
+    public List<StatusEffect> statusEffects;
     public ClassType classType;
 
     public CharacterData(){
@@ -55,6 +60,10 @@ public class CharacterData : MonoBehaviour
         crit = 10;
         evade = 10;
         block = 10;
+        strengthScale = 1;
+        defenseScale = 1;
+        criticalScale = 1;
+        evadeScale = 1;
         gear = new PlayerGear();
         equipment = new List<Equipment>();
         consumables = new List<Consumable>();
@@ -63,7 +72,7 @@ public class CharacterData : MonoBehaviour
 
     public CharacterData(string name, int floor, int expLevel, int gold, int strength, int attack,
         int defense, int evade, int crit,int baseHp, int hp, int maxHp, int exp, int maxExp, PlayerGear gear,
-        List<Equipment> equipment, List<Consumable> consumables, ClassType classType)
+        List<Equipment> equipment, List<Consumable> consumables, ClassType classType, float ss, float ds, float cs, float es, List<StatusEffect> statusEffects)
     {
         this.name = name;
         this.floor = floor;
@@ -83,5 +92,10 @@ public class CharacterData : MonoBehaviour
         this.equipment = equipment;
         this.consumables = consumables;
         this.classType = classType;
+        this.strengthScale = ss;
+        this.defenseScale= ds;
+        this.evadeScale = es;
+        this.criticalScale = cs;
+        this.statusEffects = statusEffects;
     }
 }

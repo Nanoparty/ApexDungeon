@@ -407,6 +407,7 @@ public class Player : MovingEntity
         Data.floor = GameManager.gmInstance.level;
         Data.equipment = journal.getEquipment();
         Data.consumables = journal.getItems();
+        Data.statusEffects = statusEffects;
         Data.gear = gear;
         Data.SaveCharacter();
     }
@@ -430,6 +431,7 @@ public class Player : MovingEntity
         blockStat = Data.block;
         gold = Data.gold;
         gear = Data.gear;
+        statusEffects = Data.statusEffects;
     }
 
     void OnApplicationFocus(bool hasFocus)
@@ -437,7 +439,7 @@ public class Player : MovingEntity
         if (!hasFocus)
         {
             saveCharacterData();
-            //Data.SaveToFile();
+            Data.SaveToFile();
         }
     }
 

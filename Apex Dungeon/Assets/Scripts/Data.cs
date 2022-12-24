@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using static CharacterClass;
+using static StatusEffect;
 
 public static class Data
 {
@@ -25,6 +26,7 @@ public static class Data
     //inventory data
     public static List<Equipment> equipment;
     public static List<Consumable> consumables;
+    public static List<StatusEffect> statusEffects;
 
     //Character Data
     public static string playerName;
@@ -44,6 +46,10 @@ public static class Data
     public static int crit;
     public static int evade;
     public static int block;
+    public static float strengthScale;
+    public static float defenseScale;
+    public static float criticalScale;
+    public static float evadeScale;
     public static int floor = 1;
     public static PlayerGear gear;
     public static ClassType characterClass;
@@ -73,11 +79,16 @@ public static class Data
         crit = current.defense;
         evade = current.evade;
         block = current.block;
+        strengthScale = current.strengthScale;
+        defenseScale = current.defenseScale;
+        criticalScale = current.criticalScale;
+        evadeScale = current.evadeScale;
         gear = current.gear;
         floor = current.floor;
 
         equipment = current?.equipment ?? new List<Equipment>();
         consumables = current?.consumables ?? new List<Consumable>(); 
+        statusEffects = current?.statusEffects ?? new List<StatusEffect>();
     }
 
     public static void SaveCharacter(){
@@ -106,10 +117,15 @@ public static class Data
         current.defense = defense;
         current.evade = evade;
         current.block = block;
+        current.strengthScale = strengthScale;
+        current.defenseScale = defenseScale;
+        current.criticalScale = criticalScale;
+        current.evadeScale = evadeScale;
         current.gear = gear;
         current.floor = floor;
         current.equipment = equipment;
         current.consumables = consumables;
+        current.statusEffects = statusEffects;
     }
 
     public static void RemoveActive(){
@@ -119,7 +135,6 @@ public static class Data
             activeCharacter = "bob";
             charData.Add(new CharacterData(activeCharacter, ClassType.Archer));
             playerName = activeCharacter;
-            Debug.Log("NULL CHARACTER DATA");
         }
         if (activeCharacter == "") return;
         CharacterData current = charData.Where(cd => cd.name == activeCharacter).First();
@@ -169,15 +184,21 @@ public static class Data
                 }
                 consumes.Add(item);
             }
+            List<StatusEffect> effects = new List<StatusEffect>();
+            foreach (SaveStatusEffect sse in p.statusEffects)
+            {
+                EffectType type = Enum.Parse<EffectType>(sse.effectId);
+                EffectOrder order = Enum.Parse<EffectOrder>(sse.effectOrder);
+                effects.Add(new StatusEffect(type, sse.duration, order));
+            }
 
-            //Debug.Log("STRING:" + p.classType);
             
             ClassType classType = Enum.Parse<ClassType>(p.classType ?? "Archer");
             if (classType == null) classType = ClassType.Archer;
-            //Debug.Log("ENUM:" + classType);
 
             CharacterData cd = new CharacterData(p.name, p.floor, p.level, p.gold, p.strength, p.attack, p.defense,
-                p.evasion, p.critical, p.baseHp, p.hp, p.maxHp, p.exp, p.maxExp, gear, equips, consumes, classType);
+                p.evasion, p.critical, p.baseHp, p.hp, p.maxHp, p.exp, p.maxExp, gear, equips, consumes, classType, 
+                p.strengthScale, p.defenseScale, p.criticalScale, p.evadeScale, effects);
 
             loadCharData.Add(cd);
         }
