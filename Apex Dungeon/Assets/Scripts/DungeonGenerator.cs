@@ -15,6 +15,8 @@ public class DungeonGenerator : ScriptableObject
     public static List<Vector2> visibleTiles;
     public static List<Vector2> itemList;
 
+    public static GameObject waterBackgroundObject;
+
     public static int width = 50;
     public static int height = 50;
 
@@ -43,6 +45,7 @@ public class DungeonGenerator : ScriptableObject
     public GameObject[] Furniture;
     public GameObject Chest;
     public Biome[] Biomes;
+    public GameObject WaterBackground;
 
     public DungeonObject Initalize()
     {
@@ -80,8 +83,18 @@ public class DungeonGenerator : ScriptableObject
         op.transform.GetChild(1).transform.GetChild(0).gameObject.GetComponent<Text>().text = "Floor " + GameManager.gmInstance.level;
         op.transform.SetParent(GameObject.FindGameObjectWithTag("Canvas").transform, false);
 
+        width = 50;
+        height = 50;
+
         width += 2 * border;
         height += 2 * border;
+
+        Destroy(waterBackgroundObject);
+
+        if (currentBiome.name == "Water")
+        {
+            waterBackgroundObject = Instantiate(WaterBackground, new Vector3(35,35,0), Quaternion.identity);
+        }
 
         InitializeTileMap();
         InitializeShadowMap();
@@ -130,6 +143,8 @@ public class DungeonGenerator : ScriptableObject
         Destroy(dungeon.gameObject);
         GameManager.gmInstance.clearEnemies();
         GameManager.gmInstance.clearFurniture();
+        GameManager.gmInstance.clearChests();
+        GameManager.gmInstance.clearTraps();
         return Initalize();
     }
 

@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -33,20 +32,18 @@ public class CharacterCreatorManager : MonoBehaviour
     [SerializeField] private Button Cancel;
 
     // Class Animators
-    [SerializeField] private AnimatorController Archer;
-    [SerializeField] private Sprite ArcherSprite;
-
-    [SerializeField] private AnimatorController Knight;
-    [SerializeField] private AnimatorController Warrior;
-    [SerializeField] private AnimatorController Monk;
-    [SerializeField] private AnimatorController Priest;
-    [SerializeField] private AnimatorController Necromancer;
-    [SerializeField] private AnimatorController Paladin;
-    [SerializeField] private AnimatorController Mage;
-    [SerializeField] private AnimatorController Druid;
-    [SerializeField] private AnimatorController Bard;
-    [SerializeField] private AnimatorController Thief;
-    [SerializeField] private AnimatorController Swordsman;
+    [SerializeField] private RuntimeAnimatorController Archer;
+    [SerializeField] private RuntimeAnimatorController Knight;
+    [SerializeField] private RuntimeAnimatorController Warrior;
+    [SerializeField] private RuntimeAnimatorController Monk;
+    [SerializeField] private RuntimeAnimatorController Priest;
+    [SerializeField] private RuntimeAnimatorController Necromancer;
+    [SerializeField] private RuntimeAnimatorController Paladin;
+    [SerializeField] private RuntimeAnimatorController Mage;
+    [SerializeField] private RuntimeAnimatorController Druid;
+    [SerializeField] private RuntimeAnimatorController Bard;
+    [SerializeField] private RuntimeAnimatorController Thief;
+    [SerializeField] private RuntimeAnimatorController Swordsman;
 
     private List<string> taken;
     private bool done;

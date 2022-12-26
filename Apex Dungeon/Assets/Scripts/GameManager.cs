@@ -159,6 +159,16 @@ public class GameManager : MonoBehaviour
         furniture.Clear();
     }
 
+    public void clearChests()
+    {
+        chests.Clear();
+    }
+
+    public void clearTraps()
+    {
+        traps.Clear();
+    }
+
     public void removeFurniture(Furniture e)
     {
         furniture.Remove(e);

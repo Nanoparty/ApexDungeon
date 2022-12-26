@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.U2D.Animation;
 using UnityEngine.UI;
@@ -47,18 +46,18 @@ public class Journal : ScriptableObject
     private bool open;
     private bool trashConfirmOpen;
 
-    [SerializeField] private AnimatorController ArcherController;
-    [SerializeField] private AnimatorController WarriorController;
-    [SerializeField] private AnimatorController PaladinController;
-    [SerializeField] private AnimatorController KnightController;
-    [SerializeField] private AnimatorController ThiefController;
-    [SerializeField] private AnimatorController MageController;
-    [SerializeField] private AnimatorController MonkController;
-    [SerializeField] private AnimatorController NecromancerController;
-    [SerializeField] private AnimatorController BardController;
-    [SerializeField] private AnimatorController DruidController;
-    [SerializeField] private AnimatorController SwordsmanController;
-    [SerializeField] private AnimatorController PriestController;
+    [SerializeField] private RuntimeAnimatorController ArcherController;
+    [SerializeField] private RuntimeAnimatorController WarriorController;
+    [SerializeField] private RuntimeAnimatorController PaladinController;
+    [SerializeField] private RuntimeAnimatorController KnightController;
+    [SerializeField] private RuntimeAnimatorController ThiefController;
+    [SerializeField] private RuntimeAnimatorController MageController;
+    [SerializeField] private RuntimeAnimatorController MonkController;
+    [SerializeField] private RuntimeAnimatorController NecromancerController;
+    [SerializeField] private RuntimeAnimatorController BardController;
+    [SerializeField] private RuntimeAnimatorController DruidController;
+    [SerializeField] private RuntimeAnimatorController SwordsmanController;
+    [SerializeField] private RuntimeAnimatorController PriestController;
 
     private void OnEnable()
     {

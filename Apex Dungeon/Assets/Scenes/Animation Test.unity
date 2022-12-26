@@ -140,7 +140,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!61 &103288811
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -179,6 +179,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57069bc9e6c5bf94f8a86fa4bd21c13d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canDisplayPopupText: 1
+  popupTextDelay: 0.4
   moveTime: 0.1
   speed: 3
   blockingLayer:
@@ -187,6 +189,8 @@ MonoBehaviour:
   blood: {fileID: 6035910965898688361, guid: a4a0b7d015bed704c806ff555bd7f1a3, type: 3}
   damageText: {fileID: 3475315571993695346, guid: 2786e48bb15534cd281c669e73be8cdf,
     type: 3}
+  poisonChance: 0.01
+  bleedChance: 0.05
 --- !u!4 &103288813
 Transform:
   m_ObjectHideFlags: 0
@@ -308,7 +312,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 2101249919
-  m_SortingLayer: 6
+  m_SortingLayer: 8
   m_SortingOrder: 0
   m_Sprite: {fileID: -6085417404323728607, guid: ad61afe0b8dcf514fa99c6bd5adce9d7,
     type: 3}
@@ -359,7 +363,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!95 &499060488
 Animator:
   serializedVersion: 4
@@ -552,7 +556,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 2101249919
-  m_SortingLayer: 6
+  m_SortingLayer: 8
   m_SortingOrder: 0
   m_Sprite: {fileID: 297436181771894057, guid: ad61afe0b8dcf514fa99c6bd5adce9d7, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -602,7 +606,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!61 &588247969
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -641,6 +645,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57069bc9e6c5bf94f8a86fa4bd21c13d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canDisplayPopupText: 1
+  popupTextDelay: 0.4
   moveTime: 0.1
   speed: 3
   blockingLayer:
@@ -649,6 +655,8 @@ MonoBehaviour:
   blood: {fileID: 6035910965898688361, guid: a4a0b7d015bed704c806ff555bd7f1a3, type: 3}
   damageText: {fileID: 3475315571993695346, guid: 2786e48bb15534cd281c669e73be8cdf,
     type: 3}
+  poisonChance: 0.01
+  bleedChance: 0.05
 --- !u!4 &588247971
 Transform:
   m_ObjectHideFlags: 0
@@ -750,7 +758,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1980713789
-  m_SortingLayer: 8
+  m_SortingLayer: 10
   m_SortingOrder: 0
   m_Sprite: {fileID: 6254649218150339109, guid: 278b2cdaf90af234aa7c1f46f3637444,
     type: 3}
@@ -813,7 +821,7 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.3
+  near clip plane: 0
   far clip plane: 1000
   field of view: 60
   orthographic: 1
@@ -841,7 +849,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 801821448}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.89, y: -0.87, z: -10}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -865,7 +873,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &918206541
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -971,7 +979,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!95 &955367950
 Animator:
   serializedVersion: 4
@@ -1077,7 +1085,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!95 &1399726345
 Animator:
   serializedVersion: 4
@@ -1183,7 +1191,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!95 &1657009050
 Animator:
   serializedVersion: 4
@@ -1289,7 +1297,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!95 &1676115310
 Animator:
   serializedVersion: 4
@@ -1462,7 +1470,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1980713789
-  m_SortingLayer: 8
+  m_SortingLayer: 10
   m_SortingOrder: 0
   m_Sprite: {fileID: 6254649218150339109, guid: 278b2cdaf90af234aa7c1f46f3637444,
     type: 3}
@@ -1493,7 +1501,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2819949229353555171
 Transform:
   m_ObjectHideFlags: 0
@@ -1523,6 +1531,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57069bc9e6c5bf94f8a86fa4bd21c13d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canDisplayPopupText: 1
+  popupTextDelay: 0.4
   moveTime: 0.1
   speed: 3
   blockingLayer:
@@ -1531,6 +1541,77 @@ MonoBehaviour:
   blood: {fileID: 6035910965898688361, guid: a4a0b7d015bed704c806ff555bd7f1a3, type: 3}
   damageText: {fileID: 3475315571993695346, guid: 2786e48bb15534cd281c669e73be8cdf,
     type: 3}
+  poisonChance: 0.01
+  bleedChance: 0.05
+--- !u!1001 &2850722633350557031
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2850722633814334930, guid: 5bd196724ad3833489824ac7cf42beff,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2850722633814334930, guid: 5bd196724ad3833489824ac7cf42beff,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2850722633814334930, guid: 5bd196724ad3833489824ac7cf42beff,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2850722633814334930, guid: 5bd196724ad3833489824ac7cf42beff,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2850722633814334930, guid: 5bd196724ad3833489824ac7cf42beff,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2850722633814334930, guid: 5bd196724ad3833489824ac7cf42beff,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2850722633814334930, guid: 5bd196724ad3833489824ac7cf42beff,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2850722633814334930, guid: 5bd196724ad3833489824ac7cf42beff,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2850722633814334930, guid: 5bd196724ad3833489824ac7cf42beff,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2850722633814334930, guid: 5bd196724ad3833489824ac7cf42beff,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2850722633814334930, guid: 5bd196724ad3833489824ac7cf42beff,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2850722633814334934, guid: 5bd196724ad3833489824ac7cf42beff,
+        type: 3}
+      propertyPath: m_Name
+      value: Water_Background
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 5bd196724ad3833489824ac7cf42beff, type: 3}
 --- !u!61 &3234981166245866832
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1691,7 +1772,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1980713789
-  m_SortingLayer: 8
+  m_SortingLayer: 10
   m_SortingOrder: 0
   m_Sprite: {fileID: 6254649218150339109, guid: 278b2cdaf90af234aa7c1f46f3637444,
     type: 3}
@@ -1764,7 +1845,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 2101249919
-  m_SortingLayer: 6
+  m_SortingLayer: 8
   m_SortingOrder: 0
   m_Sprite: {fileID: -9011678658048681673, guid: ad61afe0b8dcf514fa99c6bd5adce9d7,
     type: 3}
