@@ -53,6 +53,8 @@ public class ImageLookup : ScriptableObject
     public Sprite redPotion;
     public Sprite bluePotion;
     public Sprite greenPotion;
+    public Sprite yellowPotion;
+    public Sprite blackPotion;
 
     public Sprite redBook;
     public Sprite blackBook;
@@ -76,6 +78,12 @@ public class ImageLookup : ScriptableObject
     public Sprite silver;
     public Sprite copper;
 
+    public Sprite bandage;
+    public Sprite dice;
+    public Sprite chicken;
+    public Sprite rope;
+    public Sprite heart;
+
     public Sprite getImage(string id)
     {
         var images = new Dictionary<string, Sprite>();
@@ -83,6 +91,16 @@ public class ImageLookup : ScriptableObject
         images["SkipOrb"] = images["LightOrb"] = images["TeleportOrb"] = blueOrb;
         images["DeathOrb"] = blackOrb;
         images["MapFragment"] = map;
+        images["Bandage"] = bandage;
+        images["Antidote"] = yellowPotion;
+        images["FullCleanse"] = blackPotion;
+        images["HealthRegenPotion"] = redFlask;
+        images["Chicken"] = chicken;
+        images["EscapeRope"] = rope;
+        images["HeartGem"] = heart;
+        images["ExpPotion"] = greenPotion;
+        images["MagicDice"] = dice;
+        images["BuffScroll"] = scroll;
         
         return images[id];
     }

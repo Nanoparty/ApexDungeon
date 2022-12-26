@@ -87,7 +87,8 @@ public class Chest : MonoBehaviour
             {
                 item = consumableGenerator.CreateRandomConsumable(GameManager.gmInstance.level);
             }
-            
+
+            itemContainer = GameObject.Find("ItemContainer");
             item.transform.parent = itemContainer.transform;
             item.transform.position = position;
             item.GetComponent<Pickup>().SetLocation((int)pos.x, (int)pos.y);
@@ -121,6 +122,7 @@ public class Chest : MonoBehaviour
                             && (player.getRow() != r && player.getCol() != c))
                         {
                             positions.Add(new Vector2(r, c));
+                            if (positions.Count < num) return positions;
                         }
                     }
                 }

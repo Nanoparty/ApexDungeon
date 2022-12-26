@@ -51,11 +51,11 @@ public class StatusEffectCard : MonoBehaviour
                 description = "Lose 10% of Max HP Each Turn";
                 iconSprite = poison_sprite;
                 break;
-            case EffectType.paralysis:
-                effectName = "Paralyzed";
-                description = "50% Chance to Skip Turn";
-                iconSprite = paralysis_sprite;
-                break;
+            //case EffectType.paralysis:
+            //    effectName = "Paralyzed";
+            //    description = "50% Chance to Skip Turn";
+            //    iconSprite = paralysis_sprite;
+            //    break;
             case EffectType.strength_up:
                 effectName = "Strength Up";
                 description = "Strength Increased by 10%";

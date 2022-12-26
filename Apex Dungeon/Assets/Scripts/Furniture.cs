@@ -64,9 +64,11 @@ public class Furniture : MonoBehaviour
         else
         {
             item = consumableGenerator.CreateRandomMoney(GameManager.gmInstance.level);
+            Debug.Log("Create money");
         }
 
         item.transform.position = position;
+        itemContainer = GameObject.Find("ItemContainer");
         item.transform.parent = itemContainer.transform;
         if (item.GetComponent<Pickup>() != null)
         {

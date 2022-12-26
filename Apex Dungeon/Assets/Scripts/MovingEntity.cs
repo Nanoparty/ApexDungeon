@@ -189,6 +189,8 @@ public abstract class MovingEntity : MonoBehaviour
 
     protected virtual void Update()
     {
+        if (GameManager.gmInstance.Dungeon == null) return;
+
         if (!atTarget)
         {
             moveToTarget();

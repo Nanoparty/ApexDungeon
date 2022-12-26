@@ -11,7 +11,7 @@ public class StatusEffect
         health_regen,
         poison,
         bleed,
-        paralysis,
+        //paralysis,
         strength_up,
         defense_up,
         critical_up,
@@ -56,10 +56,10 @@ public class StatusEffect
                 textColor = Color.red;
                 popupText = "Bleed";
                 break;
-            case EffectType.paralysis:
-                textColor = Color.yellow;
-                popupText = "Paralysis";
-                break;
+            //case EffectType.paralysis:
+            //    textColor = Color.yellow;
+            //    popupText = "Paralysis";
+            //    break;
             case EffectType.strength_up:
                 textColor = Color.cyan;
                 popupText = "Strength Up";
@@ -114,17 +114,17 @@ public class StatusEffect
                 int bleedDamage = (int)(entity.getMaxHP() * 0.05);
                 entity.takeDamage(-bleedDamage, textColor);
                 break;
-            case EffectType.paralysis:
-                // 50% chance to skip turn
-                float r = Random.Range(0f, 1f);
-                Debug.Log("COIN: " + r);
-                if (r > 0.5f)
-                {
-                    Debug.Log("ZAP");
-                    entity.AddTextPopup("Paralyzed", textColor);
-                    entity.SkipTurn();
-                }
-                break;
+            //case EffectType.paralysis:
+            //    // 50% chance to skip turn
+            //    float r = Random.Range(0f, 1f);
+            //    Debug.Log("COIN: " + r);
+            //    if (r > 0.5f)
+            //    {
+            //        Debug.Log("ZAP");
+            //        entity.AddTextPopup("Paralyzed", textColor);
+            //        entity.SkipTurn();
+            //    }
+            //    break;
             case EffectType.strength_up:
                 // Increase player strength by 10%
                 entity.setStrengthScale(entity.getStrengthScale() + 0.1f);

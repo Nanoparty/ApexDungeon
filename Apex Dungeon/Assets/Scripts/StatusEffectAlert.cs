@@ -38,9 +38,9 @@ public class StatusEffectAlert : MonoBehaviour
             case EffectType.poison:
                 EffectIcon.sprite = poison;
                 break;
-            case EffectType.paralysis:
-                EffectIcon.sprite = paralysis;
-                break;
+            //case EffectType.paralysis:
+            //    EffectIcon.sprite = paralysis;
+            //    break;
             case EffectType.strength_up:
                 EffectIcon.sprite = strength_up;
                 break;

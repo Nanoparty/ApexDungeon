@@ -51,6 +51,8 @@ public class Enemy : MovingEntity
 
     protected override void Update()
     {
+        if (GameManager.gmInstance.Dungeon == null) return;
+
         base.Update();
         if (!GameManager.gmInstance.Dungeon.tileMap[row, col].visible)
         {

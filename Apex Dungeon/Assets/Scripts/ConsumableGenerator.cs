@@ -7,6 +7,7 @@ public class ConsumableGenerator : ScriptableObject
     public Sprite bluePotion;
     public Sprite greenPotion;
     public Sprite yellowPotion;
+    public Sprite blackPotion;
 
     public Sprite redBook;
     public Sprite blackBook;
@@ -32,7 +33,10 @@ public class ConsumableGenerator : ScriptableObject
     public Sprite copper;
 
     public Sprite bandage;
-
+    public Sprite rope;
+    public Sprite heart;
+    public Sprite dice;
+    public Sprite chicken;
 
     public GameObject CreateHealthPotion(int level)
     {
@@ -248,6 +252,160 @@ public class ConsumableGenerator : ScriptableObject
         return item;
     }
 
+    public GameObject CreateFullCleanse()
+    {
+        GameObject item = new GameObject("FullCleanse");
+        string id = "FullCleanse";
+
+        item.AddComponent<SpriteRenderer>();
+        item.GetComponent<SpriteRenderer>().sprite = blackPotion;
+        item.GetComponent<SpriteRenderer>().sortingLayerName = "Items";
+
+        item.AddComponent<BoxCollider2D>();
+        item.GetComponent<BoxCollider2D>().isTrigger = true;
+
+        Consumable orb = new Consumable(id, "Full Cleanse", "This might be overkill", "Cleanse user of all Status Effects", blackPotion);
+
+        item.AddComponent<Pickup>();
+        item.GetComponent<Pickup>().SetItem(orb);
+
+        item.tag = "Consumable";
+
+        return item;
+    }
+
+    public GameObject CreateHeartGem()
+    {
+        GameObject item = new GameObject("HeartGem");
+        string id = "HeartGem";
+
+        item.AddComponent<SpriteRenderer>();
+        item.GetComponent<SpriteRenderer>().sprite = heart;
+        item.GetComponent<SpriteRenderer>().sortingLayerName = "Items";
+
+        item.AddComponent<BoxCollider2D>();
+        item.GetComponent<BoxCollider2D>().isTrigger = true;
+
+        Consumable orb = new Consumable(id, "Heart Gem", "Not anatomically accurate", "Permemantly increase HP by 10%", heart);
+
+        item.AddComponent<Pickup>();
+        item.GetComponent<Pickup>().SetItem(orb);
+
+        item.tag = "Consumable";
+
+        return item;
+    }
+
+    public GameObject CreateExpPotion()
+    {
+        GameObject item = new GameObject("ExpPotion");
+        string id = "ExpPotion";
+
+        item.AddComponent<SpriteRenderer>();
+        item.GetComponent<SpriteRenderer>().sprite = greenPotion;
+        item.GetComponent<SpriteRenderer>().sortingLayerName = "Items";
+
+        item.AddComponent<BoxCollider2D>();
+        item.GetComponent<BoxCollider2D>().isTrigger = true;
+
+        Consumable orb = new Consumable(id, "Experience Potion", "Wise men learn from the experience of others", "Permenantly Gain 1 level", greenPotion);
+
+        item.AddComponent<Pickup>();
+        item.GetComponent<Pickup>().SetItem(orb);
+
+        item.tag = "Consumable";
+
+        return item;
+    }
+
+    public GameObject CreateMagicDice()
+    {
+        GameObject item = new GameObject("MagicDice");
+        string id = "MagicDice";
+
+        item.AddComponent<SpriteRenderer>();
+        item.GetComponent<SpriteRenderer>().sprite = dice;
+        item.GetComponent<SpriteRenderer>().sortingLayerName = "Items";
+
+        item.AddComponent<BoxCollider2D>();
+        item.GetComponent<BoxCollider2D>().isTrigger = true;
+
+        Consumable orb = new Consumable(id, "Magic Dice", "Luck always beats skill", "Randomly gain 1 status effect", dice);
+
+        item.AddComponent<Pickup>();
+        item.GetComponent<Pickup>().SetItem(orb);
+
+        item.tag = "Consumable";
+
+        return item;
+    }
+
+    public GameObject CreateEscapeRope()
+    {
+        GameObject item = new GameObject("EscapeRope");
+        string id = "EscapeRope";
+
+        item.AddComponent<SpriteRenderer>();
+        item.GetComponent<SpriteRenderer>().sprite = rope;
+        item.GetComponent<SpriteRenderer>().sortingLayerName = "Items";
+
+        item.AddComponent<BoxCollider2D>();
+        item.GetComponent<BoxCollider2D>().isTrigger = true;
+
+        Consumable orb = new Consumable(id, "Escape Rope", "Tactical Retreat", "Return to previous floor", rope);
+
+        item.AddComponent<Pickup>();
+        item.GetComponent<Pickup>().SetItem(orb);
+
+        item.tag = "Consumable";
+
+        return item;
+    }
+
+    public GameObject CreateChicken()
+    {
+        GameObject item = new GameObject("Chicken");
+        string id = "Chicken";
+
+        item.AddComponent<SpriteRenderer>();
+        item.GetComponent<SpriteRenderer>().sprite = chicken;
+        item.GetComponent<SpriteRenderer>().sortingLayerName = "Items";
+
+        item.AddComponent<BoxCollider2D>();
+        item.GetComponent<BoxCollider2D>().isTrigger = true;
+
+        Consumable orb = new Consumable(id, "Chicken", "Lemon Pepper", "Restores 10% HP per turn for 2 turns", chicken);
+
+        item.AddComponent<Pickup>();
+        item.GetComponent<Pickup>().SetItem(orb);
+
+        item.tag = "Consumable";
+
+        return item;
+    }
+
+    public GameObject CreateBuffScroll()
+    {
+        GameObject item = new GameObject("BuffScroll");
+        string id = "BuffScroll";
+
+        item.AddComponent<SpriteRenderer>();
+        item.GetComponent<SpriteRenderer>().sprite = scroll;
+        item.GetComponent<SpriteRenderer>().sortingLayerName = "Items";
+
+        item.AddComponent<BoxCollider2D>();
+        item.GetComponent<BoxCollider2D>().isTrigger = true;
+
+        Consumable orb = new Consumable(id, "Buff Scroll", "Plus Ultra!", "Temporarily boosts one stat", scroll);
+
+        item.AddComponent<Pickup>();
+        item.GetComponent<Pickup>().SetItem(orb);
+
+        item.tag = "Consumable";
+
+        return item;
+    }
+
     public GameObject CreateGold(int level)
     {
         GameObject item = new GameObject("Gold");
@@ -309,22 +467,33 @@ public class ConsumableGenerator : ScriptableObject
     {
         GameObject consumable = null;
 
-        int rand = Random.Range(1, 11);
+        int rand = Random.Range(1, 23);
 
         if (rand == 1) consumable = CreateHealthPotion(level);
-        if (rand == 2) consumable = CreateHealthPotion(level);
-        if (rand == 3) consumable = CreateDeathOrb();
-        if (rand == 4) consumable = CreateLightOrb();
-        if (rand == 5) consumable = CreateTeleportOrb();
-        if (rand == 6) consumable = CreateMap();
-        if (rand == 7) consumable = CreateSkipOrb();
-        if (rand == 8) consumable = CreateAntidote();
-        if (rand == 9) consumable = CreateBandage();
-        if (rand == 10) consumable = CreateHealthRegenPotion();
+        if (rand == 3) consumable = CreateHealthPotion(level);
+        if (rand == 4) consumable = CreateHealthPotion(level);
+        if (rand == 5) consumable = CreateHealthPotion(level);
+        if (rand == 6) consumable = CreateHealthPotion(level);
+        if (rand == 7) consumable = CreateHealthPotion(level);
+        if (rand == 8) consumable = CreateDeathOrb();
+        if (rand == 9) consumable = CreateLightOrb();
+        if (rand == 10) consumable = CreateTeleportOrb();
+        if (rand == 11) consumable = CreateMap();
+        if (rand == 12) consumable = CreateSkipOrb();
+        if (rand == 13) consumable = CreateAntidote();
+        if (rand == 14) consumable = CreateBandage();
+        if (rand == 15) consumable = CreateHealthRegenPotion();
+        if (rand == 16) consumable = CreateBuffScroll();
+        if (rand == 17) consumable = CreateChicken();
+        if (rand == 18) consumable = CreateEscapeRope();
+        if (rand == 19) consumable = CreateExpPotion();
+        if (rand == 20) consumable = CreateFullCleanse();
+        if (rand == 21) consumable = CreateHeartGem();
+        if (rand == 22) consumable = CreateMagicDice();
 
         if (consumable == null) consumable = new GameObject();
 
-        return consumable;
+        return CreateEscapeRope();
     }
 
     public GameObject CreateRandomMoney(int level)

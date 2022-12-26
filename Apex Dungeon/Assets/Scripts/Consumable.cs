@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using static StatusEffect;
+using static UnityEditor.MaterialProperty;
 
 public class Consumable : Item
 {
@@ -88,6 +90,60 @@ public class Consumable : Item
         if(id == "Antidote")
         {
             p.RemoveAllStatusEffect(EffectType.poison);
+        }
+        if (id == "Chicken")
+        {
+            p.AddStatusEffect(new StatusEffect(EffectType.health_regen, 2, EffectOrder.End));
+        }
+        if (id == "BuffScroll")
+        {
+            EffectType[] effects = { EffectType.strength_up, EffectType.defense_up, EffectType.evasion_up, EffectType.critical_up };
+            EffectType effect = (EffectType) effects.GetValue(UnityEngine.Random.Range(0, effects.Length));
+            p.AddStatusEffect(new StatusEffect(effect, 20, EffectOrder.Status));
+
+        }
+        if (id == "EscapeRope")
+        {
+            if (GameManager.gmInstance.level > 1)
+            {
+                GameManager.gmInstance.level -= 2;
+                p.nextFloor();
+            }
+            else
+            {
+                GameManager.gmInstance.level -= 1;
+                p.nextFloor();
+            }
+        }
+        if (id == "MagicDice")
+        {
+            System.Array values = System.Enum.GetValues(typeof(EffectType));
+            EffectType effect = (EffectType) values.GetValue(UnityEngine.Random.Range(0, values.Length));
+            int duration = 20;
+            EffectOrder order = EffectOrder.Status;
+            EffectType[] shortEffects = { EffectType.bleed, EffectType.poison, EffectType.health_regen };
+            if (Array.IndexOf(shortEffects, effect) != -1){
+                duration = 5;
+                order = EffectOrder.End;
+            }
+            p.AddStatusEffect(new StatusEffect(effect, duration, order));
+        }
+        if (id == "ExpPotion")
+        {
+            p.addExp(p.getMaxExp());
+        }
+        if (id == "HeartGem")
+        {
+            p.addBaseHP((int)(p.getMaxHP() * 0.1f));
+
+        }
+        if (id == "FullCleanse")
+        {
+            System.Array values = System.Enum.GetValues(typeof(EffectType));
+            foreach (EffectType effect in values)
+            {
+                p.RemoveAllStatusEffect(effect);
+            }
         }
     }
 }

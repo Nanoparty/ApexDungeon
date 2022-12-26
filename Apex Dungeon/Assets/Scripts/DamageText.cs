@@ -15,6 +15,8 @@ public class DamageText : MonoBehaviour
 
     void Update()
     {
+        if (GameManager.gmInstance.Dungeon == null) return;
+
         transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y + speed * Time.deltaTime, 0);
         if (transform.localPosition.y - start > maxDistance)
         {
