@@ -50,4 +50,24 @@ public class TitleManager : MonoBehaviour
         SoundManager.sm.PlayMenuSound();
         SceneManager.LoadScene("Options", LoadSceneMode.Single);
     }
+
+    public void OpenYoutube()
+    {
+        Application.OpenURL("https://www.youtube.com/@dispixel");
+    }
+
+    public  void OpenTwitter()
+    {
+        Application.OpenURL("https://twitter.com/dispixel_exe");
+    }
+
+    public void OpenFacebook()
+    {
+        Application.OpenURL("https://www.facebook.com/profile.php?id=100088631456408");
+    }
+
+    public void OpenInstagram()
+    {
+        Application.OpenURL("https://www.instagram.com/dispixel_studios/");
+    }
 }
