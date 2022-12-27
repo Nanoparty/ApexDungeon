@@ -102,17 +102,17 @@ public class StatusEffect
             case EffectType.health_regen:
                 // Heal 10% max health
                 int healing = (int)(entity.getMaxHP() * 0.1);
-                entity.takeDamage(healing, textColor);
+                entity.takeDamage(healing, textColor, canDodge = false);
                 break;
             case EffectType.poison:
                 // Damage 10% max health
                 int poisonDamage = (int)(entity.getMaxHP() * 0.1);
-                entity.takeDamage(-poisonDamage, textColor);
+                entity.takeDamage(-poisonDamage, textColor,canDodge = false);
                 break;
             case EffectType.bleed:
                 // Damage 5% max health
                 int bleedDamage = (int)(entity.getMaxHP() * 0.05);
-                entity.takeDamage(-bleedDamage, textColor);
+                entity.takeDamage(-bleedDamage, textColor, canDodge = false);
                 break;
             //case EffectType.paralysis:
             //    // 50% chance to skip turn
@@ -132,6 +132,8 @@ public class StatusEffect
             case EffectType.defense_up:
                 // Increase player defense by 10%
                 entity.setDefenseScale(entity.getDefenseScale() + 0.1f);
+                Player player = (Player)entity;
+                player.UpdateHealthAndDefense();
                 break;
             case EffectType.critical_up:
                 // Increase player critical by 10%
@@ -148,6 +150,8 @@ public class StatusEffect
             case EffectType.defense_down:
                 // Decrease player defense by 10%
                 entity.setDefenseScale(entity.getDefenseScale() - 0.1f);
+                player = (Player)entity;
+                player.UpdateHealthAndDefense();
                 break;
             case EffectType.critical_down:
                 // Decrease player critical by 10%
@@ -172,9 +176,13 @@ public class StatusEffect
                 break;
             case EffectType.defense_up:
                 entity.setDefenseScale(entity.getDefenseScale() - 0.1f);
+                Player player = (Player)entity;
+                player.UpdateHealthAndDefense();
                 break;
             case EffectType.defense_down:
                 entity.setDefenseScale(entity.getDefenseScale() + 0.1f);
+                player = (Player)entity;
+                player.UpdateHealthAndDefense();
                 break;
             case EffectType.critical_up:
                 entity.setCriticalScale(entity.getCriticalScale() - 0.1f);

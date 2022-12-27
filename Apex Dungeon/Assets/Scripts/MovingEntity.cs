@@ -259,7 +259,7 @@ public abstract class MovingEntity : MonoBehaviour
         return -attackDamage;
     }
 
-    public virtual void takeDamage(float change, Color color, bool critical = false)
+    public virtual void takeDamage(float change, Color color, bool critical = false, bool canDodge = true)
     {
         hp += (int)change;
 

@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour
     public string DungeonName = "Misty Dungeon";
     public int level;
     public int score;
+    public bool gameStarted = false;
     public List<(string, int)> scores;
     public string playerName;
     public string state = "play";

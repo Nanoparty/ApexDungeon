@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using static StatusEffect;
-using static UnityEditor.MaterialProperty;
 
 public class Consumable : Item
 {

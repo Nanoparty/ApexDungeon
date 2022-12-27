@@ -67,17 +67,12 @@ public class Player : MovingEntity
         initializeObjects();
         setInitialValues();
 
-        if (GameManager.gmInstance.level > 1 || Data.loadData)
+        if (GameManager.gmInstance.level > 1 || Data.loadData || GameManager.gmInstance.gameStarted)
         {
             loadCharacterData();
         }
 
-        //statusEffects.Add(new StatusEffect(EffectType.health_regen, 5, EffectOrder.Start));
-        //statusEffects.Add(new StatusEffect(EffectType.bleed, 4, EffectOrder.End));
-        //statusEffects.Add(new StatusEffect(EffectType.poison, 3, EffectOrder.End));
-        //statusEffects.Add(new StatusEffect(EffectType.paralysis, 2, EffectOrder.Start));
-        //statusEffects.Add(new StatusEffect(EffectType.strength_up, 1, EffectOrder.Update));
-        //statusEffects.Add(new StatusEffect(EffectType.critical_down, 5, EffectOrder.Update));
+        GameManager.gmInstance.gameStarted = true;
     }
 
     void setInitialValues() {
@@ -381,7 +376,11 @@ public class Player : MovingEntity
         }
         if (Input.GetKeyDown("b"))
         {
-            AddStatusEffect(new StatusEffect(EffectType.bleed, 5, EffectOrder.End));
+            AddStatusEffect(new StatusEffect(EffectType.defense_up, 5, EffectOrder.Status));
+        }
+        if (Input.GetKeyDown("n"))
+        {
+            AddStatusEffect(new StatusEffect(EffectType.defense_down, 5, EffectOrder.Status));
         }
     }
 
@@ -609,13 +608,17 @@ public class Player : MovingEntity
         if (enemyCol < col) animator.Play("AttackLeft");
     }
 
-    public override void takeDamage(float d, Color c, bool critical = false){
-        int dice = Random.Range(1, 101);
-        if(dice <= (int)(evade * evadeScale))
+    public override void takeDamage(float d, Color c, bool critical = false, bool canDodge = true){
+        if (canDodge)
         {
-            AddTextPopup("Evade", new Color(50f / 255f, 205f / 255f, 50f / 255f));
-            return;
+            int dice = Random.Range(1, 101);
+            if (dice <= (int)(evade * evadeScale))
+            {
+                AddTextPopup("Evade", new Color(50f / 255f, 205f / 255f, 50f / 255f));
+                return;
+            }
         }
+        
 
         hp += (int)d;
 
@@ -785,6 +788,24 @@ public class Player : MovingEntity
     {
         mp += i;
         if(mp > maxMp) mp = maxMp;
+    }
+
+    public void UpdateHealthAndDefense()
+    {
+        var newHp = baseHp + (int)((float)baseHp * 0.05f * (int)(defense * defenseScale));
+        var diff = maxHp - newHp;
+        if(diff > 0) // decrease health
+        {
+            maxHp = newHp;
+            hp -= diff;
+            if (hp <= 0) hp = 1;
+        }
+        if (diff < 0) //increase health
+        {
+            maxHp = newHp;
+            hp -= diff;
+            if (hp > maxHp) hp = maxHp;
+        }
     }
     public void addMaxMP(int i){
         maxMp += i;

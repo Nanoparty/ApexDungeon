@@ -470,6 +470,7 @@ public class ConsumableGenerator : ScriptableObject
         int rand = Random.Range(1, 23);
 
         if (rand == 1) consumable = CreateHealthPotion(level);
+        if (rand == 2) consumable = CreateHealthPotion(level);
         if (rand == 3) consumable = CreateHealthPotion(level);
         if (rand == 4) consumable = CreateHealthPotion(level);
         if (rand == 5) consumable = CreateHealthPotion(level);
@@ -491,9 +492,13 @@ public class ConsumableGenerator : ScriptableObject
         if (rand == 21) consumable = CreateHeartGem();
         if (rand == 22) consumable = CreateMagicDice();
 
-        if (consumable == null) consumable = new GameObject();
+        if (consumable == null)
+        {
+            consumable = CreateHealthPotion(level);
+            Debug.Log("CONSUMABLE WAS NULL! RAND = " + rand);
+        }
 
-        return CreateEscapeRope();
+        return consumable;
     }
 
     public GameObject CreateRandomMoney(int level)

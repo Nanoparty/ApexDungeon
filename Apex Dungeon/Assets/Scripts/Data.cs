@@ -180,7 +180,6 @@ public static class Data
                 Consumable item = new Consumable(c);
                 if(item.image == null)
                 {
-                    Debug.Log(item.id);
                     item.image = il.getImage(item.id);
                 }
                 consumes.Add(item);

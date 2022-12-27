@@ -98,7 +98,7 @@ public class Enemy : MovingEntity
         return 50 + 50 * floor;
     }
 
-    public override void takeDamage(float d, Color c, bool critical = false){        
+    public override void takeDamage(float d, Color c, bool critical = false, bool canDodge = true){        
         int netDamage = (int)calculateDamageIn(d);
         if (critical)
         {
