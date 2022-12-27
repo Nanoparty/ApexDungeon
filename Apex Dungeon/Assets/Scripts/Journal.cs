@@ -544,6 +544,8 @@ public class Journal : ScriptableObject
     {
 
         GameObject mapArea = mapPanel.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject;
+        TMP_Text floorText = mapPanel.transform.GetChild(5).GetComponent<TMP_Text>();
+        floorText.SetText("Floor " + GameManager.gmInstance.level);
 
         mapRoot = GameObject.Instantiate(mapPrefab, new Vector3(0, 0, 0), Quaternion.identity);
         mapRoot.transform.SetParent(mapArea.transform, false);

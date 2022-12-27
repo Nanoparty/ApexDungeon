@@ -102,17 +102,17 @@ public class StatusEffect
             case EffectType.health_regen:
                 // Heal 10% max health
                 int healing = (int)(entity.getMaxHP() * 0.1);
-                entity.takeDamage(healing, textColor, canDodge = false);
+                entity.takeDamage(healing, textColor, false, false);
                 break;
             case EffectType.poison:
                 // Damage 10% max health
                 int poisonDamage = (int)(entity.getMaxHP() * 0.1);
-                entity.takeDamage(-poisonDamage, textColor,canDodge = false);
+                entity.takeDamage(-poisonDamage, textColor, false, false);
                 break;
             case EffectType.bleed:
                 // Damage 5% max health
                 int bleedDamage = (int)(entity.getMaxHP() * 0.05);
-                entity.takeDamage(-bleedDamage, textColor, canDodge = false);
+                entity.takeDamage(-bleedDamage, textColor, false, false);
                 break;
             //case EffectType.paralysis:
             //    // 50% chance to skip turn
