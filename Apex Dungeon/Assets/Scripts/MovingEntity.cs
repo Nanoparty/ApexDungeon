@@ -318,13 +318,8 @@ public abstract class MovingEntity : MonoBehaviour
     public virtual void AddStatusEffect(StatusEffect se)
     {
         statusEffects.Add(se);
-
         AddTextPopup(se.popupText, se.textColor);
         
-        //GameObject statusEffectText = GameObject.Instantiate(damageText, new Vector3(this.transform.position.x, this.transform.position.y, 0), Quaternion.identity);
-        //statusEffectText.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = $"{se.popupText}";
-        //statusEffectText.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().color = se.textColor;
-
         if (se.order == StatusEffect.EffectOrder.Status)
         {
             se.Activate(this);

@@ -49,7 +49,7 @@ public class StatusEffect
                 popupText = "HP Regen";
                 break;
             case EffectType.poison:
-                textColor = new Color(206f / 255f, 40f / 255f, 209f / 255f);
+                textColor = new Color(127f / 255f, 1f / 255f, 254f / 255f);
                 popupText = "Poison";
                 break;
             case EffectType.bleed:

@@ -376,7 +376,7 @@ public class Player : MovingEntity
         }
         if (Input.GetKeyDown("b"))
         {
-            AddStatusEffect(new StatusEffect(EffectType.defense_up, 5, EffectOrder.Status));
+            AddStatusEffect(new StatusEffect(EffectType.poison, 5, EffectOrder.End));
         }
         if (Input.GetKeyDown("n"))
         {
@@ -626,13 +626,13 @@ public class Player : MovingEntity
         {
             SoundManager.sm.PlayHitSound();
             moving = false;
-            AddTextPopup($"{d}", Color.red);
+            AddTextPopup($"{d}", c);
             SpawnBlood();
         }
         else
         {
             SoundManager.sm.PlayHealSound();
-            AddTextPopup($"+{d}", Color.green);
+            AddTextPopup($"+{d}", c);
         }
 
         if (hp <= 0)
