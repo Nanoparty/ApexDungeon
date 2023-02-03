@@ -380,7 +380,11 @@ public class Player : MovingEntity
         }
         if (Input.GetKeyDown("n"))
         {
-            AddStatusEffect(new StatusEffect(EffectType.defense_down, 5, EffectOrder.Status));
+            AddStatusEffect(new StatusEffect(EffectType.defense_down, 20, EffectOrder.Status));
+        }
+        if (Input.GetKeyDown("m"))
+        {
+            AddStatusEffect(new StatusEffect(EffectType.health_regen, 12, EffectOrder.End));
         }
     }
 

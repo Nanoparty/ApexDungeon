@@ -11,6 +11,7 @@ public class TitleManager : MonoBehaviour
     public Button LoadGame;
     public Button Scores;
     public Button Options;
+    public Button Quit;
     public ImageLookup imageLookup;
 
     public bool skipLoad;
@@ -29,6 +30,7 @@ public class TitleManager : MonoBehaviour
         LoadGame.onClick.AddListener(loadGameListener);
         Scores.onClick.AddListener(scoresListener);
         Options.onClick.AddListener(optionsListener);
+        Quit.onClick.AddListener(quitListener);
     }
 
     void newGameListener(){
@@ -49,6 +51,12 @@ public class TitleManager : MonoBehaviour
     void optionsListener(){
         SoundManager.sm.PlayMenuSound();
         SceneManager.LoadScene("Options", LoadSceneMode.Single);
+    }
+
+    void quitListener()
+    {
+        SoundManager.sm.PlayMenuSound();
+        Application.Quit();
     }
 
     public void OpenYoutube()
