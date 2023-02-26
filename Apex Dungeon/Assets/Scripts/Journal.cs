@@ -819,6 +819,7 @@ public class Journal : ScriptableObject
         GameObject skillName = textHolder1.transform.GetChild(0).gameObject;
         GameObject skillType = textHolder1.transform.GetChild(1).gameObject;
         GameObject skillDesc = modal1.transform.GetChild(1).gameObject;
+        GameObject skillRank = textHolder1.transform.GetChild(1).gameObject;
         useButton = tags1.transform.GetChild(0).gameObject;
         trashButton = tags1.transform.GetChild(1).gameObject;
         compareButton = tags1.transform.GetChild(2).gameObject;
@@ -828,10 +829,11 @@ public class Journal : ScriptableObject
         popup.transform.SetParent(journalRoot.transform, false);
         popupRoot = popup;
 
-        
         Skill i = skills[selected];
-        skillName.transform.gameObject.GetComponent<TMP_Text>().text = i.name;
+        skillName.transform.gameObject.GetComponent<TMP_Text>().text = i.skillName;
         skillDesc.transform.gameObject.GetComponent<TMP_Text>().text = i.description;
+        skillRank.transform.gameObject.GetComponent<TMP_Text>().text = "Range: " + i.range + "\nMP Cost: " + i.manaCost;
+
         itemFrame1.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = i.image;
 
         secondary.SetActive(false);

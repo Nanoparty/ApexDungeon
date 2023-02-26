@@ -43,7 +43,7 @@ public class Skill
     }
 
     public SkillType type;
-    public string name;
+    public string skillName;
     public string description;
     public Sprite image;
     public int manaCost;
@@ -53,7 +53,7 @@ public class Skill
     public Skill(SkillType type, string name, string description, Sprite image)
     {
         this.type = type;
-        this.name = name;
+        this.skillName = name;
         this.description = description;
         this.image = image;
 
