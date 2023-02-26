@@ -24,16 +24,18 @@ public class Journal : ScriptableObject
 
     private List<Consumable> items;
     private List<Equipment> equipment;
+    private List<Skill> skills;
     private PlayerGear gear;
 
     private GameObject[] invSlots;
     private GameObject[] equipSlots;
+    private GameObject[] skillSlots;
     private GameObject mapRoot;
     private GameObject journalRoot;
     private GameObject popupRoot;
     private GameObject useButton, trashButton, compareButton;
-    private GameObject charPanel, statusPanel, equipmentPanel, mapPanel, inventoryPanel, effectsPanel;
-    private Button inventoryTab, equipmentTab, mapTab, effectsTab, closeTab;
+    private GameObject charPanel, statusPanel, equipmentPanel, mapPanel, inventoryPanel, effectsPanel, skillsPanel;
+    private Button inventoryTab, equipmentTab, mapTab, effectsTab, skillsTab, closeTab;
     private Animator anim;
     private Sprite[] icons;
     
@@ -59,10 +61,15 @@ public class Journal : ScriptableObject
     [SerializeField] private RuntimeAnimatorController SwordsmanController;
     [SerializeField] private RuntimeAnimatorController PriestController;
 
+    [SerializeField] private SkillIcons skillIcons;
+
     private void OnEnable()
     {
         items = Data.consumables ?? new List<Consumable>();
         equipment = Data.equipment ?? new List<Equipment>();
+        skills = new List<Skill>();
+        Skill restore = new Skill(Skill.SkillType.Restore, "Restore", "Heals target 50% max health.", skillIcons.Restore);
+        skills.Add(restore);
         map = new int[100, 100];
         tab = 0;
         open = false;
@@ -93,13 +100,15 @@ public class Journal : ScriptableObject
         equipmentTab = journalRoot.transform.GetChild(0).transform.GetChild(1).gameObject.GetComponent<Button>();
         mapTab = journalRoot.transform.GetChild(0).transform.GetChild(2).gameObject.GetComponent<Button>();
         effectsTab = journalRoot.transform.GetChild(0).transform.GetChild(3).gameObject.GetComponent<Button>();
-        closeTab = journalRoot.transform.GetChild(0).transform.GetChild(4).gameObject.GetComponent<Button>();
+        skillsTab = journalRoot.transform.GetChild(0).transform.GetChild(4).gameObject.GetComponent<Button>();
+        closeTab = journalRoot.transform.GetChild(0).transform.GetChild(5).gameObject.GetComponent<Button>();
 
         inventoryTab.onClick.AddListener(itemListener);
         equipmentTab.onClick.AddListener(equipmentListener);
         mapTab.onClick.AddListener(mapListener);
         closeTab.onClick.AddListener(closeListener);
         effectsTab.onClick.AddListener(effectsListener);
+        skillsTab.onClick.AddListener(skillsListener);
 
         anim = journalRoot.GetComponent<Animator>();
 
@@ -155,6 +164,12 @@ public class Journal : ScriptableObject
                  || useButton.GetComponent<Clickable>().getClicked()
                  || trashButton.GetComponent<Clickable>().getClicked()
                  || compareButton.GetComponent<Clickable>().getClicked();
+            }
+            if (tab == 5)
+            {
+                isClicked = popupRoot.GetComponent<Clickable>().getClicked()
+                 || useButton.GetComponent<Clickable>().getClicked()
+                 || trashButton.GetComponent<Clickable>().getClicked();
             }
             if (isClicked)
             {
@@ -220,6 +235,20 @@ public class Journal : ScriptableObject
                         equipSlots[i].GetComponent<Clickable>().setClicked(false);
                         popupOpen = true;
                         createPopup();
+                        SoundManager.sm.PlayMenuSound();
+                    }
+                }
+            }
+            else if (tab == 5)
+            {
+                for (int i = 0; i < skills.Count; i++)
+                {
+                    if (skillSlots != null && skillSlots[i].GetComponent<Clickable>().getClicked())
+                    {
+                        selected = i;
+                        skillSlots[i].GetComponent<Clickable>().setClicked(false);
+                        popupOpen = true;
+                        createSkillPopup();
                         SoundManager.sm.PlayMenuSound();
                     }
                 }
@@ -332,18 +361,24 @@ public class Journal : ScriptableObject
         GameObject levelText = healthBanner.transform.GetChild(2).gameObject;
         GameObject hpBar = healthBanner.transform.GetChild(3).gameObject;
         GameObject expBar = healthBanner.transform.GetChild(4).gameObject;
+        GameObject mpBar = healthBanner.transform.GetChild(6).gameObject;
+        GameObject mpText = healthBanner.transform.GetChild(5).gameObject;
 
         int hp = player.getHP();
+        int mp = player.getMP();
         int exp = player.getExp();
         int maxHp = player.getMaxHP();
+        int maxMp = player.getMaxMP();
         int maxExp = player.getMaxExp();
 
         hpText.GetComponent<TMP_Text>().text = "HP: " + hp + "/" + maxHp;
+        mpText.GetComponent<TMP_Text>().text = "MP: " + mp + "/" + maxMp;
         expText.GetComponent<TMP_Text>().text = "EXP: " + exp + "/" + maxExp;
 
         levelText.transform.GetChild(1).transform.GetComponent<TMP_Text>().text = player.getExpLevel().ToString();
 
         GameObject redbar = hpBar.transform.GetChild(0).gameObject;
+        GameObject bluebar = mpBar.transform.GetChild(0).gameObject;
         GameObject greenbar = expBar.transform.GetChild(0).gameObject;
 
         Canvas canvas = GameObject.FindGameObjectWithTag("Canvas").GetComponent<Canvas>();
@@ -357,6 +392,15 @@ public class Journal : ScriptableObject
         float redStartingPos = hpBar.transform.GetChild(1).gameObject.transform.position.x;
         float redPos = redStartingPos - (redWidth - (((float)hp / (float)maxHp) * redWidth));
         redbar.transform.GetComponent<RectTransform>().position = new Vector3(redPos, pos1.y, pos1.z);
+
+        Vector2 blueSizeDelta = bluebar.transform.GetComponent<RectTransform>().sizeDelta;
+        Vector2 blueFinalScale = new Vector2(blueSizeDelta.x * canvasScale.x, blueSizeDelta.y * canvasScale.y);
+        float blueWidth = blueFinalScale.x * journalRoot.transform.GetComponent<RectTransform>().localScale.x;
+
+        Vector3 pos3 = bluebar.transform.position;
+        float blueStartingPos = mpBar.transform.GetChild(1).gameObject.transform.position.x;
+        float bluePos = blueStartingPos - (blueWidth - (((float)mp / (float)maxMp) * blueWidth));
+        bluebar.transform.GetComponent<RectTransform>().position = new Vector3(bluePos, pos3.y, pos3.z);
 
         Vector2 greenSizeDelta = greenbar.transform.GetComponent<RectTransform>().sizeDelta;
         Vector2 greenFinalScale = new Vector2(greenSizeDelta.x * canvasScale.x, greenSizeDelta.y * canvasScale.y);
@@ -428,17 +472,20 @@ public class Journal : ScriptableObject
         equipmentPanel = journalRoot.transform.GetChild(3).gameObject;
         mapPanel = journalRoot.transform.GetChild(4).gameObject;
         effectsPanel = journalRoot.transform.GetChild(5).gameObject;
+        skillsPanel = journalRoot.transform.GetChild(6).gameObject;
 
         statusPanel.SetActive(true);
         inventoryPanel.SetActive(false);
         equipmentPanel.SetActive(false);
         mapPanel.SetActive(false);
         effectsPanel.SetActive(false);
+        skillsPanel.SetActive(false);
 
         inventoryTab.transform.GetComponent<Image>().sprite = journalTabs[1];
         equipmentTab.transform.GetComponent<Image>().sprite = journalTabs[1];
         mapTab.transform.GetComponent<Image>().sprite = journalTabs[1];
         effectsTab.transform.GetComponent<Image>().sprite = journalTabs[1];
+        skillsTab.transform.GetComponent<Image>().sprite = journalTabs[1];
 
         if (tab == 0)
         {
@@ -460,6 +507,11 @@ public class Journal : ScriptableObject
             effectsPanel.SetActive(true);
             effectsTab.transform.GetComponent<Image>().sprite = journalTabs[0];
         }
+        else if (tab == 5)
+        {
+            skillsPanel.SetActive(true);
+            skillsTab.transform.GetComponent<Image>().sprite = journalTabs[0];
+        }
     }
 
     void populateTopicArea()
@@ -479,6 +531,10 @@ public class Journal : ScriptableObject
         else if (tab == 4)
         {
             populateEffects();
+        }
+        else if (tab == 5)
+        {
+            populateSkills();
         }
     }
 
@@ -638,6 +694,31 @@ public class Journal : ScriptableObject
         }
     }
 
+    void populateSkills()
+    {
+        GameObject slotsPanel = skillsPanel.transform.GetChild(0).gameObject;
+
+        int numSkills = skills.Count;
+
+        skillSlots = new GameObject[maxSlots];
+
+        for (int i = 0; i < maxSlots; i++)
+        {
+            skillSlots[i] = slotsPanel.transform.GetChild(i).gameObject;
+            if (i < numSkills)
+            {
+                Skill skill = skills[i];
+
+                skillSlots[i].transform.GetChild(0).gameObject.SetActive(true);
+                skillSlots[i].transform.GetChild(0).transform.GetComponent<Image>().sprite = skill.image;
+            }
+            else
+            {
+                skillSlots[i].transform.GetChild(0).gameObject.SetActive(false);
+            }
+        }
+    }
+
     private void createPopup()
     {
         Vector3 pos = new Vector3(0, 0, 0);
@@ -719,6 +800,48 @@ public class Journal : ScriptableObject
             compareButton.GetComponent<Button>().onClick.AddListener(compareListener);
         }
 
+    }
+
+    private void createSkillPopup()
+    {
+        Vector3 pos = new Vector3(0, 0, 0);
+        GameObject popup = GameObject.Instantiate(popupPrefab, pos, Quaternion.identity);
+        GameObject mainHolder = popup.transform.GetChild(0).gameObject;
+        GameObject confirmHolder = popup.transform.GetChild(1).gameObject;
+        confirmHolder.SetActive(false);
+
+        GameObject primary = mainHolder.transform.GetChild(0).gameObject;
+        GameObject modal1 = primary.transform.GetChild(0).gameObject;
+        GameObject tags1 = primary.transform.GetChild(1).gameObject;
+        GameObject top1 = modal1.transform.GetChild(0).gameObject;
+        GameObject itemFrame1 = top1.transform.GetChild(0).gameObject;
+        GameObject textHolder1 = top1.transform.GetChild(1).gameObject;
+        GameObject skillName = textHolder1.transform.GetChild(0).gameObject;
+        GameObject skillType = textHolder1.transform.GetChild(1).gameObject;
+        GameObject skillDesc = modal1.transform.GetChild(1).gameObject;
+        useButton = tags1.transform.GetChild(0).gameObject;
+        trashButton = tags1.transform.GetChild(1).gameObject;
+        compareButton = tags1.transform.GetChild(2).gameObject;
+
+        GameObject secondary = mainHolder.transform.GetChild(1).gameObject;
+
+        popup.transform.SetParent(journalRoot.transform, false);
+        popupRoot = popup;
+
+        
+        Skill i = skills[selected];
+        skillName.transform.gameObject.GetComponent<TMP_Text>().text = i.name;
+        skillDesc.transform.gameObject.GetComponent<TMP_Text>().text = i.description;
+        itemFrame1.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = i.image;
+
+        secondary.SetActive(false);
+        compareButton.SetActive(false);
+
+        useButton.GetComponent<Button>().onClick.AddListener(castSkillListener);
+        trashButton.GetComponent<Button>().onClick.AddListener(trashConfirmListener);
+       
+        useButton.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = "Use";
+        trashButton.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = "Forget";
     }
 
     void createGearPopup()
@@ -839,6 +962,7 @@ public class Journal : ScriptableObject
         equipmentPanel.SetActive(false);
         mapPanel.SetActive(false);
         effectsPanel.SetActive(false);
+        skillsPanel.SetActive(false);
 
         anim.Play(flipDirection(0));
         flipping = true;
@@ -856,6 +980,7 @@ public class Journal : ScriptableObject
         equipmentPanel.SetActive(false);
         mapPanel.SetActive(false);
         effectsPanel.SetActive(false);
+        skillsPanel.SetActive(false);
 
         anim.Play(flipDirection(1));
         flipping = true;
@@ -872,6 +997,7 @@ public class Journal : ScriptableObject
         equipmentPanel.SetActive(false);
         mapPanel.SetActive(false);
         effectsPanel.SetActive(false);
+        skillsPanel.SetActive(false);
 
         anim.Play(flipDirection(3));
         flipping = true;
@@ -888,11 +1014,28 @@ public class Journal : ScriptableObject
         inventoryPanel.SetActive(false);
         equipmentPanel.SetActive(false);
         mapPanel.SetActive(false);
+        skillsPanel.SetActive(false);
 
         anim.Play(flipDirection(4));
         flipping = true;
 
         tab = 4;
+    }
+
+    void skillsListener()
+    {
+        if (tab == 5) return;
+        SoundManager.sm.PlayPageTurn();
+
+        statusPanel.SetActive(false);
+        inventoryPanel.SetActive(false);
+        equipmentPanel.SetActive(false);
+        mapPanel.SetActive(false);
+
+        anim.Play(flipDirection(5));
+        flipping = true;
+
+        tab = 5;
     }
 
     void closeListener()
@@ -928,6 +1071,33 @@ public class Journal : ScriptableObject
         refreshTopicPanel();
         setPlayerStats();
     }
+
+    void castSkillListener()
+    {
+        SoundManager.sm.PlayMenuSound();
+        skills[selected].Activate(player, player);
+
+        // Set Active Skill, Close Journal, Open Grid Selection Mode
+
+        selected = -1;
+        GameObject.Destroy(popupRoot);
+        popupOpen = false;
+        refreshTopicPanel();
+        setPlayerStats();
+    }
+
+    void forgetSkillListener()
+    {
+        SoundManager.sm.PlayUnequipSound();
+        skills.RemoveAt(selected);
+        selected = -1;
+        GameObject.Destroy(popupRoot);
+        popupOpen = false;
+
+        refreshTopicPanel();
+        setPlayerStats();
+    }
+
     void equipListener()
     {
         SoundManager.sm.PlayEquipSound();
@@ -1117,6 +1287,10 @@ public class Journal : ScriptableObject
         if (tab == 1)
         {
             equipment.RemoveAt(selected);
+        }
+        if (tab == 5)
+        {
+            skills.RemoveAt(selected);
         }
 
         selected = -1;

@@ -463,6 +463,22 @@ public abstract class MovingEntity : MonoBehaviour
 
     public void setHP(int i){
         this.hp = i;
+        if (hp > maxHp) hp = maxHp;
+        if (hp < 0) hp = 0;
+    }
+
+    public void addHp(int i)
+    {
+        this.hp += i;
+        if (hp > maxHp) hp = maxHp;
+        if (hp < 0) hp = 0;
+    }
+
+    public void addMp(int i)
+    {
+        this.mp += i;
+        if (mp > maxMp) mp = maxMp;
+        if (mp < 0) mp = 0;
     }
 
     public void setPosition(int r, int c){
