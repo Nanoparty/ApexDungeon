@@ -262,16 +262,17 @@ public abstract class MovingEntity : MonoBehaviour
     public virtual void takeDamage(float change, Color color, bool critical = false, bool canDodge = true)
     {
         hp += (int)change;
+        change = Mathf.Floor(change);
 
         if (change < 0)
         {
             if (critical)
             {
-                AddTextPopup($"CRIT! {change}", color);
+                AddTextPopup($"CRIT! {(int)change}", color);
             }
             else
             {
-                AddTextPopup($"{change}", color);
+                AddTextPopup($"{(int)change}", color);
             }
             moving = false;
            
@@ -280,7 +281,7 @@ public abstract class MovingEntity : MonoBehaviour
         else
         {
             SoundManager.sm.PlayHealSound();
-            AddTextPopup($"+{change}", color);
+            AddTextPopup($"+{(int)change}", color);
         }
         
         if(hp <= 0)
@@ -477,6 +478,15 @@ public abstract class MovingEntity : MonoBehaviour
     public void addMp(int i)
     {
         this.mp += i;
+        if (i > 0)
+        {
+            AddTextPopup($"MP +{i}", ColorManager.MANA);
+        }
+        if (i < 0)
+        {
+            AddTextPopup($"MP {i}", ColorManager.MANA);
+        }
+
         if (mp > maxMp) mp = maxMp;
         if (mp < 0) mp = 0;
     }

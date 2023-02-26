@@ -1077,7 +1077,10 @@ public class Journal : ScriptableObject
     void castSkillListener()
     {
         SoundManager.sm.PlayMenuSound();
-        skills[selected].Activate(player, player);
+
+        player.activeSkill = skills[selected];
+        player.targetMode = true;
+        //skills[selected].Activate(player, player);
 
         // Set Active Skill, Close Journal, Open Grid Selection Mode
 
@@ -1086,6 +1089,8 @@ public class Journal : ScriptableObject
         popupOpen = false;
         refreshTopicPanel();
         setPlayerStats();
+
+        closeJournal();
     }
 
     void forgetSkillListener()

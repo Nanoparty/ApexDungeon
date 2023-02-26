@@ -23,6 +23,9 @@ public class Player : MovingEntity
     public GameObject journalButton;
     public GameObject pauseButton;
 
+    public GameObject tileHighlight;
+    public List<GameObject> targetTiles;
+
     private PlayerGear gear;
     private Animator animator;
     private SpriteLibrary sl;
@@ -43,6 +46,10 @@ public class Player : MovingEntity
     private bool turnEnd = false;
 
     public bool stairsOpen = false;
+    public bool targetMode = false;
+    private bool drawTargets = false;
+
+    public Skill activeSkill;
 
     [Header("Character Sprite Libraries")]
     [SerializeField] private SpriteLibraryAsset ArcherLibrary;
@@ -158,6 +165,7 @@ public class Player : MovingEntity
         animator = transform.GetChild(1).gameObject.transform.GetComponent<Animator>();
         sl = transform.GetChild(1).gameObject.GetComponent<SpriteLibrary>();
         gear = new PlayerGear();
+        targetTiles = new List<GameObject>();
 
         hpBar = GameObject.FindGameObjectWithTag("hpbar");
         mpBar = GameObject.FindGameObjectWithTag("mpbar");
@@ -282,6 +290,74 @@ public class Player : MovingEntity
 
         base.Update();
         checkMoving();
+
+        if (targetMode)
+        {
+            //draw tile highlights
+            if (!drawTargets)
+            {
+                drawTargets = true;
+                int range = activeSkill.range;
+                if (activeSkill.canTargetSelf)
+                {
+                    GameObject t = Instantiate(tileHighlight, transform.position, Quaternion.identity);
+                    targetTiles.Add(t);
+                }
+                for (int r = row - range; r <= row + range; r++)
+                {
+                    for (int c = col - range; c <= col + range; c++)
+                    {
+                        if (Mathf.Abs(row - r) + Mathf.Abs(col - c) <= range && GameManager.gmInstance.Dungeon.tileMap[r, c].getFloor())
+                        {
+                            GameObject t = Instantiate(tileHighlight, new Vector2(c, r), Quaternion.identity);
+                            targetTiles.Add(t);
+                        }
+                    }
+                }
+            }
+
+            Debug.Log("Checking targets");
+
+            //check for tile clicks
+            if (Input.GetButtonDown("Fire1"))
+            {
+                int clickRow = (int)GameManager.gmInstance.mRow;
+                int clickCol = (int)GameManager.gmInstance.mCol;
+                foreach (GameObject t in targetTiles)
+                {
+                    if (t.transform.position.y == clickRow && t.transform.position.x == clickCol)
+                    {
+                        Debug.Log("Target Clicked");
+                        if (clickCol == col && clickRow == row)
+                        {
+                            activeSkill.Activate(this, this);
+                        }
+                        else
+                        {
+                            Enemy e = GameManager.gmInstance.getEnemyAtLoc(clickRow, clickCol);
+                            if (e != null)
+                            {
+                                activeSkill.Activate(this, e);
+                            }
+                        }
+
+                        // Finish Casting
+                        targetMode = false;
+                        foreach (GameObject o in targetTiles)
+                        {
+                            Destroy(o);
+                        }
+                        targetTiles.Clear();
+                        activeSkill = null;
+                        drawTargets = false;
+                        return;
+                    }
+                }
+                
+            }
+            
+            return;
+        }
 
         if (Input.GetButtonDown("Fire1"))
         {

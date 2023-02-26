@@ -49,6 +49,7 @@ public class Skill
     public int manaCost;
     public int healthCost;
     public int range;
+    public bool canTargetSelf;
 
     public Skill(SkillType type, string name, string description, Sprite image)
     {
@@ -56,6 +57,7 @@ public class Skill
         this.skillName = name;
         this.description = description;
         this.image = image;
+        this.canTargetSelf = true;
 
         switch (type)
         {
@@ -65,7 +67,7 @@ public class Skill
                 break;
             case SkillType.Restore:
                 manaCost = 20;
-                range = 1;
+                range = 3;
                 break;
         }
     }
@@ -78,9 +80,10 @@ public class Skill
                 if (caster.getMP() < manaCost) return false;
 
                 float restoreAmount = target.getMaxHP() * 0.5f;
-                target.addHp((int)restoreAmount);
+                target.takeDamage(restoreAmount, ColorManager.HEAL);
                 caster.addMp(-manaCost);
                 return true;
+            case SkillType.Fireball:
                 break;
         }
 

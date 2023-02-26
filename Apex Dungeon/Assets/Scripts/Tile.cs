@@ -88,6 +88,15 @@ public class Tile
         return false;
     }
 
+    public bool getFloor()
+    {
+        if (type == 1 || type == 3)
+        {
+            return true;
+        }
+        return false;
+    }
+
     
 
     
