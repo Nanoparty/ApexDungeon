@@ -81,6 +81,7 @@ public class Player : MovingEntity
         }
 
         GameManager.gmInstance.gameStarted = true;
+        
     }
 
     void setInitialValues() {
@@ -101,6 +102,8 @@ public class Player : MovingEntity
         blockStat = 10;
         type = 1;
         gold = 0;
+
+        attackRange = 1;
 
         baseHp = 100;
         hp = baseHp + (int)((float)baseHp * 0.05f * (int)(defense * defenseScale));
@@ -454,7 +457,7 @@ public class Player : MovingEntity
         }
         if (Input.GetKeyDown("b"))
         {
-            AddStatusEffect(new StatusEffect(EffectType.poison, 5, EffectOrder.End));
+            AddStatusEffect(new StatusEffect(EffectType.burn, 5, EffectOrder.End));
         }
         if (Input.GetKeyDown("n"))
         {

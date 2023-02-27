@@ -9,7 +9,7 @@ public class Skill
     {
         //Attacks
         Fireball,
-        Snowball,
+        IceSpike,
         LightningBolt,
         PoisonJet,
         WhirlwindStrike,
@@ -60,6 +60,13 @@ public class Skill
     public int healthCost;
     public int range;
     public bool canTargetSelf;
+    public Sprite projectile;
+
+    public Skill(SkillType type, string name, string description, Sprite image, Sprite projectile)
+        : this(type, name, description, image)
+    {
+        this.projectile = projectile;
+    }
 
     public Skill(SkillType type, string name, string description, Sprite image)
     {
@@ -72,6 +79,16 @@ public class Skill
         switch (type)
         {
             case SkillType.Fireball:
+                manaCost = 10;
+                range = 3;
+                break;
+
+            case SkillType.IceSpike:
+                manaCost = 10;
+                range = 3;
+                break;
+
+            case SkillType.LightningBolt:
                 manaCost = 10;
                 range = 3;
                 break;
@@ -146,6 +163,21 @@ public class Skill
                 break;
 
             case SkillType.Fireball:
+                float damage = target.getMaxHP() * 0.2f;
+                target.takeDamage(-damage, ColorManager.FIRE);
+                target.AddStatusEffect(new StatusEffect(EffectType.burn, 5, EffectOrder.End));
+                break;
+
+            case SkillType.IceSpike:
+                damage = target.getMaxHP() * 0.2f;
+                target.takeDamage(-damage, ColorManager.ICE);
+                target.AddStatusEffect(new StatusEffect(EffectType.freeze, 5, EffectOrder.End));
+                break;
+
+            case SkillType.LightningBolt:
+                damage = target.getMaxHP() * 0.2f;
+                target.takeDamage(-damage, ColorManager.LIGHTNING);
+                target.AddStatusEffect(new StatusEffect(EffectType.electric, 5, EffectOrder.End));
                 break;
 
             case SkillType.Cleanse:
@@ -202,5 +234,10 @@ public class Skill
         }
 
         return true;
+    }
+
+    IEnumerator ShootProjectile()
+    {
+        yield return new WaitForSeconds(1);
     }
 }

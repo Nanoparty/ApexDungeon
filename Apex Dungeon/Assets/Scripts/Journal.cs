@@ -82,6 +82,9 @@ public class Journal : ScriptableObject
         Skill lifedrain = new Skill(Skill.SkillType.LifeDrain, "Restore", "Heals target 50% max health.", skillIcons.LifeDrain);
         Skill manadrain = new Skill(Skill.SkillType.ManaDrain, "Restore", "Heals target 50% max health.", skillIcons.ManaDrain);
 
+        Skill icespike = new Skill(Skill.SkillType.IceSpike, "Restore", "Heals target 50% max health.", skillIcons.IceSpike);
+        Skill lightningbolt = new Skill(Skill.SkillType.LightningBolt, "Restore", "Heals target 50% max health.", skillIcons.LightningBolt);
+
         skills.Add(restore);
         skills.Add(teleport);
         skills.Add(fireball);
@@ -94,6 +97,8 @@ public class Journal : ScriptableObject
         skills.Add(lacerate);
         skills.Add(lifedrain);
         skills.Add(manadrain);
+        skills.Add(icespike);
+        skills.Add(lightningbolt);
 
         map = new int[100, 100];
         tab = 0;

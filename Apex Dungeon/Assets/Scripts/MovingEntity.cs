@@ -26,6 +26,15 @@ public abstract class MovingEntity : MonoBehaviour
     protected int evade;
     protected int blockStat;
 
+    // Combat
+    protected int attackRange;
+
+    // Resistances
+    protected float fireResistance;
+    protected float iceResistance;
+    protected float lightningResistance;
+    protected float poisonResistance;
+
     protected float attackScale = 1f;
     protected float defenseScale = 1f;
     protected float strengthScale = 1f;

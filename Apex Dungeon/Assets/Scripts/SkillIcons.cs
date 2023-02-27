@@ -6,7 +6,7 @@ using UnityEngine;
 public class SkillIcons : ScriptableObject
 {
     public Sprite Fireball;
-    public Sprite Snowball;
+    public Sprite IceSpike;
     public Sprite LightningBolt;
     public Sprite PoisonJet;
     public Sprite Restore;

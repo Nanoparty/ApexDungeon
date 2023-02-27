@@ -12,6 +12,10 @@ public class StatusEffect
         poison,
         bleed,
         //paralysis,
+        burn,
+        freeze,
+        electric,
+        sleep,
         strength_up,
         defense_up,
         critical_up,
@@ -45,16 +49,28 @@ public class StatusEffect
         switch (effectId)
         {
             case EffectType.health_regen:
-                textColor = new Color(52f / 255f, 219f / 255f, 37f / 255f);
+                textColor = ColorManager.HEAL;
                 popupText = "HP Regen";
                 break;
             case EffectType.poison:
-                textColor = new Color(127f / 255f, 1f / 255f, 254f / 255f);
+                textColor = ColorManager.POISON;
                 popupText = "Poison";
                 break;
             case EffectType.bleed:
-                textColor = Color.red;
+                textColor = ColorManager.BLEED;
                 popupText = "Bleed";
+                break;
+            case EffectType.burn:
+                textColor = ColorManager.FIRE;
+                popupText = "Burn";
+                break;
+            case EffectType.freeze:
+                textColor = ColorManager.ICE;
+                popupText = "Freeze";
+                break;
+            case EffectType.electric:
+                textColor = ColorManager.LIGHTNING;
+                popupText = "Electrified";
                 break;
             //case EffectType.paralysis:
             //    textColor = Color.yellow;
@@ -113,6 +129,18 @@ public class StatusEffect
                 // Damage 5% max health
                 int bleedDamage = (int)(entity.getMaxHP() * 0.05);
                 entity.takeDamage(-bleedDamage, textColor, false, false);
+                break;
+            case EffectType.burn:
+                int burnDamage = (int)(entity.getMaxHP() * 0.05);
+                entity.takeDamage(-burnDamage, textColor, false, false);
+                break;
+            case EffectType.freeze:
+                int freezeDamage = (int)(entity.getMaxHP() * 0.05);
+                entity.takeDamage(-freezeDamage, textColor, false, false);
+                break;
+            case EffectType.electric:
+                int electricDamage = (int)(entity.getMaxHP() * 0.05);
+                entity.takeDamage(-electricDamage, textColor, false, false);
                 break;
             //case EffectType.paralysis:
             //    // 50% chance to skip turn
