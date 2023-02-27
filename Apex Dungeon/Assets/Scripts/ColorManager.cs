@@ -14,4 +14,7 @@ public static class ColorManager
     public static Color ICE = Color.cyan;
     public static Color MANA = Color.blue;
     public static Color SILENT = Color.grey;
+    public static Color INVISIBLE = Color.white;
+    public static Color ROOT = new Color(133f / 255f, 57f / 255f, 0f / 255f);
+    public static Color STEALTH = Color.gray;
 }

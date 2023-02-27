@@ -9,9 +9,9 @@ public class Skill
     {
         //Attacks
         Fireball,
-        IceSpike,
+        IceShard,
         LightningBolt,
-        PoisonJet,
+        PoisonSpike,
         WhirlwindStrike,
         Thrust,
         Bash,
@@ -29,6 +29,7 @@ public class Skill
         FlamePalm,
         IcePalm,
         StaticPalm,
+        PoisonPalm,
 
         //Status Effects
         Hypnosis,
@@ -81,20 +82,23 @@ public class Skill
             case SkillType.Fireball:
                 manaCost = 20;
                 range = 3;
+                canTargetSelf = false;
                 skillName = "Fireball";
                 description = "Cast fireball at target. Causes Burn.";
                 break;
 
-            case SkillType.IceSpike:
+            case SkillType.IceShard:
                 manaCost = 20;
                 range = 3;
-                skillName = "Ice Spike";
-                description = "Cast ice spike ata target. Causes Frostbite.";
+                canTargetSelf = false;
+                skillName = "Ice Shard";
+                description = "Cast ice shard at target. Causes Frostbite.";
                 break;
 
             case SkillType.LightningBolt:
                 manaCost = 20;
                 range = 3;
+                canTargetSelf = false;
                 skillName = "Lightning Bolt";
                 description = "Cast lightning bolt at target. Causes Electrified.";
                 break;
@@ -121,9 +125,16 @@ public class Skill
                 break;
 
             case SkillType.Lacerate:
+                manaCost = 10;
+                range = 1;
+                skillName = "Lacerate";
+                description = "Afflict target with bleeding.";
+                break;
+
+            case SkillType.BloodCurse:
                 manaCost = 20;
                 range = 3;
-                skillName = "Lacerate";
+                skillName = "Blood Curse";
                 description = "Afflict target with bleeding.";
                 break;
 
@@ -196,6 +207,155 @@ public class Skill
                 skillName = "Stun";
                 description = "Aflicts target with paralysis.";
                 break;
+
+            case SkillType.PoisonSpike:
+                manaCost = 20;
+                canTargetSelf = false;
+                range = 3;
+                skillName = "Poison Spike";
+                description = "Fires a poison spike at target. Inflicts poison.";
+                break;
+
+            case SkillType.WhirlwindStrike:
+                manaCost = 30;
+                range = 0;
+                skillName = "Whirlwind Strike";
+                description = "Attack all enemies within 1 tile.";
+                break;
+
+            case SkillType.Slash:
+                manaCost = 10;
+                range = 1;
+                canTargetSelf = false;
+                skillName = "Slash";
+                description = "Slash target with blade. Chance to bleed.";
+                break;
+
+            case SkillType.Scratch:
+                manaCost = 10;
+                range = 1;
+                canTargetSelf = false;
+                skillName = "Scratch";
+                description = "Scratch target with claws. Chance to bleed.";
+                break;
+
+            case SkillType.Pound:
+                manaCost = 10;
+                range = 1;
+                canTargetSelf = false;
+                skillName = "Pound";
+                description = "Pound target with body. Chance to cause paralysis.";
+                break;
+
+            case SkillType.Trap:
+                manaCost = 10;
+                range = 2;
+                canTargetSelf = false;
+                skillName = "Trap";
+                description = "Place a bear trap at target location.";
+                break;
+
+            case SkillType.FlamePalm:
+                manaCost = 10;
+                range = 1;
+                canTargetSelf = false;
+                skillName = "Flame Palm";
+                description = "Attack target with flaming strike. Causes burn.";
+                break;
+
+            case SkillType.IcePalm:
+                manaCost = 10;
+                range = 1;
+                canTargetSelf = false;
+                skillName = "Ice Palm";
+                description = "Attack target with freezing strike. Causes frostbite.";
+                break;
+
+            case SkillType.StaticPalm:
+                manaCost = 10;
+                range = 1;
+                canTargetSelf = false;
+                skillName = "Static Palm";
+                description = "Attack target with electric strike. Causes electrified.";
+                break;
+
+            case SkillType.PoisonPalm:
+                manaCost = 10;
+                range = 1;
+                canTargetSelf = false;
+                skillName = "Poison Palm";
+                description = "Attack target with poison strike. Causes poison.";
+                break;
+
+            case SkillType.MagicMissle:
+                manaCost = 5;
+                range = 3;
+                canTargetSelf = false;
+                skillName = "Magic Missile";
+                description = "Fire magical bolt at target.";
+                break;
+
+            case SkillType.Taunt:
+                manaCost = 5;
+                range = 5;
+                canTargetSelf = false;
+                skillName = "Taunt";
+                description = "Draw target's aggro.";
+                break;
+
+            case SkillType.Bind:
+                manaCost = 10;
+                range = 3;
+                skillName = "Bind";
+                description = "Lock's target in place.";
+                break;
+
+            case SkillType.Stealth:
+                manaCost = 10;
+                range = 0;
+                skillName = "Stealth";
+                description = "Reduces enemy aggro range.";
+                break;
+
+            case SkillType.Invisibility:
+                manaCost = 30;
+                range = 0;
+                skillName = "Invisibility";
+                description = "Prevents enemies from detecting caster. Effect is lost on attacking.";
+                break;
+
+            case SkillType.Bash:
+                manaCost = 20;
+                range = 1;
+                canTargetSelf = false;
+                skillName = "Bash";
+                description = "Bash target with weapon. Knocks target back 1 tile.";
+                break;
+
+            case SkillType.Headbutt:
+                manaCost = 20;
+                range = 1;
+                canTargetSelf = false;
+                skillName = "Headbutt";
+                description = "Ram target with your head and deal heavy damage. Inflicts recoil on user.";
+                break;
+
+            case SkillType.Thrust:
+                manaCost = 20;
+                range = 2;
+                canTargetSelf = false;
+                skillName = "Thrust";
+                description = "Thrust weapon at target.";
+                break;
+
+            case SkillType.Bite:
+                manaCost = 10;
+                range = 1;
+                canTargetSelf = false;
+                skillName = "Bite";
+                description = "Bite target. Chance to cause poison or bleed.";
+                break;
+
         }
     }
 
@@ -219,7 +379,7 @@ public class Skill
                 target.AddStatusEffect(new StatusEffect(EffectType.burn, 5, EffectOrder.End));
                 break;
 
-            case SkillType.IceSpike:
+            case SkillType.IceShard:
                 damage = target.getMaxHP() * 0.2f;
                 target.takeDamage(-damage, ColorManager.ICE);
                 target.AddStatusEffect(new StatusEffect(EffectType.freeze, 5, EffectOrder.End));
@@ -291,6 +451,122 @@ public class Skill
 
             case SkillType.Stun:
                 target.AddStatusEffect(new StatusEffect(EffectType.paralysis, 5, EffectOrder.Start));
+                break;
+
+            case SkillType.PoisonSpike:
+                damage = target.getMaxHP() * 0.2f;
+                target.takeDamage(-damage, ColorManager.POISON);
+                target.AddStatusEffect(new StatusEffect(EffectType.poison, 5, EffectOrder.End));
+                break;
+
+            case SkillType.WhirlwindStrike:
+                // Get all entities in circle of target
+
+                // Attack all entities
+
+                break;
+
+            case SkillType.Slash:
+                damage = target.getMaxHP() * 0.2f;
+                target.takeDamage(-damage, ColorManager.DAMAGE);
+                if (Random.Range(0, 100) <= 20)
+                    target.AddStatusEffect(new StatusEffect(EffectType.bleed, 5, EffectOrder.End));
+                break;
+
+            case SkillType.Scratch:
+                damage = target.getMaxHP() * 0.2f;
+                target.takeDamage(-damage, ColorManager.DAMAGE);
+                if (Random.Range(0, 100) <= 10)
+                    target.AddStatusEffect(new StatusEffect(EffectType.bleed, 5, EffectOrder.End));
+                break;
+
+            case SkillType.Bite:
+                damage = target.getMaxHP() * 0.2f;
+                target.takeDamage(-damage, ColorManager.DAMAGE);
+                if (Random.Range(0, 100) <= 10)
+                    target.AddStatusEffect(new StatusEffect(EffectType.bleed, 5, EffectOrder.End));
+                else if (Random.Range(0, 100) <= 10)
+                    target.AddStatusEffect(new StatusEffect(EffectType.poison, 5, EffectOrder.End));
+                break;
+
+            case SkillType.Pound:
+                damage = target.getMaxHP() * 0.2f;
+                target.takeDamage(-damage, ColorManager.DAMAGE);
+                if (Random.Range(0, 100) <= 10)
+                    target.AddStatusEffect(new StatusEffect(EffectType.paralysis, 5, EffectOrder.Start));
+                break;
+
+            case SkillType.Trap:
+                // Spawn trap
+                break;
+
+            case SkillType.FlamePalm:
+                damage = target.getMaxHP() * 0.2f;
+                target.takeDamage(-damage, ColorManager.DAMAGE);
+                target.AddStatusEffect(new StatusEffect(EffectType.burn, 5, EffectOrder.End));
+                break;
+
+            case SkillType.IcePalm:
+                damage = target.getMaxHP() * 0.2f;
+                target.takeDamage(-damage, ColorManager.DAMAGE);
+                target.AddStatusEffect(new StatusEffect(EffectType.freeze, 5, EffectOrder.End));
+                break;
+
+            case SkillType.StaticPalm:
+                damage = target.getMaxHP() * 0.2f;
+                target.takeDamage(-damage, ColorManager.DAMAGE);
+                target.AddStatusEffect(new StatusEffect(EffectType.electric, 5, EffectOrder.End));
+                break;
+
+            case SkillType.PoisonPalm:
+                damage = target.getMaxHP() * 0.2f;
+                target.takeDamage(-damage, ColorManager.DAMAGE);
+                target.AddStatusEffect(new StatusEffect(EffectType.poison, 5, EffectOrder.End));
+                break;
+
+            case SkillType.MagicMissle:
+                damage = target.getMaxHP() * 0.1f;
+                target.takeDamage(-damage, ColorManager.DAMAGE);
+                break;
+
+            case SkillType.Taunt:
+                target.agro = true;
+                break;
+
+            case SkillType.Bind:
+                // Root status effect
+                target.AddStatusEffect(new StatusEffect(EffectType.root, 5, EffectOrder.Status));
+                break;
+
+            case SkillType.Stealth:
+                // Stealth status effect
+                target.AddStatusEffect(new StatusEffect(EffectType.stealth, 5, EffectOrder.Status));
+                break;
+
+            case SkillType.Invisibility:
+                // Invisibility status effect
+                target.AddStatusEffect(new StatusEffect(EffectType.invisible, 5, EffectOrder.Status));
+                break;
+
+            case SkillType.Bash:
+                damage = target.getMaxHP() * 0.2f;
+                target.takeDamage(-damage, ColorManager.DAMAGE);
+                // Move target back 1 tile
+                break;
+
+            case SkillType.Headbutt:
+                damage = target.getMaxHP() * 0.4f;
+                target.takeDamage(-damage, ColorManager.DAMAGE);
+                caster.takeDamage(-((int)(caster.getMaxHP() * 0.1f)), ColorManager.DAMAGE);
+                break;
+
+            case SkillType.Thrust:
+                damage = target.getMaxHP() * 0.2f;
+                target.takeDamage(-damage, ColorManager.DAMAGE);
+                break;
+
+            case SkillType.BloodCurse:
+                target.AddStatusEffect(new StatusEffect(EffectType.bleed, 5, EffectOrder.End));
                 break;
 
             default: return false;

@@ -19,6 +19,9 @@ public class StatusEffectAlert : MonoBehaviour
     [SerializeField] private Sprite electric;
     [SerializeField] private Sprite sleep;
     [SerializeField] private Sprite silence;
+    [SerializeField] private Sprite root;
+    [SerializeField] private Sprite stealth;
+    [SerializeField] private Sprite invisible;
     [SerializeField] private Sprite strength_up;
     [SerializeField] private Sprite strength_down;
     [SerializeField] private Sprite defense_up;
@@ -60,6 +63,15 @@ public class StatusEffectAlert : MonoBehaviour
                 break;
             case EffectType.silence:
                 EffectIcon.sprite = silence;
+                break;
+            case EffectType.invisible:
+                EffectIcon.sprite = invisible;
+                break;
+            case EffectType.root:
+                EffectIcon.sprite = root;
+                break;
+            case EffectType.stealth:
+                EffectIcon.sprite = stealth;
                 break;
             case EffectType.strength_up:
                 EffectIcon.sprite = strength_up;

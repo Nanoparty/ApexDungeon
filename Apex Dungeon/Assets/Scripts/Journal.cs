@@ -81,7 +81,7 @@ public class Journal : ScriptableObject
         Skill fielddress = new Skill(Skill.SkillType.FieldDress, skillIcons.FieldDress);
         Skill lifedrain = new Skill(Skill.SkillType.LifeDrain, skillIcons.LifeDrain);
         Skill manadrain = new Skill(Skill.SkillType.ManaDrain, skillIcons.ManaDrain);
-        Skill icespike = new Skill(Skill.SkillType.IceSpike, skillIcons.IceSpike);
+        Skill icespike = new Skill(Skill.SkillType.IceShard, skillIcons.IceSpike);
         Skill lightningbolt = new Skill(Skill.SkillType.LightningBolt, skillIcons.LightningBolt);
         Skill Stun = new Skill(Skill.SkillType.Stun, skillIcons.Stun);
         Skill hypnosis = new Skill(Skill.SkillType.Hypnosis, skillIcons.Hypnosis);

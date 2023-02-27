@@ -23,6 +23,9 @@ public class StatusEffectCard : MonoBehaviour
     [SerializeField] private Sprite electric_sprite;
     [SerializeField] private Sprite sleep_sprite;
     [SerializeField] private Sprite silenced_sprite;
+    [SerializeField] private Sprite invisible_sprite;
+    [SerializeField] private Sprite stealth_sprite;
+    [SerializeField] private Sprite root_sprite;
 
     [SerializeField] private Sprite strength_up_sprite;
     [SerializeField] private Sprite strength_down_sprite;
@@ -75,6 +78,21 @@ public class StatusEffectCard : MonoBehaviour
                 effectName = "Sleep";
                 description = "Skip Turn Until Awake";
                 iconSprite = sleep_sprite;
+                break;
+            case EffectType.invisible:
+                effectName = "Invisible";
+                description = "Undetectable by enemies. Broken on attack.";
+                iconSprite = invisible_sprite;
+                break;
+            case EffectType.stealth:
+                effectName = "Stealth";
+                description = "Reduce enemy detection range.";
+                iconSprite = stealth_sprite;
+                break;
+            case EffectType.root:
+                effectName = "Root";
+                description = "Unable to move.";
+                iconSprite = root_sprite;
                 break;
             case EffectType.paralysis:
                 effectName = "Paralyzed";

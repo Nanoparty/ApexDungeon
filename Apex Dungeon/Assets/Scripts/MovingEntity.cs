@@ -37,6 +37,8 @@ public abstract class MovingEntity : MonoBehaviour
 
     // Active Effects
     public bool silenced;
+    public bool stealth;
+    public bool invisible;
 
     protected float attackScale = 1f;
     protected float defenseScale = 1f;
@@ -47,6 +49,9 @@ public abstract class MovingEntity : MonoBehaviour
     protected float blockScale = 1f;
 
     protected bool dead;
+
+    public bool agro;
+    public int agroRange;
 
     public List<StatusEffect> statusEffects;
 

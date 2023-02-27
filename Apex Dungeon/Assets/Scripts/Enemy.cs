@@ -8,14 +8,11 @@ public class Enemy : MovingEntity
     SpriteRenderer sr;
     SpriteRenderer healthBar;
 
-    int agroRange;
-
     private int pRow;
     private int pCol;
 
     Player player;
 
-    bool agro = false;
     bool pathFound = false;
 
     private Path path;
@@ -228,7 +225,13 @@ public class Enemy : MovingEntity
 
         boxCollider.enabled = false;
 
-        RaycastHit2D hit = Physics2D.Raycast(fromPosition, direction, agroRange);
+        if (player.invisible) return;
+
+        int effectiveAgroRange = agroRange;
+
+        if (player.stealth) effectiveAgroRange -= 1;
+
+        RaycastHit2D hit = Physics2D.Raycast(fromPosition, direction, effectiveAgroRange);
         if (hit.collider != null)
         {
             if (hit.collider.gameObject.tag.Equals("Player"))

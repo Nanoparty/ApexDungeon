@@ -17,6 +17,9 @@ public class StatusEffect
         freeze,
         electric,
         sleep,
+        stealth,
+        invisible,
+        root,
         strength_up,
         defense_up,
         critical_up,
@@ -84,6 +87,18 @@ public class StatusEffect
             case EffectType.silence:
                 textColor = ColorManager.SILENT;
                 popupText = "Silenced";
+                break;
+            case EffectType.invisible:
+                textColor = ColorManager.INVISIBLE;
+                popupText = "Invisible";
+                break;
+            case EffectType.stealth:
+                textColor = ColorManager.STEALTH;
+                popupText = "Stealth";
+                break;
+            case EffectType.root:
+                textColor = ColorManager.ROOT;
+                popupText = "Root";
                 break;
             case EffectType.strength_up:
                 textColor = Color.cyan;
@@ -164,6 +179,18 @@ public class StatusEffect
                 break;
             case EffectType.silence:
                 entity.AddTextPopup("Silenced", textColor);
+                entity.silenced = true;
+                break;
+            case EffectType.stealth:
+                entity.AddTextPopup("Stealth", textColor);
+                entity.stealth = true;
+                break;
+            case EffectType.invisible:
+                entity.AddTextPopup("Invisible", textColor);
+                entity.invisible = true;
+                break;
+            case EffectType.root:
+                entity.AddTextPopup("Rooted", textColor);
                 break;
             case EffectType.sleep:
                 entity.AddTextPopup("Sleep", textColor);
