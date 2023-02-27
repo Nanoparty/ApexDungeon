@@ -296,6 +296,19 @@ public class Player : MovingEntity
 
         if (targetMode)
         {
+            if (activeSkill == null)
+            {
+                targetMode = false;
+                return;
+            }
+            if (activeSkill.range == 0)
+            {
+                activeSkill.Activate(this, this);
+                targetMode = false;
+                activeSkill = null;
+                return;
+            }
+
             //draw tile highlights
             if (!drawTargets)
             {
@@ -312,6 +325,7 @@ public class Player : MovingEntity
                     {
                         if (Mathf.Abs(row - r) + Mathf.Abs(col - c) <= range && GameManager.gmInstance.Dungeon.tileMap[r, c].getFloor())
                         {
+                            if (!activeSkill.canTargetSelf) continue;
                             GameObject t = Instantiate(tileHighlight, new Vector2(c, r), Quaternion.identity);
                             targetTiles.Add(t);
                         }

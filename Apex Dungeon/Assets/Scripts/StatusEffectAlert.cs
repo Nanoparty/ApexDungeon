@@ -18,6 +18,7 @@ public class StatusEffectAlert : MonoBehaviour
     [SerializeField] private Sprite freeze;
     [SerializeField] private Sprite electric;
     [SerializeField] private Sprite sleep;
+    [SerializeField] private Sprite silence;
     [SerializeField] private Sprite strength_up;
     [SerializeField] private Sprite strength_down;
     [SerializeField] private Sprite defense_up;
@@ -54,9 +55,12 @@ public class StatusEffectAlert : MonoBehaviour
             case EffectType.sleep:
                 EffectIcon.sprite = sleep;
                 break;
-            //case EffectType.paralysis:
-            //    EffectIcon.sprite = paralysis;
-            //    break;
+            case EffectType.paralysis:
+                EffectIcon.sprite = paralysis;
+                break;
+            case EffectType.silence:
+                EffectIcon.sprite = silence;
+                break;
             case EffectType.strength_up:
                 EffectIcon.sprite = strength_up;
                 break;

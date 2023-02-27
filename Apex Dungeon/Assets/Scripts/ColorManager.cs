@@ -13,4 +13,5 @@ public static class ColorManager
     public static Color FIRE = new Color(255f / 255f, 135f / 255f, 23f / 255f);
     public static Color ICE = Color.cyan;
     public static Color MANA = Color.blue;
+    public static Color SILENT = Color.grey;
 }

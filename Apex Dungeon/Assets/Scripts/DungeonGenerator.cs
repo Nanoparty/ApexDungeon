@@ -596,21 +596,40 @@ public class DungeonGenerator : ScriptableObject
             int tries = 0;
             int row = 0;
             int col = 0;
-            while(!valid && tries < 10)
+            int numEnemies;
+            int eCoin = Random.Range(0, 100);
+            if (eCoin <= 20)
             {
-                tries++;
-                row = Random.Range(room.row + 1, room.row + room.height - 2);
-                col = Random.Range(room.col + 1, room.col + room.width - 2);
-                if (!tileMap[row, col].getOccupied())
+                numEnemies = 3;
+            }else if (eCoin <= 50)
+            {
+                numEnemies = 2;
+            }
+            else
+            {
+                numEnemies = 1;
+            }
+            for (int e = 0; e < numEnemies; e++)
+            {
+                while (!valid && tries < 10)
                 {
-                    valid = true;
+                    tries++;
+                    row = Random.Range(room.row + 1, room.row + room.height - 2);
+                    col = Random.Range(room.col + 1, room.col + room.width - 2);
+                    if (!tileMap[row, col].getOccupied())
+                    {
+                        valid = true;
+                    }
                 }
+                if (valid)
+                {
+                    InstantiateRandom(currentBiome.enemies, row, col, enemyContainer);
+                    tileMap[row, col].occupied = 2;
+                }
+                valid = false;
+                tries = 0;
             }
-            if (valid)
-            {
-                InstantiateRandom(currentBiome.enemies, row, col, enemyContainer);
-                tileMap[row, col].occupied = 2;
-            }
+            
             
         }
         

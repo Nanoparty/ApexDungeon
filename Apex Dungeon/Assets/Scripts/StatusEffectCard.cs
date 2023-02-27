@@ -22,6 +22,7 @@ public class StatusEffectCard : MonoBehaviour
     [SerializeField] private Sprite freeze_sprite;
     [SerializeField] private Sprite electric_sprite;
     [SerializeField] private Sprite sleep_sprite;
+    [SerializeField] private Sprite silenced_sprite;
 
     [SerializeField] private Sprite strength_up_sprite;
     [SerializeField] private Sprite strength_down_sprite;
@@ -75,11 +76,16 @@ public class StatusEffectCard : MonoBehaviour
                 description = "Skip Turn Until Awake";
                 iconSprite = sleep_sprite;
                 break;
-            //case EffectType.paralysis:
-            //    effectName = "Paralyzed";
-            //    description = "50% Chance to Skip Turn";
-            //    iconSprite = paralysis_sprite;
-            //    break;
+            case EffectType.paralysis:
+                effectName = "Paralyzed";
+                description = "50% Chance to Skip Turn";
+                iconSprite = paralysis_sprite;
+                break;
+            case EffectType.silence:
+                effectName = "Silenced";
+                description = "Cannot Use Skills";
+                iconSprite = silenced_sprite;
+                break;
             case EffectType.strength_up:
                 effectName = "Strength Up";
                 description = "Strength Increased by 10%";

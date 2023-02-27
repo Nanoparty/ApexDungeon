@@ -35,6 +35,9 @@ public abstract class MovingEntity : MonoBehaviour
     protected float lightningResistance;
     protected float poisonResistance;
 
+    // Active Effects
+    public bool silenced;
+
     protected float attackScale = 1f;
     protected float defenseScale = 1f;
     protected float strengthScale = 1f;

@@ -20,4 +20,7 @@ public class SkillIcons : ScriptableObject
     public Sprite FieldDress;
     public Sprite LifeDrain;
     public Sprite ManaDrain;
+    public Sprite Hypnosis;
+    public Sprite Silence;
+    public Sprite Stun;
 }

@@ -62,90 +62,139 @@ public class Skill
     public bool canTargetSelf;
     public Sprite projectile;
 
-    public Skill(SkillType type, string name, string description, Sprite image, Sprite projectile)
-        : this(type, name, description, image)
+    public Skill(SkillType type, Sprite image, Sprite projectile)
+        : this(type, image)
     {
         this.projectile = projectile;
     }
 
-    public Skill(SkillType type, string name, string description, Sprite image)
+    public Skill(SkillType type, Sprite image)
     {
         this.type = type;
-        this.skillName = name;
-        this.description = description;
+        //this.skillName = name;
+        //this.description = description;
         this.image = image;
         this.canTargetSelf = true;
 
         switch (type)
         {
             case SkillType.Fireball:
-                manaCost = 10;
+                manaCost = 20;
                 range = 3;
+                skillName = "Fireball";
+                description = "Cast fireball at target. Causes Burn.";
                 break;
 
             case SkillType.IceSpike:
-                manaCost = 10;
+                manaCost = 20;
                 range = 3;
+                skillName = "Ice Spike";
+                description = "Cast ice spike ata target. Causes Frostbite.";
                 break;
 
             case SkillType.LightningBolt:
-                manaCost = 10;
+                manaCost = 20;
                 range = 3;
+                skillName = "Lightning Bolt";
+                description = "Cast lightning bolt at target. Causes Electrified.";
                 break;
 
             case SkillType.Restore:
-                manaCost = 20;
-                range = 3;
+                manaCost = 30;
+                range = 0;
+                skillName = "Restore";
+                description = "Heal target for 50% max HP.";
                 break;
 
             case SkillType.Cleanse:
                 manaCost = 20;
-                range = 3;
+                range = 0;
+                skillName = "Cleanse";
+                description = "Cleanse target of all status effects.";
                 break;
 
             case SkillType.Plague:
                 manaCost = 20;
                 range = 3;
+                skillName = "Plague";
+                description = "Afflict target with poison.";
                 break;
 
             case SkillType.Lacerate:
                 manaCost = 20;
                 range = 3;
+                skillName = "Lacerate";
+                description = "Afflict target with bleeding.";
                 break;
 
             case SkillType.Bless:
                 manaCost = 20;
-                range = 3;
+                range = 0;
+                skillName = "Bless";
+                description = "Grant target health regeneration.";
                 break;
 
             case SkillType.Teleport:
-                manaCost = 20;
+                manaCost = 30;
                 range = 3;
+                skillName = "Teleport";
+                description = "Teleport target to random location on floor.";
                 break;
 
             case SkillType.ArmorPolish:
-                manaCost = 20;
-                range = 3;
+                manaCost = 10;
+                range = 0;
+                skillName = "Armor Polish";
+                description = "Increase target defense.";
                 break;
 
             case SkillType.Berserk:
-                manaCost = 20;
-                range = 3;
+                manaCost = 10;
+                range = 0;
+                skillName = "Berserk";
+                description = "Increase target attack.";
                 break;
 
             case SkillType.FieldDress:
-                manaCost = 20;
-                range = 3;
+                manaCost = 10;
+                range = 0;
+                skillName = "Field Dress";
+                description = "Heal target by 20% of max HP.";
                 break;
 
             case SkillType.LifeDrain:
-                manaCost = 20;
-                range = 3;
+                manaCost = 30;
+                range = 1;
+                skillName = "Life Drain";
+                description = "Absorb HP from target.";
                 break;
 
             case SkillType.ManaDrain:
-                manaCost = 20;
-                range = 3;
+                manaCost = 0;
+                range = 1;
+                skillName = "Mana Drain";
+                description = "Absorb MP from target.";
+                break;
+
+            case SkillType.Hypnosis:
+                manaCost = 30;
+                range = 1;
+                skillName = "Hypnosis";
+                description = "Puts target to sleep.";
+                break;
+
+            case SkillType.Silence:
+                manaCost = 10;
+                range = 2;
+                skillName = "Silence";
+                description = "Prevents target from using skills.";
+                break;
+
+            case SkillType.Stun:
+                manaCost = 10;
+                range = 2;
+                skillName = "Stun";
+                description = "Aflicts target with paralysis.";
                 break;
         }
     }
@@ -153,6 +202,8 @@ public class Skill
     public bool Activate(MovingEntity caster, MovingEntity target)
     {
         if (caster.getMP() < manaCost) return false;
+        if (caster.silenced) return false;
+
         caster.addMp(-manaCost);
 
         switch (type)
@@ -228,6 +279,18 @@ public class Skill
                 amount = target.getMaxMP() * 0.2f;
                 target.addMp((int)-amount);
                 caster.addMp((int)amount);
+                break;
+
+            case SkillType.Hypnosis:
+                target.AddStatusEffect(new StatusEffect(EffectType.sleep, 3, EffectOrder.Start));
+                break;
+
+            case SkillType.Silence:
+                target.AddStatusEffect(new StatusEffect(EffectType.silence, 5, EffectOrder.Status));
+                break;
+
+            case SkillType.Stun:
+                target.AddStatusEffect(new StatusEffect(EffectType.paralysis, 5, EffectOrder.Start));
                 break;
 
             default: return false;

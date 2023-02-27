@@ -11,7 +11,8 @@ public class StatusEffect
         health_regen,
         poison,
         bleed,
-        //paralysis,
+        silence,
+        paralysis,
         burn,
         freeze,
         electric,
@@ -72,10 +73,18 @@ public class StatusEffect
                 textColor = ColorManager.LIGHTNING;
                 popupText = "Electrified";
                 break;
-            //case EffectType.paralysis:
-            //    textColor = Color.yellow;
-            //    popupText = "Paralysis";
-            //    break;
+            case EffectType.paralysis:
+                textColor = Color.yellow;
+                popupText = "Paralysis";
+                break;
+            case EffectType.sleep:
+                textColor = ColorManager.SLEEP;
+                popupText = "Sleep";
+                break;
+            case EffectType.silence:
+                textColor = ColorManager.SILENT;
+                popupText = "Silenced";
+                break;
             case EffectType.strength_up:
                 textColor = Color.cyan;
                 popupText = "Strength Up";
@@ -142,17 +151,23 @@ public class StatusEffect
                 int electricDamage = (int)(entity.getMaxHP() * 0.05);
                 entity.takeDamage(-electricDamage, textColor, false, false);
                 break;
-            //case EffectType.paralysis:
-            //    // 50% chance to skip turn
-            //    float r = Random.Range(0f, 1f);
-            //    Debug.Log("COIN: " + r);
-            //    if (r > 0.5f)
-            //    {
-            //        Debug.Log("ZAP");
-            //        entity.AddTextPopup("Paralyzed", textColor);
-            //        entity.SkipTurn();
-            //    }
-            //    break;
+            case EffectType.paralysis:
+                // 50% chance to skip turn
+                float r = Random.Range(0f, 1f);
+                //Debug.Log("COIN: " + r);
+                if (r > 0.5f)
+                {
+                    //Debug.Log("ZAP");
+                    entity.AddTextPopup("Paralyzed", textColor);
+                    //entity.SkipTurn();
+                }
+                break;
+            case EffectType.silence:
+                entity.AddTextPopup("Silenced", textColor);
+                break;
+            case EffectType.sleep:
+                entity.AddTextPopup("Sleep", textColor);
+                break;
             case EffectType.strength_up:
                 // Increase player strength by 10%
                 entity.setStrengthScale(entity.getStrengthScale() + 0.1f);

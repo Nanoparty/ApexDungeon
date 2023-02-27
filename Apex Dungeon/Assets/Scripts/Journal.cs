@@ -69,21 +69,23 @@ public class Journal : ScriptableObject
         equipment = Data.equipment ?? new List<Equipment>();
         skills = new List<Skill>();
 
-        Skill restore = new Skill(Skill.SkillType.Restore, "Restore", "Heals target 50% max health.", skillIcons.Restore);
-        Skill cleanse = new Skill(Skill.SkillType.Cleanse, "Restore", "Heals target 50% max health.", skillIcons.Cleanse);
-        Skill plague = new Skill(Skill.SkillType.Plague, "Restore", "Heals target 50% max health.", skillIcons.Plague);
-        Skill lacerate = new Skill(Skill.SkillType.Lacerate, "Restore", "Heals target 50% max health.", skillIcons.Lacerate);
-        Skill bless = new Skill(Skill.SkillType.Bless, "Restore", "Heals target 50% max health.", skillIcons.Bless);
-        Skill teleport = new Skill(Skill.SkillType.Teleport, "Restore", "Heals target 50% max health.", skillIcons.Teleport);
-        Skill fireball = new Skill(Skill.SkillType.Fireball, "Restore", "Heals target 50% max health.", skillIcons.Fireball);
-        Skill armorpolish = new Skill(Skill.SkillType.ArmorPolish, "Restore", "Heals target 50% max health.", skillIcons.ArmorPolish);
-        Skill berserk = new Skill(Skill.SkillType.Berserk, "Restore", "Heals target 50% max health.", skillIcons.Berserk);
-        Skill fielddress = new Skill(Skill.SkillType.FieldDress, "Restore", "Heals target 50% max health.", skillIcons.FieldDress);
-        Skill lifedrain = new Skill(Skill.SkillType.LifeDrain, "Restore", "Heals target 50% max health.", skillIcons.LifeDrain);
-        Skill manadrain = new Skill(Skill.SkillType.ManaDrain, "Restore", "Heals target 50% max health.", skillIcons.ManaDrain);
-
-        Skill icespike = new Skill(Skill.SkillType.IceSpike, "Restore", "Heals target 50% max health.", skillIcons.IceSpike);
-        Skill lightningbolt = new Skill(Skill.SkillType.LightningBolt, "Restore", "Heals target 50% max health.", skillIcons.LightningBolt);
+        Skill restore = new Skill(Skill.SkillType.Restore, skillIcons.Restore);
+        Skill cleanse = new Skill(Skill.SkillType.Cleanse,  skillIcons.Cleanse);
+        Skill plague = new Skill(Skill.SkillType.Plague,  skillIcons.Plague);
+        Skill lacerate = new Skill(Skill.SkillType.Lacerate, skillIcons.Lacerate);
+        Skill bless = new Skill(Skill.SkillType.Bless, skillIcons.Bless);
+        Skill teleport = new Skill(Skill.SkillType.Teleport, skillIcons.Teleport);
+        Skill fireball = new Skill(Skill.SkillType.Fireball, skillIcons.Fireball);
+        Skill armorpolish = new Skill(Skill.SkillType.ArmorPolish, skillIcons.ArmorPolish);
+        Skill berserk = new Skill(Skill.SkillType.Berserk, skillIcons.Berserk);
+        Skill fielddress = new Skill(Skill.SkillType.FieldDress, skillIcons.FieldDress);
+        Skill lifedrain = new Skill(Skill.SkillType.LifeDrain, skillIcons.LifeDrain);
+        Skill manadrain = new Skill(Skill.SkillType.ManaDrain, skillIcons.ManaDrain);
+        Skill icespike = new Skill(Skill.SkillType.IceSpike, skillIcons.IceSpike);
+        Skill lightningbolt = new Skill(Skill.SkillType.LightningBolt, skillIcons.LightningBolt);
+        Skill Stun = new Skill(Skill.SkillType.Stun, skillIcons.Stun);
+        Skill hypnosis = new Skill(Skill.SkillType.Hypnosis, skillIcons.Hypnosis);
+        Skill silence = new Skill(Skill.SkillType.Silence, skillIcons.Silence);
 
         skills.Add(restore);
         skills.Add(teleport);
@@ -99,6 +101,9 @@ public class Journal : ScriptableObject
         skills.Add(manadrain);
         skills.Add(icespike);
         skills.Add(lightningbolt);
+        skills.Add(Stun); 
+        skills.Add(hypnosis);
+        skills.Add(silence);
 
         map = new int[100, 100];
         tab = 0;
@@ -1110,9 +1115,6 @@ public class Journal : ScriptableObject
 
         player.activeSkill = skills[selected];
         player.targetMode = true;
-        //skills[selected].Activate(player, player);
-
-        // Set Active Skill, Close Journal, Open Grid Selection Mode
 
         selected = -1;
         GameObject.Destroy(popupRoot);
