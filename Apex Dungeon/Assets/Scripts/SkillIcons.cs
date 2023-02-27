@@ -6,5 +6,18 @@ using UnityEngine;
 public class SkillIcons : ScriptableObject
 {
     public Sprite Fireball;
+    public Sprite Snowball;
+    public Sprite LightningBolt;
+    public Sprite PoisonJet;
     public Sprite Restore;
+    public Sprite Cleanse;
+    public Sprite Plague;
+    public Sprite Lacerate;
+    public Sprite Bless;
+    public Sprite Teleport;
+    public Sprite ArmorPolish;
+    public Sprite Berserk;
+    public Sprite FieldDress;
+    public Sprite LifeDrain;
+    public Sprite ManaDrain;
 }
