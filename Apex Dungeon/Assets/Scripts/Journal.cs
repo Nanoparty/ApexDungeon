@@ -86,6 +86,17 @@ public class Journal : ScriptableObject
         Skill Stun = new Skill(Skill.SkillType.Stun, skillIcons.Stun);
         Skill hypnosis = new Skill(Skill.SkillType.Hypnosis, skillIcons.Hypnosis);
         Skill silence = new Skill(Skill.SkillType.Silence, skillIcons.Silence);
+        Skill poisonspike = new Skill(Skill.SkillType.PoisonSpike, skillIcons.PoisonJet);
+        Skill whirlwind = new Skill(Skill.SkillType.WhirlwindStrike, skillIcons.WhirlwindStrike);
+        Skill thrust = new Skill(Skill.SkillType.Thrust, skillIcons.Thrust);
+        Skill bash = new Skill(Skill.SkillType.Bash, skillIcons.Bash);
+        Skill stomp = new Skill(Skill.SkillType.Stomp, skillIcons.Stomp);
+        Skill bite = new Skill(Skill.SkillType.Bite, skillIcons.Bite);
+        Skill slash = new Skill(Skill.SkillType.Slash, skillIcons.Slash);
+        Skill scratch = new Skill(Skill.SkillType.Scratch, skillIcons.Scratch);
+        Skill pound = new Skill(Skill.SkillType.Pound, skillIcons.Pound);
+        Skill headbutt = new Skill(Skill.SkillType.Headbutt, skillIcons.Headbutt);
+        Skill trap = new Skill(Skill.SkillType.Trap, skillIcons.Trap, skillIcons.BearTrap);
 
         skills.Add(restore);
         skills.Add(teleport);
@@ -104,6 +115,17 @@ public class Journal : ScriptableObject
         skills.Add(Stun); 
         skills.Add(hypnosis);
         skills.Add(silence);
+        skills.Add(poisonspike);
+        skills.Add(whirlwind);
+        skills.Add(thrust);
+        skills.Add(bash);
+        skills.Add(stomp);
+        skills.Add(bite);
+        skills.Add(slash);
+        //skills.Add(pound);
+        //skills.Add(scratch);
+        //skills.Add(headbutt);
+        skills.Add(trap);
 
         map = new int[100, 100];
         tab = 0;

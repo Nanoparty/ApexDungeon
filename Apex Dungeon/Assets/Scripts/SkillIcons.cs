@@ -44,5 +44,5 @@ public class SkillIcons : ScriptableObject
     public Sprite Taunt;
     public Sprite Invisibility;
 
-
+    public GameObject BearTrap;
 }

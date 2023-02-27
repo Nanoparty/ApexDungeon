@@ -61,12 +61,20 @@ public class Skill
     public int healthCost;
     public int range;
     public bool canTargetSelf;
+    public bool canTargetLocation;
     public Sprite projectile;
+    public GameObject spawn;
 
     public Skill(SkillType type, Sprite image, Sprite projectile)
         : this(type, image)
     {
         this.projectile = projectile;
+    }
+
+    public Skill(SkillType type, Sprite image, GameObject spawn)
+        : this(type, image)
+    {
+        this.spawn = spawn;
     }
 
     public Skill(SkillType type, Sprite image)
@@ -226,7 +234,7 @@ public class Skill
             case SkillType.Slash:
                 manaCost = 10;
                 range = 1;
-                canTargetSelf = false;
+                canTargetSelf = true;
                 skillName = "Slash";
                 description = "Slash target with blade. Chance to bleed.";
                 break;
@@ -251,6 +259,7 @@ public class Skill
                 manaCost = 10;
                 range = 2;
                 canTargetSelf = false;
+                canTargetLocation = true;
                 skillName = "Trap";
                 description = "Place a bear trap at target location.";
                 break;
@@ -356,13 +365,34 @@ public class Skill
                 description = "Bite target. Chance to cause poison or bleed.";
                 break;
 
+            case SkillType.Stomp:
+                manaCost = 10;
+                range = 1;
+                canTargetSelf = false;
+                skillName = "Stomp";
+                description = "Stomp on target. Chance to cause paralysis.";
+                break;
+
         }
     }
 
-    public bool Activate(MovingEntity caster, MovingEntity target)
+    public bool Activate(MovingEntity caster, int row, int col)
     {
         if (caster.getMP() < manaCost) return false;
         if (caster.silenced) return false;
+
+        MovingEntity target = null;
+
+        if (caster.getRow() == row && caster.getCol() == col) {
+            target = caster;
+        }
+        else {
+            Enemy e = GameManager.gmInstance.getEnemyAtLoc(row, col);
+            if (e != null) { target = (MovingEntity) e; }
+        }
+
+        if (target == null && !canTargetLocation) return false;
+         
 
         caster.addMp(-manaCost);
 
@@ -480,6 +510,13 @@ public class Skill
                     target.AddStatusEffect(new StatusEffect(EffectType.bleed, 5, EffectOrder.End));
                 break;
 
+            case SkillType.Stomp:
+                damage = target.getMaxHP() * 0.2f;
+                target.takeDamage(-damage, ColorManager.DAMAGE);
+                if (Random.Range(0, 100) <= 10)
+                    target.AddStatusEffect(new StatusEffect(EffectType.paralysis, 5, EffectOrder.End));
+                break;
+
             case SkillType.Bite:
                 damage = target.getMaxHP() * 0.2f;
                 target.takeDamage(-damage, ColorManager.DAMAGE);
@@ -498,6 +535,8 @@ public class Skill
 
             case SkillType.Trap:
                 // Spawn trap
+                GameObject o = caster.SpawnObject(spawn, new Vector2(col, row));
+                o.GetComponent<Trap>().Setup(row, col, GameManager.gmInstance.level);
                 break;
 
             case SkillType.FlamePalm:

@@ -216,6 +216,7 @@ MonoBehaviour:
   EffectIcon: {fileID: 767936313763539295}
   DurationText: {fileID: 4777302082528110035}
   hp_regen: {fileID: 1563328437, guid: 5079d4817188ef9498ac3620dd01b258, type: 3}
+  mp_regen: {fileID: -1521263864, guid: 5079d4817188ef9498ac3620dd01b258, type: 3}
   poison: {fileID: -1790990910, guid: 5079d4817188ef9498ac3620dd01b258, type: 3}
   bleed: {fileID: -783744813, guid: 5079d4817188ef9498ac3620dd01b258, type: 3}
   paralysis: {fileID: -1595422613, guid: 5079d4817188ef9498ac3620dd01b258, type: 3}
@@ -224,6 +225,9 @@ MonoBehaviour:
   electric: {fileID: 21300000, guid: 5ed085eaf8b0fd4458bcb732e94bcb04, type: 3}
   sleep: {fileID: -1928755906, guid: eae641d9c99be75469ddc61bed45c7ff, type: 3}
   silence: {fileID: -285143102, guid: eae641d9c99be75469ddc61bed45c7ff, type: 3}
+  root: {fileID: -578755079, guid: eae641d9c99be75469ddc61bed45c7ff, type: 3}
+  stealth: {fileID: -992765096, guid: eae641d9c99be75469ddc61bed45c7ff, type: 3}
+  invisible: {fileID: 1025819848, guid: eae641d9c99be75469ddc61bed45c7ff, type: 3}
   strength_up: {fileID: 2117263783, guid: 5079d4817188ef9498ac3620dd01b258, type: 3}
   strength_down: {fileID: 322054386, guid: 5079d4817188ef9498ac3620dd01b258, type: 3}
   defense_up: {fileID: -1092040369, guid: 5079d4817188ef9498ac3620dd01b258, type: 3}
@@ -368,9 +372,9 @@ RectTransform:
   m_Father: {fileID: 3242904528053236036}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 12.65, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 12.65, y: -10}
   m_SizeDelta: {x: 0, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &269797852758554302

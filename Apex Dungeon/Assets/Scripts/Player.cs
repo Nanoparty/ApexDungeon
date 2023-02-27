@@ -303,7 +303,7 @@ public class Player : MovingEntity
             }
             if (activeSkill.range == 0)
             {
-                activeSkill.Activate(this, this);
+                activeSkill.Activate(this, row, col);
                 targetMode = false;
                 activeSkill = null;
                 return;
@@ -325,7 +325,7 @@ public class Player : MovingEntity
                     {
                         if (Mathf.Abs(row - r) + Mathf.Abs(col - c) <= range && GameManager.gmInstance.Dungeon.tileMap[r, c].getFloor())
                         {
-                            if (!activeSkill.canTargetSelf) continue;
+                            if (r == row && c == col && !activeSkill.canTargetSelf) continue;
                             GameObject t = Instantiate(tileHighlight, new Vector2(c, r), Quaternion.identity);
                             targetTiles.Add(t);
                         }
@@ -345,18 +345,7 @@ public class Player : MovingEntity
                     if (t.transform.position.y == clickRow && t.transform.position.x == clickCol)
                     {
                         Debug.Log("Target Clicked");
-                        if (clickCol == col && clickRow == row)
-                        {
-                            activeSkill.Activate(this, this);
-                        }
-                        else
-                        {
-                            Enemy e = GameManager.gmInstance.getEnemyAtLoc(clickRow, clickCol);
-                            if (e != null)
-                            {
-                                activeSkill.Activate(this, e);
-                            }
-                        }
+                        bool castSuccessful = activeSkill.Activate(this, clickRow, clickCol);
 
                         // Finish Casting
                         targetMode = false;
@@ -370,7 +359,17 @@ public class Player : MovingEntity
                         return;
                     }
                 }
-                
+                // Cancel Casting
+                targetMode = false;
+                foreach (GameObject o in targetTiles)
+                {
+                    Destroy(o);
+                }
+                targetTiles.Clear();
+                activeSkill = null;
+                drawTargets = false;
+                return;
+
             }
             
             return;

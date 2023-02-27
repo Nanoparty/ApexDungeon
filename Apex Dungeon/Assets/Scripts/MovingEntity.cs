@@ -128,6 +128,11 @@ public abstract class MovingEntity : MonoBehaviour
         GameManager.gmInstance.Dungeon.tileMap[(int)target.y, (int)target.x].occupied = type;
     }
 
+    public GameObject SpawnObject(GameObject o, Vector2 pos)
+    {
+        return Instantiate(o, pos, Quaternion.identity);
+    }
+
     void updateLocalPosition()
     {
         row = (int)target.y;
