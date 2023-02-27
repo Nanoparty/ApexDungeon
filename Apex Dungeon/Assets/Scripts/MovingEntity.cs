@@ -39,6 +39,7 @@ public abstract class MovingEntity : MonoBehaviour
     public bool silenced;
     public bool stealth;
     public bool invisible;
+    public bool root;
 
     protected float attackScale = 1f;
     protected float defenseScale = 1f;

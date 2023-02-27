@@ -9,6 +9,7 @@ public class StatusEffect
     public enum EffectType
     {
         health_regen,
+        mana_regen,
         poison,
         bleed,
         silence,
@@ -55,6 +56,10 @@ public class StatusEffect
             case EffectType.health_regen:
                 textColor = ColorManager.HEAL;
                 popupText = "HP Regen";
+                break;
+            case EffectType.mana_regen:
+                textColor = ColorManager.MANA;
+                popupText = "MP Regen";
                 break;
             case EffectType.poison:
                 textColor = ColorManager.POISON;
@@ -144,6 +149,11 @@ public class StatusEffect
                 int healing = (int)(entity.getMaxHP() * 0.1);
                 entity.takeDamage(healing, textColor, false, false);
                 break;
+            case EffectType.mana_regen:
+                // Heal 10% max health
+                int mana = (int)(entity.getMaxMP() * 0.1);
+                entity.addMp(mana);
+                break;
             case EffectType.poison:
                 // Damage 10% max health
                 int poisonDamage = (int)(entity.getMaxHP() * 0.1);
@@ -191,6 +201,7 @@ public class StatusEffect
                 break;
             case EffectType.root:
                 entity.AddTextPopup("Rooted", textColor);
+                entity.root = true;
                 break;
             case EffectType.sleep:
                 entity.AddTextPopup("Sleep", textColor);
@@ -265,6 +276,18 @@ public class StatusEffect
                 break;
             case EffectType.evasion_down:
                 entity.setEvadeScale(entity.getEvadeScale() + 0.1f);
+                break;
+            case EffectType.stealth:
+                entity.stealth = false;
+                break;
+            case EffectType.invisible:
+                entity.invisible = false;
+                break;
+            case EffectType.silence:
+                entity.silenced = false;
+                break;
+            case EffectType.root:
+                entity.root = false;
                 break;
         }
     }

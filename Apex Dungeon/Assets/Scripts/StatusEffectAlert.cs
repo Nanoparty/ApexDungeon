@@ -11,6 +11,7 @@ public class StatusEffectAlert : MonoBehaviour
     [SerializeField] private TMP_Text DurationText;
 
     [SerializeField] private Sprite hp_regen;
+    [SerializeField] private Sprite mp_regen;
     [SerializeField] private Sprite poison;
     [SerializeField] private Sprite bleed;
     [SerializeField] private Sprite paralysis;
@@ -39,6 +40,9 @@ public class StatusEffectAlert : MonoBehaviour
         {
             case EffectType.health_regen:
                 EffectIcon.sprite = hp_regen;
+                break;
+            case EffectType.mana_regen:
+                EffectIcon.sprite = mp_regen;
                 break;
             case EffectType.bleed:
                 EffectIcon.sprite = bleed;

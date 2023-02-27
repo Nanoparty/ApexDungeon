@@ -49,7 +49,14 @@ public class Consumable : Item
             p.AddStatusEffect(new StatusEffect(EffectType.health_regen, 5, EffectOrder.Start));
         }
         if(id == "ManaPotion"){
-            p.addMP(20);
+            int baseMP = 25;
+            float appliedMP = baseMP * Mathf.Pow(1.5f, level - 1);
+            p.addMP((int)appliedMP);
+            SoundManager.sm.PlayPotionSound();
+        }
+        if (id == "ManaRegenPotion")
+        {
+            p.AddStatusEffect(new StatusEffect(EffectType.mana_regen, 5, EffectOrder.Start));
         }
         if(id == "SkipOrb"){
             p.nextFloor();

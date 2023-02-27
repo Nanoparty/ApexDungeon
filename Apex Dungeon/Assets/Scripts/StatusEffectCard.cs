@@ -15,6 +15,7 @@ public class StatusEffectCard : MonoBehaviour
 
     [Header("Icons")]
     [SerializeField] private Sprite hp_regen_sprite;
+    [SerializeField] private Sprite mp_regen_sprite;
     [SerializeField] private Sprite bleed_sprite;
     [SerializeField] private Sprite poison_sprite;
     [SerializeField] private Sprite paralysis_sprite;
@@ -48,6 +49,11 @@ public class StatusEffectCard : MonoBehaviour
                 effectName = "HP Regeneration";
                 description = "Restores 10% of Max HP Each Turn";
                 iconSprite = hp_regen_sprite;
+                break;
+            case EffectType.mana_regen:
+                effectName = "MP Regeneration";
+                description = "Restores 10% of Max MP Each Turn";
+                iconSprite = mp_regen_sprite;
                 break;
             case EffectType.bleed:
                 effectName = "Bleeding";

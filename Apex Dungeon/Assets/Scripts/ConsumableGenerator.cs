@@ -82,7 +82,7 @@ public class ConsumableGenerator : ScriptableObject
         return item;
     }
 
-    public GameObject CreateManaPotion()
+    public GameObject CreateManaPotion(int level)
     {
         GameObject item = new GameObject("ManaPotion");
 
@@ -93,7 +93,28 @@ public class ConsumableGenerator : ScriptableObject
         item.AddComponent<BoxCollider2D>();
         item.GetComponent<BoxCollider2D>().isTrigger = true;
 
-        Consumable potion = new Consumable("ManaPotion", "ManaPotion", "Blueberry Flavor", "Restores 10 MP", bluePotion);
+        Consumable potion = new Consumable("ManaPotion", "Mana Potion lvl " + level , "Blueberry Flavor", "Restores 10 MP", bluePotion, level);
+
+        item.AddComponent<Pickup>();
+        item.GetComponent<Pickup>().SetItem(potion);
+
+        item.tag = "Consumable";
+
+        return item;
+    }
+
+    public GameObject CreateManaRegenPotion()
+    {
+        GameObject item = new GameObject("ManaRegenPotion");
+
+        item.AddComponent<SpriteRenderer>();
+        item.GetComponent<SpriteRenderer>().sprite = blueFlask;
+        item.GetComponent<SpriteRenderer>().sortingLayerName = "Items";
+
+        item.AddComponent<BoxCollider2D>();
+        item.GetComponent<BoxCollider2D>().isTrigger = true;
+
+        Consumable potion = new Consumable("ManaRegenPotion", "Mana Regen Potion", "Blue Raspberry Flavor", "Restores 10% of Max MP per Turn for 5 Turns.", blueFlask);
 
         item.AddComponent<Pickup>();
         item.GetComponent<Pickup>().SetItem(potion);
@@ -467,14 +488,14 @@ public class ConsumableGenerator : ScriptableObject
     {
         GameObject consumable = null;
 
-        int rand = Random.Range(1, 23);
+        int rand = Random.Range(1, 24);
 
         if (rand == 1) consumable = CreateHealthPotion(level);
         if (rand == 2) consumable = CreateHealthPotion(level);
         if (rand == 3) consumable = CreateHealthPotion(level);
         if (rand == 4) consumable = CreateHealthPotion(level);
-        if (rand == 5) consumable = CreateHealthPotion(level);
-        if (rand == 6) consumable = CreateHealthPotion(level);
+        if (rand == 5) consumable = CreateManaPotion(level);
+        if (rand == 6) consumable = CreateManaPotion(level);
         if (rand == 7) consumable = CreateHealthPotion(level);
         if (rand == 8) consumable = CreateDeathOrb();
         if (rand == 9) consumable = CreateLightOrb();
@@ -491,6 +512,7 @@ public class ConsumableGenerator : ScriptableObject
         if (rand == 20) consumable = CreateFullCleanse();
         if (rand == 21) consumable = CreateHeartGem();
         if (rand == 22) consumable = CreateMagicDice();
+        if (rand == 23) consumable = CreateManaRegenPotion();
 
         if (consumable == null)
         {
