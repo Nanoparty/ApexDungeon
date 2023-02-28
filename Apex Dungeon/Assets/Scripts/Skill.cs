@@ -502,9 +502,22 @@ public class Skill
 
             case SkillType.WhirlwindStrike:
                 // Get all entities in circle of target
-
+                List<MovingEntity> entities = new List<MovingEntity>();
+                for (int r = caster.getRow() - 1; r <= caster.getRow() + 1; r++)
+                {
+                    for (int c = caster.getCol() - 1; c <= caster.getCol() + 1; c++)
+                    {
+                        MovingEntity e = GameManager.gmInstance.getEnemyAtLoc(r, c);
+                        if (e != null)
+                            entities.Add(e);
+                    }
+                }
                 // Attack all entities
-
+                foreach (MovingEntity e in entities)
+                {
+                    damage = e.getMaxHP() * 0.2f;
+                    e.takeDamage(-damage, ColorManager.DAMAGE);
+                }
                 break;
 
             case SkillType.Slash:
@@ -602,6 +615,12 @@ public class Skill
                 damage = target.getMaxHP() * 0.2f;
                 target.takeDamage(-damage, ColorManager.DAMAGE);
                 // Move target back 1 tile
+                int rdif = target.getRow() - caster.getRow();
+                int cdif = target.getCol() - caster.getCol();
+                if (!GameManager.gmInstance.Dungeon.tileMap[rdif, cdif].getBlocked())
+                {
+                    target.setPosition(target.getRow() + rdif, target.getCol() + cdif);
+                }
                 break;
 
             case SkillType.Headbutt:

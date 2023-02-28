@@ -57,6 +57,7 @@ public abstract class MovingEntity : MonoBehaviour
     public int agroRange;
 
     public List<StatusEffect> statusEffects;
+    public List<Skill> skills;
 
     public Queue<(string, Color)> popupTexts;
     public bool canDisplayPopupText = true;

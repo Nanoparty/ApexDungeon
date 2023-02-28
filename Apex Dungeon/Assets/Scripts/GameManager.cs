@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
     public static GameManager gmInstance = null;
     public DungeonObject Dungeon;
     public DungeonGenerator DunGen;
+    public SkillGenerator SkillGenerator;
     public LogManager Log;
     public bool playersTurn = false;
     
