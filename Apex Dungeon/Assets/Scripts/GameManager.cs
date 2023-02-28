@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
     public static GameManager gmInstance = null;
     public DungeonObject Dungeon;
     public DungeonGenerator DunGen;
+    public LogManager Log;
     public bool playersTurn = false;
     
     private List<Enemy> enemies;
@@ -55,6 +56,8 @@ public class GameManager : MonoBehaviour
 
         Vector3 position = new Vector3(0f, 0f, 0f);
         cursor = Instantiate(tileCursor, position, Quaternion.identity) as GameObject;
+
+        Log = GameObject.FindGameObjectWithTag("Log").GetComponent<LogManager>();
     }
 
     void Setup()
@@ -62,6 +65,7 @@ public class GameManager : MonoBehaviour
         if(SceneManager.GetActiveScene().name == "Dungeon") {
             Dungeon = null;
             Dungeon = DunGen.Initalize();
+            
         }
     }
 

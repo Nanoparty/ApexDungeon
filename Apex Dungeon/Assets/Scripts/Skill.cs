@@ -392,9 +392,20 @@ public class Skill
         }
 
         if (target == null && !canTargetLocation) return false;
+
+        if (canTargetLocation)
+        {
+            GameManager.gmInstance.Log.AddLog($">{caster.entityName} used {skillName}.");
+        }
+        else
+        {
+            GameManager.gmInstance.Log.AddLog($">{caster.entityName} used {skillName} on {target.entityName}.");
+        }
          
 
         caster.addMp(-manaCost);
+
+        
 
         switch (type)
         {

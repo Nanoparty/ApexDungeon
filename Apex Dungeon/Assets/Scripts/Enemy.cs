@@ -27,6 +27,7 @@ public class Enemy : MovingEntity
         floor = GameManager.gmInstance.level;
 
         //Values
+        entityName = "Enemy";
         hp = 100;
         maxHp = 100;
         defense = 5;

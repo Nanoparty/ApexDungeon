@@ -8,6 +8,8 @@ using static StatusEffect;
 
 public abstract class MovingEntity : MonoBehaviour
 {
+    public string entityName;
+
     protected int maxHp;
     protected int maxMp;
     protected int hp;
@@ -343,7 +345,9 @@ public abstract class MovingEntity : MonoBehaviour
     {
         statusEffects.Add(se);
         AddTextPopup(se.popupText, se.textColor);
-        
+
+        GameManager.gmInstance.Log.AddLog($">{entityName} is afflicted with {se.popupText}.");
+
         if (se.order == StatusEffect.EffectOrder.Status)
         {
             se.Activate(this);

@@ -81,11 +81,14 @@ public class Player : MovingEntity
         }
 
         GameManager.gmInstance.gameStarted = true;
+
+        GameManager.gmInstance.Log.AddLog(">Player enters dungeon level " + GameManager.gmInstance.level + ".");
         
     }
 
     void setInitialValues() {
         playerName = Data.activeCharacter ?? "bob";
+        entityName = playerName;
 
         mp = 100;
         maxMp = 50;
@@ -304,6 +307,7 @@ public class Player : MovingEntity
             if (activeSkill.range == 0)
             {
                 activeSkill.Activate(this, row, col);
+                
                 targetMode = false;
                 activeSkill = null;
                 return;
@@ -346,6 +350,7 @@ public class Player : MovingEntity
                     {
                         Debug.Log("Target Clicked");
                         bool castSuccessful = activeSkill.Activate(this, clickRow, clickCol);
+                        
 
                         // Finish Casting
                         targetMode = false;
@@ -677,10 +682,12 @@ public class Player : MovingEntity
             if (dice <= (int)(critical * criticalScale))
             {
                 enemy.takeDamage(calculateDamage(3), Color.red, true);
+                GameManager.gmInstance.Log.AddLog(">Player hits Enemy for " + (int)calculateDamage(3) + " HP.");
             }
             else
             {
                 enemy.takeDamage(calculateDamage(), Color.red);
+                GameManager.gmInstance.Log.AddLog(">Player hits Enemy for " + (int)calculateDamage() + " HP.");
             }
 
             if (Random.Range(0f, 1f) <= 0.05f)
@@ -709,6 +716,7 @@ public class Player : MovingEntity
             if (dice <= (int)(evade * evadeScale))
             {
                 AddTextPopup("Evade", new Color(50f / 255f, 205f / 255f, 50f / 255f));
+                GameManager.gmInstance.Log.AddLog(">Player evades attack.");
                 return;
             }
         }
@@ -722,17 +730,20 @@ public class Player : MovingEntity
             moving = false;
             AddTextPopup($"{d}", c);
             SpawnBlood();
+            GameManager.gmInstance.Log.AddLog(">Enemy hits Player for " + (int)d + " damage.");
         }
         else
         {
             SoundManager.sm.PlayHealSound();
             AddTextPopup($"+{d}", c);
+            GameManager.gmInstance.Log.AddLog(">Player healed for +" + (int)d + " HP.");
         }
 
         if (hp <= 0)
         {
             dead = true;
             SpawnBlood();
+            GameManager.gmInstance.Log.AddLog(">Player died.");
         }
         if (hp > maxHp)
         {
