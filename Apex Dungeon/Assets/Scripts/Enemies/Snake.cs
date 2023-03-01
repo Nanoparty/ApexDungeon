@@ -2,17 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Snake : MonoBehaviour
+public class Snake : Enemy
 {
-    // Start is called before the first frame update
-    void Start()
+    protected override void Start()
     {
-        
-    }
+        base.Start();
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        entityName = "Snake";
+
+        skills.Add(GameManager.gmInstance.SkillGenerator.Bite);
+        skills.Add(GameManager.gmInstance.SkillGenerator.Bind);
+        skills.Add(GameManager.gmInstance.SkillGenerator.PoisonSpike);
     }
 }

@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 1749157605672506428}
   - component: {fileID: 1749157605672506430}
   - component: {fileID: 1749157605672506431}
-  - component: {fileID: 1749157605672506424}
   - component: {fileID: -9185200360876720139}
   - component: {fileID: 3976893129170681581}
+  - component: {fileID: 4171431329690258549}
   m_Layer: 8
   m_Name: GoblinSpear
   m_TagString: Enemy
@@ -111,30 +111,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &1749157605672506424
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1749157605672506429}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 57069bc9e6c5bf94f8a86fa4bd21c13d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  canDisplayPopupText: 1
-  popupTextDelay: 0.4
-  moveTime: 0.1
-  speed: 3
-  blockingLayer:
-    serializedVersion: 2
-    m_Bits: 256
-  blood: {fileID: 6035910965898688361, guid: a4a0b7d015bed704c806ff555bd7f1a3, type: 3}
-  damageText: {fileID: 3475315571993695346, guid: 2786e48bb15534cd281c669e73be8cdf,
-    type: 3}
-  poisonChance: 0.01
-  bleedChance: 0.05
 --- !u!61 &-9185200360876720139
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -182,6 +158,37 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!114 &4171431329690258549
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1749157605672506429}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98ee68562a78403449665866826eaace, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  entityName: 
+  silenced: 0
+  stealth: 0
+  invisible: 0
+  root: 0
+  agro: 0
+  agroRange: 0
+  canDisplayPopupText: 1
+  popupTextDelay: 0.4
+  moveTime: 0.1
+  speed: 3
+  blockingLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  blood: {fileID: 6035910965898688361, guid: a4a0b7d015bed704c806ff555bd7f1a3, type: 3}
+  damageText: {fileID: 3475315571993695346, guid: 2786e48bb15534cd281c669e73be8cdf,
+    type: 3}
+  poisonChance: 0.01
+  bleedChance: 0.05
 --- !u!1 &7018432282519922634
 GameObject:
   m_ObjectHideFlags: 0

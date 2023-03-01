@@ -174,7 +174,7 @@ SpriteRenderer:
   m_SortingLayerID: 2101249919
   m_SortingLayer: 8
   m_SortingOrder: 0
-  m_Sprite: {fileID: 3543595414041277741, guid: ad61afe0b8dcf514fa99c6bd5adce9d7,
+  m_Sprite: {fileID: -3155123437957440029, guid: ad61afe0b8dcf514fa99c6bd5adce9d7,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -247,9 +247,9 @@ GameObject:
   - component: {fileID: 8835050064166001349}
   - component: {fileID: 8835050064166001351}
   - component: {fileID: 8835050064166001350}
-  - component: {fileID: 8835050064166001345}
   - component: {fileID: -6508178567142258109}
   - component: {fileID: 6520787728842231348}
+  - component: {fileID: 3934265989547710432}
   m_Layer: 8
   m_Name: Snake
   m_TagString: Enemy
@@ -347,30 +347,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &8835050064166001345
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8835050064166001348}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 57069bc9e6c5bf94f8a86fa4bd21c13d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  canDisplayPopupText: 1
-  popupTextDelay: 0.4
-  moveTime: 0.1
-  speed: 3
-  blockingLayer:
-    serializedVersion: 2
-    m_Bits: 256
-  blood: {fileID: 6035910965898688361, guid: a4a0b7d015bed704c806ff555bd7f1a3, type: 3}
-  damageText: {fileID: 3475315571993695346, guid: 2786e48bb15534cd281c669e73be8cdf,
-    type: 3}
-  poisonChance: 0.01
-  bleedChance: 0.05
 --- !u!61 &-6508178567142258109
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -418,3 +394,34 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!114 &3934265989547710432
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8835050064166001348}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7575dccc63108845aa698196b3b1195, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  entityName: 
+  silenced: 0
+  stealth: 0
+  invisible: 0
+  root: 0
+  agro: 0
+  agroRange: 0
+  canDisplayPopupText: 1
+  popupTextDelay: 0.4
+  moveTime: 0.1
+  speed: 3
+  blockingLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  blood: {fileID: 6035910965898688361, guid: a4a0b7d015bed704c806ff555bd7f1a3, type: 3}
+  damageText: {fileID: 3475315571993695346, guid: 2786e48bb15534cd281c669e73be8cdf,
+    type: 3}
+  poisonChance: 0.01
+  bleedChance: 0.05

@@ -13,7 +13,7 @@ public class LogManager : MonoBehaviour
     private GameObject scrollView;
     private List<GameObject> logEntries;
 
-    private void Start()
+    private void Awake()
     {
         scrollView = transform.Find("Scroll View").gameObject;
         content = transform.Find("Scroll View/Viewport/Content").gameObject;
@@ -24,6 +24,7 @@ public class LogManager : MonoBehaviour
 
     public void AddLog(string message)
     {
+       
         GameObject log = Instantiate(logEntry, Vector2.zero, Quaternion.identity);
         log.transform.SetParent(content.transform, false);
         log.GetComponent<TMP_Text>().text = message;

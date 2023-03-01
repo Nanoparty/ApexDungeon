@@ -4,11 +4,15 @@ using UnityEngine;
 
 public class Zombie : Enemy
 {
-    private void Start()
+    protected override void Start()
     {
         base.Start();
 
+        // Name
+        entityName = "Zombie";
+
         // Skills
         skills.Add(GameManager.gmInstance.SkillGenerator.Pound);
+        skills.Add(GameManager.gmInstance.SkillGenerator.Berserk);
     }
 }

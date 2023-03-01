@@ -378,8 +378,16 @@ public class Skill
 
     public bool Activate(MovingEntity caster, int row, int col)
     {
-        if (caster.getMP() < manaCost) return false;
-        if (caster.silenced) return false;
+        if (caster.getMP() < manaCost)
+        {
+            Debug.Log("Not Enough Mana");
+            return false;
+        }
+        if (caster.silenced)
+        {
+            Debug.Log("Silenced");
+            return false;
+        }
 
         MovingEntity target = null;
 
@@ -389,9 +397,21 @@ public class Skill
         else {
             Enemy e = GameManager.gmInstance.getEnemyAtLoc(row, col);
             if (e != null) { target = (MovingEntity) e; }
+            else
+            {
+                Player player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+                if (player.getRow() == row && player.getCol() == col)
+                {
+                    target = (MovingEntity) player;
+                }
+            }
         }
 
-        if (target == null && !canTargetLocation) return false;
+        if (target == null && !canTargetLocation)
+        {
+            Debug.Log("Invalid Target");
+            return false;
+        }
 
         if (canTargetLocation)
         {

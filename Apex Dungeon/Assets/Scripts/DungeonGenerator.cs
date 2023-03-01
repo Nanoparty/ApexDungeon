@@ -76,7 +76,7 @@ public class DungeonGenerator : ScriptableObject
         enemyContainer.parent = dungeon.transform;
         furnitureContainer.parent = dungeon.transform;
 
-        currentBiome = Biomes[Random.Range(0, Biomes.Length)];
+        //currentBiome = Biomes[Random.Range(0, Biomes.Length)];
 
         GameObject op = GameObject.Instantiate(Opening, new Vector3(0, 0, 0), Quaternion.identity);
         op.transform.GetChild(0).transform.GetChild(0).gameObject.GetComponent<Text>().text = currentBiome.biomeName;

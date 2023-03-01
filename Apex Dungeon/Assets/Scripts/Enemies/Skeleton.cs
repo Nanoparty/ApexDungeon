@@ -2,17 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Skeleton : MonoBehaviour
+public class Skeleton : Enemy
 {
-    // Start is called before the first frame update
-    void Start()
+    protected override void Start()
     {
-        
-    }
+        base.Start();
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        entityName = "Skeleton";
+
+        skills.Add(GameManager.gmInstance.SkillGenerator.Bite);
+        skills.Add(GameManager.gmInstance.SkillGenerator.Pound);
+        skills.Add(GameManager.gmInstance.SkillGenerator.Berserk);
+
     }
 }

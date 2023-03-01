@@ -2,17 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GoblinSwordsman : MonoBehaviour
+public class GoblinSwordsman : Enemy
 {
-    // Start is called before the first frame update
-    void Start()
+    protected override void Start()
     {
-        
-    }
+        base.Start();
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        entityName = "Goblin Swordsman";
+
+        skills.Add(GameManager.gmInstance.SkillGenerator.Slash);
+        skills.Add(GameManager.gmInstance.SkillGenerator.PoisonPalm);
+        skills.Add(GameManager.gmInstance.SkillGenerator.ArmorPolish);
     }
 }

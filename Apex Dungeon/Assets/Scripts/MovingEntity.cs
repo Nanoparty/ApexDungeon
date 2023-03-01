@@ -96,6 +96,7 @@ public abstract class MovingEntity : MonoBehaviour
         statusEffects = new List<StatusEffect>();
         popupTexts = new Queue<(string, Color)> ();
         canDisplayPopupText = true;
+        skills = new List<Skill>();
     }
 
     bool checkValidPath()

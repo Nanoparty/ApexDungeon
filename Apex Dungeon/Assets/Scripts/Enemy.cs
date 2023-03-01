@@ -1,4 +1,6 @@
-﻿using TMPro;
+﻿using System.Collections.Generic;
+using System.Net;
+using TMPro;
 using UnityEngine;
 using static StatusEffect;
 
@@ -18,6 +20,10 @@ public class Enemy : MovingEntity
     private Path path;
     private Pathfinder finder;
     private int floor;
+
+    protected MovingEntity enemyTarget;
+
+    protected List<Skill> availableSkills;
 
     [SerializeField] private float poisonChance = 0.01f;
     [SerializeField] private float bleedChance = 0.05f;
@@ -43,8 +49,10 @@ public class Enemy : MovingEntity
         healthBar = this.transform.GetChild(0).GetComponent<SpriteRenderer>();
         path = new Path();
         finder = new Pathfinder();
-        
+        availableSkills = new List<Skill>();
+
         base.Start();
+
     }
 
     protected override void Update()
@@ -188,24 +196,81 @@ public class Enemy : MovingEntity
         }
     }
 
-    void attackController(Player player)
+    public virtual void attackController(Player player)
     {
-        if (isAdjacent(player))
+        if (canUseSkill())
         {
-            player.takeDamage(calculateDamageOut(), Color.red);
+            Debug.Log("Can Use Skill");
+            // Chance to use skill
+            int chance = Random.Range(0, 100);
+            if (chance < 20)
+            {
+                
+                Skill s = availableSkills[Random.Range(0, availableSkills.Count)];
+                
+                bool success = false;
+                if (s.range == 0)
+                {
+                    success = s.Activate(this, row, col);
+                }
+                else
+                {
+                    success = s.Activate(this, pRow, pCol);
+                }
 
-            // Status Effect Roll
-            float roll = Random.Range(0f, 1f);
-            if (roll <= poisonChance)
-            {
-                player.AddStatusEffect(new StatusEffect(EffectType.poison, 5, EffectOrder.End));
+                Debug.Log("Using Skill " + s.skillName + " : " + success);
+
+                availableSkills.Clear();
+                return;
             }
-            else if (roll <= bleedChance)
-            {
-                player.AddStatusEffect(new StatusEffect(EffectType.bleed, 5, EffectOrder.End));
-            }
-            setAttackAnimation(player.getRow(), player.getCol());
+            Debug.Log("Failed to use skill");
+            availableSkills.Clear();
         }
+        if (canAttackTarget())
+        {
+            attackTarget(player); 
+        }
+    }
+
+    public bool canAttackTarget()
+    {
+        if (isAdjacent(enemyTarget)) return true;
+
+        return false;
+    }
+
+    public bool canUseSkill()
+    {
+        int rdif = Mathf.Abs(enemyTarget.getRow() - row);
+        int cdif = Mathf.Abs(enemyTarget.getCol() - col);
+        bool value = false;
+        foreach (Skill s in skills)
+        {
+            if (rdif + cdif <= s.range || s.range == 0)
+            {
+                availableSkills.Add(s);
+                value = true;
+            }
+        }
+
+        return value;
+    }
+
+    protected void attackTarget(MovingEntity target)
+    {
+        target.takeDamage(calculateDamageOut(), Color.red);
+
+        // Status Effect Roll
+        float roll = Random.Range(0f, 1f);
+        if (roll <= poisonChance)
+        {
+            player.AddStatusEffect(new StatusEffect(EffectType.poison, 5, EffectOrder.End));
+        }
+        else if (roll <= bleedChance)
+        {
+            player.AddStatusEffect(new StatusEffect(EffectType.bleed, 5, EffectOrder.End));
+        }
+        setAttackAnimation(player.getRow(), player.getCol());
     }
 
     public void setAttackAnimation(int enemyRow, int enemyCol)
@@ -238,6 +303,7 @@ public class Enemy : MovingEntity
             if (hit.collider.gameObject.tag.Equals("Player"))
             {
                 agro = true;
+                enemyTarget = player;
             }
         }
         boxCollider.enabled = true;
@@ -273,7 +339,7 @@ public class Enemy : MovingEntity
         //ATTACK PLAYER
     }
 
-    bool isAdjacent(Player p)
+    bool isAdjacent(MovingEntity p)
     {
         int rDis = Mathf.Abs(p.getRow() - row);
         int cDis = Mathf.Abs(p.getCol() - col);
