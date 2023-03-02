@@ -68,6 +68,9 @@ public class Player : MovingEntity
     [Header("Status Effects")]
     [SerializeField] private GameObject StatusEffectAlert;
 
+    private Vector2 interruptTarget;
+    private bool setInterruptTarget;
+
     protected override void Start()
     {
         base.Start();
@@ -190,12 +193,12 @@ public class Player : MovingEntity
         stairsModal.transform.GetChild(3).GetComponent<Button>().onClick.AddListener(stairsYes);
     }
 
-    void moveController(int clickRow, int clickCol)
+    bool moveController(int clickRow, int clickCol)
     {
         bool val;
         val = AttemptMove<Player>(clickRow, clickCol);
-        //GameManager.gmInstance.playersTurn = false;
         PlayerEnd();
+        return val;
     }
 
     void stairsYes()
@@ -276,8 +279,26 @@ public class Player : MovingEntity
 
 
         if (moving && Input.GetButtonDown("Fire1")) {
-            interrupt = true;
-            GameManager.gmInstance.UpdateCursor("Interrupt");
+            int clickRow = (int)GameManager.gmInstance.mRow;
+            int clickCol = (int)GameManager.gmInstance.mCol;
+            if (moveController(clickRow, clickCol))
+            {
+                if (row == clickRow && col == clickCol)
+                {
+                    GameManager.gmInstance.UpdateCursor("Player", clickRow, clickCol);
+                }
+                else
+                {
+                    GameManager.gmInstance.UpdateCursor("Move", clickRow, clickCol);
+                }
+                
+            }
+            else
+            {
+                interrupt = true;
+                GameManager.gmInstance.UpdateCursor("Interrupt");
+            }
+            
         }
 
 
@@ -669,6 +690,11 @@ public class Player : MovingEntity
             else if(atTarget){
                 moving = false;
                 interrupt = false;
+                if (setInterruptTarget)
+                {
+                    setInterruptTarget = false;
+
+                }
             }
 
             return;

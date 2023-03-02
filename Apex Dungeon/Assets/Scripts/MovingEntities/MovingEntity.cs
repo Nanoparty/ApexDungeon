@@ -102,20 +102,14 @@ public abstract class MovingEntity : MonoBehaviour
         skills = new List<Skill>();
     }
 
-    bool checkValidPath()
+    bool checkValidPath(Path p)
     {
-        if (path == null || (path.nodes.Count == 0))
+        if (p == null || (p.nodes.Count == 0))
         {
             doneMoving();
             return false;
         }
         return true;
-    }
-
-    public void CancelPath()
-    {
-        moving = false;
-        atTarget = true;
     }
 
     bool checkValidTile(Vector2 next)
@@ -146,6 +140,12 @@ public abstract class MovingEntity : MonoBehaviour
         col = (int)target.x;
     }
 
+    protected Path GeneratePath(Tile start, Tile end)
+    {
+        Path tempPath = pathing.findPath(start, end);
+        return tempPath;
+    }
+
     protected bool Move(int r, int c)
     {
         Tile startTile = GameManager.gmInstance.Dungeon.tileMap[row, col];
@@ -156,15 +156,35 @@ public abstract class MovingEntity : MonoBehaviour
             return false;
         }
 
+        if (moving)
+        {
+            Path p = GeneratePath(startTile, endTile);
+            if (checkValidPath(p))
+            {
+                path = p;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+            
+        }
+
         if (!moving && atTarget)
         {
             if (GameManager.gmInstance.Dungeon.tileMap[r, c].getWall())
             {
                 return false;
             }
-            path = pathing.findPath(startTile, endTile);
+            if (path == null || path.nodes.Count == 0)
+            {
+                Debug.Log("Generate new path");
+                path = pathing.findPath(startTile, endTile);
+            }
+            
 
-            if (!checkValidPath()){
+            if (!checkValidPath(path)){
                 return false;
             }
             
@@ -191,7 +211,7 @@ public abstract class MovingEntity : MonoBehaviour
     {
         if (atTarget)
         {
-            if (!checkValidPath())
+            if (!checkValidPath(path))
             {
                 return;
             }
@@ -260,9 +280,10 @@ public abstract class MovingEntity : MonoBehaviour
         {
             atTarget = true;
             transform.position = new Vector2(target.x, target.y);
-            if ((path.nodes.Count == 0))
+            if (path == null || path.nodes.Count == 0)
             {
                 moving = false;
+                path = null;
             }
         }
     }
@@ -305,6 +326,7 @@ public abstract class MovingEntity : MonoBehaviour
                 AddTextPopup($"{(int)change}", color);
             }
             moving = false;
+            path = null;
            
             SpawnBlood();
         }
@@ -454,9 +476,10 @@ public abstract class MovingEntity : MonoBehaviour
         return maxMp;
     }
 
-    private void doneMoving()
+    public void doneMoving()
     {
         moving = false;
+        path = null;
         atTarget = true;
     }
 
