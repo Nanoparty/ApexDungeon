@@ -6,10 +6,14 @@ using UnityEngine.UIElements;
 
 public class Trap : MonoBehaviour
 {
+    public string trapName = "Trap";
+
     protected int row;
     protected int col;
     protected bool disarmed;
     protected int damage;
+
+
 
     protected SpriteRenderer sr;
 
@@ -84,4 +88,10 @@ public class Trap : MonoBehaviour
 
     public int GetRow() { return row; }
     public int GetCol() { return col; }
+
+    public virtual bool canActivate(MovingEntity e)
+    {
+        
+        return true;
+    }
 }

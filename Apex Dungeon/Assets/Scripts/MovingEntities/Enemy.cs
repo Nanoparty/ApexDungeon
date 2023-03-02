@@ -78,7 +78,42 @@ public class Enemy : MovingEntity
     {
         if (other.gameObject.CompareTag("Trap"))
         {
+            if (!typeof(MagicTrap).IsInstanceOfType(other.GetComponent<Trap>()))
+            {
+                return;
+            }
+            if (other.GetComponent<Trap>().canActivate(this))
+            {
+                GameManager.gmInstance.Log.AddLog($">{entityName} activates {other.GetComponent<Trap>().trapName}.");
+            }
+            
             other.GetComponent<Trap>().TriggerTrap(this);
+        }
+        if (other.gameObject.tag == "Consumable")
+        {
+            if (heldItem != null) return;
+            heldItem = other.GetComponent<Pickup>().GetItem();
+            Destroy(other.gameObject);
+            GameManager.gmInstance.Dungeon.removeFromItemList(row, col);
+            GameManager.gmInstance.Log.AddLog($">{entityName} picks up {heldItem.itemName}.");
+        }
+        if (other.gameObject.tag == "Gold" || other.gameObject.tag == "Silver" || other.gameObject.tag == "Copper")
+        {
+            int amount = other.GetComponent<Money>().amount;
+            heldMoney += amount;
+            AddTextPopup($"+{amount}", new Color(255f / 255f, 238f / 255f, 0f / 255f));
+            GameManager.gmInstance.Dungeon.removeFromItemList(row, col);
+            Destroy(other.gameObject);
+            GameManager.gmInstance.Log.AddLog($">{entityName} picks up {amount} gold.");
+
+        }
+        if (other.gameObject.tag == "Equipment")
+        {
+            if (heldItem != null) return;
+            heldItem = other.GetComponent<Pickup>().GetItem();
+            Destroy(other.gameObject);
+            GameManager.gmInstance.Dungeon.removeFromItemList(row, col);
+            GameManager.gmInstance.Log.AddLog($">{entityName} picks up {heldItem.itemName}.");
         }
     }
 
@@ -125,6 +160,7 @@ public class Enemy : MovingEntity
     }
 
     public void die(){
+        GameManager.gmInstance.Log.AddLog($">{entityName} died.");
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         if (GameManager.gmInstance.Dungeon.tileMap[row, col].visible)
         {
@@ -135,6 +171,36 @@ public class Enemy : MovingEntity
         GameManager.gmInstance.removeEnemy(this);
         int givenExp = calculateExp();
         player.addExp(givenExp);
+
+        // Drop gold
+        if (heldMoney > 0)
+        {
+            GameObject item = new GameObject("Gold");
+
+            item.AddComponent<SpriteRenderer>();
+            item.GetComponent<SpriteRenderer>().sprite = GameManager.gmInstance.consumableGenerator.gold;
+            item.GetComponent<SpriteRenderer>().sortingLayerName = "Items";
+
+            item.AddComponent<BoxCollider2D>();
+            item.GetComponent<BoxCollider2D>().isTrigger = true;
+
+            Money money = item.AddComponent<Money>();
+            money.amount = heldMoney;
+
+            item.tag = "Gold";
+
+            GameObject goldPile = Instantiate(item, new Vector2(col, row), Quaternion.identity);
+            goldPile.GetComponent<Money>().SetLocation(row, col);
+            GameManager.gmInstance.Dungeon.itemList.Add(new Vector2(row, col));
+            
+            GameManager.gmInstance.Log.AddLog($">{entityName} drops {heldMoney} gold.");
+        }
+
+        // Drop Item
+        {
+
+        }
+
         Destroy(this.gameObject);
     }
 

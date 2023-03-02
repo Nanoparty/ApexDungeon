@@ -12,6 +12,6 @@ public class GoblinSwordsman : Enemy
 
         skills.Add(GameManager.gmInstance.SkillGenerator.Slash);
         skills.Add(GameManager.gmInstance.SkillGenerator.PoisonPalm);
-        skills.Add(GameManager.gmInstance.SkillGenerator.ArmorPolish);
+        skills.Add(GameManager.gmInstance.SkillGenerator.Berserk);
     }
 }

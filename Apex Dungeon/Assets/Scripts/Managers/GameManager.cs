@@ -8,7 +8,9 @@ public class GameManager : MonoBehaviour
     public DungeonObject Dungeon;
     public DungeonGenerator DunGen;
     public SkillGenerator SkillGenerator;
+    public ConsumableGenerator consumableGenerator;
     public LogManager Log;
+    public ObjectContainer container;
     public bool playersTurn = false;
     
     private List<Enemy> enemies;

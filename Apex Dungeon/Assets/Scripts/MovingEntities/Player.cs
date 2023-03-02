@@ -82,12 +82,12 @@ public class Player : MovingEntity
 
         GameManager.gmInstance.gameStarted = true;
 
-        GameManager.gmInstance.Log.AddLog(">Player enters dungeon level " + GameManager.gmInstance.level + ".");
+        GameManager.gmInstance.Log.AddLog($">{entityName} enters dungeon level " + GameManager.gmInstance.level + ".");
         
     }
 
     void setInitialValues() {
-        playerName = Data.activeCharacter ?? "bob";
+        playerName = Data.activeCharacter ?? "Bob";
         entityName = playerName;
 
         mp = 100;
@@ -167,6 +167,8 @@ public class Player : MovingEntity
 
     void initializeObjects() {
         SoundManager.sm.PlayDungeonMusic();
+
+        journal.SetPlayer(this);
 
         animator = transform.GetChild(1).gameObject.transform.GetComponent<Animator>();
         sl = transform.GetChild(1).gameObject.GetComponent<SpriteLibrary>();
@@ -579,6 +581,7 @@ public class Player : MovingEntity
         {
             int amount = other.GetComponent<Money>().amount;
             gold += amount;
+            GameManager.gmInstance.Log.AddLog($">{entityName} picks up +{amount} gold.");
             SoundManager.sm.PlayCoinSound();
             AddTextPopup($"+{amount}", new Color(255f / 255f, 238f / 255f, 0f / 255f));
             GameManager.gmInstance.Dungeon.removeFromItemList(row, col);
@@ -595,6 +598,7 @@ public class Player : MovingEntity
         }
         if (other.gameObject.CompareTag("Trap"))
         {
+            GameManager.gmInstance.Log.AddLog($"{entityName} activates {other.GetComponent<Trap>().trapName}.");
             other.GetComponent<Trap>().TriggerTrap(this);
         }
     }
@@ -678,17 +682,21 @@ public class Player : MovingEntity
         {
             setAttackAnimation(clickRow, clickCol);
             attacking = true;
+            float targetDamage = 0.0f;
             int dice = Random.Range(0, 100);
             if (dice <= (int)(critical * criticalScale))
             {
-                enemy.takeDamage(calculateDamage(3), Color.red, true);
-                GameManager.gmInstance.Log.AddLog(">Player hits Enemy for " + (int)calculateDamage(3) + " HP.");
+                targetDamage = calculateDamage(3);
+                enemy.takeDamage(targetDamage, Color.red, true);
+                
             }
             else
             {
+                targetDamage = calculateDamage(3);
                 enemy.takeDamage(calculateDamage(), Color.red);
-                GameManager.gmInstance.Log.AddLog(">Player hits Enemy for " + (int)calculateDamage() + " HP.");
             }
+
+            GameManager.gmInstance.Log.AddLog($">{entityName} attacks {enemy.entityName} for {(int)targetDamage} HP.");
 
             if (Random.Range(0f, 1f) <= 0.05f)
             {
@@ -699,6 +707,11 @@ public class Player : MovingEntity
             return true;
         }
         return false;
+    }
+
+    public void AttackCalculations()
+    {
+
     }
 
     public void setAttackAnimation(int enemyRow, int enemyCol)
@@ -716,7 +729,7 @@ public class Player : MovingEntity
             if (dice <= (int)(evade * evadeScale))
             {
                 AddTextPopup("Evade", new Color(50f / 255f, 205f / 255f, 50f / 255f));
-                GameManager.gmInstance.Log.AddLog(">Player evades attack.");
+                GameManager.gmInstance.Log.AddLog($">{entityName} evades attack.");
                 return;
             }
         }
@@ -730,20 +743,20 @@ public class Player : MovingEntity
             moving = false;
             AddTextPopup($"{d}", c);
             SpawnBlood();
-            GameManager.gmInstance.Log.AddLog(">Enemy hits Player for " + (int)d + " damage.");
+            GameManager.gmInstance.Log.AddLog($">Enemy hits {entityName} for " + (int)d + " damage.");
         }
         else
         {
             SoundManager.sm.PlayHealSound();
             AddTextPopup($"+{d}", c);
-            GameManager.gmInstance.Log.AddLog(">Player healed for +" + (int)d + " HP.");
+            GameManager.gmInstance.Log.AddLog($">{entityName} healed for +" + (int)d + " HP.");
         }
 
         if (hp <= 0)
         {
             dead = true;
             SpawnBlood();
-            GameManager.gmInstance.Log.AddLog(">Player died.");
+            GameManager.gmInstance.Log.AddLog($">{entityName} died.");
         }
         if (hp > maxHp)
         {
@@ -953,13 +966,16 @@ public class Player : MovingEntity
     }
     public void addExp(int i){
         exp += i;
+        GameManager.gmInstance.Log.AddLog($">{entityName} receives +{i} experience.");
         int levelPoints = 0;
         GameManager.gmInstance.score += i;
         bool didLevel = false;
         while(exp >= maxExp){
+            
             SoundManager.sm.PlayLevelUpSound();
             exp -= maxExp;
             expLevel++;
+            GameManager.gmInstance.Log.AddLog($">{entityName} reaches level {expLevel}!");
             baseHp = (int)(baseHp * 1.1);
             hp = baseHp + (int)((float)baseHp * 0.05f * (int)(defense * defenseScale));
             maxHp = hp;

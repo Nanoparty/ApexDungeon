@@ -59,6 +59,9 @@ public abstract class MovingEntity : MonoBehaviour
     public List<StatusEffect> statusEffects;
     public List<Skill> skills;
 
+    public Item heldItem;
+    public int heldMoney;
+
     public Queue<(string, Color)> popupTexts;
     public bool canDisplayPopupText = true;
     [SerializeField] public float popupTextDelay = .4f;
@@ -320,6 +323,11 @@ public abstract class MovingEntity : MonoBehaviour
         {
             hp = maxHp;
         }
+    }
+
+    public virtual void AttackTarget()
+    {
+
     }
 
     public virtual void AddTextPopup(string text, Color color)

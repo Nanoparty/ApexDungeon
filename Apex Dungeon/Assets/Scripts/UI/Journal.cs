@@ -132,6 +132,11 @@ public class Journal : ScriptableObject
         open = false;
     }
 
+    public void SetPlayer(Player player)
+    {
+        this.player = player;
+    }
+
     public void CreateJournal(Player player)
     {
         this.player = player;
@@ -344,6 +349,16 @@ public class Journal : ScriptableObject
                 if (equipSlots != null && equipSlots[i].GetComponent<Clickable>().getClicked())
                 {
                     equipSlots[i].GetComponent<Clickable>().setClicked(false);
+                }
+            }
+        }
+        if (tab == 5)
+        {
+            for (int i = 0; i < skills.Count; i++)
+            {
+                if (skillSlots != null && skillSlots[i].GetComponent<Clickable>().getClicked())
+                {
+                    skillSlots[i].GetComponent<Clickable>().setClicked(false);
                 }
             }
         }
@@ -1123,6 +1138,7 @@ public class Journal : ScriptableObject
     {
         SoundManager.sm.PlayMenuSound();
         items[selected].UseItem();
+        GameManager.gmInstance.Log.AddLog($">{player.entityName} uses {items[selected].itemName}.");
         items.RemoveAt(selected);
         selected = -1;
         GameObject.Destroy(popupRoot);
@@ -1166,6 +1182,8 @@ public class Journal : ScriptableObject
         //equip armor
         Equipment e = equipment[selected];
         Equipment old = new Equipment();
+
+        GameManager.gmInstance.Log.AddLog($">{player.entityName} equips {e.itemName}.");
 
         if (e.type == "helmet")
         {
@@ -1228,6 +1246,8 @@ public class Journal : ScriptableObject
     {
         SoundManager.sm.PlayUnequipSound();
         Equipment e = new Equipment();
+
+        GameManager.gmInstance.Log.AddLog($">{player.entityName} unequips {e.itemName}.");
 
         if (gearSelection == 0)
         {
@@ -1343,14 +1363,17 @@ public class Journal : ScriptableObject
         SoundManager.sm.PlayMenuSound();
         if (tab == 0)
         {
+            GameManager.gmInstance.Log.AddLog($">{player.entityName} trashes {items[selected].itemName}.");
             items.RemoveAt(selected);
         }
         if (tab == 1)
         {
+            GameManager.gmInstance.Log.AddLog($">{player.entityName} trashes {equipment[selected].itemName}.");
             equipment.RemoveAt(selected);
         }
         if (tab == 5)
         {
+            GameManager.gmInstance.Log.AddLog($">{player.entityName} forgets skill {skills[selected].skillName}.");
             skills.RemoveAt(selected);
         }
 
@@ -1375,6 +1398,8 @@ public class Journal : ScriptableObject
         popupRoot.transform.GetChild(1).gameObject.SetActive(false);
         SoundManager.sm.PlayMenuSound();
         Equipment e = new Equipment();
+
+        GameManager.gmInstance.Log.AddLog($">{player.entityName} trashes {e.itemName}.");
 
         if (gearSelection == 0)
         {
@@ -1471,11 +1496,13 @@ public class Journal : ScriptableObject
 
     public void addItem(Item i)
     {
+        GameManager.gmInstance.Log.AddLog($">{player.entityName} picks up {i.itemName}.");
         items.Add(i as Consumable);
     }
 
     public void addEquipment(Item i)
     {
+        GameManager.gmInstance.Log.AddLog($">{player.entityName} picks up {i.itemName}.");
         equipment.Add(i as Equipment);
     }
 

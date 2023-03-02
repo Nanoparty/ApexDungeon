@@ -13,6 +13,6 @@ public class DarkKnight : Enemy
         skills.Add(GameManager.gmInstance.SkillGenerator.Lacerate);
         skills.Add(GameManager.gmInstance.SkillGenerator.Fireball);
         skills.Add(GameManager.gmInstance.SkillGenerator.BloodCurse);
-        skills.Add(GameManager.gmInstance.SkillGenerator.ArmorPolish);
+        skills.Add(GameManager.gmInstance.SkillGenerator.Berserk);
     }
 }

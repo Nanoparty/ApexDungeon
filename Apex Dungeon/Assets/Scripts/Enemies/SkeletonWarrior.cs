@@ -12,7 +12,7 @@ public class SkeletonWarrior : Enemy
 
         skills.Add(GameManager.gmInstance.SkillGenerator.Slash);
         skills.Add(GameManager.gmInstance.SkillGenerator.FlamePalm);
-        skills.Add(GameManager.gmInstance.SkillGenerator.ArmorPolish);
+        skills.Add(GameManager.gmInstance.SkillGenerator.Berserk);
 
     }
 }

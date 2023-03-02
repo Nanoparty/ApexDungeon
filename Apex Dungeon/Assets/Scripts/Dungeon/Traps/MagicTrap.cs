@@ -145,4 +145,13 @@ public class MagicTrap : Trap
     {
         base.DestroyTrap();
     }
+
+    public override bool canActivate(MovingEntity e)
+    {
+        if (typeof(Enemy).IsInstanceOfType(e))
+        {
+            return false;
+        }
+        return true;
+    }
 }

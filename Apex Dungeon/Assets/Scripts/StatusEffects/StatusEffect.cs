@@ -247,6 +247,7 @@ public class StatusEffect
 
     public void Deactivate(MovingEntity entity)
     {
+        GameManager.gmInstance.Log.AddLog($">{entity.entityName} is no longer affected by {popupText}.");
         switch (effectId)
         {
             case EffectType.strength_up:
