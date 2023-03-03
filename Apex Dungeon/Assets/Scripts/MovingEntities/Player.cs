@@ -690,6 +690,7 @@ public class Player : MovingEntity
             else if(atTarget){
                 moving = false;
                 interrupt = false;
+                path = null;
                 if (setInterruptTarget)
                 {
                     setInterruptTarget = false;
@@ -770,6 +771,7 @@ public class Player : MovingEntity
             AddTextPopup($"{d}", c);
             SpawnBlood();
             GameManager.gmInstance.Log.AddLog($">Enemy hits {entityName} for " + (int)d + " damage.");
+            path = null;
         }
         else
         {

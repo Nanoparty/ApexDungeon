@@ -83,8 +83,8 @@ public abstract class MovingEntity : MonoBehaviour
 
     protected int type = 2;
 
-    private Pathfinder pathing = new Pathfinder();
-    private Path path = new Path();
+    protected Pathfinder pathing = new Pathfinder();
+    protected Path path = new Path();
 
     protected bool moving = false;
     protected bool moved = true;
