@@ -498,6 +498,15 @@ public class Skill
 
             case SkillType.ManaDrain:
                 amount = target.getMaxMP() * 0.2f;
+                if (target.getMP() < amount)
+                {
+                    amount = target.getMP();
+                }
+                if (target.getMP() == 0)
+                {
+                    GameManager.gmInstance.Log.AddLog($">{target.entityName} has no MP left.");
+                    break;
+                }
                 target.addMp((int)-amount);
                 caster.addMp((int)amount);
                 break;
