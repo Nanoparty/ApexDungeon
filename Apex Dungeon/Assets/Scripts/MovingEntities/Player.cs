@@ -195,6 +195,12 @@ public class Player : MovingEntity
 
     bool moveController(int clickRow, int clickCol)
     {
+        if (skipTurn)
+        {
+            path = null;
+            return false;
+        }
+
         bool val;
         val = AttemptMove<Player>(clickRow, clickCol);
         PlayerEnd();
@@ -318,6 +324,7 @@ public class Player : MovingEntity
         debugMenu();
 
         base.Update();
+
         checkMoving();
 
         if (targetMode)
@@ -403,6 +410,13 @@ public class Player : MovingEntity
             return;
         }
 
+        if (skipTurn)
+        {
+            skipTurn = false;
+            PlayerEnd();
+            return;
+        }
+
         if (Input.GetButtonDown("Fire1"))
         {
             if (EventSystem.current.IsPointerOverGameObject())
@@ -483,6 +497,7 @@ public class Player : MovingEntity
 
     public void PlayerEnd()
     {
+        Debug.Log("PlayerEnd");
         GameManager.gmInstance.playersTurn = false;
         turnStart = true;
         ApplyStatusEffects("end");
@@ -498,7 +513,7 @@ public class Player : MovingEntity
         }
         if (Input.GetKeyDown("b"))
         {
-            AddStatusEffect(new StatusEffect(EffectType.burn, 5, EffectOrder.End));
+            AddStatusEffect(new StatusEffect(EffectType.paralysis, 5, EffectOrder.Start));
         }
         if (Input.GetKeyDown("n"))
         {
@@ -683,6 +698,10 @@ public class Player : MovingEntity
         {
             if (atTarget && !interrupt)
             {
+                if (skipTurn)
+                {
+                    return;
+                }
                 setNextTarget();
                 PlayerEnd();
                 SoundManager.sm.PlayStepSound();
@@ -691,11 +710,6 @@ public class Player : MovingEntity
                 moving = false;
                 interrupt = false;
                 path = null;
-                if (setInterruptTarget)
-                {
-                    setInterruptTarget = false;
-
-                }
             }
 
             return;

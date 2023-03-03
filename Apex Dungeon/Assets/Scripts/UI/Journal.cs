@@ -1151,8 +1151,14 @@ public class Journal : ScriptableObject
     {
         SoundManager.sm.PlayMenuSound();
 
-        player.activeSkill = skills[selected];
-        player.targetMode = true;
+        if (!player.skipTurn)
+        {
+            player.activeSkill = skills[selected];
+            player.targetMode = true;
+        }
+        else {
+            GameManager.gmInstance.Log.AddLog($">{player.entityName} cannot perform that action.");
+        }
 
         selected = -1;
         GameObject.Destroy(popupRoot);
@@ -1161,18 +1167,6 @@ public class Journal : ScriptableObject
         setPlayerStats();
 
         closeJournal();
-    }
-
-    void forgetSkillListener()
-    {
-        SoundManager.sm.PlayUnequipSound();
-        skills.RemoveAt(selected);
-        selected = -1;
-        GameObject.Destroy(popupRoot);
-        popupOpen = false;
-
-        refreshTopicPanel();
-        setPlayerStats();
     }
 
     void equipListener()

@@ -396,7 +396,7 @@ public class Enemy : MovingEntity
             dir = Vector2.right;
         }
 
-        base.AttemptMove<Player>(row + (int)dir.y, col + (int)dir.x);
+        base.AttemptMove<Enemy>(row + (int)dir.y, col + (int)dir.x);
     }
 
     protected override void OnCantMove<T>(T Component)

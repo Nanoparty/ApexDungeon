@@ -184,6 +184,8 @@ public class StatusEffect
                 {
                     //Debug.Log("ZAP");
                     entity.AddTextPopup("Paralyzed", textColor);
+                    GameManager.gmInstance.Log.AddLog($"{entity.entityName} is paralyzed and cannot move.");
+                    entity.skipTurn = true;
                     //entity.SkipTurn();
                 }
                 break;
