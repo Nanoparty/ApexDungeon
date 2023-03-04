@@ -16,6 +16,7 @@ public class DungeonGenerator : ScriptableObject
     public static List<Vector2> itemList;
 
     public static GameObject waterBackgroundObject;
+    public static GameObject cloudBackgroundObject;
 
     public static int width = 50;
     public static int height = 50;
@@ -46,6 +47,7 @@ public class DungeonGenerator : ScriptableObject
     public GameObject Chest;
     public Biome[] Biomes;
     public GameObject WaterBackground;
+    public GameObject CloudBackground;
 
     public DungeonObject Initalize()
     {
@@ -76,7 +78,7 @@ public class DungeonGenerator : ScriptableObject
         enemyContainer.parent = dungeon.transform;
         furnitureContainer.parent = dungeon.transform;
 
-        //currentBiome = Biomes[Random.Range(0, Biomes.Length)];
+        currentBiome = Biomes[Random.Range(0, Biomes.Length)];
 
         GameObject op = GameObject.Instantiate(Opening, new Vector3(0, 0, 0), Quaternion.identity);
         op.transform.GetChild(0).transform.GetChild(0).gameObject.GetComponent<Text>().text = currentBiome.biomeName;
@@ -90,10 +92,15 @@ public class DungeonGenerator : ScriptableObject
         height += 2 * border;
 
         Destroy(waterBackgroundObject);
+        Destroy(cloudBackgroundObject);
 
         if (currentBiome.name == "Water")
         {
             waterBackgroundObject = Instantiate(WaterBackground, new Vector3(35,35,0), Quaternion.identity);
+        }
+        if (currentBiome.name == "Cloud")
+        {
+            cloudBackgroundObject = Instantiate(CloudBackground, new Vector3(35,35,0), Quaternion.identity) ;
         }
 
         InitializeTileMap();

@@ -1021,6 +1021,7 @@ public class Player : MovingEntity
             baseHp = (int)(baseHp * 1.1);
             hp = baseHp + (int)((float)baseHp * 0.05f * (int)(defense * defenseScale));
             maxHp = hp;
+            mp = maxMp;
             maxExp += (int)(0.5 * maxExp);
             didLevel = true;
             levelPoints++;
