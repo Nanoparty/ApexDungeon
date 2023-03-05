@@ -81,7 +81,7 @@ public class MagicTrap : Trap
                 Vector2 pos = GameManager.gmInstance.Dungeon.getRandomUnoccupiedTile();
                 player.setPosition((int)pos.x, (int)pos.y);
                 player.doneMoving();
-                player.interrupt = false;
+                player.interrupt = true;
                 
                 sr.sprite = whiteCircle;
             }

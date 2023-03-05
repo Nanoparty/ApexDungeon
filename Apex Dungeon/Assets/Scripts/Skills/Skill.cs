@@ -380,12 +380,10 @@ public class Skill
     {
         if (caster.getMP() < manaCost)
         {
-            Debug.Log("Not Enough Mana");
             return false;
         }
         if (caster.silenced)
         {
-            Debug.Log("Silenced");
             return false;
         }
 
@@ -409,7 +407,6 @@ public class Skill
 
         if (target == null && !canTargetLocation)
         {
-            Debug.Log("Invalid Target");
             return false;
         }
 
@@ -475,6 +472,7 @@ public class Skill
             case SkillType.Teleport:
                 Vector2 pos = GameManager.gmInstance.Dungeon.getRandomUnoccupiedTile();
                 target.setPosition((int)pos.x, (int)pos.y);
+                target.doneMoving();
                 break;
 
             case SkillType.ArmorPolish:

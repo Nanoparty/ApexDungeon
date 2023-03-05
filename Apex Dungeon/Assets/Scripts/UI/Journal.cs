@@ -741,7 +741,6 @@ public class Journal : ScriptableObject
     private void populateEffects()
     {
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
-        Debug.Log("Populate Effects");
         GameObject content = effectsPanel.GetComponentInChildren<ScrollRect>().gameObject.transform.GetChild(0).transform.GetChild(0).transform.GetChild(0).gameObject;
         foreach(Transform t in content.transform)
         {
@@ -758,7 +757,6 @@ public class Journal : ScriptableObject
 
         foreach (StatusEffect e in player.statusEffects)
         {
-            Debug.Log($"{e.effectId}");
             GameObject effectCard = Instantiate(statusEffectCard, new Vector3(0, 0, 0), Quaternion.identity);
             effectCard.GetComponent<StatusEffectCard>().Setup(e.effectId, e.duration);
             effectCard.transform.SetParent(content.transform);

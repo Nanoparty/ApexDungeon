@@ -35,16 +35,13 @@ public class LogoFade : MonoBehaviour
                 fadeInComplete = true;
             }
             screen.color = transparent;
-            Debug.Log("Fade in");
         }
         else if (!holdComplete)
         {
-            Debug.Log("Hold");
             StartCoroutine(Delay());
         }
         else if (!fadeOutComplete)
         {
-            Debug.Log("Fade Oout");
             Color solid = screen.color;
             solid.a += fadeInRate * Time.deltaTime;
             if (solid.a >= 0.99f)

@@ -179,10 +179,8 @@ public class StatusEffect
             case EffectType.paralysis:
                 // 50% chance to skip turn
                 float r = Random.Range(0f, 1f);
-                //Debug.Log("COIN: " + r);
                 if (r > 0.5f)
                 {
-                    //Debug.Log("ZAP");
                     entity.AddTextPopup("Paralyzed", textColor);
                     GameManager.gmInstance.Log.AddLog($"{entity.entityName} is paralyzed and cannot move.");
                     entity.skipTurn = true;

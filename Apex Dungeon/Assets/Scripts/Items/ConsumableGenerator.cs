@@ -517,7 +517,6 @@ public class ConsumableGenerator : ScriptableObject
         if (consumable == null)
         {
             consumable = CreateHealthPotion(level);
-            Debug.Log("CONSUMABLE WAS NULL! RAND = " + rand);
         }
 
         return consumable;

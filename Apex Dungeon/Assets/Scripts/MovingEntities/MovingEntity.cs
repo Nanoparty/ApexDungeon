@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using TMPro;
 using UnityEngine;
 using static StatusEffect;
@@ -43,6 +44,7 @@ public abstract class MovingEntity : MonoBehaviour
     public bool invisible;
     public bool root;
     public bool skipTurn;
+    public bool interrupt;
 
     protected float attackScale = 1f;
     protected float defenseScale = 1f;
@@ -107,7 +109,6 @@ public abstract class MovingEntity : MonoBehaviour
     {
         if (p == null || (p.nodes.Count == 0))
         {
-            doneMoving();
             return false;
         }
         return true;
@@ -157,30 +158,15 @@ public abstract class MovingEntity : MonoBehaviour
             return false;
         }
 
-        if (moving)
-        {
-            Path p = GeneratePath(startTile, endTile);
-            if (checkValidPath(p))
-            {
-                path = p;
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-            
-        }
-
-        if (!moving && atTarget)
+        if (atTarget)
         {
             if (GameManager.gmInstance.Dungeon.tileMap[r, c].getWall())
             {
                 return false;
             }
+
             if (path == null || path.nodes.Count == 0)
             {
-                Debug.Log("Generate new path");
                 path = pathing.findPath(startTile, endTile);
             }
             
@@ -212,30 +198,48 @@ public abstract class MovingEntity : MonoBehaviour
     {
         if (atTarget)
         {
-            if (!checkValidPath(path))
+            if (path == null || path.nodes.Count == 0)
             {
+                interrupt = false;
+                moving = false;
+                path = null;
+                return;
+            }
+
+            target = path.nodes.Dequeue();
+
+            if (GameManager.gmInstance.Dungeon.tileMap[(int)target.y, (int)target.x].getBlocked())
+            {
+                //Interupt Path
+                interrupt = false;
+                moving = false;
+                path = null;
                 return;
             }
             else
             {
-                target = path.nodes.Dequeue();
+                moving = true;
+                atTarget = false;
 
-                if (!GameManager.gmInstance.Dungeon.tileMap[(int)target.y, (int)target.x].getBlocked())
-                {
-                    moving = true;
-                    atTarget = false;
-
-                    setMapOccupancy();
-                    updateLocalPosition();
-                }
-                else
-                {
-                    //Interupt Path
-                    doneMoving();
-                    return;
-                }
+                setMapOccupancy();
+                updateLocalPosition();
             }
         }   
+    }
+
+    protected bool SetNewPath(int r, int c)
+    {
+        Tile currentTile = GameManager.gmInstance.Dungeon.tileMap[row, col];
+        Tile nextTile = GameManager.gmInstance.Dungeon.tileMap[(int)target.y, (int)target.x];
+        Tile endTile = GameManager.gmInstance.Dungeon.tileMap[r, c];
+
+        Path newPath = pathing.findPath(nextTile, endTile);
+        if (checkValidPath(newPath))
+        {
+            path = newPath;
+            return true;
+        }
+        return false;
     }
 
     protected virtual void Update()
@@ -280,6 +284,7 @@ public abstract class MovingEntity : MonoBehaviour
         if (Mathf.Abs(distancex) < 0.1 && Mathf.Abs(distancey) < 0.1)
         {
             atTarget = true;
+            interrupt = false;
             transform.position = new Vector2(target.x, target.y);
             if (path == null || path.nodes.Count == 0)
             {
@@ -293,11 +298,7 @@ public abstract class MovingEntity : MonoBehaviour
     {
         bool canMove = Move(r, c);
 
-        if(!canMove)
-        {
-            return false;
-        }
-        return true;
+        return canMove;
     }
 
     protected abstract void OnCantMove<T>(T Component) where T : Component;
@@ -429,13 +430,7 @@ public abstract class MovingEntity : MonoBehaviour
 
     public virtual void SkipTurn()
     {
-        Debug.Log("ENTITY SKIP TURN");
     }
-
-    //public Enumerable PauseForSeconds(float seconds)
-    //{
-
-    //}
 
     public virtual void CalculateStats()
     {
@@ -482,6 +477,7 @@ public abstract class MovingEntity : MonoBehaviour
         moving = false;
         path = null;
         atTarget = true;
+        interrupt = false;
     }
 
     public float getStrengthScale()

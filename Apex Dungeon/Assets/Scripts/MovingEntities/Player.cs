@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.U2D.Animation;
 using static CharacterClass;
 using static StatusEffect;
+using System.Net;
 
 public class Player : MovingEntity
 {
@@ -39,7 +40,6 @@ public class Player : MovingEntity
     public bool openPause = false;
     public bool ending = false;
     public bool fadeIn = true;
-    public bool interrupt = false;
     public bool attacking = false;
 
     private bool turnStart = true;
@@ -203,7 +203,6 @@ public class Player : MovingEntity
 
         bool val;
         val = AttemptMove<Player>(clickRow, clickCol);
-        PlayerEnd();
         return val;
     }
 
@@ -257,19 +256,11 @@ public class Player : MovingEntity
 
     protected override void Update()
     {
-        if (!GameManager.gmInstance.playersTurn)
-        {
-            return;
-        }
+        if (!GameManager.gmInstance.playersTurn) { return; }
 
-        if (turnStart)
-        {
-            turnStart = false;
-            PlayerStart();
-        }
+        if (turnStart) { PlayerStart(); }
 
         updatePlayerStatus();
-
 
         GameManager.gmInstance.Dungeon.UpdateShadows(row, col);
 
@@ -283,31 +274,6 @@ public class Player : MovingEntity
             return;
         }
 
-
-        if (moving && Input.GetButtonDown("Fire1")) {
-            int clickRow = (int)GameManager.gmInstance.mRow;
-            int clickCol = (int)GameManager.gmInstance.mCol;
-            if (moveController(clickRow, clickCol))
-            {
-                if (row == clickRow && col == clickCol)
-                {
-                    GameManager.gmInstance.UpdateCursor("Player", clickRow, clickCol);
-                }
-                else
-                {
-                    GameManager.gmInstance.UpdateCursor("Move", clickRow, clickCol);
-                }
-                
-            }
-            else
-            {
-                interrupt = true;
-                GameManager.gmInstance.UpdateCursor("Interrupt");
-            }
-            
-        }
-
-
         if (checkDead()) return;
 
 
@@ -317,15 +283,9 @@ public class Player : MovingEntity
             return;
         }
 
-
         if (openLevel || openPause || stairsOpen) return;
 
-
         debugMenu();
-
-        base.Update();
-
-        checkMoving();
 
         if (targetMode)
         {
@@ -337,167 +297,205 @@ public class Player : MovingEntity
             if (activeSkill.range == 0)
             {
                 activeSkill.Activate(this, row, col);
-                
+
                 targetMode = false;
                 activeSkill = null;
                 return;
             }
 
-            //draw tile highlights
-            if (!drawTargets)
-            {
-                drawTargets = true;
-                int range = activeSkill.range;
-                if (activeSkill.canTargetSelf)
-                {
-                    GameObject t = Instantiate(tileHighlight, transform.position, Quaternion.identity);
-                    targetTiles.Add(t);
-                }
-                for (int r = row - range; r <= row + range; r++)
-                {
-                    for (int c = col - range; c <= col + range; c++)
-                    {
-                        if (Mathf.Abs(row - r) + Mathf.Abs(col - c) <= range && GameManager.gmInstance.Dungeon.tileMap[r, c].getFloor())
-                        {
-                            if (r == row && c == col && !activeSkill.canTargetSelf) continue;
-                            GameObject t = Instantiate(tileHighlight, new Vector2(c, r), Quaternion.identity);
-                            targetTiles.Add(t);
-                        }
-                    }
-                }
-            }
+            DrawTargetHighlights();
 
-            Debug.Log("Checking targets");
+            TargetSelection();
 
-            //check for tile clicks
+            return;
+        }
+
+        base.Update();
+
+        if (moving)
+        {
+            // Look for interrupts
             if (Input.GetButtonDown("Fire1"))
             {
                 int clickRow = (int)GameManager.gmInstance.mRow;
                 int clickCol = (int)GameManager.gmInstance.mCol;
-                foreach (GameObject t in targetTiles)
+
+                if (isPlayer(clickRow, clickCol))
                 {
-                    if (t.transform.position.y == clickRow && t.transform.position.x == clickCol)
+                    interrupt = true;
+                }
+                else if (!isBlocked(clickRow, clickCol))
+                {
+                    if (SetNewPath(clickRow, clickCol))
                     {
-                        Debug.Log("Target Clicked");
-                        bool castSuccessful = activeSkill.Activate(this, clickRow, clickCol);
-                        
-
-                        // Finish Casting
-                        targetMode = false;
-                        foreach (GameObject o in targetTiles)
-                        {
-                            Destroy(o);
-                        }
-                        targetTiles.Clear();
-                        activeSkill = null;
-                        drawTargets = false;
-                        return;
+                        GameManager.gmInstance.UpdateCursor("Move", clickRow, clickCol);
                     }
-                }
-                // Cancel Casting
-                targetMode = false;
-                foreach (GameObject o in targetTiles)
-                {
-                    Destroy(o);
-                }
-                targetTiles.Clear();
-                activeSkill = null;
-                drawTargets = false;
-                return;
-
-            }
-            
-            return;
-        }
-
-        if (skipTurn)
-        {
-            skipTurn = false;
-            PlayerEnd();
-            return;
-        }
-
-        if (Input.GetButtonDown("Fire1"))
-        {
-            if (EventSystem.current.IsPointerOverGameObject())
-            {
-                return;
-            }
-
-            //check for UI Button
-            if (openJournal || openPause ||
-                journalButton.GetComponent<Clickable>().getClicked() ||
-                pauseButton.GetComponent<Clickable>().getClicked())
-            {
-                return;
-            }
-
-            int clickRow = (int)GameManager.gmInstance.mRow;
-            int clickCol = (int)GameManager.gmInstance.mCol;
-
-            //attack or interact
-            if (isAdjacent(clickRow, clickCol))
-            {
-                // Check for trap disarm
-                Trap t = GameManager.gmInstance.GetTrapAtLoc(clickRow, clickCol);
-                if (t != null) {
-                    if (t.DisarmTrap(this))
+                    else
                     {
-                        return;
+                        interrupt = true;
+                        GameManager.gmInstance.UpdateCursor("Blocked", clickRow, clickCol);
                     }
-                }
-
-                if (isFurniture(clickRow, clickCol))
-                {
-                    GameManager.gmInstance.UpdateCursor("Furniture", clickRow, clickCol);
-                    return;
-                }
-                else if (isChest(clickRow, clickCol))
-                {
-                    return;
                 }
                 else
                 {
-                    if (attackController(clickRow, clickCol))
+                    interrupt = true;
+                    GameManager.gmInstance.UpdateCursor("Blocked", clickRow, clickCol);
+                }
+            }
+
+            UpdatePathing();
+        }
+        if (!moving)
+        {
+            // Look for inputs
+            if (Input.GetButtonDown("Fire1"))
+            {
+                int clickRow = (int)GameManager.gmInstance.mRow;
+                int clickCol = (int)GameManager.gmInstance.mCol;
+
+                // Check for UI click
+                if (EventSystem.current.IsPointerOverGameObject()) { return; }
+
+                //check for UI Button
+                if (openJournal || openPause ||
+                    journalButton.GetComponent<Clickable>().getClicked() ||
+                    pauseButton.GetComponent<Clickable>().getClicked())
+                {
+                    return;
+                }
+
+                // Check for Attacking/Interraction
+                if (IsInAttackRange(clickRow, clickCol))
+                {
+                    // Attack Furniture
+                    if (isFurniture(clickRow, clickCol))
+                    {
+                        GameManager.gmInstance.UpdateCursor("Furniture", clickRow, clickCol);
+                        return;
+                    }
+                    // Open Chest
+                    else if (isChest(clickRow, clickCol))
+                    {
+                        return;
+                    }
+                    // Attack Enemy
+                    else if (attackController(clickRow, clickCol))
                     {
                         GameManager.gmInstance.UpdateCursor("Attack", clickRow, clickCol);
                         return;
                     }
+                    // Disarm Trap
+                    else if (isAdjacent(clickRow, clickCol) && GameManager.gmInstance.GetTrapAtLoc(clickRow, clickCol) != null)
+                    {
+                        Trap t = GameManager.gmInstance.GetTrapAtLoc(clickRow, clickCol);
+                        if (t.DisarmTrap(this))
+                        {
+                            return;
+                        }
+                    }
+                }
+
+                // Check for Movement
+                {
+                    if (isPlayer(clickRow, clickCol))
+                    {
+                        GameManager.gmInstance.UpdateCursor("Player", clickRow, clickCol);
+                        PlayerEnd();
+                        return;
+                    }
+                    if (!isBlocked(clickRow, clickCol))
+                    {
+                        GameManager.gmInstance.UpdateCursor("Move", clickRow, clickCol);
+                        if (moveController(clickRow, clickCol))
+                        {
+                            PlayerEnd();
+                        }
+                        return;
+                    }
+                    else
+                    {
+                        GameManager.gmInstance.UpdateCursor("Blocked", clickRow, clickCol);
+                        return;
+                    }
                 }
             }
+        }
+    }
 
-            //move
-            //if is player skip turn
-            if (isPlayer(clickRow, clickCol))
+    void DrawTargetHighlights()
+    {
+        if (!drawTargets)
+        {
+            drawTargets = true;
+            int range = activeSkill.range;
+            if (activeSkill.canTargetSelf)
             {
-                GameManager.gmInstance.UpdateCursor("Player", clickRow, clickCol);
-                moveController(clickRow, clickCol);
-                return;
+                GameObject t = Instantiate(tileHighlight, transform.position, Quaternion.identity);
+                targetTiles.Add(t);
             }
-            //if valid location move
-            if (!isBlocked(clickRow, clickCol))
+            for (int r = row - range; r <= row + range; r++)
             {
-                GameManager.gmInstance.UpdateCursor("Move", clickRow, clickCol);
-                moveController(clickRow, clickCol);
-                return;
+                for (int c = col - range; c <= col + range; c++)
+                {
+                    if (Mathf.Abs(row - r) + Mathf.Abs(col - c) <= range && GameManager.gmInstance.Dungeon.tileMap[r, c].getFloor())
+                    {
+                        if (r == row && c == col && !activeSkill.canTargetSelf) continue;
+                        GameObject t = Instantiate(tileHighlight, new Vector2(c, r), Quaternion.identity);
+                        targetTiles.Add(t);
+                    }
+                }
             }
-            else
+        }
+    }
+
+    void TargetSelection()
+    {
+        if (Input.GetButtonDown("Fire1"))
+        {
+            int clickRow = (int)GameManager.gmInstance.mRow;
+            int clickCol = (int)GameManager.gmInstance.mCol;
+            foreach (GameObject t in targetTiles)
             {
-                GameManager.gmInstance.UpdateCursor("Blocked", clickRow, clickCol);
-                return;
+                if (t.transform.position.y == clickRow && t.transform.position.x == clickCol)
+                {
+                    bool castSuccessful = activeSkill.Activate(this, clickRow, clickCol);
+
+
+                    // Finish Casting
+                    targetMode = false;
+                    foreach (GameObject o in targetTiles)
+                    {
+                        Destroy(o);
+                    }
+                    targetTiles.Clear();
+                    activeSkill = null;
+                    drawTargets = false;
+                    return;
+                }
             }
+            // Cancel Casting
+            targetMode = false;
+            foreach (GameObject o in targetTiles)
+            {
+                Destroy(o);
+            }
+            targetTiles.Clear();
+            activeSkill = null;
+            drawTargets = false;
+            return;
+
         }
     }
 
     public void PlayerStart()
     {
+        turnStart = false;
         ApplyStatusEffects("start");
         UpdatePlayerStatusEffectAlerts();
     }
 
     public void PlayerEnd()
     {
-        Debug.Log("PlayerEnd");
         GameManager.gmInstance.playersTurn = false;
         turnStart = true;
         ApplyStatusEffects("end");
@@ -685,35 +683,29 @@ public class Player : MovingEntity
     {
         if (!openJournal && !openPause)
         {
-            Debug.Log("Pause");
             pauseMenu.CreatePause(this);
             openPause = true;
             pauseButton.GetComponent<Clickable>().setClicked(false);
         }
     }
 
-    void checkMoving()
+    void UpdatePathing()
     {
-        if (moving)
-        {
-            if (atTarget && !interrupt)
+        if (atTarget) {
+            if (interrupt)
             {
-                if (skipTurn)
-                {
-                    return;
-                }
-                setNextTarget();
-                PlayerEnd();
-                SoundManager.sm.PlayStepSound();
-            }
-            else if(atTarget){
                 moving = false;
                 interrupt = false;
                 path = null;
             }
-
-            return;
+            else
+            {
+                setNextTarget();
+                PlayerEnd();
+                SoundManager.sm.PlayStepSound();
+            }
         }
+        return;
     }
 
     bool attackController(int clickRow, int clickCol)
@@ -818,6 +810,17 @@ public class Player : MovingEntity
         int rDis = Mathf.Abs((r) - row);
         int cDis = Mathf.Abs(c - col);
         if ((rDis == 1 && cDis == 0) || (rDis == 0 && cDis == 1))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    bool IsInAttackRange(int r, int c)
+    {
+        int rDis = Mathf.Abs(r - row);
+        int cDis = Mathf.Abs(c - col);
+        if (rDis + cDis <= attackRange)
         {
             return true;
         }

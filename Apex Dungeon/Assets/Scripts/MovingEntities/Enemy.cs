@@ -266,7 +266,6 @@ public class Enemy : MovingEntity
     {
         if (canUseSkill())
         {
-            Debug.Log("Can Use Skill");
             // Chance to use skill
             int chance = Random.Range(0, 100);
             if (chance < 20)
@@ -284,12 +283,9 @@ public class Enemy : MovingEntity
                     success = s.Activate(this, pRow, pCol);
                 }
 
-                Debug.Log("Using Skill " + s.skillName + " : " + success);
-
                 availableSkills.Clear();
                 return;
             }
-            Debug.Log("Failed to use skill");
             availableSkills.Clear();
         }
         if (canAttackTarget())
