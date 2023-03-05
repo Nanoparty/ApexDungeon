@@ -195,11 +195,7 @@ public class Player : MovingEntity
 
     bool moveController(int clickRow, int clickCol)
     {
-        if (skipTurn)
-        {
-            path = null;
-            return false;
-        }
+        
 
         bool val;
         val = AttemptMove<Player>(clickRow, clickCol);
