@@ -3,53 +3,54 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
-using UnityEngine.SceneManagement;
 using UnityEngine.U2D.Animation;
 using static CharacterClass;
 using static StatusEffect;
-using System.Net;
 
 public class Player : MovingEntity
 {
+    [Header("Prefabs")]
     public GameObject endingScreen;
     public GameObject goldText;
     public LevelUp levelUp;
     public Pause pauseMenu;
     public Journal journal;
 
+    [Header("UI Buttons")]
+    public GameObject journalButton;
+    public GameObject pauseButton;
+
+    [Header("Active Skill")]
+    public Skill activeSkill;
+
     private GameObject hpBar;
     private GameObject mpBar;
     private GameObject expBar;
 
-    public GameObject journalButton;
-    public GameObject pauseButton;
-
+    [HideInInspector]
     public GameObject tileHighlight;
     public List<GameObject> targetTiles;
 
     private PlayerGear gear;
-    private Animator animator;
     private SpriteLibrary sl;
     private GameObject stairsModal;
     private GameObject endScreenHolder;
 
     private string playerName;
     private int gold;
+
+    [Header("Flags")]
     public bool openJournal = false;
     public bool openLevel = false;
     public bool openPause = false;
     public bool ending = false;
     public bool fadeIn = true;
     public bool attacking = false;
-
-    private bool turnStart = true;
-    private bool turnEnd = false;
-
     public bool stairsOpen = false;
     public bool targetMode = false;
-    private bool drawTargets = false;
+    public bool drawTargets = false;
+    private bool turnStart = true;
 
-    public Skill activeSkill;
 
     [Header("Character Sprite Libraries")]
     [SerializeField] private SpriteLibraryAsset ArcherLibrary;
@@ -68,186 +69,19 @@ public class Player : MovingEntity
     [Header("Status Effects")]
     [SerializeField] private GameObject StatusEffectAlert;
 
-    private Vector2 interruptTarget;
-    private bool setInterruptTarget;
-
     protected override void Start()
     {
         base.Start();
+        InitializeObjects();
+        SetInitialValues();
 
-        initializeObjects();
-        setInitialValues();
-
-        if (GameManager.gmInstance.level > 1 || Data.loadData || GameManager.gmInstance.gameStarted)
-        {
-            loadCharacterData();
+        if (GameManager.gmInstance.level > 1 || Data.loadData || GameManager.gmInstance.gameStarted){
+            LoadCharacterData();
         }
 
         GameManager.gmInstance.gameStarted = true;
 
         GameManager.gmInstance.Log.AddLog($">{entityName} enters dungeon level " + GameManager.gmInstance.level + ".");
-        
-    }
-
-    void setInitialValues() {
-        playerName = Data.activeCharacter ?? "Bob";
-        entityName = playerName;
-
-        mp = 100;
-        maxMp = 50;
-        expLevel = 1;
-        exp = 0;
-        maxExp = 100;
-        attack = 10;
-        strength = 10;
-        attack = 10;
-        defense = 10;
-        intelligence = 10;
-        critical = 10;
-        evade = 10;
-        blockStat = 10;
-        type = 1;
-        gold = 0;
-
-        attackRange = 1;
-
-        baseHp = 100;
-        hp = baseHp + (int)((float)baseHp * 0.05f * (int)(defense * defenseScale));
-        maxHp = hp;
-
-        //strengthScale = 1.5f;
-
-        // Set ClassType Variables
-        if (Data.characterClass == ClassType.Archer)
-        {
-            sl.spriteLibraryAsset = ArcherLibrary;
-        }
-        if (Data.characterClass == ClassType.Warrior)
-        {
-            sl.spriteLibraryAsset = WarriorLibrary;
-        }
-        if (Data.characterClass == ClassType.Paladin)
-        {
-            sl.spriteLibraryAsset = PaladinLibrary;
-        }
-        if (Data.characterClass == ClassType.Thief)
-        {
-            sl.spriteLibraryAsset = ThiefLibrary;
-        }
-        if (Data.characterClass == ClassType.Mage)
-        {
-            sl.spriteLibraryAsset = MageLibrary;
-        }
-        if (Data.characterClass == ClassType.Necromancer)
-        {
-            sl.spriteLibraryAsset = NecromancerLibrary;
-        }
-        if (Data.characterClass == ClassType.Druid)
-        {
-            sl.spriteLibraryAsset = DruidLibrary;
-        }
-        if (Data.characterClass == ClassType.Monk)
-        {
-            sl.spriteLibraryAsset = MonkLibrary;
-        }
-        if (Data.characterClass == ClassType.Bard)
-        {
-            sl.spriteLibraryAsset = BardLibrary;
-        }
-        if (Data.characterClass == ClassType.Knight)
-        {
-            sl.spriteLibraryAsset = KnightLibrary;
-        }
-        if (Data.characterClass == ClassType.Swordsman)
-        {
-            sl.spriteLibraryAsset = SwordsmanLibrary;
-        }
-        if (Data.characterClass == ClassType.Priest)
-        {
-            sl.spriteLibraryAsset = PriestLibrary;
-        }
-    }
-
-    void initializeObjects() {
-        SoundManager.sm.PlayDungeonMusic();
-
-        journal.SetPlayer(this);
-
-        animator = transform.GetChild(1).gameObject.transform.GetComponent<Animator>();
-        sl = transform.GetChild(1).gameObject.GetComponent<SpriteLibrary>();
-        gear = new PlayerGear();
-        targetTiles = new List<GameObject>();
-
-        hpBar = GameObject.FindGameObjectWithTag("hpbar");
-        mpBar = GameObject.FindGameObjectWithTag("mpbar");
-        expBar = GameObject.FindGameObjectWithTag("xpbar");
-
-        journalButton = GameObject.FindGameObjectWithTag("characterButton");
-        pauseButton = GameObject.FindGameObjectWithTag("PauseButton");
-        journalButton.GetComponent<Button>().onClick.AddListener(journalListener);
-        pauseButton.GetComponent<Button>().onClick.AddListener(pauseListener);
-
-        stairsModal = GameObject.FindGameObjectWithTag("stairspopup");
-        stairsModal.SetActive(false);
-        stairsModal.transform.GetChild(2).GetComponent<Button>().onClick.AddListener(stairsNo);
-        stairsModal.transform.GetChild(3).GetComponent<Button>().onClick.AddListener(stairsYes);
-    }
-
-    bool moveController(int clickRow, int clickCol)
-    {
-        
-
-        bool val;
-        val = AttemptMove<Player>(clickRow, clickCol);
-        return val;
-    }
-
-    void stairsYes()
-    {
-        nextFloor();
-    }
-
-    void stairsNo()
-    {
-        stairsModal.SetActive(false);
-        stairsOpen = false;
-    }
-
-    public void saveScores()
-    {
-        endScreenHolder.transform.GetChild(3).gameObject.SetActive(true);
-        endScreenHolder.transform.GetChild(4).gameObject.SetActive(true);
-        Data.inProgress = false;
-        Data.RemoveActive();
-    }
-
-    private bool checkDead()
-    {
-        if (dead)
-        {
-
-            if (fadeIn) {
-                SoundManager.sm.PlayDeathSound();
-                //calculate and save score
-                GameManager.gmInstance.score += gold;
-                List<(string, int)> scores = Data.scores ?? new List<(string, int)>();
-                scores.Add((GameManager.gmInstance.playerName, GameManager.gmInstance.score));
-                Data.scores = scores;
-                fadeIn = false;
-
-                //death screen
-                GameObject op = GameObject.Instantiate(endingScreen, new Vector3(0, 0, 0), Quaternion.identity);
-                op.transform.GetChild(2).gameObject.GetComponent<Text>().text = "Score: " + GameManager.gmInstance.score.ToString();
-                op.transform.GetChild(1).gameObject.GetComponent<Text>().text = "Floor " + GameManager.gmInstance.level;
-                op.transform.SetParent(GameObject.FindGameObjectWithTag("Canvas").transform, false);
-                op.transform.GetChild(3).gameObject.SetActive(false);
-                op.transform.GetChild(4).gameObject.SetActive(false);
-                endScreenHolder = op;
-            }
-
-            return true;
-        }
-        return false;
     }
 
     protected override void Update()
@@ -256,21 +90,21 @@ public class Player : MovingEntity
 
         if (turnStart) { PlayerStart(); }
 
-        updatePlayerStatus();
+        UpdatePlayerStatus();
 
         GameManager.gmInstance.Dungeon.UpdateShadows(row, col);
 
         if (attacking)
         {
-            if (animator.GetCurrentAnimatorStateInfo(0).IsName("Idle")) {
+            if (animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
+            {
                 attacking = false;
                 PlayerEnd();
-                GameManager.gmInstance.UpdateCursor("Done");
             }
             return;
         }
 
-        if (checkDead()) return;
+        if (CheckDead()) return;
 
 
         if (openJournal || journal.isOpen())
@@ -281,7 +115,7 @@ public class Player : MovingEntity
 
         if (openLevel || openPause || stairsOpen) return;
 
-        debugMenu();
+        DebugMenu();
 
         if (targetMode)
         {
@@ -316,26 +150,20 @@ public class Player : MovingEntity
                 int clickRow = (int)GameManager.gmInstance.mRow;
                 int clickCol = (int)GameManager.gmInstance.mCol;
 
-                if (isPlayer(clickRow, clickCol))
+                if (IsPlayer(clickRow, clickCol))
                 {
                     interrupt = true;
                 }
-                else if (!isBlocked(clickRow, clickCol))
+                else if (!IsBlocked(clickRow, clickCol))
                 {
-                    if (SetNewPath(clickRow, clickCol))
-                    {
-                        GameManager.gmInstance.UpdateCursor("Move", clickRow, clickCol);
-                    }
-                    else
+                    if (!SetNewPath(clickRow, clickCol))
                     {
                         interrupt = true;
-                        GameManager.gmInstance.UpdateCursor("Blocked", clickRow, clickCol);
                     }
                 }
                 else
                 {
                     interrupt = true;
-                    GameManager.gmInstance.UpdateCursor("Blocked", clickRow, clickCol);
                 }
             }
 
@@ -364,58 +192,192 @@ public class Player : MovingEntity
                 if (IsInAttackRange(clickRow, clickCol))
                 {
                     // Attack Furniture
-                    if (isFurniture(clickRow, clickCol))
-                    {
-                        GameManager.gmInstance.UpdateCursor("Furniture", clickRow, clickCol);
-                        return;
-                    }
+                    if (IsFurniture(clickRow, clickCol)) { return; }
                     // Open Chest
-                    else if (isChest(clickRow, clickCol))
-                    {
-                        return;
-                    }
+                    else if (IsChest(clickRow, clickCol)) { return; }
                     // Attack Enemy
-                    else if (attackController(clickRow, clickCol))
-                    {
-                        GameManager.gmInstance.UpdateCursor("Attack", clickRow, clickCol);
-                        return;
-                    }
+                    else if (AttackController(clickRow, clickCol)) { return; }
                     // Disarm Trap
-                    else if (isAdjacent(clickRow, clickCol) && GameManager.gmInstance.GetTrapAtLoc(clickRow, clickCol) != null)
+                    else if (IsAdjacent(clickRow, clickCol) && GameManager.gmInstance.GetTrapAtLoc(clickRow, clickCol) != null)
                     {
                         Trap t = GameManager.gmInstance.GetTrapAtLoc(clickRow, clickCol);
-                        if (t.DisarmTrap(this))
-                        {
-                            return;
-                        }
+                        if (t.DisarmTrap(this)) { return; }
                     }
                 }
 
                 // Check for Movement
                 {
-                    if (isPlayer(clickRow, clickCol))
+                    if (IsPlayer(clickRow, clickCol))
                     {
-                        GameManager.gmInstance.UpdateCursor("Player", clickRow, clickCol);
                         PlayerEnd();
                         return;
                     }
-                    if (!isBlocked(clickRow, clickCol))
+                    if (!IsBlocked(clickRow, clickCol))
                     {
-                        GameManager.gmInstance.UpdateCursor("Move", clickRow, clickCol);
-                        if (moveController(clickRow, clickCol))
+                        if (AttemptMove<Player>(clickRow, clickCol))
                         {
                             PlayerEnd();
                         }
                         return;
                     }
-                    else
-                    {
-                        GameManager.gmInstance.UpdateCursor("Blocked", clickRow, clickCol);
-                        return;
-                    }
+                    else { return; }
                 }
             }
         }
+    }
+
+    protected void SetInitialValues()
+    {
+        playerName = Data.activeCharacter ?? "Bob";
+        entityName = playerName;
+
+        mp = 100;
+        maxMp = 50;
+        expLevel = 1;
+        exp = 0;
+        maxExp = 100;
+        attack = 10;
+        strength = 10;
+        attack = 10;
+        defense = 10;
+        intelligence = 10;
+        critical = 10;
+        evade = 10;
+        blockStat = 10;
+        type = 1;
+        gold = 0;
+
+        attackRange = 1;
+
+        baseHp = 100;
+        hp = baseHp + (int)((float)baseHp * 0.05f * (int)(defense * defenseScale));
+        maxHp = hp;
+
+
+        // Set ClassType Variables
+        {
+            if (Data.characterClass == ClassType.Archer)
+            {
+                sl.spriteLibraryAsset = ArcherLibrary;
+            }
+            if (Data.characterClass == ClassType.Warrior)
+            {
+                sl.spriteLibraryAsset = WarriorLibrary;
+            }
+            if (Data.characterClass == ClassType.Paladin)
+            {
+                sl.spriteLibraryAsset = PaladinLibrary;
+            }
+            if (Data.characterClass == ClassType.Thief)
+            {
+                sl.spriteLibraryAsset = ThiefLibrary;
+            }
+            if (Data.characterClass == ClassType.Mage)
+            {
+                sl.spriteLibraryAsset = MageLibrary;
+            }
+            if (Data.characterClass == ClassType.Necromancer)
+            {
+                sl.spriteLibraryAsset = NecromancerLibrary;
+            }
+            if (Data.characterClass == ClassType.Druid)
+            {
+                sl.spriteLibraryAsset = DruidLibrary;
+            }
+            if (Data.characterClass == ClassType.Monk)
+            {
+                sl.spriteLibraryAsset = MonkLibrary;
+            }
+            if (Data.characterClass == ClassType.Bard)
+            {
+                sl.spriteLibraryAsset = BardLibrary;
+            }
+            if (Data.characterClass == ClassType.Knight)
+            {
+                sl.spriteLibraryAsset = KnightLibrary;
+            }
+            if (Data.characterClass == ClassType.Swordsman)
+            {
+                sl.spriteLibraryAsset = SwordsmanLibrary;
+            }
+            if (Data.characterClass == ClassType.Priest)
+            {
+                sl.spriteLibraryAsset = PriestLibrary;
+            }
+        }
+    }
+
+    protected  void InitializeObjects() {
+
+        SoundManager.sm.PlayDungeonMusic();
+
+        journal.SetPlayer(this);
+
+        sl = transform.GetChild(1).gameObject.GetComponent<SpriteLibrary>();
+        gear = new PlayerGear();
+        targetTiles = new List<GameObject>();
+
+        hpBar = GameObject.FindGameObjectWithTag("hpbar");
+        mpBar = GameObject.FindGameObjectWithTag("mpbar");
+        expBar = GameObject.FindGameObjectWithTag("xpbar");
+
+        journalButton = GameObject.FindGameObjectWithTag("characterButton");
+        pauseButton = GameObject.FindGameObjectWithTag("PauseButton");
+        journalButton.GetComponent<Button>().onClick.AddListener(JournalListener);
+        pauseButton.GetComponent<Button>().onClick.AddListener(PauseListener);
+
+        stairsModal = GameObject.FindGameObjectWithTag("stairspopup");
+        stairsModal.SetActive(false);
+        stairsModal.transform.GetChild(2).GetComponent<Button>().onClick.AddListener(StairsReject);
+        stairsModal.transform.GetChild(3).GetComponent<Button>().onClick.AddListener(StairsConfirm);
+    }
+
+    private void StairsConfirm()
+    {
+        NextFloor();
+    }
+
+    private void StairsReject()
+    {
+        stairsModal.SetActive(false);
+        stairsOpen = false;
+    }
+
+    public void SaveScores()
+    {
+        endScreenHolder.transform.GetChild(3).gameObject.SetActive(true);
+        endScreenHolder.transform.GetChild(4).gameObject.SetActive(true);
+        Data.inProgress = false;
+        Data.RemoveActive();
+    }
+
+    private bool CheckDead()
+    {
+        if (dead)
+        {
+
+            if (fadeIn) {
+                SoundManager.sm.PlayDeathSound();
+                //calculate and save score
+                GameManager.gmInstance.score += gold;
+                List<(string, int)> scores = Data.scores ?? new List<(string, int)>();
+                scores.Add((GameManager.gmInstance.playerName, GameManager.gmInstance.score));
+                Data.scores = scores;
+                fadeIn = false;
+
+                //death screen
+                GameObject op = Instantiate(endingScreen, new Vector3(0, 0, 0), Quaternion.identity);
+                op.transform.GetChild(2).gameObject.GetComponent<Text>().text = "Score: " + GameManager.gmInstance.score.ToString();
+                op.transform.GetChild(1).gameObject.GetComponent<Text>().text = "Floor " + GameManager.gmInstance.level;
+                op.transform.SetParent(GameObject.FindGameObjectWithTag("Canvas").transform, false);
+                op.transform.GetChild(3).gameObject.SetActive(false);
+                op.transform.GetChild(4).gameObject.SetActive(false);
+                endScreenHolder = op;
+            }
+
+            return true;
+        }
+        return false;
     }
 
     void DrawTargetHighlights()
@@ -499,11 +461,11 @@ public class Player : MovingEntity
         UpdatePlayerStatusEffectAlerts();
     }
 
-    void debugMenu() {
+    void DebugMenu() {
         //Debugging tool
         if (Input.GetKeyDown("t"))
         {
-            nextFloor();
+            NextFloor();
         }
         if (Input.GetKeyDown("b"))
         {
@@ -515,12 +477,7 @@ public class Player : MovingEntity
         }
     }
 
-    public bool isBlocked(int r, int c)
-    {
-        return GameManager.gmInstance.Dungeon.tileMap[r, c].getWall() || GameManager.gmInstance.Dungeon.tileMap[r,c].getVoid();
-    }
-
-    public void saveCharacterData(){
+    public void SaveCharacterData(){
         Data.playerName = playerName;
         Data.baseHp = baseHp;
         Data.hp = hp;
@@ -546,7 +503,9 @@ public class Player : MovingEntity
         Data.SaveCharacter();
     }
 
-    public void loadCharacterData(){
+    public void LoadCharacterData(){
+        
+        
         playerName = Data.playerName;
         baseHp = Data.baseHp;
         hp = Data.hp;
@@ -565,14 +524,14 @@ public class Player : MovingEntity
         blockStat = Data.block;
         gold = Data.gold;
         gear = Data.gear;
-        statusEffects = Data.statusEffects;
+        statusEffects = Data.statusEffects ?? new List<StatusEffect>();
     }
 
     void OnApplicationFocus(bool hasFocus)
     {
         if (!hasFocus)
         {
-            saveCharacterData();
+            SaveCharacterData();
             Data.SaveToFile();
         }
     }
@@ -582,11 +541,11 @@ public class Player : MovingEntity
         journal.closeJournal();
     }
 
-    public void nextFloor(){
+    public void NextFloor(){
         stairsModal.SetActive(true);
         GameManager.gmInstance.Dungeon.setFullBright(false);
         GameManager.gmInstance.level++;
-        saveCharacterData();
+        SaveCharacterData();
         Data.SaveToFile();
         GameManager.gmInstance.Reset();
     }
@@ -633,9 +592,9 @@ public class Player : MovingEntity
         }
     }
 
-    bool isFurniture(int row, int col)
+    bool IsFurniture(int row, int col)
     {
-        Furniture f = GameManager.gmInstance.getFurnitureAtLoc(row, col);
+        Furniture f = GameManager.gmInstance.GetFurnitureAtLoc(row, col);
         if (f != null)
         {
             f.setDamage(-1);
@@ -646,9 +605,9 @@ public class Player : MovingEntity
         else return false;
     }
 
-    bool isChest(int row, int col)
+    bool IsChest(int row, int col)
     {
-        Chest c = GameManager.gmInstance.getChestAtLoc(row, col);
+        Chest c = GameManager.gmInstance.GetChestAtLoc(row, col);
         if (c != null)
         {
             c.OpenChest();
@@ -659,12 +618,12 @@ public class Player : MovingEntity
         else return false;
     }
 
-    bool isPlayer(int nRow, int nCol)
+    bool IsPlayer(int nRow, int nCol)
     {
         return (nRow == row && nCol == col);
     }
 
-    void journalListener()
+    void JournalListener()
     {
         if (!openJournal && !openPause)
         {
@@ -675,7 +634,7 @@ public class Player : MovingEntity
         }
     }
 
-    void pauseListener()
+    void PauseListener()
     {
         if (!openJournal && !openPause)
         {
@@ -696,7 +655,7 @@ public class Player : MovingEntity
             }
             else
             {
-                setNextTarget();
+                SetNextTarget();
                 PlayerEnd();
                 SoundManager.sm.PlayStepSound();
             }
@@ -704,25 +663,25 @@ public class Player : MovingEntity
         return;
     }
 
-    bool attackController(int clickRow, int clickCol)
+    bool AttackController(int clickRow, int clickCol)
     {
-        Enemy enemy = GameManager.gmInstance.getEnemyAtLoc(clickRow, clickCol);
+        Enemy enemy = GameManager.gmInstance.GetEnemyAtLoc(clickRow, clickCol);
         if (enemy != null && attacking == false)
         {
-            setAttackAnimation(clickRow, clickCol);
+            SetAttackAnimation(clickRow, clickCol);
             attacking = true;
             float targetDamage = 0.0f;
             int dice = Random.Range(0, 100);
             if (dice <= (int)(critical * criticalScale))
             {
-                targetDamage = calculateDamage(3);
-                enemy.takeDamage(targetDamage, Color.red, true);
+                targetDamage = CalculateDamage(3);
+                enemy.TakeDamage(targetDamage, Color.red, true);
                 
             }
             else
             {
-                targetDamage = calculateDamage(3);
-                enemy.takeDamage(calculateDamage(), Color.red);
+                targetDamage = CalculateDamage(3);
+                enemy.TakeDamage(CalculateDamage(), Color.red);
             }
 
             GameManager.gmInstance.Log.AddLog($">{entityName} attacks {enemy.entityName} for {(int)targetDamage} HP.");
@@ -738,20 +697,7 @@ public class Player : MovingEntity
         return false;
     }
 
-    public void AttackCalculations()
-    {
-
-    }
-
-    public void setAttackAnimation(int enemyRow, int enemyCol)
-    {
-        if (enemyRow > row) animator.Play("AttackUp");
-        if (enemyRow < row) animator.Play("AttackDown");
-        if (enemyCol > col) animator.Play("AttackRight");
-        if (enemyCol < col) animator.Play("AttackLeft");
-    }
-
-    public override void takeDamage(float d, Color c, bool critical = false, bool canDodge = true){
+    public override void TakeDamage(float d, Color c, bool critical = false, bool canDodge = true){
         if (canDodge)
         {
             int dice = Random.Range(1, 101);
@@ -801,28 +747,6 @@ public class Player : MovingEntity
         UpdatePlayerStatusEffectAlerts();
     }
 
-    bool isAdjacent(int r, int c)
-    {
-        int rDis = Mathf.Abs((r) - row);
-        int cDis = Mathf.Abs(c - col);
-        if ((rDis == 1 && cDis == 0) || (rDis == 0 && cDis == 1))
-        {
-            return true;
-        }
-        return false;
-    }
-
-    bool IsInAttackRange(int r, int c)
-    {
-        int rDis = Mathf.Abs(r - row);
-        int cDis = Mathf.Abs(c - col);
-        if (rDis + cDis <= attackRange)
-        {
-            return true;
-        }
-        return false;
-    }
-
     protected override bool AttemptMove<T>(int r, int c)
     {
         bool canMove = base.AttemptMove<T>(r,c);
@@ -835,12 +759,7 @@ public class Player : MovingEntity
         return false;
     }
 
-    protected override void OnCantMove<T>(T Component)
-    {
-        //INTERACTION
-    }
-
-    void updatePlayerStatus()
+    void UpdatePlayerStatus()
     {
         if (hp < 0) hp = 0;
         if (hp > maxHp) hp = maxHp;
@@ -914,89 +833,64 @@ public class Player : MovingEntity
         UpdatePlayerStatusEffectAlerts();
     }
 
-    public override void SkipTurn()
-    {
-        PlayerEnd();
-    }
-
-    public int getStrength(){
+    public int GetStrength(){
         return strength;
     }
-    public int getDefense(){
+    public int GetDefense(){
         return defense;
     }
-    public int getIntelligence(){
+    public int GetIntelligence(){
         return intelligence;
     }
-    public int getCritical(){
+    public int GetCritical(){
         return critical;
     }
-    public int getEvade(){
+    public int GetEvade(){
         return evade;
     }
-    public int getBlock(){
-        return blockStat;
-    }
     
-    public int getGold(){
+    public int GetGold(){
         return gold;
     }
-    public int getExpLevel(){
+    public int GetExpLevel(){
         return expLevel;
     }
-    public int getExp(){
+    public int GetExp(){
         return exp;
     }
-    public int getMaxExp(){
+    public int GetMaxExp(){
         return maxExp;
     }
-    public PlayerGear getGear(){
+    public PlayerGear GetGear(){
         return gear;
     }
-    public void setGear(PlayerGear gear){
-        this.gear = gear;
+    public string GetName()
+    {
+        return playerName;
     }
 
-    public void addMP(int i)
+    public void AddMP(int i)
     {
         mp += i;
         if(mp > maxMp) mp = maxMp;
     }
-
-    public void UpdateHealthAndDefense()
-    {
-        var newHp = baseHp + (int)((float)baseHp * 0.05f * (int)(defense * defenseScale));
-        var diff = maxHp - newHp;
-        if(diff > 0) // decrease health
-        {
-            maxHp = newHp;
-            hp -= diff;
-            if (hp <= 0) hp = 1;
-        }
-        if (diff < 0) //increase health
-        {
-            maxHp = newHp;
-            hp -= diff;
-            if (hp > maxHp) hp = maxHp;
-        }
-    }
-    public void addMaxMP(int i){
+    public void AddMaxMP(int i){
         maxMp += i;
     }
-    public void addHP(int i)
+    public void AddHP(int i)
     {
         hp += i;
         if(hp > maxHp) hp = maxHp;
         AddTextPopup($"+{i}", new Color(50f / 255f, 205f / 255f, 50f / 255f));
     }
-    public void addMaxHP(int i){
+    public void AddMaxHP(int i){
         maxHp += i;
         if(hp > maxHp)
         {
             hp = maxHp;
         }
     }
-    public void addBaseHP(int i)
+    public void AddBaseHP(int i)
     {
         baseHp += i;
         int newHp = baseHp + (int)((float)baseHp * 0.05f * (int)(defense * defenseScale));
@@ -1005,7 +899,7 @@ public class Player : MovingEntity
         hp += diff;
        
     }
-    public void addExp(int i){
+    public void AddExp(int i){
         exp += i;
         GameManager.gmInstance.Log.AddLog($">{entityName} receives +{i} experience.");
         int levelPoints = 0;
@@ -1031,31 +925,31 @@ public class Player : MovingEntity
             levelUp.CreatePopup(this, levelPoints);
         }
     }
-    public void addStrength(int i){
+    public void AddStrength(int i){
         strength += i;
     }
-    public void addAttack(int i)
+    public void AddAttack(int i)
     {
         attack += i;
     }
-    
-    public void addCrit(int i){
+    public void AddCrit(int i){
         critical += i;
     }
-    public void addIntelligence(int i){
+    public void AddIntelligence(int i){
         intelligence += i;
     }
-    public void addBlock(int i){
+    public void AddBlock(int i){
         blockStat += i;
     }
-    public void addEvade(int i){
+    public void AddEvade(int i){
         evade += i;
     }
-    public void setStrength(int i)
+
+    public void SetStrength(int i)
     {
         strength = i;
     }
-    public void setDefense(int i)
+    public void SetDefense(int i)
     {
         defense = i;
         int newHp = baseHp + (int)((float)baseHp * 0.05f * (int)(defense * defenseScale));
@@ -1065,16 +959,34 @@ public class Player : MovingEntity
 
         
     }
-    public void setCritical(int i)
+    public void SetCritical(int i)
     {
         critical = i;
     }
-    public void setEvasion(int i)
+    public void SetEvasion(int i)
     {
         evade = i;
     }
-    public string getName()
+    public void SetGear(PlayerGear gear)
     {
-        return playerName;
+        this.gear = gear;
+    }
+
+    public void UpdateHealthAndDefense()
+    {
+        var newHp = baseHp + (int)((float)baseHp * 0.05f * (int)(defense * defenseScale));
+        var diff = maxHp - newHp;
+        if (diff > 0) // decrease health
+        {
+            maxHp = newHp;
+            hp -= diff;
+            if (hp <= 0) hp = 1;
+        }
+        if (diff < 0) //increase health
+        {
+            maxHp = newHp;
+            hp -= diff;
+            if (hp > maxHp) hp = maxHp;
+        }
     }
 }

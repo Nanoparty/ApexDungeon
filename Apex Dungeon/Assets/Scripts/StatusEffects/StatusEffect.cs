@@ -146,35 +146,35 @@ public class StatusEffect
         {
             case EffectType.health_regen:
                 // Heal 10% max health
-                int healing = (int)(entity.getMaxHP() * 0.1);
-                entity.takeDamage(healing, textColor, false, false);
+                int healing = (int)(entity.GetMaxHP() * 0.1);
+                entity.TakeDamage(healing, textColor, false, false);
                 break;
             case EffectType.mana_regen:
                 // Heal 10% max health
-                int mana = (int)(entity.getMaxMP() * 0.1);
-                entity.addMp(mana);
+                int mana = (int)(entity.GetMaxMP() * 0.1);
+                entity.AddMp(mana);
                 break;
             case EffectType.poison:
                 // Damage 10% max health
-                int poisonDamage = (int)(entity.getMaxHP() * 0.1);
-                entity.takeDamage(-poisonDamage, textColor, false, false);
+                int poisonDamage = (int)(entity.GetMaxHP() * 0.1);
+                entity.TakeDamage(-poisonDamage, textColor, false, false);
                 break;
             case EffectType.bleed:
                 // Damage 5% max health
-                int bleedDamage = (int)(entity.getMaxHP() * 0.05);
-                entity.takeDamage(-bleedDamage, textColor, false, false);
+                int bleedDamage = (int)(entity.GetMaxHP() * 0.05);
+                entity.TakeDamage(-bleedDamage, textColor, false, false);
                 break;
             case EffectType.burn:
-                int burnDamage = (int)(entity.getMaxHP() * 0.05);
-                entity.takeDamage(-burnDamage, textColor, false, false);
+                int burnDamage = (int)(entity.GetMaxHP() * 0.05);
+                entity.TakeDamage(-burnDamage, textColor, false, false);
                 break;
             case EffectType.freeze:
-                int freezeDamage = (int)(entity.getMaxHP() * 0.05);
-                entity.takeDamage(-freezeDamage, textColor, false, false);
+                int freezeDamage = (int)(entity.GetMaxHP() * 0.05);
+                entity.TakeDamage(-freezeDamage, textColor, false, false);
                 break;
             case EffectType.electric:
-                int electricDamage = (int)(entity.getMaxHP() * 0.05);
-                entity.takeDamage(-electricDamage, textColor, false, false);
+                int electricDamage = (int)(entity.GetMaxHP() * 0.05);
+                entity.TakeDamage(-electricDamage, textColor, false, false);
                 break;
             case EffectType.paralysis:
                 // 50% chance to skip turn
@@ -208,39 +208,39 @@ public class StatusEffect
                 break;
             case EffectType.strength_up:
                 // Increase player strength by 10%
-                entity.setStrengthScale(entity.getStrengthScale() + 0.1f);
+                entity.SetStrengthScale(entity.GetStrengthScale() + 0.1f);
                 break;
             case EffectType.defense_up:
                 // Increase player defense by 10%
-                entity.setDefenseScale(entity.getDefenseScale() + 0.1f);
+                entity.SetDefenseScale(entity.GetDefenseScale() + 0.1f);
                 Player player = (Player)entity;
                 player.UpdateHealthAndDefense();
                 break;
             case EffectType.critical_up:
                 // Increase player critical by 10%
-                entity.setCriticalScale(entity.getCriticalScale() + 0.1f);
+                entity.SetCriticalScale(entity.GetCriticalScale() + 0.1f);
                 break;
             case EffectType.evasion_up:
                 // Increase player evasion by 10%
-                entity.setEvadeScale(entity.getEvadeScale() + 0.1f);
+                entity.SetEvadeScale(entity.GetEvadeScale() + 0.1f);
                 break;
             case EffectType.strength_down:
                 // Decrease player strength by 10%
-                entity.setStrengthScale(entity.getStrengthScale() - 0.1f);
+                entity.SetStrengthScale(entity.GetStrengthScale() - 0.1f);
                 break;
             case EffectType.defense_down:
                 // Decrease player defense by 10%
-                entity.setDefenseScale(entity.getDefenseScale() - 0.1f);
+                entity.SetDefenseScale(entity.GetDefenseScale() - 0.1f);
                 player = (Player)entity;
                 player.UpdateHealthAndDefense();
                 break;
             case EffectType.critical_down:
                 // Decrease player critical by 10%
-                entity.setCriticalScale(entity.getCriticalScale() - 0.1f);
+                entity.SetCriticalScale(entity.GetCriticalScale() - 0.1f);
                 break;
             case EffectType.evasion_down:
                 // Decrease player evasion by 10%
-                entity.setEvadeScale(entity.getEvadeScale() - 0.1f);
+                entity.SetEvadeScale(entity.GetEvadeScale() - 0.1f);
                 break;
         }
     }
@@ -251,32 +251,32 @@ public class StatusEffect
         switch (effectId)
         {
             case EffectType.strength_up:
-                entity.setStrengthScale(entity.getStrengthScale() - 0.1f);
+                entity.SetStrengthScale(entity.GetStrengthScale() - 0.1f);
                 break;
             case EffectType.strength_down:
-                entity.setStrengthScale(entity.getStrengthScale() + 0.1f);
+                entity.SetStrengthScale(entity.GetStrengthScale() + 0.1f);
                 break;
             case EffectType.defense_up:
-                entity.setDefenseScale(entity.getDefenseScale() - 0.1f);
+                entity.SetDefenseScale(entity.GetDefenseScale() - 0.1f);
                 Player player = (Player)entity;
                 player.UpdateHealthAndDefense();
                 break;
             case EffectType.defense_down:
-                entity.setDefenseScale(entity.getDefenseScale() + 0.1f);
+                entity.SetDefenseScale(entity.GetDefenseScale() + 0.1f);
                 player = (Player)entity;
                 player.UpdateHealthAndDefense();
                 break;
             case EffectType.critical_up:
-                entity.setCriticalScale(entity.getCriticalScale() - 0.1f);
+                entity.SetCriticalScale(entity.GetCriticalScale() - 0.1f);
                 break;
             case EffectType.critical_down:
-                entity.setCriticalScale(entity.getCriticalScale() + 0.1f);
+                entity.SetCriticalScale(entity.GetCriticalScale() + 0.1f);
                 break;
             case EffectType.evasion_up:
-                entity.setEvadeScale(entity.getEvadeScale() - 0.1f);
+                entity.SetEvadeScale(entity.GetEvadeScale() - 0.1f);
                 break;
             case EffectType.evasion_down:
-                entity.setEvadeScale(entity.getEvadeScale() + 0.1f);
+                entity.SetEvadeScale(entity.GetEvadeScale() + 0.1f);
                 break;
             case EffectType.stealth:
                 entity.stealth = false;

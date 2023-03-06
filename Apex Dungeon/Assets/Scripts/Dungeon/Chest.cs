@@ -57,7 +57,7 @@ public class Chest : MonoBehaviour
         if (isOpen)
         {
             Instantiate(wood, new Vector2(col, row), Quaternion.identity);
-            GameManager.gmInstance.removeChest(this);
+            GameManager.gmInstance.RemoveChest(this);
             GameManager.gmInstance.Dungeon.tileMap[row, col].occupied = 0;
             Destroy(gameObject);
             return;
@@ -119,7 +119,7 @@ public class Chest : MonoBehaviour
                     {
                         if (GameManager.gmInstance.Dungeon.tileMap[r, c].isEmpty()
                             && !positions.Contains(new Vector2(r, c))
-                            && (player.getRow() != r && player.getCol() != c))
+                            && (player.GetRow() != r && player.GetCol() != c))
                         {
                             positions.Add(new Vector2(r, c));
                             if (positions.Count < num) return positions;

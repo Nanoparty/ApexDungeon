@@ -58,7 +58,7 @@ public class Pause : ScriptableObject
     void MenuListener()
     {
         SoundManager.sm.PlayMenuSound();
-        player.saveCharacterData();
+        player.SaveCharacterData();
         Data.SaveToFile();
         Destroy(GameManager.gmInstance);
         SceneManager.LoadScene("Title", LoadSceneMode.Single);

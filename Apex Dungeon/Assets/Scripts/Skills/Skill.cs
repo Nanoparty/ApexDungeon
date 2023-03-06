@@ -378,7 +378,7 @@ public class Skill
 
     public bool Activate(MovingEntity caster, int row, int col)
     {
-        if (caster.getMP() < manaCost)
+        if (caster.GetMP() < manaCost)
         {
             return false;
         }
@@ -389,16 +389,16 @@ public class Skill
 
         MovingEntity target = null;
 
-        if (caster.getRow() == row && caster.getCol() == col) {
+        if (caster.GetRow() == row && caster.GetCol() == col) {
             target = caster;
         }
         else {
-            Enemy e = GameManager.gmInstance.getEnemyAtLoc(row, col);
+            Enemy e = GameManager.gmInstance.GetEnemyAtLoc(row, col);
             if (e != null) { target = (MovingEntity) e; }
             else
             {
                 Player player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
-                if (player.getRow() == row && player.getCol() == col)
+                if (player.GetRow() == row && player.GetCol() == col)
                 {
                     target = (MovingEntity) player;
                 }
@@ -420,32 +420,32 @@ public class Skill
         }
          
 
-        caster.addMp(-manaCost);
+        caster.AddMp(-manaCost);
 
         
 
         switch (type)
         {
             case SkillType.Restore:
-                float restoreAmount = target.getMaxHP() * 0.5f;
-                target.takeDamage(restoreAmount, ColorManager.HEAL);
+                float restoreAmount = target.GetMaxHP() * 0.5f;
+                target.TakeDamage(restoreAmount, ColorManager.HEAL);
                 break;
 
             case SkillType.Fireball:
-                float damage = target.getMaxHP() * 0.2f;
-                target.takeDamage(-damage, ColorManager.FIRE);
+                float damage = target.GetMaxHP() * 0.2f;
+                target.TakeDamage(-damage, ColorManager.FIRE);
                 target.AddStatusEffect(new StatusEffect(EffectType.burn, 5, EffectOrder.End));
                 break;
 
             case SkillType.IceShard:
-                damage = target.getMaxHP() * 0.2f;
-                target.takeDamage(-damage, ColorManager.ICE);
+                damage = target.GetMaxHP() * 0.2f;
+                target.TakeDamage(-damage, ColorManager.ICE);
                 target.AddStatusEffect(new StatusEffect(EffectType.freeze, 5, EffectOrder.End));
                 break;
 
             case SkillType.LightningBolt:
-                damage = target.getMaxHP() * 0.2f;
-                target.takeDamage(-damage, ColorManager.LIGHTNING);
+                damage = target.GetMaxHP() * 0.2f;
+                target.TakeDamage(-damage, ColorManager.LIGHTNING);
                 target.AddStatusEffect(new StatusEffect(EffectType.electric, 5, EffectOrder.End));
                 break;
 
@@ -471,8 +471,8 @@ public class Skill
 
             case SkillType.Teleport:
                 Vector2 pos = GameManager.gmInstance.Dungeon.getRandomUnoccupiedTile();
-                target.setPosition((int)pos.x, (int)pos.y);
-                target.doneMoving();
+                target.SetPosition((int)pos.x, (int)pos.y);
+                target.DoneMoving();
                 break;
 
             case SkillType.ArmorPolish:
@@ -484,29 +484,29 @@ public class Skill
                 break;
 
             case SkillType.FieldDress:
-                restoreAmount = target.getMaxHP() * 0.3f;
-                target.takeDamage(restoreAmount, ColorManager.HEAL);
+                restoreAmount = target.GetMaxHP() * 0.3f;
+                target.TakeDamage(restoreAmount, ColorManager.HEAL);
                 break;
 
             case SkillType.LifeDrain:
-                float amount = target.getMaxHP() * 0.2f;
-                target.takeDamage(-amount, ColorManager.DAMAGE);
-                caster.takeDamage(amount, ColorManager.HEAL);
+                float amount = target.GetMaxHP() * 0.2f;
+                target.TakeDamage(-amount, ColorManager.DAMAGE);
+                caster.TakeDamage(amount, ColorManager.HEAL);
                 break;
 
             case SkillType.ManaDrain:
-                amount = target.getMaxMP() * 0.2f;
-                if (target.getMP() < amount)
+                amount = target.GetMaxMP() * 0.2f;
+                if (target.GetMP() < amount)
                 {
-                    amount = target.getMP();
+                    amount = target.GetMP();
                 }
-                if (target.getMP() == 0)
+                if (target.GetMP() == 0)
                 {
                     GameManager.gmInstance.Log.AddLog($">{target.entityName} has no MP left.");
                     break;
                 }
-                target.addMp((int)-amount);
-                caster.addMp((int)amount);
+                target.AddMp((int)-amount);
+                caster.AddMp((int)amount);
                 break;
 
             case SkillType.Hypnosis:
@@ -522,19 +522,19 @@ public class Skill
                 break;
 
             case SkillType.PoisonSpike:
-                damage = target.getMaxHP() * 0.2f;
-                target.takeDamage(-damage, ColorManager.POISON);
+                damage = target.GetMaxHP() * 0.2f;
+                target.TakeDamage(-damage, ColorManager.POISON);
                 target.AddStatusEffect(new StatusEffect(EffectType.poison, 5, EffectOrder.End));
                 break;
 
             case SkillType.WhirlwindStrike:
                 // Get all entities in circle of target
                 List<MovingEntity> entities = new List<MovingEntity>();
-                for (int r = caster.getRow() - 1; r <= caster.getRow() + 1; r++)
+                for (int r = caster.GetRow() - 1; r <= caster.GetRow() + 1; r++)
                 {
-                    for (int c = caster.getCol() - 1; c <= caster.getCol() + 1; c++)
+                    for (int c = caster.GetCol() - 1; c <= caster.GetCol() + 1; c++)
                     {
-                        MovingEntity e = GameManager.gmInstance.getEnemyAtLoc(r, c);
+                        MovingEntity e = GameManager.gmInstance.GetEnemyAtLoc(r, c);
                         if (e != null)
                             entities.Add(e);
                     }
@@ -542,35 +542,35 @@ public class Skill
                 // Attack all entities
                 foreach (MovingEntity e in entities)
                 {
-                    damage = e.getMaxHP() * 0.2f;
-                    e.takeDamage(-damage, ColorManager.DAMAGE);
+                    damage = e.GetMaxHP() * 0.2f;
+                    e.TakeDamage(-damage, ColorManager.DAMAGE);
                 }
                 break;
 
             case SkillType.Slash:
-                damage = target.getMaxHP() * 0.2f;
-                target.takeDamage(-damage, ColorManager.DAMAGE);
+                damage = target.GetMaxHP() * 0.2f;
+                target.TakeDamage(-damage, ColorManager.DAMAGE);
                 if (Random.Range(0, 100) <= 20)
                     target.AddStatusEffect(new StatusEffect(EffectType.bleed, 5, EffectOrder.End));
                 break;
 
             case SkillType.Scratch:
-                damage = target.getMaxHP() * 0.2f;
-                target.takeDamage(-damage, ColorManager.DAMAGE);
+                damage = target.GetMaxHP() * 0.2f;
+                target.TakeDamage(-damage, ColorManager.DAMAGE);
                 if (Random.Range(0, 100) <= 10)
                     target.AddStatusEffect(new StatusEffect(EffectType.bleed, 5, EffectOrder.End));
                 break;
 
             case SkillType.Stomp:
-                damage = target.getMaxHP() * 0.2f;
-                target.takeDamage(-damage, ColorManager.DAMAGE);
+                damage = target.GetMaxHP() * 0.2f;
+                target.TakeDamage(-damage, ColorManager.DAMAGE);
                 if (Random.Range(0, 100) <= 10)
                     target.AddStatusEffect(new StatusEffect(EffectType.paralysis, 5, EffectOrder.End));
                 break;
 
             case SkillType.Bite:
-                damage = target.getMaxHP() * 0.2f;
-                target.takeDamage(-damage, ColorManager.DAMAGE);
+                damage = target.GetMaxHP() * 0.2f;
+                target.TakeDamage(-damage, ColorManager.DAMAGE);
                 if (Random.Range(0, 100) <= 10)
                     target.AddStatusEffect(new StatusEffect(EffectType.bleed, 5, EffectOrder.End));
                 else if (Random.Range(0, 100) <= 10)
@@ -578,8 +578,8 @@ public class Skill
                 break;
 
             case SkillType.Pound:
-                damage = target.getMaxHP() * 0.2f;
-                target.takeDamage(-damage, ColorManager.DAMAGE);
+                damage = target.GetMaxHP() * 0.2f;
+                target.TakeDamage(-damage, ColorManager.DAMAGE);
                 if (Random.Range(0, 100) <= 10)
                     target.AddStatusEffect(new StatusEffect(EffectType.paralysis, 5, EffectOrder.Start));
                 break;
@@ -591,32 +591,32 @@ public class Skill
                 break;
 
             case SkillType.FlamePalm:
-                damage = target.getMaxHP() * 0.2f;
-                target.takeDamage(-damage, ColorManager.DAMAGE);
+                damage = target.GetMaxHP() * 0.2f;
+                target.TakeDamage(-damage, ColorManager.DAMAGE);
                 target.AddStatusEffect(new StatusEffect(EffectType.burn, 5, EffectOrder.End));
                 break;
 
             case SkillType.IcePalm:
-                damage = target.getMaxHP() * 0.2f;
-                target.takeDamage(-damage, ColorManager.DAMAGE);
+                damage = target.GetMaxHP() * 0.2f;
+                target.TakeDamage(-damage, ColorManager.DAMAGE);
                 target.AddStatusEffect(new StatusEffect(EffectType.freeze, 5, EffectOrder.End));
                 break;
 
             case SkillType.StaticPalm:
-                damage = target.getMaxHP() * 0.2f;
-                target.takeDamage(-damage, ColorManager.DAMAGE);
+                damage = target.GetMaxHP() * 0.2f;
+                target.TakeDamage(-damage, ColorManager.DAMAGE);
                 target.AddStatusEffect(new StatusEffect(EffectType.electric, 5, EffectOrder.End));
                 break;
 
             case SkillType.PoisonPalm:
-                damage = target.getMaxHP() * 0.2f;
-                target.takeDamage(-damage, ColorManager.DAMAGE);
+                damage = target.GetMaxHP() * 0.2f;
+                target.TakeDamage(-damage, ColorManager.DAMAGE);
                 target.AddStatusEffect(new StatusEffect(EffectType.poison, 5, EffectOrder.End));
                 break;
 
             case SkillType.MagicMissle:
-                damage = target.getMaxHP() * 0.1f;
-                target.takeDamage(-damage, ColorManager.DAMAGE);
+                damage = target.GetMaxHP() * 0.1f;
+                target.TakeDamage(-damage, ColorManager.DAMAGE);
                 break;
 
             case SkillType.Taunt:
@@ -639,26 +639,26 @@ public class Skill
                 break;
 
             case SkillType.Bash:
-                damage = target.getMaxHP() * 0.2f;
-                target.takeDamage(-damage, ColorManager.DAMAGE);
+                damage = target.GetMaxHP() * 0.2f;
+                target.TakeDamage(-damage, ColorManager.DAMAGE);
                 // Move target back 1 tile
-                int rdif = target.getRow() - caster.getRow();
-                int cdif = target.getCol() - caster.getCol();
+                int rdif = target.GetRow() - caster.GetRow();
+                int cdif = target.GetCol() - caster.GetCol();
                 if (!GameManager.gmInstance.Dungeon.tileMap[rdif, cdif].getBlocked())
                 {
-                    target.setPosition(target.getRow() + rdif, target.getCol() + cdif);
+                    target.SetPosition(target.GetRow() + rdif, target.GetCol() + cdif);
                 }
                 break;
 
             case SkillType.Headbutt:
-                damage = target.getMaxHP() * 0.4f;
-                target.takeDamage(-damage, ColorManager.DAMAGE);
-                caster.takeDamage(-((int)(caster.getMaxHP() * 0.1f)), ColorManager.DAMAGE);
+                damage = target.GetMaxHP() * 0.4f;
+                target.TakeDamage(-damage, ColorManager.DAMAGE);
+                caster.TakeDamage(-((int)(caster.GetMaxHP() * 0.1f)), ColorManager.DAMAGE);
                 break;
 
             case SkillType.Thrust:
-                damage = target.getMaxHP() * 0.2f;
-                target.takeDamage(-damage, ColorManager.DAMAGE);
+                damage = target.GetMaxHP() * 0.2f;
+                target.TakeDamage(-damage, ColorManager.DAMAGE);
                 break;
 
             case SkillType.BloodCurse:

@@ -9,6 +9,7 @@ using static StatusEffect;
 
 public abstract class MovingEntity : MonoBehaviour
 {
+    [Header("Name")]
     public string entityName;
 
     protected int maxHp;
@@ -38,7 +39,7 @@ public abstract class MovingEntity : MonoBehaviour
     protected float lightningResistance;
     protected float poisonResistance;
 
-    // Active Effects
+    [Header("Active Effects")]
     public bool silenced;
     public bool stealth;
     public bool invisible;
@@ -56,23 +57,29 @@ public abstract class MovingEntity : MonoBehaviour
 
     protected bool dead;
 
+    [Header("Agro")]
     public bool agro;
     public int agroRange;
 
+    [HideInInspector]
     public List<StatusEffect> statusEffects;
     public List<Skill> skills;
 
+    [Header("Held Items")]
     public Item heldItem;
     public int heldMoney;
 
+    [Header("Popup Text")]
     public Queue<(string, Color)> popupTexts;
     public bool canDisplayPopupText = true;
     [SerializeField] public float popupTextDelay = .4f;
 
+    [Header("Movement")]
     public float moveTime = 0.1f;
     public float speed = 3f;
     public LayerMask blockingLayer;
 
+    [Header("Particles")]
     public ParticleSystem blood;
     public GameObject damageText;
 
@@ -89,46 +96,51 @@ public abstract class MovingEntity : MonoBehaviour
     protected Pathfinder pathing = new Pathfinder();
     protected Path path = new Path();
 
+    protected Animator animator;
+
     protected bool moving = false;
     protected bool moved = true;
     
     protected virtual void Start()
     {
-        dead = false;
         boxCollider = GetComponent<BoxCollider2D>();
+        statusEffects = new List<StatusEffect>();
+        popupTexts = new Queue<(string, Color)>();
+        skills = new List<Skill>();
+        animator = this.transform.GetChild(1).gameObject.GetComponent<Animator>();
+
+        dead = false;
         row = (int)transform.position.y;
         col = (int)transform.position.x;
-
-        statusEffects = new List<StatusEffect>();
-        popupTexts = new Queue<(string, Color)> ();
         canDisplayPopupText = true;
-        skills = new List<Skill>();
     }
 
-    bool checkValidPath(Path p)
+    bool CheckValidPath(Path p)
     {
-        if (p == null || (p.nodes.Count == 0))
-        {
-            return false;
-        }
-        return true;
+        return !(p == null || p.nodes.Count == 0);
     }
 
-    bool checkValidTile(Vector2 next)
+    bool CheckValidTile(Vector2 next)
     {
         if (GameManager.gmInstance.Dungeon.tileMap[(int)next.y, (int)next.x].getBlocked())
         {
-            doneMoving();
             return false;
-
         }
         return true;
     }
 
-    void setMapOccupancy()
+    void SetMapOccupancy()
     {
         GameManager.gmInstance.Dungeon.tileMap[row, col].occupied = 0;
         GameManager.gmInstance.Dungeon.tileMap[(int)target.y, (int)target.x].occupied = type;
+    }
+
+    protected void SetAttackAnimation(int enemyRow, int enemyCol)
+    {
+        if (enemyRow > row) animator.Play("AttackUp");
+        if (enemyRow < row) animator.Play("AttackDown");
+        if (enemyCol > col) animator.Play("AttackRight");
+        if (enemyCol < col) animator.Play("AttackLeft");
     }
 
     public GameObject SpawnObject(GameObject o, Vector2 pos)
@@ -136,7 +148,7 @@ public abstract class MovingEntity : MonoBehaviour
         return Instantiate(o, pos, Quaternion.identity);
     }
 
-    void updateLocalPosition()
+    void UpdateLocalPosition()
     {
         row = (int)target.y;
         col = (int)target.x;
@@ -171,14 +183,15 @@ public abstract class MovingEntity : MonoBehaviour
             }
             
 
-            if (!checkValidPath(path)){
+            if (!CheckValidPath(path)){
                 return false;
             }
             
             Vector2 next = path.nodes.Peek();
 
-            if (!checkValidTile(next))
+            if (!CheckValidTile(next))
             {
+                DoneMoving();
                 return false;
             }
 
@@ -186,15 +199,15 @@ public abstract class MovingEntity : MonoBehaviour
             atTarget = false;
             target = path.nodes.Dequeue();
 
-            setMapOccupancy();
-            updateLocalPosition();
+            SetMapOccupancy();
+            UpdateLocalPosition();
 
             return true;
         }
         return false;
     }
 
-    protected virtual void setNextTarget()
+    protected virtual void SetNextTarget()
     {
         if (atTarget)
         {
@@ -221,20 +234,28 @@ public abstract class MovingEntity : MonoBehaviour
                 moving = true;
                 atTarget = false;
 
-                setMapOccupancy();
-                updateLocalPosition();
+                SetMapOccupancy();
+                UpdateLocalPosition();
             }
         }   
     }
 
     protected bool SetNewPath(int r, int c)
     {
-        Tile currentTile = GameManager.gmInstance.Dungeon.tileMap[row, col];
-        Tile nextTile = GameManager.gmInstance.Dungeon.tileMap[(int)target.y, (int)target.x];
+        Tile currentTile = null;
+        if (atTarget)
+        {
+            currentTile = GameManager.gmInstance.Dungeon.tileMap[row, col];
+        }
+        else
+        {
+            currentTile = GameManager.gmInstance.Dungeon.tileMap[(int)target.y, (int)target.x];
+        }
         Tile endTile = GameManager.gmInstance.Dungeon.tileMap[r, c];
 
-        Path newPath = pathing.findPath(nextTile, endTile);
-        if (checkValidPath(newPath))
+        Path newPath = pathing.findPath(currentTile, endTile);
+
+        if (CheckValidPath(newPath))
         {
             path = newPath;
             return true;
@@ -248,7 +269,7 @@ public abstract class MovingEntity : MonoBehaviour
 
         if (!atTarget)
         {
-            moveToTarget();
+            MoveToTarget();
         }
 
         if (canDisplayPopupText && popupTexts.Count > 0)
@@ -259,7 +280,7 @@ public abstract class MovingEntity : MonoBehaviour
         }
     }
 
-    protected void moveToTarget()
+    protected void MoveToTarget()
     {
         float distancex = target.x - transform.position.x;
         float distancey = target.y - transform.position.y;
@@ -301,9 +322,7 @@ public abstract class MovingEntity : MonoBehaviour
         return canMove;
     }
 
-    protected abstract void OnCantMove<T>(T Component) where T : Component;
-
-    public float calculateDamage(float m = 1f)
+    public float CalculateDamage(float m = 1f)
     {
         int scaledStrength = (int)(strength * strengthScale);
         float increase = (float)(attack * (scaledStrength * 0.05));
@@ -312,7 +331,7 @@ public abstract class MovingEntity : MonoBehaviour
         return -attackDamage;
     }
 
-    public virtual void takeDamage(float change, Color color, bool critical = false, bool canDodge = true)
+    public virtual void TakeDamage(float change, Color color, bool critical = false, bool canDodge = true)
     {
         hp += (int)change;
         change = Mathf.Floor(change);
@@ -347,11 +366,6 @@ public abstract class MovingEntity : MonoBehaviour
         {
             hp = maxHp;
         }
-    }
-
-    public virtual void AttackTarget()
-    {
-
     }
 
     public virtual void AddTextPopup(string text, Color color)
@@ -414,6 +428,7 @@ public abstract class MovingEntity : MonoBehaviour
     {
         if (time == "start")
         {
+            Debug.Log(statusEffects);
             foreach (StatusEffect e in statusEffects)
             {
                 if (e.order == EffectOrder.Start) e.Activate(this);
@@ -428,51 +443,42 @@ public abstract class MovingEntity : MonoBehaviour
         }
     }
 
-    public virtual void SkipTurn()
-    {
-    }
-
     public virtual void CalculateStats()
     {
 
     }
 
-    public void addMP(float change)
-    {
-        mp += (int)change;
-    }
-
-    public int getRow()
+    public int GetRow()
     {
         return row;
     }
 
-    public int getCol()
+    public int GetCol()
     {
         return col;
     }
 
-    public int getHP()
+    public int GetHP()
     {
         return hp;
     }
 
-    public int getMP()
+    public int GetMP()
     {
         return mp;
     }
 
-    public int getMaxHP()
+    public int GetMaxHP()
     {
         return maxHp;
     }
 
-    public int getMaxMP()
+    public int GetMaxMP()
     {
         return maxMp;
     }
 
-    public void doneMoving()
+    public void DoneMoving()
     {
         moving = false;
         path = null;
@@ -480,59 +486,41 @@ public abstract class MovingEntity : MonoBehaviour
         interrupt = false;
     }
 
-    public float getStrengthScale()
+    public float GetStrengthScale()
     {
         return strengthScale;
     }
-    public float getCriticalScale()
+    public float GetCriticalScale()
     {
         return criticalScale;
     }
-    public float getDefenseScale()
+    public float GetDefenseScale()
     {
         return defenseScale;
     }
-    public float getEvadeScale()
+    public float GetEvadeScale()
     {
         return evadeScale;
     }
 
-    public void setStrengthScale(float f)
+    public void SetStrengthScale(float f)
     {
         strengthScale = f;
     }
-    public void setDefenseScale(float f)
+    public void SetDefenseScale(float f)
     {
         defenseScale = f;
     }
-    public void setCriticalScale(float f)
+    public void SetCriticalScale(float f)
     {
         criticalScale = f;
     }
-    public void setEvadeScale(float f)
+    public void SetEvadeScale(float f)
     {
         evadeScale = f;
     }
 
-    private void UpdateShadows(int r, int c)
-    {
-        GameManager.gmInstance.Dungeon.UpdateShadows(r, c);
-    }
-
-    public void setHP(int i){
-        this.hp = i;
-        if (hp > maxHp) hp = maxHp;
-        if (hp < 0) hp = 0;
-    }
-
-    public void addHp(int i)
-    {
-        this.hp += i;
-        if (hp > maxHp) hp = maxHp;
-        if (hp < 0) hp = 0;
-    }
-
-    public void addMp(int i)
+    public void AddMp(int i)
     {
         this.mp += i;
         if (i > 0)
@@ -548,12 +536,39 @@ public abstract class MovingEntity : MonoBehaviour
         if (mp < 0) mp = 0;
     }
 
-    public void setPosition(int r, int c){
+    public void SetPosition(int r, int c){
         GameManager.gmInstance.Dungeon.tileMap[row,col].occupied = 0;
         gameObject.transform.position = new Vector3(c, r, 0f);
         this.row = r;
         this.col = c;
         GameManager.gmInstance.Dungeon.tileMap[r,c].occupied = 1;
+    }
+
+    protected bool IsAdjacent(int r, int c)
+    {
+        int rDis = Mathf.Abs((r) - row);
+        int cDis = Mathf.Abs(c - col);
+        if ((rDis == 1 && cDis == 0) || (rDis == 0 && cDis == 1))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    protected bool IsInAttackRange(int r, int c)
+    {
+        int rDis = Mathf.Abs(r - row);
+        int cDis = Mathf.Abs(c - col);
+        if (rDis + cDis <= attackRange)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public bool IsBlocked(int r, int c)
+    {
+        return GameManager.gmInstance.Dungeon.tileMap[r, c].getWall() || GameManager.gmInstance.Dungeon.tileMap[r, c].getVoid();
     }
 
 

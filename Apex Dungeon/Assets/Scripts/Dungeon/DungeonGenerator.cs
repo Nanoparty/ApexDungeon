@@ -148,10 +148,10 @@ public class DungeonGenerator : ScriptableObject
     public DungeonObject Reset()
     {
         Destroy(dungeon.gameObject);
-        GameManager.gmInstance.clearEnemies();
-        GameManager.gmInstance.clearFurniture();
-        GameManager.gmInstance.clearChests();
-        GameManager.gmInstance.clearTraps();
+        GameManager.gmInstance.ClearEnemies();
+        GameManager.gmInstance.ClearFurniture();
+        GameManager.gmInstance.ClearChests();
+        GameManager.gmInstance.ClearTraps();
         return Initalize();
     }
 

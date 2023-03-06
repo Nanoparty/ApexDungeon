@@ -88,7 +88,7 @@ public class SavePlayer
             consumables.Add(new SaveConsumable(c));
         }
         statusEffects = new List<SaveStatusEffect>();
-        foreach (StatusEffect se in data.statusEffects)
+        foreach (StatusEffect se in data.statusEffects ?? new List<StatusEffect>())
         {
             statusEffects.Add(new SaveStatusEffect(se.effectId.ToString(), se.order.ToString(), se.duration));
         }

@@ -146,7 +146,7 @@ public class Journal : ScriptableObject
         height = GameManager.gmInstance.Dungeon.height;
         icons = Resources.LoadAll<Sprite>("mapIcons");
 
-        gear = player.getGear();
+        gear = player.GetGear();
 
         flipping = flipping2 = false;
         popupOpen = false;
@@ -374,7 +374,7 @@ public class Journal : ScriptableObject
         GameObject equipment = charPanel.transform.GetChild(6).gameObject;
 
         //set name
-        nameBanner.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = player.getName();
+        nameBanner.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = player.GetName();
 
         // Set Player Profile Image
         Animator profileAnim = playerProfile.GetComponentInChildren<Animator>();
@@ -436,18 +436,18 @@ public class Journal : ScriptableObject
         GameObject mpBar = healthBanner.transform.GetChild(6).gameObject;
         GameObject mpText = healthBanner.transform.GetChild(5).gameObject;
 
-        int hp = player.getHP();
-        int mp = player.getMP();
-        int exp = player.getExp();
-        int maxHp = player.getMaxHP();
-        int maxMp = player.getMaxMP();
-        int maxExp = player.getMaxExp();
+        int hp = player.GetHP();
+        int mp = player.GetMP();
+        int exp = player.GetExp();
+        int maxHp = player.GetMaxHP();
+        int maxMp = player.GetMaxMP();
+        int maxExp = player.GetMaxExp();
 
         hpText.GetComponent<TMP_Text>().text = "HP: " + hp + "/" + maxHp;
         mpText.GetComponent<TMP_Text>().text = "MP: " + mp + "/" + maxMp;
         expText.GetComponent<TMP_Text>().text = "EXP: " + exp + "/" + maxExp;
 
-        levelText.transform.GetChild(1).transform.GetComponent<TMP_Text>().text = player.getExpLevel().ToString();
+        levelText.transform.GetChild(1).transform.GetComponent<TMP_Text>().text = player.GetExpLevel().ToString();
 
         GameObject redbar = hpBar.transform.GetChild(0).gameObject;
         GameObject bluebar = mpBar.transform.GetChild(0).gameObject;
@@ -490,11 +490,11 @@ public class Journal : ScriptableObject
         TMP_Text evasionText = statusBanner.transform.GetChild(3).gameObject.GetComponent<TMP_Text>();
         TMP_Text goldText = statusBanner.transform.GetChild(4).gameObject.GetComponent<TMP_Text>();
 
-        strengthText.text = "Strength:" + (int)(player.getStrength() * player.getStrengthScale());
-        defenseText.text = "Defense:" + (int)(player.getDefense() * player.getDefenseScale());
-        criticalText.text = "Critical:" + (int)(player.getCritical() * player.getCriticalScale());
-        evasionText.text = "Evasion:" + (int)(player.getEvade() * player.getEvadeScale());
-        goldText.text = "Gold:" + player.getGold();
+        strengthText.text = "Strength:" + (int)(player.GetStrength() * player.GetStrengthScale());
+        defenseText.text = "Defense:" + (int)(player.GetDefense() * player.GetDefenseScale());
+        criticalText.text = "Critical:" + (int)(player.GetCritical() * player.GetCriticalScale());
+        evasionText.text = "Evasion:" + (int)(player.GetEvade() * player.GetEvadeScale());
+        goldText.text = "Gold:" + player.GetGold();
 
         //set equipment
         GameObject HelmSlot = equipment.transform.GetChild(0).gameObject;
@@ -1303,11 +1303,11 @@ public class Journal : ScriptableObject
         int intel = e.intelligence;
         int evade = e.evade;
 
-        player.addAttack(att);
-        player.addBaseHP(hp);
-        player.addCrit(crit);
-        player.addIntelligence(intel);
-        player.addEvade(evade);
+        player.AddAttack(att);
+        player.AddBaseHP(hp);
+        player.AddCrit(crit);
+        player.AddIntelligence(intel);
+        player.AddEvade(evade);
     }
 
     void removeGearStats(Equipment e)
@@ -1320,11 +1320,11 @@ public class Journal : ScriptableObject
         int intel = e.intelligence;
         int evade = e.evade;
 
-        player.addAttack(-att);
-        player.addBaseHP(-hp);
-        player.addCrit(-crit);
-        player.addIntelligence(-intel);
-        player.addEvade(-evade);
+        player.AddAttack(-att);
+        player.AddBaseHP(-hp);
+        player.AddCrit(-crit);
+        player.AddIntelligence(-intel);
+        player.AddEvade(-evade);
     }
 
     void trashConfirmListener()
@@ -1501,7 +1501,7 @@ public class Journal : ScriptableObject
     public void closeJournal()
     {
         closePopup();
-        player.setGear(gear);
+        player.SetGear(gear);
         player.openJournal = false;
         open = false;
         player.journalButton.GetComponent<Clickable>().setClicked(false);

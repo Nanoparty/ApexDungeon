@@ -79,8 +79,8 @@ public class MagicTrap : Trap
             if (type == TrapType.teleport)
             {
                 Vector2 pos = GameManager.gmInstance.Dungeon.getRandomUnoccupiedTile();
-                player.setPosition((int)pos.x, (int)pos.y);
-                player.doneMoving();
+                player.SetPosition((int)pos.x, (int)pos.y);
+                player.DoneMoving();
                 player.interrupt = true;
                 
                 sr.sprite = whiteCircle;

@@ -6,7 +6,6 @@ using static StatusEffect;
 
 public class Enemy : MovingEntity
 {
-    Animator animator;
     SpriteRenderer sr;
     SpriteRenderer healthBar;
 
@@ -15,10 +14,6 @@ public class Enemy : MovingEntity
 
     Player player;
 
-    bool pathFound = false;
-
-    private Path path;
-    private Pathfinder finder;
     private int floor;
 
     protected MovingEntity enemyTarget;
@@ -30,29 +25,9 @@ public class Enemy : MovingEntity
 
     protected override void Start()
     {
-        floor = GameManager.gmInstance.level;
-
-        //Values
-        entityName = "Enemy";
-        hp = 100;
-        maxHp = 100;
-        defense = 5;
-        agroRange = 7;
-        pRow = pCol = -1;
-
-        setStatsByFloor(floor);
-
-        //Objects
-        GameManager.gmInstance.AddEnemyToList(this);
-        animator = this.transform.GetChild(1).gameObject.GetComponent<Animator>();
-        sr = this.transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>();
-        healthBar = this.transform.GetChild(0).GetComponent<SpriteRenderer>();
-        path = new Path();
-        finder = new Pathfinder();
-        availableSkills = new List<Skill>();
-
         base.Start();
-
+        InitializeObjects();
+        SetInitialValues();
     }
 
     protected override void Update()
@@ -72,6 +47,25 @@ public class Enemy : MovingEntity
             sr.enabled = true;
             healthBar.enabled = true;
         }
+    }
+
+    protected void InitializeObjects()
+    {
+        GameManager.gmInstance.AddEnemyToList(this);
+
+        sr = this.transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>();
+        healthBar = this.transform.GetChild(0).GetComponent<SpriteRenderer>();
+        path = new Path();
+        availableSkills = new List<Skill>();
+    }
+
+    protected void SetInitialValues()
+    {
+        floor = GameManager.gmInstance.level;
+        entityName = "Enemy";
+        hp = 100;
+        agroRange = 5;
+        SetStatsByFloor(floor);
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -117,12 +111,7 @@ public class Enemy : MovingEntity
         }
     }
 
-    protected override bool AttemptMove<T>(int r, int c)
-    {
-        return base.AttemptMove<T>(r, c);
-    }
-
-    private void setStatsByFloor(int floor){
+    private void SetStatsByFloor(int floor){
         int basehp = 50;
         hp = (int)(basehp + basehp * 0.2 * (floor-1));
         maxHp = hp;
@@ -135,12 +124,12 @@ public class Enemy : MovingEntity
         defense = 5 + 1 * floor;
     }
 
-    int calculateExp(){
+    int CalculateExp(){
         return 50 + 50 * floor;
     }
 
-    public override void takeDamage(float d, Color c, bool critical = false, bool canDodge = true){        
-        int netDamage = (int)calculateDamageIn(d);
+    public override void TakeDamage(float d, Color c, bool critical = false, bool canDodge = true){
+        int netDamage = (int)d;
         if (critical)
         {
             if (GameManager.gmInstance.Dungeon.tileMap[row, col].visible)
@@ -156,10 +145,10 @@ public class Enemy : MovingEntity
                 SoundManager.sm.PlayHitSound();
             }
         }
-        base.takeDamage(netDamage, c, critical);
+        base.TakeDamage(netDamage, c, critical);
     }
 
-    public void die(){
+    public void Die(){
         GameManager.gmInstance.Log.AddLog($">{entityName} died.");
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         if (GameManager.gmInstance.Dungeon.tileMap[row, col].visible)
@@ -168,9 +157,9 @@ public class Enemy : MovingEntity
         }
         SpawnBlood();
         GameManager.gmInstance.Dungeon.tileMap[row, col].occupied = 0;
-        GameManager.gmInstance.removeEnemy(this);
-        int givenExp = calculateExp();
-        player.addExp(givenExp);
+        GameManager.gmInstance.RemoveEnemy(this);
+        int givenExp = CalculateExp();
+        player.AddExp(givenExp);
 
         // Drop gold
         if (heldMoney > 0)
@@ -221,7 +210,7 @@ public class Enemy : MovingEntity
 
         if (dead || hp <= 0)
         {
-            die();
+            Die();
             return;
         }
         if (agro)
@@ -229,42 +218,42 @@ public class Enemy : MovingEntity
             //ATTACKING
             player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
 
-            checkPlayerMoved(player);
-            attackController(player);
+            CheckPlayerMoved(player);
+            AttackController(player);
 
-            base.AttemptMove<Player>(player.getRow(), player.getCol());
+            base.AttemptMove<Enemy>(player.GetRow(), player.GetCol());
 
             if (moving)
             {
                 if (atTarget)
                 {
-                    setNextTarget();
+                    SetNextTarget();
                 }
             }
         }
         else
         {
             //IDLE
-            checkAgro();
-            moveRandom();
+            CheckAgro();
+            MoveRandom();
         }
 
         EndTurn();
     }
 
-    void checkPlayerMoved(Player player)
+    void CheckPlayerMoved(Player player)
     {
-        if (player.getRow() != pRow || player.getCol() != pCol)
+        if (player.GetRow() != pRow || player.GetCol() != pCol)
         {
-            pRow = player.getRow();
-            pCol = player.getCol();
+            pRow = player.GetRow();
+            pCol = player.GetCol();
             moving = false;
         }
     }
 
-    public virtual void attackController(Player player)
+    public virtual void AttackController(Player player)
     {
-        if (canUseSkill())
+        if (CanUseSkill())
         {
             // Chance to use skill
             int chance = Random.Range(0, 100);
@@ -288,23 +277,23 @@ public class Enemy : MovingEntity
             }
             availableSkills.Clear();
         }
-        if (canAttackTarget())
+        if (CanAttackTarget())
         {
-            attackTarget(player); 
+            AttackTarget(player); 
         }
     }
 
-    public bool canAttackTarget()
+    public bool CanAttackTarget()
     {
-        if (isAdjacent(enemyTarget)) return true;
+        if (IsAdjacent(enemyTarget.GetRow(), enemyTarget.GetCol())) return true;
 
         return false;
     }
 
-    public bool canUseSkill()
+    public bool CanUseSkill()
     {
-        int rdif = Mathf.Abs(enemyTarget.getRow() - row);
-        int cdif = Mathf.Abs(enemyTarget.getCol() - col);
+        int rdif = Mathf.Abs(enemyTarget.GetRow() - row);
+        int cdif = Mathf.Abs(enemyTarget.GetCol() - col);
         bool value = false;
         foreach (Skill s in skills)
         {
@@ -318,9 +307,9 @@ public class Enemy : MovingEntity
         return value;
     }
 
-    protected void attackTarget(MovingEntity target)
+    protected void AttackTarget(MovingEntity target)
     {
-        target.takeDamage(calculateDamageOut(), Color.red);
+        target.TakeDamage(-attack, Color.red);
 
         // Status Effect Roll
         float roll = Random.Range(0f, 1f);
@@ -332,32 +321,28 @@ public class Enemy : MovingEntity
         {
             player.AddStatusEffect(new StatusEffect(EffectType.bleed, 5, EffectOrder.End));
         }
-        setAttackAnimation(player.getRow(), player.getCol());
+        SetAttackAnimation(player.GetRow(), player.GetCol());
     }
 
-    public void setAttackAnimation(int enemyRow, int enemyCol)
-    {
-        if (enemyRow > row) animator.Play("AttackUp");
-        if (enemyRow < row) animator.Play("AttackDown");
-        if (enemyCol > col) animator.Play("AttackRight");
-        if (enemyCol < col) animator.Play("AttackLeft");
-    }
-
-    void checkAgro()
+    void CheckAgro()
     {
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
 
         Vector3 fromPosition = transform.position;
-        Vector3 toPosition = new Vector2(player.getCol(), player.getRow());
+        Vector3 toPosition = new Vector2(player.GetCol(), player.GetRow());
         Vector3 direction = toPosition - fromPosition;
 
         boxCollider.enabled = false;
 
         if (player.invisible) return;
 
+        Debug.Log("Playe Visible");
+
         int effectiveAgroRange = agroRange;
 
         if (player.stealth) effectiveAgroRange -= 1;
+
+        Debug.Log("Effective agro range=" + effectiveAgroRange);
 
         RaycastHit2D hit = Physics2D.Raycast(fromPosition, direction, effectiveAgroRange);
         if (hit.collider != null)
@@ -371,7 +356,7 @@ public class Enemy : MovingEntity
         boxCollider.enabled = true;
     }
 
-    void moveRandom()
+    void MoveRandom()
     {
         Vector2 dir;
         float ran = Random.Range(0.0f, 1.0f);
@@ -393,36 +378,5 @@ public class Enemy : MovingEntity
         }
 
         base.AttemptMove<Enemy>(row + (int)dir.y, col + (int)dir.x);
-    }
-
-    protected override void OnCantMove<T>(T Component)
-    {
-        //INTERACT
-        //ATTACK PLAYER
-    }
-
-    bool isAdjacent(MovingEntity p)
-    {
-        int rDis = Mathf.Abs(p.getRow() - row);
-        int cDis = Mathf.Abs(p.getCol() - col);
-        if ((rDis == 1 && cDis == 0) || (rDis == 0 && cDis == 1))
-        {
-            return true;
-        }
-        return false;
-    }
-
-    private float calculateDamageOut()
-    {
-        return -attack;
-    }
-
-    private float calculateDamageIn(float d){
-        return d;
-    }
-
-    void addHP(float change)
-    {
-        hp += (int)change;
     }
 }

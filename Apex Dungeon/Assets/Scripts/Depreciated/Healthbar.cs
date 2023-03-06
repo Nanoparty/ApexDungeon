@@ -18,7 +18,7 @@ public class Healthbar : MonoBehaviour
     void Update()
     {
         MovingEntity parent = transform.parent.gameObject.GetComponent<MovingEntity>();
-        localScale.x =(float) initial*((float)parent.getHP() / (float)parent.getMaxHP());
+        localScale.x =(float) initial*((float)parent.GetHP() / (float)parent.GetMaxHP());
         transform.localScale = localScale;
     }
 }

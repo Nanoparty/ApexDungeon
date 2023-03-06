@@ -41,7 +41,7 @@ public class Furniture : MonoBehaviour
         {
             DropLoot();
             GameManager.gmInstance.Dungeon.tileMap[row, col].occupied = 0;
-            GameManager.gmInstance.removeFurniture(this);
+            GameManager.gmInstance.RemoveFurniture(this);
             Destroy(this.gameObject);
         }
     }

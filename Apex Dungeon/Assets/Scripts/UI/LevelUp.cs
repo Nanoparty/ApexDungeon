@@ -25,11 +25,11 @@ public class LevelUp : ScriptableObject
 
     public void CreatePopup(Player player, int points)
     {
-        strength = player.getStrength();
-        defense = player.getDefense();
-        critical = player.getCritical();
-        evasion = player.getEvade();
-        expLevel = player.getExpLevel();
+        strength = player.GetStrength();
+        defense = player.GetDefense();
+        critical = player.GetCritical();
+        evasion = player.GetEvade();
+        expLevel = player.GetExpLevel();
         prevLevel = expLevel - points;
         levelPoints = points;
 
@@ -187,10 +187,10 @@ public class LevelUp : ScriptableObject
     void ClosePopup()
     {
         Player player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
-        player.setStrength(strength);
-        player.setDefense(defense);
-        player.setCritical(critical);
-        player.setEvasion(evasion);
+        player.SetStrength(strength);
+        player.SetDefense(defense);
+        player.SetCritical(critical);
+        player.SetEvasion(evasion);
         player.openLevel = false;
         GameObject.Destroy(levelRoot);
     }

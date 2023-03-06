@@ -41,7 +41,7 @@ public class Consumable : Item
         if(id == "HealthPotion"){
             int baseHP = 50;
             float appliedHP = baseHP * Mathf.Pow(1.5f,level-1);
-            p.addHP((int)appliedHP);
+            p.AddHP((int)appliedHP);
             SoundManager.sm.PlayPotionSound();
         }
         if (id == "HealthRegenPotion")
@@ -51,7 +51,7 @@ public class Consumable : Item
         if(id == "ManaPotion"){
             int baseMP = 25;
             float appliedMP = baseMP * Mathf.Pow(1.5f, level - 1);
-            p.addMP((int)appliedMP);
+            p.AddMP((int)appliedMP);
             SoundManager.sm.PlayPotionSound();
         }
         if (id == "ManaRegenPotion")
@@ -59,22 +59,22 @@ public class Consumable : Item
             p.AddStatusEffect(new StatusEffect(EffectType.mana_regen, 5, EffectOrder.Start));
         }
         if(id == "SkipOrb"){
-            p.nextFloor();
+            p.NextFloor();
             SoundManager.sm.PlayMagicSound();
             p.CloseJournal();
         }
         if(id == "TeleportOrb"){
             Vector2 pos = GameManager.gmInstance.Dungeon.getRandomUnoccupiedTile();
-            p.setPosition((int)pos.x, (int)pos.y);
+            p.SetPosition((int)pos.x, (int)pos.y);
             SoundManager.sm.PlayMagicSound();
             p.CloseJournal();
         }
         if(id == "DeathOrb"){
             List<Vector2> activeShadows = GameManager.gmInstance.Dungeon.getActiveShadowCoords();
             foreach(Vector2 v in activeShadows){
-                Enemy e = GameManager.gmInstance.getEnemyAtLoc((int)v.x,(int)v.y);
+                Enemy e = GameManager.gmInstance.GetEnemyAtLoc((int)v.x,(int)v.y);
                 if(e != null){
-                    e.die();
+                    e.Die();
                 }
             }
             SoundManager.sm.PlayMagicSound();
@@ -113,12 +113,12 @@ public class Consumable : Item
             if (GameManager.gmInstance.level > 1)
             {
                 GameManager.gmInstance.level -= 2;
-                p.nextFloor();
+                p.NextFloor();
             }
             else
             {
                 GameManager.gmInstance.level -= 1;
-                p.nextFloor();
+                p.NextFloor();
             }
         }
         if (id == "MagicDice")
@@ -136,11 +136,11 @@ public class Consumable : Item
         }
         if (id == "ExpPotion")
         {
-            p.addExp(p.getMaxExp());
+            p.AddExp(p.GetMaxExp());
         }
         if (id == "HeartGem")
         {
-            p.addBaseHP((int)(p.getMaxHP() * 0.1f));
+            p.AddBaseHP((int)(p.GetMaxHP() * 0.1f));
 
         }
         if (id == "FullCleanse")

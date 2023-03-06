@@ -63,42 +63,20 @@ public class GameManager : MonoBehaviour
         Log = GameObject.FindGameObjectWithTag("Log").GetComponent<LogManager>();
     }
 
-    void Setup()
-    {
-        if(SceneManager.GetActiveScene().name == "Dungeon") {
-            Dungeon = null;
-            Dungeon = DunGen.Initalize();
-            
-        }
-    }
-
-    public void Reset(){
-        Dungeon = DunGen.Reset();
-    }
-
-    public void FullReset(){
-        Data.reset();
-        level = 1;
-        score = 0;
-        enemies.Clear();
-        furniture.Clear();
-        chests.Clear();
-        traps.Clear();
-    }
-
     void Update()
     {
-        
-
-        if (state == "score"){
+        if (state == "score")
+        {
 
             return;
         }
-        if(state == "menu"){
-            
+        if (state == "menu")
+        {
+
             return;
         }
-        if(state == "play" && cursor == null){
+        if (state == "play" && cursor == null)
+        {
             level = 1;
             score = 0;
             enemies.Clear();
@@ -124,7 +102,7 @@ public class GameManager : MonoBehaviour
             cursor.transform.position = new Vector3(mCol, mRow, 0f);
             cursorRow = (int)mRow;
             cursorCol = (int)mCol;
-            if (player.isBlocked((int)mRow, (int)mCol))
+            if (player.IsBlocked((int)mRow, (int)mCol))
             {
                 cursor.GetComponent<Cursor>().SetRed();
             }
@@ -133,12 +111,11 @@ public class GameManager : MonoBehaviour
                 cursor.GetComponent<Cursor>().SetGreen();
             }
         }
-        
-        if (player.getRow() == cursorRow && player.getCol() == cursorCol)
+
+        if (player.GetRow() == cursorRow && player.GetCol() == cursorCol)
         {
             cursor.SetActive(false);
         }
-
 
         if (playersTurn || enemiesTurn || doingSetup)
         {
@@ -152,47 +129,59 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void removeEnemy(Enemy e)
+    void Setup()
+    {
+        if(SceneManager.GetActiveScene().name == "Dungeon") {
+            Dungeon = null;
+            Dungeon = DunGen.Initalize();
+        }
+    }
+
+    public void Reset(){
+        Dungeon = DunGen.Reset();
+    }
+
+    public void RemoveEnemy(Enemy e)
     {
         enemies.Remove(e);
     }
 
-    public void clearEnemies()
+    public void ClearEnemies()
     {
         enemies.Clear();
     }
 
-    public void clearFurniture()
+    public void ClearFurniture()
     {
         furniture.Clear();
     }
 
-    public void clearChests()
+    public void ClearChests()
     {
         chests.Clear();
     }
 
-    public void clearTraps()
+    public void ClearTraps()
     {
         traps.Clear();
     }
 
-    public void removeFurniture(Furniture e)
+    public void RemoveFurniture(Furniture e)
     {
         furniture.Remove(e);
     }
 
-    public void removeChest(Chest e)
+    public void RemoveChest(Chest e)
     {
         chests.Remove(e);
     }
 
-    public void removeTrap(Trap t)
+    public void RemoveTrap(Trap t)
     {
         traps.Remove(t);
     }
 
-    public Enemy getEnemyAtLoc(int r, int c)
+    public Enemy GetEnemyAtLoc(int r, int c)
     {
         if (enemies.Count == 0)
         {
@@ -200,8 +189,8 @@ public class GameManager : MonoBehaviour
         }
         for (int i = 0; i < enemies.Count; i++)
         {
-            int er = enemies[i].getRow();
-            int ec = enemies[i].getCol();
+            int er = enemies[i].GetRow();
+            int ec = enemies[i].GetCol();
             if(r == er && c == ec)
             {
                 return enemies[i];
@@ -235,22 +224,7 @@ public class GameManager : MonoBehaviour
         enemies.Add(script);
     }
 
-    public void AddTrapToList(Trap trap)
-    {
-        traps.Add(trap);
-    }
-
-    public void AddFurnitureToList(Furniture f)
-    {
-        furniture.Add(f);
-    }
-
-    public void AddChestToList(Chest c)
-    {
-        chests.Add(c);
-    }
-
-    public Furniture getFurnitureAtLoc(int r, int c)
+    public Furniture GetFurnitureAtLoc(int r, int c)
     {
         if (furniture.Count == 0)
         {
@@ -269,7 +243,7 @@ public class GameManager : MonoBehaviour
         return null;
     }
 
-    public Chest getChestAtLoc(int r, int c)
+    public Chest GetChestAtLoc(int r, int c)
     {
         if (chests.Count == 0)
         {
@@ -288,7 +262,22 @@ public class GameManager : MonoBehaviour
         return null;
     }
 
-    void MoveEnemies()
+    public void AddTrapToList(Trap trap)
+    {
+        traps.Add(trap);
+    }
+
+    public void AddFurnitureToList(Furniture f)
+    {
+        furniture.Add(f);
+    }
+
+    public void AddChestToList(Chest c)
+    {
+        chests.Add(c);
+    }
+
+    private void MoveEnemies()
     {
         if(enemies.Count == 0)
         {
@@ -303,44 +292,5 @@ public class GameManager : MonoBehaviour
         }
         playersTurn = true;
         enemiesTurn = false;        
-    }
-
-    public void UpdateCursor(string state, int row, int col)
-    {
-        //if (state == "Furniture")
-        //{
-        //    //look for nearest open square
-        //    cursor.SetActive(true);
-        //    cursor.transform.position = new Vector3(col, row, 0f);
-        //    cursor.GetComponent<Cursor>().SetRed();
-        //}
-        //if (state == "Attack")
-        //{
-        //    cursor.SetActive(true);
-        //    cursor.transform.position = new Vector3(col, row, 0f);
-        //    cursor.GetComponent<Cursor>().SetRed();
-        //    //cursorRow = (int)mRow;
-        //    //cursorCol = (int)mCol;
-        //}
-        //if (state == "Player")
-        //{
-        //    cursor.SetActive(true);
-        //    cursor.transform.position = new Vector3(col, row, 0f);
-        //    cursor.GetComponent<Cursor>().SetGreen();
-        //}
-        //if (state == "Blocked")
-        //{
-        //    cursor.SetActive(true);
-        //    cursor.transform.position = new Vector3(col, row, 0f);
-        //    cursor.GetComponent<Cursor>().SetRed();
-        //}
-    }
-
-    public void UpdateCursor(string state)
-    {
-        //if (state == "Interrupt")
-        //{
-        //    cursor.GetComponent<Cursor>().SetRed();
-        //}
     }
 }

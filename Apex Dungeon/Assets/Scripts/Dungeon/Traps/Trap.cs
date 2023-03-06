@@ -55,12 +55,12 @@ public class Trap : MonoBehaviour
         if (typeof(Player).IsInstanceOfType(me))
         {
             Player player = (Player)me;
-            player.takeDamage(-damage, Color.red);
+            player.TakeDamage(-damage, Color.red);
             player.AddStatusEffect(new StatusEffect(StatusEffect.EffectType.bleed, 5, StatusEffect.EffectOrder.End));
         }
         if (typeof(Enemy).IsInstanceOfType(me)){
             Enemy enemy = (Enemy)me;
-            enemy.takeDamage(-damage, Color.red);
+            enemy.TakeDamage(-damage, Color.red);
             enemy.AddStatusEffect(new StatusEffect(StatusEffect.EffectType.bleed, 5, StatusEffect.EffectOrder.End));
         }
 
@@ -82,7 +82,7 @@ public class Trap : MonoBehaviour
         }
         disarmed = true;
         Instantiate(destruction, new Vector2(col, row), Quaternion.identity);
-        GameManager.gmInstance.removeTrap(this);
+        GameManager.gmInstance.RemoveTrap(this);
         Destroy(gameObject);
     }
 
