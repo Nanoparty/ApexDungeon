@@ -92,7 +92,7 @@ public class Skill
                 range = 3;
                 canTargetSelf = false;
                 skillName = "Fireball";
-                description = "Cast fireball at target. Causes Burn.";
+                description = "Cast fireball at target. Chance to cause Burn.";
                 break;
 
             case SkillType.IceShard:
@@ -100,7 +100,7 @@ public class Skill
                 range = 3;
                 canTargetSelf = false;
                 skillName = "Ice Shard";
-                description = "Cast ice shard at target. Causes Frostbite.";
+                description = "Cast ice shard at target. Chance to cause Frostbite.";
                 break;
 
             case SkillType.LightningBolt:
@@ -108,7 +108,7 @@ public class Skill
                 range = 3;
                 canTargetSelf = false;
                 skillName = "Lightning Bolt";
-                description = "Cast lightning bolt at target. Causes Electrified.";
+                description = "Cast lightning bolt at target. Chance to cause Electrified.";
                 break;
 
             case SkillType.Restore:
@@ -221,7 +221,7 @@ public class Skill
                 canTargetSelf = false;
                 range = 3;
                 skillName = "Poison Spike";
-                description = "Fires a poison spike at target. Inflicts poison.";
+                description = "Fires a poison spike at target. Chance to inflicts Poison.";
                 break;
 
             case SkillType.WhirlwindStrike:
@@ -269,7 +269,7 @@ public class Skill
                 range = 1;
                 canTargetSelf = false;
                 skillName = "Flame Palm";
-                description = "Attack target with flaming strike. Causes burn.";
+                description = "Attack target with flaming strike. Chance to cause Burn.";
                 break;
 
             case SkillType.IcePalm:
@@ -277,7 +277,7 @@ public class Skill
                 range = 1;
                 canTargetSelf = false;
                 skillName = "Ice Palm";
-                description = "Attack target with freezing strike. Causes frostbite.";
+                description = "Attack target with freezing strike. Chance to cause Frostbite.";
                 break;
 
             case SkillType.StaticPalm:
@@ -285,7 +285,7 @@ public class Skill
                 range = 1;
                 canTargetSelf = false;
                 skillName = "Static Palm";
-                description = "Attack target with electric strike. Causes electrified.";
+                description = "Attack target with electric strike. Chance to cause Electrified.";
                 break;
 
             case SkillType.PoisonPalm:
@@ -293,7 +293,7 @@ public class Skill
                 range = 1;
                 canTargetSelf = false;
                 skillName = "Poison Palm";
-                description = "Attack target with poison strike. Causes poison.";
+                description = "Attack target with poison strike. Chance to cause Poison.";
                 break;
 
             case SkillType.MagicMissle:
@@ -362,7 +362,7 @@ public class Skill
                 range = 1;
                 canTargetSelf = false;
                 skillName = "Bite";
-                description = "Bite target. Chance to cause poison or bleed.";
+                description = "Bite target. Chance to cause Poison or Bleed.";
                 break;
 
             case SkillType.Stomp:
@@ -370,7 +370,7 @@ public class Skill
                 range = 1;
                 canTargetSelf = false;
                 skillName = "Stomp";
-                description = "Stomp on target. Chance to cause paralysis.";
+                description = "Stomp on target. Chance to cause Paralysis.";
                 break;
 
         }
@@ -434,19 +434,22 @@ public class Skill
             case SkillType.Fireball:
                 float damage = target.GetMaxHP() * 0.2f;
                 target.TakeDamage(-damage, ColorManager.FIRE);
-                target.AddStatusEffect(new StatusEffect(EffectType.burn, 5, EffectOrder.End));
+                if (Random.Range(0, 100) <= 20)
+                    target.AddStatusEffect(new StatusEffect(EffectType.burn, 5, EffectOrder.End));
                 break;
 
             case SkillType.IceShard:
                 damage = target.GetMaxHP() * 0.2f;
                 target.TakeDamage(-damage, ColorManager.ICE);
-                target.AddStatusEffect(new StatusEffect(EffectType.freeze, 5, EffectOrder.End));
+                if (Random.Range(0, 100) <= 20)
+                    target.AddStatusEffect(new StatusEffect(EffectType.freeze, 5, EffectOrder.End));
                 break;
 
             case SkillType.LightningBolt:
                 damage = target.GetMaxHP() * 0.2f;
                 target.TakeDamage(-damage, ColorManager.LIGHTNING);
-                target.AddStatusEffect(new StatusEffect(EffectType.electric, 5, EffectOrder.End));
+                if (Random.Range(0, 100) <= 20)
+                    target.AddStatusEffect(new StatusEffect(EffectType.electric, 5, EffectOrder.End));
                 break;
 
             case SkillType.Cleanse:
@@ -524,7 +527,8 @@ public class Skill
             case SkillType.PoisonSpike:
                 damage = target.GetMaxHP() * 0.2f;
                 target.TakeDamage(-damage, ColorManager.POISON);
-                target.AddStatusEffect(new StatusEffect(EffectType.poison, 5, EffectOrder.End));
+                if (Random.Range(0, 100) <= 20)
+                    target.AddStatusEffect(new StatusEffect(EffectType.poison, 5, EffectOrder.End));
                 break;
 
             case SkillType.WhirlwindStrike:
@@ -593,25 +597,29 @@ public class Skill
             case SkillType.FlamePalm:
                 damage = target.GetMaxHP() * 0.2f;
                 target.TakeDamage(-damage, ColorManager.DAMAGE);
-                target.AddStatusEffect(new StatusEffect(EffectType.burn, 5, EffectOrder.End));
+                if (Random.Range(0, 100) <= 20)
+                    target.AddStatusEffect(new StatusEffect(EffectType.burn, 5, EffectOrder.End));
                 break;
 
             case SkillType.IcePalm:
                 damage = target.GetMaxHP() * 0.2f;
                 target.TakeDamage(-damage, ColorManager.DAMAGE);
-                target.AddStatusEffect(new StatusEffect(EffectType.freeze, 5, EffectOrder.End));
+                if (Random.Range(0, 100) <= 20)
+                    target.AddStatusEffect(new StatusEffect(EffectType.freeze, 5, EffectOrder.End));
                 break;
 
             case SkillType.StaticPalm:
                 damage = target.GetMaxHP() * 0.2f;
                 target.TakeDamage(-damage, ColorManager.DAMAGE);
-                target.AddStatusEffect(new StatusEffect(EffectType.electric, 5, EffectOrder.End));
+                if (Random.Range(0, 100) <= 20)
+                    target.AddStatusEffect(new StatusEffect(EffectType.electric, 5, EffectOrder.End));
                 break;
 
             case SkillType.PoisonPalm:
                 damage = target.GetMaxHP() * 0.2f;
                 target.TakeDamage(-damage, ColorManager.DAMAGE);
-                target.AddStatusEffect(new StatusEffect(EffectType.poison, 5, EffectOrder.End));
+                if (Random.Range(0, 100) <= 20)
+                    target.AddStatusEffect(new StatusEffect(EffectType.poison, 5, EffectOrder.End));
                 break;
 
             case SkillType.MagicMissle:
