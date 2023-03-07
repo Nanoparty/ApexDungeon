@@ -177,14 +177,12 @@ public class StatusEffect
                 entity.TakeDamage(-electricDamage, textColor, false, false);
                 break;
             case EffectType.paralysis:
-                // 50% chance to skip turn
                 float r = Random.Range(0f, 1f);
                 if (r > 0.5f)
                 {
                     entity.AddTextPopup("Paralyzed", textColor);
                     GameManager.gmInstance.Log.AddLog($"{entity.entityName} is paralyzed and cannot move.");
                     entity.skipTurn = true;
-                    //entity.SkipTurn();
                 }
                 break;
             case EffectType.silence:
@@ -205,6 +203,7 @@ public class StatusEffect
                 break;
             case EffectType.sleep:
                 entity.AddTextPopup("Sleep", textColor);
+                entity.sleeping = true;
                 break;
             case EffectType.strength_up:
                 // Increase player strength by 10%
@@ -289,6 +288,9 @@ public class StatusEffect
                 break;
             case EffectType.root:
                 entity.root = false;
+                break;
+            case EffectType.sleep:
+                entity.sleeping = false;
                 break;
         }
     }

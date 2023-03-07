@@ -126,7 +126,10 @@ public class Player : MovingEntity
             }
             if (activeSkill.range == 0)
             {
-                activeSkill.Activate(this, row, col);
+                if (activeSkill.Activate(this, row, col))
+                {
+                    PlayerEnd();
+                }
 
                 targetMode = false;
                 activeSkill = null;
@@ -135,7 +138,10 @@ public class Player : MovingEntity
 
             DrawTargetHighlights();
 
-            TargetSelection();
+            if (TargetSelection()) {
+                PlayerEnd();
+                return; 
+            }
 
             return;
         }
@@ -406,7 +412,7 @@ public class Player : MovingEntity
         }
     }
 
-    void TargetSelection()
+    bool TargetSelection()
     {
         if (Input.GetButtonDown("Fire1"))
         {
@@ -428,7 +434,7 @@ public class Player : MovingEntity
                     targetTiles.Clear();
                     activeSkill = null;
                     drawTargets = false;
-                    return;
+                    return castSuccessful;
                 }
             }
             // Cancel Casting
@@ -440,9 +446,9 @@ public class Player : MovingEntity
             targetTiles.Clear();
             activeSkill = null;
             drawTargets = false;
-            return;
-
+            return false;
         }
+        return false;
     }
 
     public void PlayerStart()

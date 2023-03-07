@@ -46,6 +46,7 @@ public abstract class MovingEntity : MonoBehaviour
     public bool root;
     public bool skipTurn;
     public bool interrupt;
+    public bool sleeping;
 
     protected float attackScale = 1f;
     protected float defenseScale = 1f;
@@ -428,7 +429,6 @@ public abstract class MovingEntity : MonoBehaviour
     {
         if (time == "start")
         {
-            Debug.Log(statusEffects);
             foreach (StatusEffect e in statusEffects)
             {
                 if (e.order == EffectOrder.Start) e.Activate(this);

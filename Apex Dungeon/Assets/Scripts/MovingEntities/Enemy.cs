@@ -222,13 +222,25 @@ public class Enemy : MovingEntity
             Die();
             return;
         }
+
+        if (skipTurn || sleeping)
+        {
+            skipTurn = false;
+            EndTurn();
+            return;
+        }
+
         if (agro)
         {
             //ATTACKING
             player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
 
             CheckPlayerMoved(player);
-            AttackController(player);
+            if (AttackController(player))
+            {
+                EndTurn();
+                return;
+            }
 
             base.AttemptMove<Enemy>(player.GetRow(), player.GetCol());
 
@@ -260,7 +272,7 @@ public class Enemy : MovingEntity
         }
     }
 
-    public virtual void AttackController(Player player)
+    public virtual bool AttackController(Player player)
     {
         if (CanUseSkill())
         {
@@ -282,14 +294,30 @@ public class Enemy : MovingEntity
                 }
 
                 availableSkills.Clear();
-                return;
+
+                if (success)
+                {
+                    return true;
+                }
+                else
+                {
+                    availableSkills.Clear();
+                    if (CanAttackTarget())
+                    {
+                        AttackTarget(player);
+                        return true;
+                    }
+                    return false;
+                }
             }
             availableSkills.Clear();
         }
         if (CanAttackTarget())
         {
-            AttackTarget(player); 
+            AttackTarget(player);
+            return true;
         }
+        return false;
     }
 
     public bool CanAttackTarget()

@@ -673,9 +673,9 @@ public class Skill
                 target.AddStatusEffect(new StatusEffect(EffectType.bleed, 5, EffectOrder.End));
                 break;
 
-            default: return false;
+            default: { Debug.Log("Default"); return false; }
         }
-
+        Debug.Log("End of Skill");
         return true;
     }
 
