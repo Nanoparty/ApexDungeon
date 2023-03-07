@@ -534,4 +534,32 @@ public class ConsumableGenerator : ScriptableObject
 
         return money;
     }
+
+    public GameObject CreatePickup(Consumable i, int r, int c)
+    {
+        Sprite image = GameManager.gmInstance.imageLookup.getImage(i.id);
+
+        GameObject consumable = new GameObject("consumable");
+
+        consumable.AddComponent<SpriteRenderer>();
+        consumable.GetComponent<SpriteRenderer>().sprite = image;
+        consumable.GetComponent<SpriteRenderer>().sortingLayerName = "Items";
+
+        consumable.AddComponent<BoxCollider2D>();
+        consumable.GetComponent<BoxCollider2D>().isTrigger = true;
+
+        Consumable item = new Consumable(i.id, i.itemName, i.flavorText, i.description, image, i.level);
+
+        consumable.AddComponent<Pickup>();
+        consumable.GetComponent<Pickup>().SetItem(item);
+
+        consumable.tag = "Consumable";
+
+        consumable.transform.parent = GameManager.gmInstance.DunGen.itemContainer.transform;
+        consumable.transform.position = new Vector2(c, r);
+        consumable.GetComponent<Pickup>().SetLocation(r, c);
+        GameManager.gmInstance.Dungeon.itemList.Add(new Vector2(r, c));
+
+        return consumable;
+    }
 }

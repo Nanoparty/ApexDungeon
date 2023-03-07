@@ -186,8 +186,17 @@ public class Enemy : MovingEntity
         }
 
         // Drop Item
-        {
+        if (heldItem != null) {
+            if (typeof(Consumable).IsInstanceOfType(heldItem))
+            {
+                GameManager.gmInstance.consumableGenerator.CreatePickup((Consumable)heldItem, row, col);
 
+            }
+            else if (typeof(Equipment).IsInstanceOfType(heldItem))
+            {
+                GameManager.gmInstance.equipmentGenerator.CreatePickup((Equipment)heldItem, row, col);
+            }
+            GameManager.gmInstance.Log.AddLog($">{entityName} drops {heldItem.itemName}.");
         }
 
         Destroy(this.gameObject);

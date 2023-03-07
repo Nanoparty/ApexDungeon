@@ -5,8 +5,6 @@ using UnityEngine.UI;
 [CreateAssetMenu(fileName = "DungeonGenerator", menuName = "ScriptableObjects/Dungeon Generator")]
 public class DungeonGenerator : ScriptableObject
 {
-    public EquipmentGenerator equipmentGenerator;
-    public ConsumableGenerator consumableGenerator;
     public static Tile[,] tileMap;
     private static List<Vector2> walkableTiles;
     public static GameObject[,] shadowMap;
@@ -34,7 +32,7 @@ public class DungeonGenerator : ScriptableObject
     private Transform dungeon;
     private Transform shadowContainer;
     private Transform mapContainer;
-    private Transform itemContainer;
+    public Transform itemContainer;
     private Transform enemyContainer;
     private Transform furnitureContainer;
 
@@ -798,7 +796,7 @@ public class DungeonGenerator : ScriptableObject
                 if (valid)
                 {
                     Vector3 position = new Vector3(col, row, 0f);
-                    GameObject item = consumableGenerator.CreateRandomConsumable(GameManager.gmInstance.level);
+                    GameObject item = GameManager.gmInstance.consumableGenerator.CreateRandomConsumable(GameManager.gmInstance.level);
                     item.transform.parent = itemContainer.transform;
                     item.transform.position = position;
                     item.GetComponent<Pickup>().SetLocation(row, col);
@@ -828,7 +826,7 @@ public class DungeonGenerator : ScriptableObject
                 if (valid)
                 {
                     Vector3 position = new Vector3(col, row, 0f);
-                    GameObject item = equipmentGenerator.GenerateEquipment(GameManager.gmInstance.level);
+                    GameObject item = GameManager.gmInstance.equipmentGenerator.GenerateEquipment(GameManager.gmInstance.level);
                     item.transform.parent = itemContainer.transform;
                     item.transform.position = position;
                     item.GetComponent<Pickup>().SetLocation(row, col);
@@ -863,7 +861,7 @@ public class DungeonGenerator : ScriptableObject
                 {
                     Vector3 position = new Vector3(col, row, 0f);
                     
-                    GameObject item = consumableGenerator.CreateRandomMoney(GameManager.gmInstance.level);
+                    GameObject item = GameManager.gmInstance.consumableGenerator.CreateRandomMoney(GameManager.gmInstance.level);
                     item.transform.parent = itemContainer.transform;
                     item.transform.position = position;
                     item.GetComponent<Money>().SetLocation(row, col);

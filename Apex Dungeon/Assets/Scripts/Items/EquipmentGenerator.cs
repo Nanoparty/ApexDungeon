@@ -1,8 +1,12 @@
 using UnityEngine;
+using UnityEngine.UIElements;
 
 [CreateAssetMenu(fileName = "EquipmentGenerator", menuName = "ScriptableObjects/Equipment Generator")]
 public class EquipmentGenerator : ScriptableObject
 {
+    // Container Objects
+    //private Transform itemContainer;
+
     //Images
     public Sprite LeatherHelm;
     public Sprite LeatherChest;
@@ -354,5 +358,33 @@ public class EquipmentGenerator : ScriptableObject
         
         //create gameobject
         return GenerateEquipment(level, type, tierNum);
+    }
+
+    public GameObject CreatePickup(Equipment e, int r, int c)
+    {
+        Sprite image = getEquipmentImage(e.tier, e.type);
+
+        GameObject equipment = new GameObject("equipment");
+
+        equipment.AddComponent<SpriteRenderer>();
+        equipment.GetComponent<SpriteRenderer>().sprite = image;
+        equipment.GetComponent<SpriteRenderer>().sortingLayerName = "Items";
+
+        equipment.AddComponent<BoxCollider2D>();
+        equipment.GetComponent<BoxCollider2D>().isTrigger = true;
+
+        Equipment item = new Equipment(e.level, e.type, e.tier, image, e.defense, e.attack, e.crit, e.evade);
+
+        equipment.AddComponent<Pickup>();
+        equipment.GetComponent<Pickup>().SetItem(item);
+
+        equipment.tag = "Equipment";
+
+        equipment.transform.parent = GameManager.gmInstance.DunGen.itemContainer.transform;
+        equipment.transform.position = new Vector2(c, r);
+        equipment.GetComponent<Pickup>().SetLocation(r, c);
+        GameManager.gmInstance.Dungeon.itemList.Add(new Vector2(r, c));
+
+        return equipment;
     }
 }

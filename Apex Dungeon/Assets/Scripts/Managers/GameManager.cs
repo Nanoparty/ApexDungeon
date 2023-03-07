@@ -9,6 +9,8 @@ public class GameManager : MonoBehaviour
     public DungeonGenerator DunGen;
     public SkillGenerator SkillGenerator;
     public ConsumableGenerator consumableGenerator;
+    public EquipmentGenerator equipmentGenerator;
+    public ImageLookup imageLookup;
     public LogManager Log;
     public ObjectContainer container;
     public bool playersTurn = false;
