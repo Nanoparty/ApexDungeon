@@ -113,7 +113,7 @@ public class Player : MovingEntity
             return;
         }
 
-        if (openLevel || openPause || stairsOpen) return;
+        if (openLevel || openPause || stairsOpen || GameManager.gmInstance.Log.isFullscreen) return;
 
         DebugMenu();
 
@@ -593,7 +593,7 @@ public class Player : MovingEntity
         }
         if (other.gameObject.CompareTag("Trap"))
         {
-            GameManager.gmInstance.Log.AddLog($"{entityName} activates {other.GetComponent<Trap>().trapName}.");
+            GameManager.gmInstance.Log.AddLog($">{entityName} activates {other.GetComponent<Trap>().trapName}.");
             other.GetComponent<Trap>().TriggerTrap(this);
         }
     }
@@ -839,22 +839,6 @@ public class Player : MovingEntity
         UpdatePlayerStatusEffectAlerts();
     }
 
-    public int GetStrength(){
-        return strength;
-    }
-    public int GetDefense(){
-        return defense;
-    }
-    public int GetIntelligence(){
-        return intelligence;
-    }
-    public int GetCritical(){
-        return critical;
-    }
-    public int GetEvade(){
-        return evade;
-    }
-    
     public int GetGold(){
         return gold;
     }
@@ -874,37 +858,6 @@ public class Player : MovingEntity
     {
         return playerName;
     }
-
-    public void AddMP(int i)
-    {
-        mp += i;
-        if(mp > maxMp) mp = maxMp;
-    }
-    public void AddMaxMP(int i){
-        maxMp += i;
-    }
-    public void AddHP(int i)
-    {
-        hp += i;
-        if(hp > maxHp) hp = maxHp;
-        AddTextPopup($"+{i}", new Color(50f / 255f, 205f / 255f, 50f / 255f));
-    }
-    public void AddMaxHP(int i){
-        maxHp += i;
-        if(hp > maxHp)
-        {
-            hp = maxHp;
-        }
-    }
-    public void AddBaseHP(int i)
-    {
-        baseHp += i;
-        int newHp = baseHp + (int)((float)baseHp * 0.05f * (int)(defense * defenseScale));
-        int diff = newHp - maxHp;
-        maxHp += diff;
-        hp += diff;
-       
-    }
     public void AddExp(int i){
         exp += i;
         GameManager.gmInstance.Log.AddLog($">{entityName} receives +{i} experience.");
@@ -912,7 +865,6 @@ public class Player : MovingEntity
         GameManager.gmInstance.score += i;
         bool didLevel = false;
         while(exp >= maxExp){
-            
             SoundManager.sm.PlayLevelUpSound();
             exp -= maxExp;
             expLevel++;
@@ -931,48 +883,7 @@ public class Player : MovingEntity
             levelUp.CreatePopup(this, levelPoints);
         }
     }
-    public void AddStrength(int i){
-        strength += i;
-    }
-    public void AddAttack(int i)
-    {
-        attack += i;
-    }
-    public void AddCrit(int i){
-        critical += i;
-    }
-    public void AddIntelligence(int i){
-        intelligence += i;
-    }
-    public void AddBlock(int i){
-        blockStat += i;
-    }
-    public void AddEvade(int i){
-        evade += i;
-    }
-
-    public void SetStrength(int i)
-    {
-        strength = i;
-    }
-    public void SetDefense(int i)
-    {
-        defense = i;
-        int newHp = baseHp + (int)((float)baseHp * 0.05f * (int)(defense * defenseScale));
-        int diff = newHp - maxHp;
-        maxHp += diff;
-        hp += diff;
-
-        
-    }
-    public void SetCritical(int i)
-    {
-        critical = i;
-    }
-    public void SetEvasion(int i)
-    {
-        evade = i;
-    }
+    
     public void SetGear(PlayerGear gear)
     {
         this.gear = gear;

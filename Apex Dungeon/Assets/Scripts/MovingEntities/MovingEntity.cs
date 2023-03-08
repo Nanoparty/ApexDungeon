@@ -26,6 +26,8 @@ public abstract class MovingEntity : MonoBehaviour
     protected int defense;
     protected int strength;
     protected int intelligence;
+    protected int dexterity;
+    protected int constitution;
     protected int critical;
     protected int evade;
     protected int blockStat;
@@ -34,6 +36,8 @@ public abstract class MovingEntity : MonoBehaviour
     protected int attackRange;
 
     // Resistances
+    protected float physicalResistance;
+    protected float magicResistance;
     protected float fireResistance;
     protected float iceResistance;
     protected float lightningResistance;
@@ -569,6 +573,128 @@ public abstract class MovingEntity : MonoBehaviour
     public bool IsBlocked(int r, int c)
     {
         return GameManager.gmInstance.Dungeon.tileMap[r, c].getWall() || GameManager.gmInstance.Dungeon.tileMap[r, c].getVoid();
+    }
+
+    public void AddStrength(int i)
+    {
+        strength += i;
+    }
+    public void AddAttack(int i)
+    {
+        attack += i;
+    }
+    public void AddCrit(int i)
+    {
+        critical += i;
+    }
+    public void AddIntelligence(int i)
+    {
+        intelligence += i;
+    }
+    public void AddBlock(int i)
+    {
+        blockStat += i;
+    }
+    public void AddEvade(int i)
+    {
+        evade += i;
+    }
+    public void AddDexterity(int i)
+    {
+        dexterity += i;
+    }
+    public void AddConstitution(int i)
+    {
+        constitution += i;
+    }
+
+    public void SetStrength(int i)
+    {
+        strength = i;
+    }
+    public void SetDefense(int i)
+    {
+        defense = i;
+        int newHp = baseHp + (int)((float)baseHp * 0.05f * (int)(defense * defenseScale));
+        int diff = newHp - maxHp;
+        maxHp += diff;
+        hp += diff;
+    }
+    public void SetCritical(int i)
+    {
+        critical = i;
+    }
+    public void SetEvasion(int i)
+    {
+        evade = i;
+    }
+    public void SetDexterity(int i)
+    {
+        dexterity = i;
+    }
+    public void SetConstitution(int i)
+    {
+        constitution = i;
+    }
+    public int GetStrength()
+    {
+        return strength;
+    }
+    public int GetDefense()
+    {
+        return defense;
+    }
+    public int GetIntelligence()
+    {
+        return intelligence;
+    }
+    public int GetCritical()
+    {
+        return critical;
+    }
+    public int GetEvade()
+    {
+        return evade;
+    }
+    public int GetDexterity()
+    {
+        return dexterity;
+    }
+    public int GetConstitution()
+    {
+        return constitution;
+    }
+    public void AddMP(int i)
+    {
+        mp += i;
+        if (mp > maxMp) mp = maxMp;
+    }
+    public void AddMaxMP(int i)
+    {
+        maxMp += i;
+    }
+    public void AddHP(int i)
+    {
+        hp += i;
+        if (hp > maxHp) hp = maxHp;
+        AddTextPopup($"+{i}", new Color(50f / 255f, 205f / 255f, 50f / 255f));
+    }
+    public void AddMaxHP(int i)
+    {
+        maxHp += i;
+        if (hp > maxHp)
+        {
+            hp = maxHp;
+        }
+    }
+    public void AddBaseHP(int i)
+    {
+        baseHp += i;
+        int newHp = baseHp + (int)((float)baseHp * 0.05f * (int)(defense * defenseScale));
+        int diff = newHp - maxHp;
+        maxHp += diff;
+        hp += diff;
+
     }
 
 
