@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Skill;
 
 [CreateAssetMenu(fileName = "SkillGenerator", menuName = "ScriptableObjects/Skill Generator")]
 public class SkillGenerator : ScriptableObject

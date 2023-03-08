@@ -1,4 +1,6 @@
 using UnityEngine;
+using static Skill;
+using static StatusEffect;
 
 [CreateAssetMenu(fileName = "ConsumableGenerator", menuName = "ScriptableObjects/Consumable Generator")]
 public class ConsumableGenerator : ScriptableObject
@@ -37,6 +39,8 @@ public class ConsumableGenerator : ScriptableObject
     public Sprite heart;
     public Sprite dice;
     public Sprite chicken;
+
+    public Sprite[] spellbooks;
 
     public GameObject CreateHealthPotion(int level)
     {
@@ -561,5 +565,37 @@ public class ConsumableGenerator : ScriptableObject
         GameManager.gmInstance.Dungeon.itemList.Add(new Vector2(r, c));
 
         return consumable;
+    }
+
+    public GameObject CreateSpellbook(int r, int c)
+    {
+        //Sprite image = spellbooks[Random.Range(0, spellbooks.Length)];
+
+        //System.Array skills = System.Enum.GetValues(typeof(SkillType));
+        //SkillType skill = (SkillType)skills.GetValue(UnityEngine.Random.Range(0, skills.Length));
+
+        //GameObject consumable = new GameObject("spellbook");
+
+        //consumable.AddComponent<SpriteRenderer>();
+        //consumable.GetComponent<SpriteRenderer>().sprite = image;
+        //consumable.GetComponent<SpriteRenderer>().sortingLayerName = "Items";
+
+        //consumable.AddComponent<BoxCollider2D>();
+        //consumable.GetComponent<BoxCollider2D>().isTrigger = true;
+
+        //Consumable item = new Consumable(i.id, i.itemName, i.flavorText, i.description, image, i.level);
+
+        //consumable.AddComponent<Pickup>();
+        //consumable.GetComponent<Pickup>().SetItem(item);
+
+        //consumable.tag = "Consumable";
+
+        //consumable.transform.parent = GameManager.gmInstance.DunGen.itemContainer.transform;
+        //consumable.transform.position = new Vector2(c, r);
+        //consumable.GetComponent<Pickup>().SetLocation(r, c);
+        //GameManager.gmInstance.Dungeon.itemList.Add(new Vector2(r, c));
+
+        //return consumable;
+        return null;
     }
 }
