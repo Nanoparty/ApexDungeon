@@ -492,7 +492,7 @@ public class ConsumableGenerator : ScriptableObject
     {
         GameObject consumable = null;
 
-        int rand = Random.Range(1, 24);
+        int rand = Random.Range(1, 26);
 
         if (rand == 1) consumable = CreateHealthPotion(level);
         if (rand == 2) consumable = CreateHealthPotion(level);
@@ -517,6 +517,8 @@ public class ConsumableGenerator : ScriptableObject
         if (rand == 21) consumable = CreateHeartGem();
         if (rand == 22) consumable = CreateMagicDice();
         if (rand == 23) consumable = CreateManaRegenPotion();
+        if (rand == 24) consumable = CreateRandomSkillbook();
+        if (rand == 25) consumable = CreateRandomSkillbook();
 
         if (consumable == null)
         {
@@ -567,35 +569,39 @@ public class ConsumableGenerator : ScriptableObject
         return consumable;
     }
 
-    public GameObject CreateSpellbook(int r, int c)
+    public GameObject CreateRandomSkillbook()
     {
-        //Sprite image = spellbooks[Random.Range(0, spellbooks.Length)];
+        int imageIndex = Random.Range(0, spellbooks.Length);
+        Sprite image = spellbooks[imageIndex];
 
-        //System.Array skills = System.Enum.GetValues(typeof(SkillType));
-        //SkillType skill = (SkillType)skills.GetValue(UnityEngine.Random.Range(0, skills.Length));
+        System.Array skills = System.Enum.GetValues(typeof(SkillType));
+        SkillType skillType = (SkillType)skills.GetValue(UnityEngine.Random.Range(0, skills.Length));
 
-        //GameObject consumable = new GameObject("spellbook");
+        Skill skill = GameManager.gmInstance.SkillGenerator.GetSkill(skillType);
 
-        //consumable.AddComponent<SpriteRenderer>();
-        //consumable.GetComponent<SpriteRenderer>().sprite = image;
-        //consumable.GetComponent<SpriteRenderer>().sortingLayerName = "Items";
+        GameObject consumable = new GameObject("spellbook");
 
-        //consumable.AddComponent<BoxCollider2D>();
-        //consumable.GetComponent<BoxCollider2D>().isTrigger = true;
+        consumable.AddComponent<SpriteRenderer>();
+        consumable.GetComponent<SpriteRenderer>().sprite = image;
+        consumable.GetComponent<SpriteRenderer>().sortingLayerName = "Items";
 
-        //Consumable item = new Consumable(i.id, i.itemName, i.flavorText, i.description, image, i.level);
+        consumable.AddComponent<BoxCollider2D>();
+        consumable.GetComponent<BoxCollider2D>().isTrigger = true;
 
-        //consumable.AddComponent<Pickup>();
-        //consumable.GetComponent<Pickup>().SetItem(item);
+        consumable.transform.localScale = new Vector3(0.6f, 0.6f, 0.6f);
 
-        //consumable.tag = "Consumable";
+        Consumable item = new Consumable($"skillbook", $"{skill.skillName} Skillbook", $"Teaches the skill {skill.skillName}", $"{skill.description}", image, 1, skillType);
+
+        consumable.AddComponent<Pickup>();
+        consumable.GetComponent<Pickup>().SetItem(item);
+
+        consumable.tag = "Consumable";
 
         //consumable.transform.parent = GameManager.gmInstance.DunGen.itemContainer.transform;
         //consumable.transform.position = new Vector2(c, r);
         //consumable.GetComponent<Pickup>().SetLocation(r, c);
         //GameManager.gmInstance.Dungeon.itemList.Add(new Vector2(r, c));
 
-        //return consumable;
-        return null;
+        return consumable;
     }
 }

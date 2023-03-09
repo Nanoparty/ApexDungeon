@@ -776,7 +776,7 @@ public class DungeonGenerator : ScriptableObject
         {
             // Spawn Consumable
             float coin = Random.Range(0f, 1f);
-            if (coin <= .3f)
+            if (true)//(coin <= .3f)
             {
                 Room room = rooms[i];
                 bool valid = false;
@@ -801,6 +801,7 @@ public class DungeonGenerator : ScriptableObject
                     item.transform.position = position;
                     item.GetComponent<Pickup>().SetLocation(row, col);
                     itemList.Add(new Vector2(row, col));
+                    
                 }
             }
 

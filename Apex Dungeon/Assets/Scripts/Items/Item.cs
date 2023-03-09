@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using static Skill;
 
 public abstract class Item
 {
@@ -9,6 +10,7 @@ public abstract class Item
     public int level;
     public int tier;
     public string id;
+    public SkillType skillType;
     
     public abstract void Create();
 

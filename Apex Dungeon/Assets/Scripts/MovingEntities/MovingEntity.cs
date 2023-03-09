@@ -66,7 +66,6 @@ public abstract class MovingEntity : MonoBehaviour
     public bool agro;
     public int agroRange;
 
-    [HideInInspector]
     public List<StatusEffect> statusEffects;
     public List<Skill> skills;
 

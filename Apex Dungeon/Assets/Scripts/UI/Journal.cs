@@ -766,6 +766,7 @@ public class Journal : ScriptableObject
 
     void populateSkills()
     {
+        skills = player.skills;
         GameObject slotsPanel = skillsPanel.transform.GetChild(0).gameObject;
 
         int numSkills = skills.Count;

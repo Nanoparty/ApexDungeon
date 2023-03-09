@@ -22,7 +22,7 @@ public class Skill
         Pound,
         Headbutt,
         Trap,
-        MagicMissle,
+        MagicMissile,
         LifeDrain,
         ManaDrain,
         BloodCurse,
@@ -296,7 +296,7 @@ public class Skill
                 description = "Attack target with poison strike. Chance to cause Poison.";
                 break;
 
-            case SkillType.MagicMissle:
+            case SkillType.MagicMissile:
                 manaCost = 5;
                 range = 3;
                 canTargetSelf = false;
@@ -622,7 +622,7 @@ public class Skill
                     target.AddStatusEffect(new StatusEffect(EffectType.poison, 5, EffectOrder.End));
                 break;
 
-            case SkillType.MagicMissle:
+            case SkillType.MagicMissile:
                 damage = target.GetMaxHP() * 0.1f;
                 target.TakeDamage(-damage, ColorManager.DAMAGE);
                 break;
@@ -652,10 +652,10 @@ public class Skill
                 // Move target back 1 tile
                 int rdif = target.GetRow() - caster.GetRow();
                 int cdif = target.GetCol() - caster.GetCol();
-                if (!GameManager.gmInstance.Dungeon.tileMap[rdif, cdif].getBlocked())
-                {
-                    target.SetPosition(target.GetRow() + rdif, target.GetCol() + cdif);
-                }
+                //if (!GameManager.gmInstance.Dungeon.tileMap[rdif, cdif].getBlocked())
+                //{
+                //    target.SetPosition(target.GetRow() + rdif, target.GetCol() + cdif);
+                //}
                 break;
 
             case SkillType.Headbutt:

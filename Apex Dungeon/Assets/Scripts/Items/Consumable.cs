@@ -1,17 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using static Skill;
 using static StatusEffect;
 
 public class Consumable : Item
 {
-    public Consumable(string id, string name, string flavor, string desc, Sprite img, int level = 1){
+    public Consumable(string id, string name, string flavor, string desc, Sprite img, int level = 1, SkillType st = SkillType.Fireball){
         itemName = name;
         flavorText = flavor;
         description = desc;
         image = img;
         this.level = level;
         this.id = id;
+        skillType = st;
     }
 
     public Consumable(SaveConsumable sc)
@@ -150,6 +152,11 @@ public class Consumable : Item
             {
                 p.RemoveAllStatusEffect(effect);
             }
+        }
+        if (id == "skillbook")
+        {
+            Skill skill = GameManager.gmInstance.SkillGenerator.GetSkill(skillType);
+            p.skills.Add(skill);
         }
     }
 }

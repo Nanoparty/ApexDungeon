@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 using static Skill;
 
 [CreateAssetMenu(fileName = "SkillGenerator", menuName = "ScriptableObjects/Skill Generator")]
@@ -45,6 +46,55 @@ public class SkillGenerator : ScriptableObject
     public Sprite Stealth_icon;
     public Sprite Taunt_icon;
     public Sprite Invisibility_icon;
+
+    public Skill GetSkill(SkillType st)
+    {
+       
+        var skills = new Dictionary<SkillType, Skill>();
+        skills[SkillType.Fireball] = Fireball;
+        skills[SkillType.IceShard] = IceShard;
+        skills[SkillType.LightningBolt] = LightningBolt;
+        skills[SkillType.PoisonSpike] = PoisonSpike;
+        skills[SkillType.WhirlwindStrike] = WhirlwindStrike;
+        skills[SkillType.Thrust] = Thrust;
+        skills[SkillType.Bash] = Bash;
+        skills[SkillType.Stomp] = Stomp;
+        skills[SkillType.Bite] = Bite;
+        skills[SkillType.Slash] = Slash;
+        skills[SkillType.Scratch] = Scratch;
+        skills[SkillType.Pound] = Pound;
+        skills[SkillType.Headbutt] = Headbutt;
+        skills[SkillType.Trap] = Trap;
+        skills[SkillType.MagicMissile] = MagicMissile;
+        skills[SkillType.LifeDrain] = LifeDrain;
+        skills[SkillType.ManaDrain] = ManaDrain;
+        skills[SkillType.BloodCurse] = BloodCurse;
+        skills[SkillType.FlamePalm] = FlamePalm;
+        skills[SkillType.IcePalm] = IcePalm;
+        skills[SkillType.StaticPalm] = StaticPalm;
+        skills[SkillType.PoisonPalm] = PoisonPalm;
+        skills[SkillType.Hypnosis] = Hypnosis;
+        skills[SkillType.Lacerate] = Lacerate;
+        skills[SkillType.Stun] = Stun;
+        skills[SkillType.ArmorPolish] = ArmorPolish;
+        skills[SkillType.FieldDress] = FieldDress;
+        skills[SkillType.Berserk] = Berserk;
+        skills[SkillType.Bind] = Bind;
+        skills[SkillType.Silence] = Silence;
+        skills[SkillType.Bless] = Bless;
+        skills[SkillType.Plague] = Plague;
+        skills[SkillType.Stealth] = Stealth;
+        skills[SkillType.Taunt] = Taunt;
+        skills[SkillType.Invisibility] = Invisibility;
+        skills[SkillType.Teleport] = Teleport;
+        skills[SkillType.Restore] = Restore;
+        skills[SkillType.Cleanse] = Cleanse;
+
+        return skills[st];
+
+        return Fireball;
+        return null;
+    }
 
     public Skill Fireball
     {
@@ -176,7 +226,7 @@ public class SkillGenerator : ScriptableObject
     }
     public Skill MagicMissile
     {
-        get { return new Skill(Skill.SkillType.MagicMissle, MagicMissile_icon); }
+        get { return new Skill(Skill.SkillType.MagicMissile, MagicMissile_icon); }
     }
     public Skill BloodCurse
     {
