@@ -99,7 +99,7 @@ public class Consumable : Item
         {
             p.RemoveAllStatusEffect(EffectType.poison);
         }
-        if (id == "Chicken")
+        if (id == "Chicken" || id == "food")
         {
             p.AddStatusEffect(new StatusEffect(EffectType.health_regen, 2, EffectOrder.End));
         }

@@ -5,6 +5,8 @@ using static StatusEffect;
 [CreateAssetMenu(fileName = "ConsumableGenerator", menuName = "ScriptableObjects/Consumable Generator")]
 public class ConsumableGenerator : ScriptableObject
 {
+    public FoodGenerator foodGenerator;
+
     public Sprite redPotion;
     public Sprite bluePotion;
     public Sprite greenPotion;
