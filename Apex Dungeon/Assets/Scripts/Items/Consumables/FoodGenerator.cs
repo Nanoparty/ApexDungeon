@@ -222,7 +222,7 @@ public class FoodGenerator : ScriptableObject
     }
     public GameObject JellyDonut()
     {
-        return CreateFood("JellyDonut", "Has a delicious filling.", riceball);
+        return CreateFood("Jelly Donut", "Has a delicious filling.", riceball);
     }
     public GameObject Pizza()
     {

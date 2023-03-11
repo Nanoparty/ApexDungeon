@@ -6,6 +6,11 @@ public class EquipmentGenerator : ScriptableObject
 {
     // Container Objects
     //private Transform itemContainer;
+    public ShieldGenerator shieldGenerator;
+    public GlovesGenerator glovesGenerator;
+    public ChestGenerator chestGenerator;
+    public HelmetGenerator helmetGenerator;
+    public ShoesGenerator bootsGenerator;
 
     //Images
     public Sprite LeatherHelm;
@@ -320,6 +325,28 @@ public class EquipmentGenerator : ScriptableObject
 
         equipment.tag = "Equipment";
 
+        if (type == "shield")
+        {
+            return shieldGenerator.CreateRandomShield(level);
+        }
+        if (type == "boots")
+        {
+            return bootsGenerator.CreateRandomBoots(level);
+        }
+        if (type == "chestplate")
+        {
+            return chestGenerator.CreateRandomChest(level);
+        }
+        if (type == "helmet")
+        {
+            return helmetGenerator.CreateRandomHelmet(level);
+        }
+        if (type == "gloves")
+        {
+            return glovesGenerator.CreateRandomGloves(level);
+        }
+        return glovesGenerator.CreateRandomGloves(level);
+
         return equipment;
     }
 
@@ -330,7 +357,7 @@ public class EquipmentGenerator : ScriptableObject
         if (typeNum == 1) type = "helmet";
         else if (typeNum == 2) type = "chestplate";
         else if (typeNum == 3) type = "boots";
-        else if (typeNum == 4) type = "legs";
+        else if (typeNum == 4) type = "gloves";
         else if (typeNum == 5) type = "weapon";
         else if (typeNum == 6) type = "shield";
         else if (typeNum == 7) type = "necklace";

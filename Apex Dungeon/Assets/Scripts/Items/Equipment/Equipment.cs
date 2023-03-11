@@ -28,6 +28,26 @@ public class Equipment : Item
         setStats(lvl, type, tier, image, hpBoost, attackBoost, critBoost, evadeBoost);
     }
 
+    public Equipment(int lvl, string type, int tier, Sprite image, string name, string description, int hp, int attack, int crit, int evade)
+    {
+        this.level = lvl;
+        this.type = type;
+        this.tier = tier;
+        this.image = image;
+        this.itemName = name;
+
+        string descriptionText = "";
+
+        if (attack > 0) descriptionText += String.Format("\nAttack Damage +{0}", attack);
+        if (hp > 0) descriptionText += String.Format("\nHP Increase +{0}", hp);
+        if (crit > 0) descriptionText += String.Format("\nCritical Hit Chance +{0}", crit);
+        if (evade > 0) descriptionText += String.Format("\nEvade Chance +{0}", evade);
+
+        this.description = descriptionText;
+        flavorText = description;
+        this.image = image;
+    }
+
     public Equipment(SaveGear gear, ImageLookup il)
     {
         attack = gear.attack;
