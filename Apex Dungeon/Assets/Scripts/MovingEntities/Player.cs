@@ -19,6 +19,8 @@ public class Player : MovingEntity
     [Header("UI Buttons")]
     public GameObject journalButton;
     public GameObject pauseButton;
+    public GameObject mapButton;
+    public GameObject skillsButton;
 
     [Header("Active Skill")]
     public Skill activeSkill;
@@ -329,8 +331,12 @@ public class Player : MovingEntity
 
         journalButton = GameObject.FindGameObjectWithTag("characterButton");
         pauseButton = GameObject.FindGameObjectWithTag("PauseButton");
+        mapButton = GameObject.FindGameObjectWithTag("MapButton");
+        skillsButton = GameObject.FindGameObjectWithTag("SkillsButton");
         journalButton.GetComponent<Button>().onClick.AddListener(JournalListener);
         pauseButton.GetComponent<Button>().onClick.AddListener(PauseListener);
+        mapButton.GetComponent<Button>().onClick.AddListener(MapListener);
+        skillsButton.GetComponent<Button>().onClick.AddListener(SkillsListener);
 
         stairsModal = GameObject.FindGameObjectWithTag("stairspopup");
         stairsModal.SetActive(false);
@@ -633,6 +639,30 @@ public class Player : MovingEntity
     {
         if (!openJournal && !openPause)
         {
+            SoundManager.sm.PlayBookOpen();
+            journal.CreateJournal(this);
+            openJournal = true;
+            journalButton.GetComponent<Clickable>().setClicked(false);
+        }
+    }
+
+    void SkillsListener()
+    {
+        if (!openJournal && !openPause)
+        {
+            journal.tab = 5;
+            SoundManager.sm.PlayBookOpen();
+            journal.CreateJournal(this);
+            openJournal = true;
+            journalButton.GetComponent<Clickable>().setClicked(false);
+        }
+    }
+
+    void MapListener()
+    {
+        if (!openJournal && !openPause)
+        {
+            journal.tab = 3;
             SoundManager.sm.PlayBookOpen();
             journal.CreateJournal(this);
             openJournal = true;

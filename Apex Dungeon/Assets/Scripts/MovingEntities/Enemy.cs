@@ -213,21 +213,23 @@ public class Enemy : MovingEntity
         UpdateStatusEffectDuration();
     }
 
-    public void MoveEnemy()
+    public bool MoveEnemy()
     {
+        if (!atTarget) return false;
+
         StartTurn();
 
         if (dead || hp <= 0)
         {
             Die();
-            return;
+            return false;
         }
 
         if (skipTurn || sleeping)
         {
             skipTurn = false;
             EndTurn();
-            return;
+            return true;
         }
 
         if (agro)
@@ -239,7 +241,7 @@ public class Enemy : MovingEntity
             if (AttackController(player))
             {
                 EndTurn();
-                return;
+                return true;
             }
 
             base.AttemptMove<Enemy>(player.GetRow(), player.GetCol());
@@ -260,6 +262,7 @@ public class Enemy : MovingEntity
         }
 
         EndTurn();
+        return true;
     }
 
     void CheckPlayerMoved(Player player)

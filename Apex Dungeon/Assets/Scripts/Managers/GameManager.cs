@@ -287,7 +287,18 @@ public class GameManager : MonoBehaviour
             enemiesTurn = false;
             return;
         }
-        for(int i = 0;i < enemies.Count; i++)
+        //int enemyIndex = 0;
+
+        //while (enemyIndex < enemies.Count)
+        //{
+        //    Enemy activeEnemy = enemies[enemyIndex];
+        //    bool result = activeEnemy.MoveEnemy();
+        //    if (result)
+        //    {
+        //        enemyIndex++;
+        //    }
+        //}
+        for (int i = 0; i < enemies.Count; i++)
         {
             enemies[i].MoveEnemy();
             //WAIT OPTIONAL

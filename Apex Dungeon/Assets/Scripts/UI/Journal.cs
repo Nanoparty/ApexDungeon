@@ -41,7 +41,7 @@ public class Journal : ScriptableObject
     
     private int[,] map;
     private int width, height;    
-    private int tab;
+    public int tab;
     private bool flipping, flipping2;
     private bool popupOpen;
     private int selected, gearSelection;
@@ -766,7 +766,7 @@ public class Journal : ScriptableObject
 
     void populateSkills()
     {
-        skills = player.skills;
+        //skills = player.skills;
         GameObject slotsPanel = skillsPanel.transform.GetChild(0).gameObject;
 
         int numSkills = skills.Count;
