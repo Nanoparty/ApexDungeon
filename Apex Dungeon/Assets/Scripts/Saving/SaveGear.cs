@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Equipment;
 
 [System.Serializable]
 public class SaveGear
@@ -17,6 +18,9 @@ public class SaveGear
     public string description;
     public string id;
     public bool empty;
+    public int spriteIndex;
+    public string equipType;
+    public string subType;
 
     public SaveGear(Equipment e)
     {
@@ -36,5 +40,29 @@ public class SaveGear
         itemName = e.itemName;
         rank = e.flavorText;
         description = e.description;
+        spriteIndex = e.spriteIndex;
+        equipType = e.etype.ToString();
+        
+        if (e.etype == EquipType.HELMET)
+        {
+            subType = ((Helmet)e).helmetType.ToString();
+        }
+        if (e.etype == EquipType.CHESTPLATE)
+        {
+            subType = ((Chestplate)e).chestplateType.ToString();
+        }
+        if (e.etype == EquipType.SHIELD)
+        {
+            subType = ((Shield)e).shieldType.ToString();
+        }
+        if (e.etype == EquipType.BOOTS)
+        {
+            subType = ((Boots)e).bootType.ToString();
+        }
+        if (e.etype == EquipType.GLOVES)
+        {
+            subType = ((Gloves)e).gloveType.ToString();
+        }
+        
     }
 }

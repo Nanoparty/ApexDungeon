@@ -12,6 +12,7 @@ public class TitleManager : MonoBehaviour
     public Button Scores;
     public Button Options;
     public ImageLookup imageLookup;
+    public SkillGenerator skillGenerator;
 
     public bool skipLoad;
 
@@ -19,7 +20,7 @@ public class TitleManager : MonoBehaviour
     {
         if (skipLoad) return;
 
-        Data.LoadFromFile(imageLookup);
+        Data.LoadFromFile(imageLookup, skillGenerator);
     }
 
     void Start()

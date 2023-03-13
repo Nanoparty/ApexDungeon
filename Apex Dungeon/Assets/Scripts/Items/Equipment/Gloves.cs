@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -33,6 +34,22 @@ public class Gloves : Equipment
         this.gloveType = gt;
         this.spriteIndex = si;
         this.image = GetImage();
+    }
+
+    public Gloves(SaveGear gear)
+    {
+        attack = gear.attack;
+        defense = gear.hpBoost;
+        type = gear.type;
+        tier = gear.tier;
+        level = gear.itemLevel;
+        itemName = gear.itemName;
+        description = gear.description;
+        flavorText = gear.rank;
+        spriteIndex = gear.spriteIndex;
+        etype = Enum.Parse<EquipType>(gear.equipType);
+        gloveType = Enum.Parse<GloveType>(gear.subType);
+        image = GetImage();
     }
 
     public override Sprite GetImage()

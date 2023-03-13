@@ -6,7 +6,7 @@ public class Equipment : Item
 {
     //Parameters
     public string type;
-    public EquipType etype;
+    public EquipType etype = EquipType.NONE;
 
     //stats
     public int defense;
@@ -34,7 +34,8 @@ public class Equipment : Item
         SPEAR,
         DAGGER,
         BOW,
-        WAND
+        WAND,
+        NONE
     }
 
     public virtual Sprite GetImage()
@@ -81,7 +82,11 @@ public class Equipment : Item
         itemName = gear.itemName;
         description = gear.description;
         flavorText = gear.rank;
+        spriteIndex = gear.spriteIndex;
+        etype = Enum.Parse<EquipType>(gear.equipType);
         image = il.getEquipmentImage(tier, type);
+
+        
     }
 
     public Equipment(Equipment e){

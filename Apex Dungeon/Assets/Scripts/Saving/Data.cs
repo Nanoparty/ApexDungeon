@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using static CharacterClass;
+using static Equipment;
+using static Skill;
 using static StatusEffect;
 
 public static class Data
@@ -27,6 +29,7 @@ public static class Data
     public static List<Equipment> equipment;
     public static List<Consumable> consumables;
     public static List<StatusEffect> statusEffects;
+    public static List<Skill> skills;
 
     //Character Data
     public static string playerName;
@@ -89,6 +92,7 @@ public static class Data
         equipment = current?.equipment ?? new List<Equipment>();
         consumables = current?.consumables ?? new List<Consumable>(); 
         statusEffects = current?.statusEffects ?? new List<StatusEffect>();
+        skills = current?.skills ?? new List<Skill>();
     }
 
     public static void SaveCharacter(){
@@ -127,6 +131,7 @@ public static class Data
         current.consumables = consumables;
         current.statusEffects = statusEffects;
         current.classType = characterClass;
+        current.skills = skills;
     }
 
     public static void RemoveActive(){
@@ -148,7 +153,7 @@ public static class Data
         SaveSystem.SaveData();
     }
 
-    public static void LoadFromFile(ImageLookup il)
+    public static void LoadFromFile(ImageLookup il, SkillGenerator skillGenerator = null)
     {
         SaveData data = SaveSystem.LoadData();
         if (data == null) return;
@@ -170,16 +175,46 @@ public static class Data
             List<Equipment> equips = new List<Equipment>();
             foreach(SaveGear g in p.equipment)
             {
-                Equipment e = new Equipment(g, il);
+                Equipment e = null;
+                EquipType etype = Enum.Parse<EquipType>(g.equipType);
+                if (etype == EquipType.HELMET)
+                {
+                    e = new Helmet(g); 
+                }
+                if (etype == EquipType.CHESTPLATE)
+                {
+                    e = new Chestplate(g);
+                }
+                if (etype == EquipType.SHIELD)
+                {
+                    e = new Shield(g);
+                }
+                if (etype == EquipType.BOOTS)
+                {
+                    e = new Boots(g);
+                }
+                if (etype == EquipType.GLOVES)
+                {
+                    e = new Gloves(g);
+                }
+                else
+                {
+                    e = new Equipment(g, il);
+                }
                 equips.Add(e);
             }
 
             List<Consumable> consumes = new List<Consumable>();
             foreach(SaveConsumable c in p.consumables)
             {
-                Consumable item = new Consumable(c);
-                if(item.image == null)
+                Consumable item;
+                if (c.id == "food")
                 {
+                    item = new Food(c);
+                }
+                else
+                {
+                    item = new Consumable(c);
                     item.image = il.getImage(item.id);
                 }
                 consumes.Add(item);
@@ -192,13 +227,27 @@ public static class Data
                 effects.Add(new StatusEffect(type, sse.duration, order));
             }
 
-            
+            List<Skill> skillList = new List<Skill>();
+            foreach (SaveSkill s in p.skills)
+            {
+                SkillType sType = Enum.Parse<SkillType>(s.skillType);
+                if (GameManager.gmInstance == null)
+                {
+                    skillList.Add(skillGenerator.GetSkill(sType));
+                }
+                else
+                {
+                    skillList.Add(GameManager.gmInstance.SkillGenerator.GetSkill(sType));
+                }
+                
+            }
+
             ClassType classType = Enum.Parse<ClassType>(p.classType ?? "Archer");
             if (classType == null) classType = ClassType.Archer;
 
             CharacterData cd = new CharacterData(p.name, p.floor, p.level, p.gold, p.strength, p.attack, p.defense,
                 p.evasion, p.critical, p.baseHp, p.hp, p.maxHp, p.exp, p.maxExp, gear, equips, consumes, classType, 
-                p.strengthScale, p.defenseScale, p.criticalScale, p.evadeScale, effects);
+                p.strengthScale, p.defenseScale, p.criticalScale, p.evadeScale, effects, skillList, p.mp, p.maxMp);
 
             loadCharData.Add(cd);
         }

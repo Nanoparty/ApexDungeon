@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -34,6 +35,22 @@ public class Helmet : Equipment
     {
         this.helmetType = ht;
         this.spriteIndex = si;
+        image = GetImage();
+    }
+
+    public Helmet(SaveGear gear)
+    {
+        attack = gear.attack;
+        defense = gear.hpBoost;
+        type = gear.type;
+        tier = gear.tier;
+        level = gear.itemLevel;
+        itemName = gear.itemName;
+        description = gear.description;
+        flavorText = gear.rank;
+        spriteIndex = gear.spriteIndex;
+        etype = Enum.Parse<EquipType>(gear.equipType);
+        helmetType = Enum.Parse<HelmetType>(gear.subType);
         image = GetImage();
     }
 

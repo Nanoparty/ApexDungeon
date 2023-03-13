@@ -261,6 +261,8 @@ public class Player : MovingEntity
         hp = baseHp + (int)((float)baseHp * 0.05f * (int)(defense * defenseScale));
         maxHp = hp;
 
+        skills.Add(GameManager.gmInstance.SkillGenerator.Fireball);
+
 
         // Set ClassType Variables
         {
@@ -511,6 +513,7 @@ public class Player : MovingEntity
         Data.equipment = journal.getEquipment();
         Data.consumables = journal.getItems();
         Data.statusEffects = statusEffects;
+        Data.skills = skills;
         Data.gear = gear;
         Data.SaveCharacter();
     }
@@ -537,6 +540,7 @@ public class Player : MovingEntity
         gold = Data.gold;
         gear = Data.gear;
         statusEffects = Data.statusEffects ?? new List<StatusEffect>();
+        skills = Data.skills ?? new List<Skill>();
     }
 
     void OnApplicationFocus(bool hasFocus)

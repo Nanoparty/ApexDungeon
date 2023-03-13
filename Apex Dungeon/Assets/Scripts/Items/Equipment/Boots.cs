@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Chestplate;
 using static Gloves;
 
 public class Boots : Equipment
@@ -30,6 +32,22 @@ public class Boots : Equipment
         this.bootType = bt;
         this.spriteIndex = si;
         this.image = GetImage();
+    }
+
+    public Boots(SaveGear gear)
+    {
+        attack = gear.attack;
+        defense = gear.hpBoost;
+        type = gear.type;
+        tier = gear.tier;
+        level = gear.itemLevel;
+        itemName = gear.itemName;
+        description = gear.description;
+        flavorText = gear.rank;
+        spriteIndex = gear.spriteIndex;
+        etype = Enum.Parse<EquipType>(gear.equipType);
+        bootType = Enum.Parse<BootType>(gear.subType);
+        image = GetImage();
     }
 
     public override Sprite GetImage()

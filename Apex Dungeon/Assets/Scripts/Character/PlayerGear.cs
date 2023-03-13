@@ -47,12 +47,12 @@ public class PlayerGear
         Necklace = null;
         Ring = null;
 
-        if (!p.helmet.empty) Helmet = new Equipment(p.helmet, il);
-        if (!p.chestplate.empty) Chestplate = new Equipment(p.chestplate, il);
-        if (!p.legs.empty) Legs = new Equipment(p.legs, il);
-        if (!p.feet.empty) Feet = new Equipment(p.feet, il);
+        if (!p.helmet.empty) Helmet = new Helmet(p.helmet);
+        if (!p.chestplate.empty) Chestplate = new Chestplate(p.chestplate);
+        if (!p.legs.empty) Legs = new Gloves(p.legs);
+        if (!p.feet.empty) Feet = new Boots(p.feet);
         if (!p.weapon.empty) Weapon = new Equipment(p.weapon, il);
-        if (!p.shield.empty) Secondary = new Equipment(p.shield, il);
+        if (!p.shield.empty) Secondary = new Shield(p.shield);
         if (!p.necklace.empty) Necklace = new Equipment(p.necklace, il);
         if (!p.ring.empty) Ring = new Equipment(p.ring, il);
 

@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Chestplate;
 using static Helmet;
 
 public class Shield : Equipment
@@ -35,6 +37,22 @@ public class Shield : Equipment
     {
         this.shieldType = st;
         this.spriteIndex = si;
+        image = GetImage();
+    }
+
+    public Shield(SaveGear gear)
+    {
+        attack = gear.attack;
+        defense = gear.hpBoost;
+        type = gear.type;
+        tier = gear.tier;
+        level = gear.itemLevel;
+        itemName = gear.itemName;
+        description = gear.description;
+        flavorText = gear.rank;
+        spriteIndex = gear.spriteIndex;
+        etype = Enum.Parse<EquipType>(gear.equipType);
+        shieldType = Enum.Parse<ShieldType>(gear.subType);
         image = GetImage();
     }
 

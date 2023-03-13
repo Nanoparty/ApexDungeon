@@ -16,6 +16,8 @@ public class Consumable : Item
         skillType = st;
     }
 
+    public Consumable() { }
+
     public Consumable(SaveConsumable sc)
     {
         itemName = sc.itemName;
@@ -23,6 +25,7 @@ public class Consumable : Item
         description = sc.description;
         level = sc.itemLevel;
         id = sc.id;
+        skillType = Enum.Parse<SkillType>(sc.skillType);
     }
 
     public void SetStats(string n, string f, string d, Sprite s)
