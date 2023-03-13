@@ -593,6 +593,7 @@ public class Player : MovingEntity
         {
             if (journal.getEquipment().Count == Journal.maxSlots) return;
             journal.addEquipment(other.GetComponent<Pickup>().GetItem());
+            Debug.Log("ITEM:" + other.GetComponent<Pickup>().GetItem().itemName);
             Destroy(other.gameObject);
             GameManager.gmInstance.Dungeon.removeFromItemList(row, col);
             SoundManager.sm.PlayPickupSound();

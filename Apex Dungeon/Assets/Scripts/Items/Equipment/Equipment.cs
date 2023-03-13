@@ -5,8 +5,8 @@ using System.Collections.Generic;
 public class Equipment : Item
 {
     //Parameters
-    public Article article;
     public string type;
+    public EquipType etype;
 
     //stats
     public int defense;
@@ -18,6 +18,29 @@ public class Equipment : Item
     public string modifier;
 
     public List<StatusEffect> inflictions;
+
+    public enum EquipType
+    {
+        HELMET,
+        BOOTS,
+        GLOVES,
+        CHESTPLATE,
+        LEGS,
+        NECKLACE,
+        RING,
+        SHIELD,
+        SWORD,
+        AXE,
+        SPEAR,
+        DAGGER,
+        BOW,
+        WAND
+    }
+
+    public virtual Sprite GetImage()
+    {
+        return null;
+    }
 
     public Equipment(){
 
@@ -91,7 +114,6 @@ public class Equipment : Item
         if(tier == 1)
         {
             if (type == "helmet") nameText = "Leather Helmet";
-            else if (type == "chestplate") nameText = "Leather Chestplate";
             else if (type == "gloves") nameText = "Leather Gloves";
             else if (type == "legs") nameText = "Leather Greaves";
             else if (type == "boots") nameText = "Leather Boots";
@@ -103,7 +125,6 @@ public class Equipment : Item
         else if (tier == 2)
         {
             if (type == "helmet") nameText = "Iron Helmet";
-            else if (type == "chestplate") nameText = "Iron Chestplate";
             else if (type == "gloves") nameText = "Iron Gloves";
             else if (type == "legs") nameText = "Iron Greaves";
             else if (type == "boots") nameText = "Iron Boots";
@@ -115,7 +136,6 @@ public class Equipment : Item
         else if (tier == 3)
         {
             if (type == "helmet") nameText = "Gold Helmet";
-            else if (type == "chestplate") nameText = "Gold Chestplate";
             else if (type == "gloves") nameText = "Gold Gloves";
             else if (type == "legs") nameText = "Gold Greaves";
             else if (type == "boots") nameText = "Gold Boots";
@@ -126,7 +146,6 @@ public class Equipment : Item
         }
         else if (tier == 4){
             if (type == "helmet") nameText = "Diamond Helmet";
-            else if (type == "chestplate") nameText = "Diamond Chestplate";
             else if (type == "gloves") nameText = "Diamond Gloves";
             else if (type == "legs") nameText = "Diamond Greaves";
             else if (type == "boots") nameText = "Diamond Boots";

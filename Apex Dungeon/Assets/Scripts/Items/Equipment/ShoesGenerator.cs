@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using UnityEngine;
+using static Boots;
 
 [CreateAssetMenu(fileName = "ShoesGenerator", menuName = "ScriptableObjects/Shoes Generator")]
 public class ShoesGenerator : ScriptableObject
@@ -50,7 +51,7 @@ public class ShoesGenerator : ScriptableObject
         return tierNum;
     }
 
-    public GameObject CreateShoes(string name, string description, Sprite image, int level)
+    public GameObject CreateShoes(string name, string description, Sprite image, int level, BootType bt, int spriteIndex = 0)
     {
         int tier = GetTier();
         int attackDamage = 10;
@@ -125,14 +126,14 @@ public class ShoesGenerator : ScriptableObject
             attackDamage = (int)(attackDamage * 0.5);
         }
 
-        GameObject equipment = new GameObject("name");
+        GameObject equipment = new GameObject(name);
         equipment.AddComponent<SpriteRenderer>();
         equipment.GetComponent<SpriteRenderer>().sprite = image;
         equipment.GetComponent<SpriteRenderer>().sortingLayerName = "Items";
         equipment.AddComponent<BoxCollider2D>();
         equipment.GetComponent<BoxCollider2D>().isTrigger = true;
 
-        Equipment item = new Equipment(level, "shoes", tier, image, hpBoost, attackDamage, critBoost, evadeBoost);
+        Boots item = new Boots(level, "boots", tier, image, name, description, hpBoost, attackDamage, critBoost, evadeBoost, bt, spriteIndex);
 
         equipment.AddComponent<Pickup>();
         equipment.GetComponent<Pickup>().SetItem(item);
@@ -144,57 +145,59 @@ public class ShoesGenerator : ScriptableObject
 
     public GameObject LeatherBoots(int level)
     {
-        Sprite sprite = leatherBoots[UnityEngine.Random.Range(0, leatherBoots.Length)];
-        return CreateShoes("Leather Boots", "Descrption", sprite, level);
+        int spriteIndex = UnityEngine.Random.Range(0, leatherBoots.Length);
+        Sprite sprite = leatherBoots[spriteIndex];
+        return CreateShoes("Leather Boots", "Descrption", sprite, level, BootType.Leather, spriteIndex);
     }
     public GameObject DyedClothBoots(int level)
     {
-        Sprite sprite = dyedClothBoots[UnityEngine.Random.Range(0, dyedClothBoots.Length)];
-        return CreateShoes("Dyed Cloth Boots", "Descrption", sprite, level);
+        int spriteIndex = UnityEngine.Random.Range(0, dyedClothBoots.Length);
+        Sprite sprite = dyedClothBoots[spriteIndex];
+        return CreateShoes("Dyed Cloth Boots", "", sprite, level, BootType.DyedCloth, spriteIndex);
     }
     public GameObject IronBoots(int level)
     {
-        return CreateShoes("Iron Boots", "Descrption", ironBoots, level);
+        return CreateShoes("Iron Boots", "", ironBoots, level, BootType.Iron);
     }
     public GameObject SteelBoots(int level)
     {
-        return CreateShoes("STeel Boots", "Descrption", steelBoots, level);
+        return CreateShoes("STeel Boots", "", steelBoots, level, BootType.Steel);
     }
     public GameObject SilverBoots(int level)
     {
-        return CreateShoes("Silver Boots", "Descrption", silverBoots, level);
+        return CreateShoes("Silver Boots", "", silverBoots, level, BootType.Silver);
     }
     public GameObject GoldBoots(int level)
     {
-        return CreateShoes("Gold Boots", "Descrption", goldBoots, level);
+        return CreateShoes("Gold Boots", "", goldBoots, level, BootType.Gold);
     }
     public GameObject CopperBoots(int level)
     {
-        return CreateShoes("Copper Boots", "Descrption", copperBoots, level);
+        return CreateShoes("Copper Boots", "", copperBoots, level, BootType.Copper);
     }
     public GameObject BronzeBoots(int level)
     {
-        return CreateShoes("Bronze Boots", "Descrption", bronzeBoots, level);
+        return CreateShoes("Bronze Boots", "", bronzeBoots, level, BootType.Bronze);
     }
     public GameObject FestiveBoots(int level)
     {
-        return CreateShoes("Festive Boots", "Descrption", festiveBoots, level);
+        return CreateShoes("Festive Boots", "", festiveBoots, level, BootType.Festive);
     }
     public GameObject WingedBoots(int level)
     {
-        return CreateShoes("Winged Boots", "Descrption", wingedBoots, level);
+        return CreateShoes("Winged Boots", "", wingedBoots, level, BootType.Winged);
     }
     public GameObject SoldierBoots(int level)
     {
-        return CreateShoes("Soldier Boots", "Descrption", soldierBoots, level);
+        return CreateShoes("Soldier Boots", "", soldierBoots, level, BootType.Soldier);
     }
     public GameObject CyberBoots(int level)
     {
-        return CreateShoes("Cyber Boots", "Descrption", cyberBoots, level);
+        return CreateShoes("Cyber Boots", "", cyberBoots, level, BootType.Cyber);
     }
     public GameObject AristocratBoots(int level)
     {
-        return CreateShoes("Aristocrat Boots", "Descrption", aristocratBoots, level);
+        return CreateShoes("Aristocrat Boots", "", aristocratBoots, level, BootType.Aristocrat);
     }
 
     public GameObject CreateRandomBoots(int level)

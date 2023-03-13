@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using UnityEngine;
+using static Shield;
 
 [CreateAssetMenu(fileName = "ShieldGenerator", menuName = "ScriptableObjects/Shield Generator")]
 public class ShieldGenerator : ScriptableObject
@@ -68,7 +69,7 @@ public class ShieldGenerator : ScriptableObject
         return 0;
     } 
 
-    public GameObject CreateShield(string name, string description, Sprite image, int level)
+    public GameObject CreateShield(string name, string description, Sprite image, int level, ShieldType st, int spriteIndex = 0)
     {
         int tier = GetTier();
         int attackDamage = 10;
@@ -143,14 +144,14 @@ public class ShieldGenerator : ScriptableObject
             attackDamage = (int)(attackDamage * 0.5);
         }
 
-        GameObject equipment = new GameObject("name");
+        GameObject equipment = new GameObject(name);
         equipment.AddComponent<SpriteRenderer>();
         equipment.GetComponent<SpriteRenderer>().sprite = image;
         equipment.GetComponent<SpriteRenderer>().sortingLayerName = "Items";
         equipment.AddComponent<BoxCollider2D>();
         equipment.GetComponent<BoxCollider2D>().isTrigger = true;
 
-        Equipment item = new Equipment(level, "shield", tier, image, name, description, hpBoost, attackDamage, critBoost, evadeBoost);
+        Shield item = new Shield(level, "shield", tier, image, name, description, hpBoost, attackDamage, critBoost, evadeBoost, st, spriteIndex);
 
         equipment.AddComponent<Pickup>();
         equipment.GetComponent<Pickup>().SetItem(item);
@@ -163,79 +164,79 @@ public class ShieldGenerator : ScriptableObject
 
     public GameObject WoodenBuckler(int level)
     {
-        return CreateShield("Wooden Buckler Shield", "Standard issue wooden shield.", woodenBuckler, level);
+        return CreateShield("Wooden Buckler Shield", "Standard issue wooden shield.", woodenBuckler, level, ShieldType.WoodenBuckler);
     }
     public GameObject StuddedWoodenBuckler(int level)
     {
-        return CreateShield("Studded Wooden Buckler Shield", "Standard issue wooden shield reinforced with metal studs.", studdedBuckler, level);
+        return CreateShield("Studded Wooden Buckler Shield", "Standard issue wooden shield reinforced with metal studs.", studdedBuckler, level, ShieldType.StuddedBuckler);
     }
     public GameObject IronBuckler(int level)
     {
-        return CreateShield("Iron Buckler Shield", "Standard issue wooden shield reinforced with iron plating.", ironBuckler, level);
+        return CreateShield("Iron Buckler Shield", "Standard issue wooden shield reinforced with iron plating.", ironBuckler, level, ShieldType.IronBuckler);
     }
     public GameObject SteelBuckler(int level)
     {
-        return CreateShield("Steel Buckler Shield", "Sturdy steel shield.", steelBuckler, level);
+        return CreateShield("Steel Buckler Shield", "Sturdy steel shield.", steelBuckler, level, ShieldType.SteelBuckler);
     }
     public GameObject SpikedBuckler(int level)
     {
-        return CreateShield("Spiked Buckler Shield", "Reliable steel shield with spikes to deter attackers.", spikedBuckler, level);
+        return CreateShield("Spiked Buckler Shield", "Reliable steel shield with spikes to deter attackers.", spikedBuckler, level, ShieldType.SpikedBuckler);
     }
     public GameObject SteelTower(int level)
     {
-        return CreateShield("Steel Tower Shield", "A heavy yet imposing steel shield that towers over enemies.", towerShield, level);
+        return CreateShield("Steel Tower Shield", "A heavy yet imposing steel shield that towers over enemies.", towerShield, level, ShieldType.Tower);
     }
     public GameObject WoodenKnight(int level)
     {
-        return CreateShield("Wooden Knight Shield", "Standard wooden shield for valiant knights.", woodenKnight, level);
+        return CreateShield("Wooden Knight Shield", "Standard wooden shield for valiant knights.", woodenKnight, level, ShieldType.WoodenKnight);
     }
     public GameObject IronKnight(int level)
     {
-        return CreateShield("Iron Knight Shield", "Sturdy iron shield for valiant knights.", ironKnight, level);
+        return CreateShield("Iron Knight Shield", "Sturdy iron shield for valiant knights.", ironKnight, level, ShieldType.IronKnight);
     }
     public GameObject SteelKnight(int level)
     {
-        return CreateShield("Steel Knight Shield", "Reinforced steel shield for elite knights.", steelKnight, level);
+        return CreateShield("Steel Knight Shield", "Reinforced steel shield for elite knights.", steelKnight, level, ShieldType.SteelKnight);
     }
     public GameObject RoyalKnight(int level)
     {
-        return CreateShield("Royal Knight Shield", "Crested shield for loyal knights of the royal guard.", royalKnight, level);
+        return CreateShield("Royal Knight Shield", "Crested shield for loyal knights of the royal guard.", royalKnight, level, ShieldType.RoyalKnight);
     }
     public GameObject SteelKite(int level)
     {
-        return CreateShield("Steel Kite Shield", "Sturdy steel kite shield.", steelKite, level);
+        return CreateShield("Steel Kite Shield", "Sturdy steel kite shield.", steelKite, level, ShieldType.SteelKite);
     }
     public GameObject HolyKite(int level)
     {
-        return CreateShield("Holy Kite Shield", "Holy steel kite shield for members of the faith.", holyKite, level);
+        return CreateShield("Holy Kite Shield", "Holy steel kite shield for members of the faith.", holyKite, level, ShieldType.HolyKite);
     }
     public GameObject Boar(int level)
     {
-        return CreateShield("Demonic Boar Kite Shield", "Imposing shield with a sigil of a demonic boar.", porkKite, level);
+        return CreateShield("Demonic Boar Kite Shield", "Imposing shield with a sigil of a demonic boar.", porkKite, level, ShieldType.PorkKite);
     }
     public GameObject SilverKite(int level)
     {
-        return CreateShield("Silver Kite Shield", "Fancy silver kite shield for those concerned with their appearance.", silverKite, level);
+        return CreateShield("Silver Kite Shield", "Fancy silver kite shield for those concerned with their appearance.", silverKite, level, ShieldType.SilverKite);
     }
     public GameObject GoldKite(int level)
     {
-        return CreateShield("Gold Kite Shield", "Resplendent golden kite shield for those with wealth to flaunt.", goldKite, level);
+        return CreateShield("Gold Kite Shield", "Resplendent golden kite shield for those with wealth to flaunt.", goldKite, level, ShieldType.GoldKite);
     }
     public GameObject Cyber(int level)
     {
-        return CreateShield("Cyber Shield", "Seems almost as if it came from the future...", cyber, level);
+        return CreateShield("Cyber Shield", "Seems almost as if it came from the future...", cyber, level, ShieldType.Cyber);
     }
     public GameObject Winged(int level)
     {
-        return CreateShield("Winged Shield", "Gives wearers the impression they could soar unto the heavens.", winged, level);
+        return CreateShield("Winged Shield", "Gives wearers the impression they could soar unto the heavens.", winged, level, ShieldType.Winged);
     }
     public GameObject Marble(int level)
     {
-        return CreateShield("Marble Shield", "Exquisite shield masterfully carved from solid marble.", marble, level);
+        return CreateShield("Marble Shield", "Exquisite shield masterfully carved from solid marble.", marble, level, ShieldType.Marble);
     }
     public GameObject Hero(int level)
     {
-        return CreateShield("Hero Shield", "A shield that reminds of a certain valiant hero...", target, level);
+        return CreateShield("Hero Shield", "A shield that reminds of a certain valiant hero...", target, level, ShieldType.Hero);
     }
 
     public GameObject CreateRandomShield(int level)

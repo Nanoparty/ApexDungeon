@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UIElements;
+using static Equipment;
 
 [CreateAssetMenu(fileName = "EquipmentGenerator", menuName = "ScriptableObjects/Equipment Generator")]
 public class EquipmentGenerator : ScriptableObject
@@ -216,6 +217,16 @@ public class EquipmentGenerator : ScriptableObject
         return image;
     }
 
+    public Sprite GetImage(EquipType et)
+    {
+        //if (et == EquipType.HELMET) return helmetGenerator.GetImage(et);
+        //if (et == EquipType.CHESTPLATE) return chestGenerator.GetImage(et);
+        //if (et == EquipType.BOOTS) return bootsGenerator.GetImage(et);
+        //if (et == EquipType.GLOVES) return glovesGenerator.GetImage(et);
+        //if (et == EquipType.SHIELD) return shieldGenerator.GetImage(et);
+        return null;
+    }
+
     public GameObject GenerateEquipment(int inputLevel, string inputType, int inputTier)
     {
         level = inputLevel;
@@ -345,7 +356,7 @@ public class EquipmentGenerator : ScriptableObject
         {
             return glovesGenerator.CreateRandomGloves(level);
         }
-        return glovesGenerator.CreateRandomGloves(level);
+        //return glovesGenerator.CreateRandomGloves(level);
 
         return equipment;
     }
@@ -388,22 +399,18 @@ public class EquipmentGenerator : ScriptableObject
     }
 
     public GameObject CreatePickup(Equipment e, int r, int c)
-    {
-        Sprite image = getEquipmentImage(e.tier, e.type);
-
+    { 
         GameObject equipment = new GameObject("equipment");
 
         equipment.AddComponent<SpriteRenderer>();
-        equipment.GetComponent<SpriteRenderer>().sprite = image;
+        equipment.GetComponent<SpriteRenderer>().sprite = e.image;
         equipment.GetComponent<SpriteRenderer>().sortingLayerName = "Items";
 
         equipment.AddComponent<BoxCollider2D>();
         equipment.GetComponent<BoxCollider2D>().isTrigger = true;
 
-        Equipment item = new Equipment(e.level, e.type, e.tier, image, e.defense, e.attack, e.crit, e.evade);
-
         equipment.AddComponent<Pickup>();
-        equipment.GetComponent<Pickup>().SetItem(item);
+        equipment.GetComponent<Pickup>().SetItem(e);
 
         equipment.tag = "Equipment";
 
@@ -414,4 +421,13 @@ public class EquipmentGenerator : ScriptableObject
 
         return equipment;
     }
+
+    //public Equipment CreateEquipment(Equipment e)
+    //{
+    //    if (e.etype == EquipType.HELMET)
+    //    {
+    //        Helm
+    //        return new Helmet(e.level, e.type, e.tier, e.itemName, e.description, e.GetImage(), e.defense, e.attack, e.crit, e.evade, e)
+    //    }
+    //}
 }

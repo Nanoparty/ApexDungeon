@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using UnityEngine;
+using static Gloves;
 
 [CreateAssetMenu(fileName = "GlovesGenerator", menuName = "ScriptableObjects/Gloves Generator")]
 public class GlovesGenerator : ScriptableObject
@@ -53,7 +54,7 @@ public class GlovesGenerator : ScriptableObject
         return tierNum;
     }
 
-    public GameObject CreateGloves(string name, string description, Sprite image, int level)
+    public GameObject CreateGloves(string name, string description, Sprite image, int level, GloveType gt, int spriteIndex = 0)
     {
         int tier = GetTier();
         int attackDamage = 10;
@@ -128,14 +129,14 @@ public class GlovesGenerator : ScriptableObject
             attackDamage = (int)(attackDamage * 0.5);
         }
 
-        GameObject equipment = new GameObject("name");
+        GameObject equipment = new GameObject(name);
         equipment.AddComponent<SpriteRenderer>();
         equipment.GetComponent<SpriteRenderer>().sprite = image;
         equipment.GetComponent<SpriteRenderer>().sortingLayerName = "Items";
         equipment.AddComponent<BoxCollider2D>();
         equipment.GetComponent<BoxCollider2D>().isTrigger = true;
 
-        Equipment item = new Equipment(level, "gloves", tier, image, hpBoost, attackDamage, critBoost, evadeBoost);
+        Gloves item = new Gloves(level, "gloves", tier, image, name, description, hpBoost, attackDamage, critBoost, evadeBoost, gt, spriteIndex);
 
         equipment.AddComponent<Pickup>();
         equipment.GetComponent<Pickup>().SetItem(item);
@@ -148,64 +149,64 @@ public class GlovesGenerator : ScriptableObject
     public GameObject DyedClothGauntlets(int level)
     {
         Sprite sprite = dyedClothGloves[UnityEngine.Random.Range(0, dyedClothGloves.Length)];
-        return CreateGloves("Dyed Cloth Gloves", "Standard issue wooden shield.", sprite, level);
+        return CreateGloves("Dyed Cloth Gloves", "", sprite, level, GloveType.DyedCloth);
     }
     public GameObject DyedIronGauntlets(int level)
     {
         Sprite sprite = dyedIronGloves[UnityEngine.Random.Range(0, dyedIronGloves.Length)];
-        return CreateGloves("Dyed Iron Gauntlets", "Standard issue wooden shield.", sprite, level);
+        return CreateGloves("Dyed Iron Gauntlets", "", sprite, level, GloveType.DyedIron);
     }
     public GameObject LeatherGloves(int level)
     {
-        return CreateGloves("Leather Gloves", "Standard issue wooden shield.", leatherGloves, level);
+        return CreateGloves("Leather Gloves", "", leatherGloves, level, GloveType.Leather);
     }
     public GameObject StuddedLeatherGloves(int level)
     {
-        return CreateGloves("Studded Leather Gloves", "Standard issue wooden shield.", studdedGloves, level);
+        return CreateGloves("Studded Leather Gloves", "", studdedGloves, level, GloveType.Studded);
     }
     public GameObject IronGauntlets(int level)
     {
-        return CreateGloves("Iron Gauntlets", "Standard issue wooden shield.", ironGloves, level);
+        return CreateGloves("Iron Gauntlets", "", ironGloves, level, GloveType.Iron);
     }
     public GameObject SteelGauntlets(int level)
     {
-        return CreateGloves("Steel Gauntlets", "Standard issue wooden shield.", steelGloves, level);
+        return CreateGloves("Steel Gauntlets", "", steelGloves, level, GloveType.Steel);
     }
     public GameObject SilverGauntlets(int level)
     {
-        return CreateGloves("Silver Gauntlets", "Standard issue wooden shield.", silverGloves, level);
+        return CreateGloves("Silver Gauntlets", "", silverGloves, level, GloveType.Silver);
     }
     public GameObject GoldGauntlets(int level)
     {
-        return CreateGloves("Gold Gauntlets", "Standard issue wooden shield.", goldGloves, level);
+        return CreateGloves("Gold Gauntlets", "", goldGloves, level, GloveType.Gold);
     }
     public GameObject BronzeGauntlets(int level)
     {
-        return CreateGloves("Bronze Gauntlets", "Standard issue wooden shield.", bronzeGloves, level);
+        return CreateGloves("Bronze Gauntlets", "", bronzeGloves, level, GloveType.Bronze);
     }
     public GameObject CopperGauntlets(int level)
     {
-        return CreateGloves("Copper Gauntlets", "Standard issue wooden shield.", copperGloves, level);
+        return CreateGloves("Copper Gauntlets", "", copperGloves, level, GloveType.Copper);
     }
     public GameObject CyberGauntlets(int level)
     {
-        return CreateGloves("Cyber Gauntlets", "Standard issue wooden shield.", cyberGloves, level);
+        return CreateGloves("Cyber Gauntlets", "", cyberGloves, level, GloveType.Cyber);
     }
     public GameObject SoldierGauntlets(int level)
     {
-        return CreateGloves("Soldier Gauntlets", "Standard issue wooden shield.", soldierGloves, level);
+        return CreateGloves("Soldier Gauntlets", "", soldierGloves, level, GloveType.Soldier);
     }
     public GameObject AdventurerGauntlets(int level)
     {
-        return CreateGloves("Adventurer Gauntlets", "Standard issue wooden shield.", adventurerGloves, level);
+        return CreateGloves("Adventurer Gauntlets", "", adventurerGloves, level, GloveType.Adventurer);
     }
     public GameObject HeroGauntlets(int level)
     {
-        return CreateGloves("Hero Gauntlets", "Standard issue wooden shield.", heroGloves, level);
+        return CreateGloves("Hero Gauntlets", "", heroGloves, level, GloveType.Hero);
     }
     public GameObject AristocratGloves(int level)
     {
-        return CreateGloves("Aristocrat Gloves", "Standard issue wooden shield.", aristocratGloves, level);
+        return CreateGloves("Aristocrat Gloves", "", aristocratGloves, level, GloveType.Aristocrat);
     }
 
     public GameObject CreateRandomGloves(int level)

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using UnityEngine;
+using static Chestplate;
 
 [CreateAssetMenu(fileName = "ChestGenerator", menuName = "ScriptableObjects/Chest Generator")]
 public class ChestGenerator : ScriptableObject
@@ -65,7 +66,7 @@ public class ChestGenerator : ScriptableObject
         return tierNum;
     }
 
-    public GameObject CreateChest(string name, string description, Sprite image, int level)
+    public GameObject CreateChest(string name, string description, Sprite image, int level, ChestplateType ct, int spriteIndex = 0)
     {
         int tier = GetTier();
 
@@ -141,14 +142,14 @@ public class ChestGenerator : ScriptableObject
             attackDamage = (int)(attackDamage * 0.5);
         }
 
-        GameObject equipment = new GameObject("name");
+        GameObject equipment = new GameObject(name);
         equipment.AddComponent<SpriteRenderer>();
         equipment.GetComponent<SpriteRenderer>().sprite = image;
         equipment.GetComponent<SpriteRenderer>().sortingLayerName = "Items";
         equipment.AddComponent<BoxCollider2D>();
         equipment.GetComponent<BoxCollider2D>().isTrigger = true;
 
-        Equipment item = new Equipment(level, "chestplate", tier, image, hpBoost, attackDamage, critBoost, evadeBoost);
+        Chestplate item = new Chestplate(level, "shield", tier, image, name, description, hpBoost, attackDamage, critBoost, evadeBoost, ct, spriteIndex);
 
         equipment.AddComponent<Pickup>();
         equipment.GetComponent<Pickup>().SetItem(item);
@@ -160,72 +161,77 @@ public class ChestGenerator : ScriptableObject
 
     public GameObject DyedCape(int level)
     {
-        Sprite sprite = dyedCape[UnityEngine.Random.Range(0, dyedCape.Length)];
-        return CreateChest("Dyed Cape", "Standard issue wooden shield.", sprite, level);
+        int spriteIndex = UnityEngine.Random.Range(0, dyedCape.Length);
+        Sprite sprite = dyedCape[spriteIndex];
+        return CreateChest("Dyed Cape", "", sprite, level, ChestplateType.DyedCape, spriteIndex);
     }
     public GameObject DyedJacket(int level)
     {
-        Sprite sprite = dyedJacket[UnityEngine.Random.Range(0, dyedJacket.Length)];
-        return CreateChest("Dyed Iron Gauntlets", "Standard issue wooden shield.", sprite, level);
+        int spriteIndex = UnityEngine.Random.Range(0, dyedJacket.Length);
+        Sprite sprite = dyedJacket[spriteIndex];
+        return CreateChest("Dyed Jacket", "", sprite, level, ChestplateType.DyedJacket, spriteIndex);
     }
     public GameObject DyedBreastplate(int level)
     {
-        Sprite sprite = dyedBreastplate[UnityEngine.Random.Range(0, dyedBreastplate.Length)];
-        return CreateChest("Dyed Iron Gauntlets", "Standard issue wooden shield.", sprite, level);
+        int spriteIndex = UnityEngine.Random.Range(0, dyedBreastplate.Length);
+        Sprite sprite = dyedBreastplate[spriteIndex];
+        return CreateChest("Dyed Chestplate", "", sprite, level, ChestplateType.DyedBreastplate, spriteIndex);
     }
     public GameObject DyedRobe(int level)
     {
-        Sprite sprite = dyedRobe[UnityEngine.Random.Range(0, dyedRobe.Length)];
-        return CreateChest("Dyed Iron Gauntlets", "Standard issue wooden shield.", sprite, level);
+        int spriteIndex = UnityEngine.Random.Range(0, dyedRobe.Length);
+        Sprite sprite = dyedRobe[spriteIndex];
+        return CreateChest("Dyed Robe", "", sprite, level, ChestplateType.DyedRobe, spriteIndex);
     }
     public GameObject DyedTunic(int level)
     {
-        Sprite sprite = dyedTunic[UnityEngine.Random.Range(0, dyedTunic.Length)];
-        return CreateChest("Dyed Iron Gauntlets", "Standard issue wooden shield.", sprite, level);
+        int spriteIndex = UnityEngine.Random.Range(0, dyedTunic.Length);
+        Sprite sprite = dyedTunic[spriteIndex];
+        return CreateChest("Dyed Tunic", "", sprite, level, ChestplateType.DyedTunic, spriteIndex);
     }
     public GameObject ClothTunic(int level)
     {
-        return CreateChest("Leather Gloves", "Standard issue wooden shield.", clothTunic, level);
+        return CreateChest("Cloth Tunic", "", clothTunic, level, ChestplateType.ClothTunic);
     }
     public GameObject LeatherTunic(int level)
     {
-        return CreateChest("Leather Gloves", "Standard issue wooden shield.", leatherTunic, level);
+        return CreateChest("Leather Tunic", "", leatherTunic, level, ChestplateType.LeatherTunic);
     }
     public GameObject ClothRobe(int level)
     {
-        return CreateChest("Leather Gloves", "Standard issue wooden shield.", clothRobe, level);
+        return CreateChest("Cloth Robe", "", clothRobe, level, ChestplateType.ClothRobe);
     }
     public GameObject LeatherRobe(int level)
     {
-        return CreateChest("Leather Gloves", "Standard issue wooden shield.", leatherRobe, level);
+        return CreateChest("Leather Robe", "", leatherRobe, level, ChestplateType.LeatherRobe);
     }
     public GameObject LeatherJacket(int level)
     {
-        return CreateChest("Leather Gloves", "Standard issue wooden shield.", leatherJacket, level);
+        return CreateChest("Leather Jacket", "", leatherJacket, level, ChestplateType.LeatherJacket);
     }
     public GameObject LeatherBreastplate(int level)
     {
-        return CreateChest("Leather Gloves", "Standard issue wooden shield.", leatherBreastplate, level);
+        return CreateChest("Leather Chestplate", "", leatherBreastplate, level, ChestplateType.LeatherBreastplate);
     }
     public GameObject IronBreastplate(int level)
     {
-        return CreateChest("Leather Gloves", "Standard issue wooden shield.", ironBreastplate, level);
+        return CreateChest("Iron Chestplate", "", ironBreastplate, level, ChestplateType.IronBreastplate);
     }
     public GameObject SteelCuirass(int level)
     {
-        return CreateChest("Leather Gloves", "Standard issue wooden shield.", steelCuirass, level);
+        return CreateChest("Steel Chestplate", "", steelCuirass, level, ChestplateType.SteelCuirass);
     }
     public GameObject SilverCuirass(int level)
     {
-        return CreateChest("Leather Gloves", "Standard issue wooden shield.", silverCuirass, level);
+        return CreateChest("Silver Chestplate", "", silverCuirass, level, ChestplateType.SilverCuirass);
     }
     public GameObject GoldCuirass(int level)
     {
-        return CreateChest("Leather Gloves", "Standard issue wooden shield.", goldCuirass, level);
+        return CreateChest("Gold Chestplate", "", goldCuirass, level, ChestplateType.GoldCuirass);
     }
     public GameObject BronzeCuirass(int level)
     {
-        return CreateChest("Leather Gloves", "Standard issue wooden shield.", brassCuirass, level);
+        return CreateChest("Bronze Chestplate", "", brassCuirass, level, ChestplateType.BrassCuirass);
     }
 
     public GameObject CreateRandomChest(int level)

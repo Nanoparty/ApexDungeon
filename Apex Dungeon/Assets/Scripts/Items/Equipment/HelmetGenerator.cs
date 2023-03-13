@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using UnityEngine;
+using static Equipment;
+using static Helmet;
 
 [CreateAssetMenu(fileName = "HelmetGenerator", menuName = "ScriptableObjects/Helmet Generator")]
 public class HelmetGenerator : ScriptableObject
@@ -30,11 +32,10 @@ public class HelmetGenerator : ScriptableObject
 
     public int GetTier()
     {
-        //pick tier
-        //5% legendary/diamond
-        //10% unique/gold
-        //25% rare/iron
-        //70% common/leather
+        //5% legendary
+        //10% unique
+        //25% rare
+        //70% common
         int tierNum = 0;
 
         int dice = UnityEngine.Random.Range(1, 101);
@@ -57,7 +58,7 @@ public class HelmetGenerator : ScriptableObject
         return tierNum;
     }
 
-    public GameObject CreateHelmet(string name, string description, Sprite image, int level)
+    public GameObject CreateHelmet(string name, string description, Sprite image, int level, HelmetType ht, int spriteIndex = 0)
     {
         int tier = GetTier();
         int attackDamage = 10;
@@ -132,14 +133,14 @@ public class HelmetGenerator : ScriptableObject
             attackDamage = (int)(attackDamage * 0.5);
         }
 
-        GameObject equipment = new GameObject("name");
+        GameObject equipment = new GameObject(name);
         equipment.AddComponent<SpriteRenderer>();
         equipment.GetComponent<SpriteRenderer>().sprite = image;
         equipment.GetComponent<SpriteRenderer>().sortingLayerName = "Items";
         equipment.AddComponent<BoxCollider2D>();
         equipment.GetComponent<BoxCollider2D>().isTrigger = true;
 
-        Equipment item = new Equipment(level, "helmet", tier, image, hpBoost, attackDamage, critBoost, evadeBoost);
+        Helmet item = new Helmet(level, "helmet", tier, image, name, description, hpBoost, attackDamage, critBoost, evadeBoost, ht, spriteIndex);
 
         equipment.AddComponent<Pickup>();
         equipment.GetComponent<Pickup>().SetItem(item);
@@ -151,89 +152,96 @@ public class HelmetGenerator : ScriptableObject
 
     public GameObject LeatherHelm(int level)
     {
-        Sprite sprite = leatherHelm[UnityEngine.Random.Range(0, leatherHelm.Length)];
-        return CreateHelmet("Leather Helmet", "Standard issue wooden shield.", sprite, level);
+        int spriteIndex = UnityEngine.Random.Range(0, leatherHelm.Length);
+        Sprite sprite = leatherHelm[spriteIndex];
+        return CreateHelmet("Leather Helmet", "", sprite, level, HelmetType.LeatherHelmet, spriteIndex);
     }
     public GameObject IronHelm(int level)
     {
-        Sprite sprite = ironHelm[UnityEngine.Random.Range(0, ironHelm.Length)];
-        return CreateHelmet("Iron Helmet", "Standard issue wooden shield.", sprite, level);
+
+        int spriteIndex = UnityEngine.Random.Range(0, ironHelm.Length);
+        Sprite sprite = ironHelm[spriteIndex];
+        return CreateHelmet("Iron Helmet", "", sprite, level, HelmetType.IronHelmet);
     }
     public GameObject GoldHelm(int level)
     {
-        return CreateHelmet("Gold Helmet", "Standard issue wooden shield.", goldHelm, level);
+        return CreateHelmet("Gold Helmet", "", goldHelm, level, HelmetType.GoldHelmet);
     }
     public GameObject BronzeHelm(int level)
     {
-        return CreateHelmet("Bronze Helmet", "Standard issue wooden shield.", bronzeHelm, level);
+        return CreateHelmet("Bronze Helmet", "", bronzeHelm, level, HelmetType.BronzeHelmet);
     }
     public GameObject CopperHelm(int level)
     {
-        return CreateHelmet("Copper Helmet", "Standard issue wooden shield.", copperHelm, level);
+        return CreateHelmet("Copper Helmet", "", copperHelm, level, HelmetType.CopperHelmet);
     }
     public GameObject DyedWizardHat(int level)
     {
-        Sprite sprite = dyedWizardHat[UnityEngine.Random.Range(0, dyedWizardHat.Length)];
-        return CreateHelmet("Dyed Wizard Hat", "Standard issue wooden shield.", sprite, level);
+        int spriteIndex = UnityEngine.Random.Range(0, dyedWizardHat.Length);
+        Sprite sprite = dyedWizardHat[spriteIndex];
+        return CreateHelmet("Dyed Wizard Hat", "", sprite, level, HelmetType.DyedWizardHat);
     }
     public GameObject MerchantCap(int level)
     {
-        return CreateHelmet("Merchant Cap", "Standard issue wooden shield.", merchantCap, level);
+        return CreateHelmet("Merchant Cap", "", merchantCap, level, HelmetType.MerchantCap);
     }
     public GameObject LeatherCap(int level)
     {
-        return CreateHelmet("Leath Cap", "Standard issue wooden shield.", leatherCap, level);
+        return CreateHelmet("Leather Cap", "", leatherCap, level, HelmetType.LeatherCap);
     }
     public GameObject MonsterMask(int level)
     {
-        return CreateHelmet("Monster Mask", "Standard issue wooden shield.", monsterMask, level);
+        return CreateHelmet("Monster Mask", "", monsterMask, level, HelmetType.MonsterMask);
     }
     public GameObject MagicianHat(int level)
     {
-        return CreateHelmet("Magician Hat", "Standard issue wooden shield.", magicianHat, level);
+        return CreateHelmet("Magician Hat", "", magicianHat, level, HelmetType.MagicianHat);
     }
     public GameObject DarkWizardHat(int level)
     {
-        return CreateHelmet("Dark Wizard Hat", "Standard issue wooden shield.", darkWizardHat, level);
+        return CreateHelmet("Dark Wizard Hat", "", darkWizardHat, level, HelmetType.DarkWizardHat);
     }
     public GameObject CatEars(int level)
     {
-        return CreateHelmet("Cat Ears", "Standard issue wooden shield.", catEars, level);
+        return CreateHelmet("Cat Ears", "", catEars, level, HelmetType.CatEars);
     }
     public GameObject BunnyEars(int level)
     {
-        return CreateHelmet("Bunny Ears", "Standard issue wooden shield.", bunnyEars, level);
+        return CreateHelmet("Bunny Ears", "", bunnyEars, level, HelmetType.BunnyEars);
     }
     public GameObject RoseHeadband(int level)
     {
-        return CreateHelmet("Rose Headband", "Standard issue wooden shield.", roseHeadband, level);
+        return CreateHelmet("Rose Headband", "", roseHeadband, level, HelmetType.RoseHeadband);
     }
     public GameObject Crown(int level)
     {
-        return CreateHelmet("Crown", "Standard issue wooden shield.", crown, level);
+        return CreateHelmet("Crown", "", crown, level, HelmetType.Crown);
     }
     public GameObject AristocratCap(int level)
     {
-        return CreateHelmet("Aristocrat Cap", "Standard issue wooden shield.", arisocratCap, level);
+        return CreateHelmet("Aristocrat Cap", "", arisocratCap, level, HelmetType.AristocratCap);
     }
     public GameObject FishingCap(int level)
     {
-        return CreateHelmet("Fishing Cap", "Standard issue wooden shield.", fishingCap, level);
+        return CreateHelmet("Fishing Cap", "", fishingCap, level, HelmetType.FishingCap);
     }
     public GameObject DyedClothHeadband(int level)
     {
-        Sprite sprite = dyedClothHeadband[UnityEngine.Random.Range(0, dyedClothHeadband.Length)];
-        return CreateHelmet("Dyed Cloth Headband", "Standard issue wooden shield.", sprite, level);
+        int spriteIndex = UnityEngine.Random.Range(0, dyedClothHeadband.Length);
+        Sprite sprite = dyedClothHeadband[spriteIndex];
+        return CreateHelmet("Dyed Cloth Headband", "", sprite, level, HelmetType.DyedClothHeadband);
     }
     public GameObject DyedIronHelm(int level)
     {
-        Sprite sprite = dyedIronHelm[UnityEngine.Random.Range(0, dyedIronHelm.Length)];
-        return CreateHelmet("Dyed Iron Helm", "Standard issue wooden shield.", sprite, level);
+        int spriteIndex = UnityEngine.Random.Range(0, dyedIronHelm.Length);
+        Sprite sprite = dyedIronHelm[spriteIndex];
+        return CreateHelmet("Dyed Iron Helm", "", sprite, level, HelmetType.DyedIronHelmet);
     }
     public GameObject DyedRibbon(int level)
     {
-        Sprite sprite = dyedRibbon[UnityEngine.Random.Range(0, dyedRibbon.Length)];
-        return CreateHelmet("Dyed Ribbon", "Standard issue wooden shield.", sprite, level);
+        int spriteIndex = UnityEngine.Random.Range(0, dyedRibbon.Length);
+        Sprite sprite = dyedRibbon[spriteIndex];
+        return CreateHelmet("Dyed Ribbon", "", sprite, level, HelmetType.DyedRibbon);
     }
 
     public GameObject CreateRandomHelmet(int level)
@@ -259,6 +267,8 @@ public class HelmetGenerator : ScriptableObject
         helmets.Add(() => DyedClothHeadband(level));
         helmets.Add(() => DyedIronHelm(level));
         helmets.Add(() => DyedRibbon(level));
+
+        return DyedRibbon(level);
 
         Expression<Func<GameObject>> function = helmets[UnityEngine.Random.Range(0, helmets.Count)];
         return function.Compile().Invoke();

@@ -796,8 +796,7 @@ public class DungeonGenerator : ScriptableObject
                 if (valid)
                 {
                     Vector3 position = new Vector3(col, row, 0f);
-                    //GameObject item = GameManager.gmInstance.consumableGenerator.CreateRandomConsumable(GameManager.gmInstance.level);
-                    GameObject item = GameManager.gmInstance.consumableGenerator.foodGenerator.CreateRandomFood();
+                    GameObject item = GameManager.gmInstance.consumableGenerator.CreateRandomConsumable(GameManager.gmInstance.level);
                     item.transform.parent = itemContainer.transform;
                     item.transform.position = position;
                     item.GetComponent<Pickup>().SetLocation(row, col);
@@ -829,6 +828,7 @@ public class DungeonGenerator : ScriptableObject
                 {
                     Vector3 position = new Vector3(col, row, 0f);
                     GameObject item = GameManager.gmInstance.equipmentGenerator.GenerateEquipment(GameManager.gmInstance.level);
+                    
                     item.transform.parent = itemContainer.transform;
                     item.transform.position = position;
                     item.GetComponent<Pickup>().SetLocation(row, col);
