@@ -149,6 +149,8 @@ public class ChestGenerator : ScriptableObject
         equipment.AddComponent<BoxCollider2D>();
         equipment.GetComponent<BoxCollider2D>().isTrigger = true;
 
+        equipment.transform.localScale = new Vector3(0.6f, 0.6f, 0.6f);
+
         Chestplate item = new Chestplate(level, "shield", tier, image, name, description, hpBoost, attackDamage, critBoost, evadeBoost, ct, spriteIndex);
 
         equipment.AddComponent<Pickup>();

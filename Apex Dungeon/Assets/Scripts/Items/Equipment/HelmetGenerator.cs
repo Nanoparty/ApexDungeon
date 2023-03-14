@@ -140,6 +140,8 @@ public class HelmetGenerator : ScriptableObject
         equipment.AddComponent<BoxCollider2D>();
         equipment.GetComponent<BoxCollider2D>().isTrigger = true;
 
+        equipment.transform.localScale = new Vector3(0.6f, 0.6f, 0.6f);
+
         Helmet item = new Helmet(level, "helmet", tier, image, name, description, hpBoost, attackDamage, critBoost, evadeBoost, ht, spriteIndex);
 
         equipment.AddComponent<Pickup>();

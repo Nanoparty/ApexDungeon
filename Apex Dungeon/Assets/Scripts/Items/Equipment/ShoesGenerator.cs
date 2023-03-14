@@ -133,6 +133,8 @@ public class ShoesGenerator : ScriptableObject
         equipment.AddComponent<BoxCollider2D>();
         equipment.GetComponent<BoxCollider2D>().isTrigger = true;
 
+        equipment.transform.localScale = new Vector3(0.6f, 0.6f, 0.6f);
+
         Boots item = new Boots(level, "boots", tier, image, name, description, hpBoost, attackDamage, critBoost, evadeBoost, bt, spriteIndex);
 
         equipment.AddComponent<Pickup>();

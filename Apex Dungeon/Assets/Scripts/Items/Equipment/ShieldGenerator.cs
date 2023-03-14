@@ -151,6 +151,8 @@ public class ShieldGenerator : ScriptableObject
         equipment.AddComponent<BoxCollider2D>();
         equipment.GetComponent<BoxCollider2D>().isTrigger = true;
 
+        equipment.transform.localScale = new Vector3(0.6f, 0.6f, 0.6f);
+
         Shield item = new Shield(level, "shield", tier, image, name, description, hpBoost, attackDamage, critBoost, evadeBoost, st, spriteIndex);
 
         equipment.AddComponent<Pickup>();
