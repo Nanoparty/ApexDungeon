@@ -545,9 +545,18 @@ public class ConsumableGenerator : ScriptableObject
 
     public GameObject CreatePickup(Consumable i, int r, int c)
     {
-        Sprite image = GameManager.gmInstance.imageLookup.getImage(i.id);
+        Sprite image = null;
 
-        GameObject consumable = new GameObject("consumable");
+        if (i.id == "food")
+        {
+            image = i.GetImage();
+        }
+        else
+        {
+            image = GameManager.gmInstance.imageLookup.getImage(i.id);
+        }
+
+        GameObject consumable = new GameObject(i.itemName);
 
         consumable.AddComponent<SpriteRenderer>();
         consumable.GetComponent<SpriteRenderer>().sprite = image;
@@ -556,10 +565,8 @@ public class ConsumableGenerator : ScriptableObject
         consumable.AddComponent<BoxCollider2D>();
         consumable.GetComponent<BoxCollider2D>().isTrigger = true;
 
-        Consumable item = new Consumable(i.id, i.itemName, i.flavorText, i.description, image, i.level);
-
         consumable.AddComponent<Pickup>();
-        consumable.GetComponent<Pickup>().SetItem(item);
+        consumable.GetComponent<Pickup>().SetItem(i);
 
         consumable.tag = "Consumable";
 

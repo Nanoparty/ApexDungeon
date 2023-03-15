@@ -36,6 +36,8 @@ public class Consumable : Item
         image = s;
     }
 
+    public virtual Sprite GetImage() { return null; }
+
     public override void Create()
     {
     }

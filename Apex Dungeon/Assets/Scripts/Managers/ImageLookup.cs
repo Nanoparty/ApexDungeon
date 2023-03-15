@@ -86,6 +86,7 @@ public class ImageLookup : ScriptableObject
 
     public Sprite getImage(string id)
     {
+        //handle skillbooks
         
         var images = new Dictionary<string, Sprite>();
         images["HealthPotion"] = redPotion;
