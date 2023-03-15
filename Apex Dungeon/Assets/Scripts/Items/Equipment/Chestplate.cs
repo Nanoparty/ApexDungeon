@@ -47,6 +47,7 @@ public class Chestplate : Equipment
         this.chestplateType = ct;
         this.spriteIndex = si;
         this.image = GetImage();
+        etype = EquipType.CHESTPLATE;
     }
 
     public Chestplate(SaveGear gear)
@@ -67,7 +68,7 @@ public class Chestplate : Equipment
 
     public override Sprite GetImage()
     {
-        ChestGenerator cg = GameManager.gmInstance.equipmentGenerator.chestGenerator;
+        ChestGenerator cg = Resources.Load<ChestGenerator>("ScriptableObjects/ChestplateGenerator");
 
         if (chestplateType == ChestplateType.ClothTunic) return cg.clothTunic;
         if (chestplateType == ChestplateType.LeatherTunic) return cg.leatherTunic;

@@ -32,6 +32,7 @@ public class Boots : Equipment
         this.bootType = bt;
         this.spriteIndex = si;
         this.image = GetImage();
+        etype = EquipType.BOOTS;
     }
 
     public Boots(SaveGear gear)
@@ -52,7 +53,7 @@ public class Boots : Equipment
 
     public override Sprite GetImage()
     {
-        ShoesGenerator bg = GameManager.gmInstance.equipmentGenerator.bootsGenerator;
+        ShoesGenerator bg = Resources.Load<ShoesGenerator>("ScriptableObjects/ShoesGenerator");
 
         if (bootType == BootType.Leather) return bg.leatherBoots[spriteIndex];
         if (bootType == BootType.DyedCloth) return bg.dyedClothBoots[spriteIndex];

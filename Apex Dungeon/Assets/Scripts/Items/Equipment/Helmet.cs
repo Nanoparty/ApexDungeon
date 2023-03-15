@@ -36,6 +36,7 @@ public class Helmet : Equipment
         this.helmetType = ht;
         this.spriteIndex = si;
         image = GetImage();
+        etype = EquipType.HELMET;
     }
 
     public Helmet(SaveGear gear)
@@ -56,7 +57,8 @@ public class Helmet : Equipment
 
     public override Sprite GetImage()
     {
-        HelmetGenerator hg = GameManager.gmInstance.equipmentGenerator.helmetGenerator;
+        HelmetGenerator hg = Resources.Load<HelmetGenerator>("ScriptableObjects/HelmetGenerator");
+
         if (helmetType == HelmetType.LeatherHelmet) return hg.leatherHelm[spriteIndex];
         if (helmetType == HelmetType.IronHelmet) return hg.ironHelm[spriteIndex];
         if (helmetType == HelmetType.GoldHelmet) return hg.goldHelm;

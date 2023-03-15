@@ -181,19 +181,19 @@ public static class Data
                 {
                     e = new Helmet(g); 
                 }
-                if (etype == EquipType.CHESTPLATE)
+                else if (etype == EquipType.CHESTPLATE)
                 {
                     e = new Chestplate(g);
                 }
-                if (etype == EquipType.SHIELD)
+                else if (etype == EquipType.SHIELD)
                 {
                     e = new Shield(g);
                 }
-                if (etype == EquipType.BOOTS)
+                else if (etype == EquipType.BOOTS)
                 {
                     e = new Boots(g);
                 }
-                if (etype == EquipType.GLOVES)
+                else if (etype == EquipType.GLOVES)
                 {
                     e = new Gloves(g);
                 }
@@ -201,6 +201,7 @@ public static class Data
                 {
                     e = new Equipment(g, il);
                 }
+
                 equips.Add(e);
             }
 

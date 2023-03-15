@@ -38,6 +38,7 @@ public class Shield : Equipment
         this.shieldType = st;
         this.spriteIndex = si;
         image = GetImage();
+        etype = EquipType.SHIELD;
     }
 
     public Shield(SaveGear gear)
@@ -58,7 +59,7 @@ public class Shield : Equipment
 
     public override Sprite GetImage()
     {
-        ShieldGenerator sg = GameManager.gmInstance.equipmentGenerator.shieldGenerator;
+        ShieldGenerator sg = Resources.Load<ShieldGenerator>("ScriptableObjects/ShieldGenerator");
 
         if (shieldType == ShieldType.WoodenBuckler) return sg.woodenBuckler;
         if (shieldType == ShieldType.StuddedBuckler) return sg.studdedBuckler;

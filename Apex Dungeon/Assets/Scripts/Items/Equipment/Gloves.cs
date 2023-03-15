@@ -34,6 +34,7 @@ public class Gloves : Equipment
         this.gloveType = gt;
         this.spriteIndex = si;
         this.image = GetImage();
+        etype = EquipType.GLOVES;
     }
 
     public Gloves(SaveGear gear)
@@ -54,7 +55,7 @@ public class Gloves : Equipment
 
     public override Sprite GetImage()
     {
-        GlovesGenerator gg = GameManager.gmInstance.equipmentGenerator.glovesGenerator;
+        GlovesGenerator gg = Resources.Load<GlovesGenerator>("ScriptableObjects/GlovesGenerator");
 
         if (gloveType == GloveType.Leather) return gg.leatherGloves;
         if (gloveType == GloveType.Studded) return gg.studdedGloves;
