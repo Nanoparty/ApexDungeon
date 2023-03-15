@@ -215,7 +215,7 @@ public static class Data
                 else
                 {
                     item = new Consumable(c);
-                    item.image = il.getImage(item.id);
+                    item.image = il.getImage(item.id, item.spriteIndex);
                 }
                 consumes.Add(item);
             }

@@ -57,7 +57,7 @@ public class ConsumableGenerator : ScriptableObject
 
         int healAmount = (int)(50 + 50 * 0.2 * (level - 1));
 
-        Consumable potion = new Consumable("HealthPotion", "Health Potion Lvl " + level, "Cherry Flavor", "Heals " + healAmount + " HP", redPotion, level);
+        Consumable potion = new Consumable("HealthPotion", "Health Potion Lvl " + level, "Cherry Flavor", "Heals " + healAmount + " HP", redPotion, 0, level);
 
         item.AddComponent<Pickup>();
         item.GetComponent<Pickup>().SetItem(potion);
@@ -99,7 +99,7 @@ public class ConsumableGenerator : ScriptableObject
         item.AddComponent<BoxCollider2D>();
         item.GetComponent<BoxCollider2D>().isTrigger = true;
 
-        Consumable potion = new Consumable("ManaPotion", "Mana Potion lvl " + level , "Blueberry Flavor", "Restores 10 MP", bluePotion, level);
+        Consumable potion = new Consumable("ManaPotion", "Mana Potion lvl " + level , "Blueberry Flavor", "Restores 10 MP", bluePotion, 0, level);
 
         item.AddComponent<Pickup>();
         item.GetComponent<Pickup>().SetItem(potion);
@@ -527,7 +527,7 @@ public class ConsumableGenerator : ScriptableObject
             consumable = CreateHealthPotion(level);
         }
 
-        return consumable;
+        return CreateRandomSkillbook();
     }
 
     public GameObject CreateRandomMoney(int level)
@@ -553,7 +553,7 @@ public class ConsumableGenerator : ScriptableObject
         }
         else
         {
-            image = GameManager.gmInstance.imageLookup.getImage(i.id);
+            image = GameManager.gmInstance.imageLookup.getImage(i.id, i.spriteIndex);
         }
 
         GameObject consumable = new GameObject(i.itemName);
@@ -599,7 +599,7 @@ public class ConsumableGenerator : ScriptableObject
 
         consumable.transform.localScale = new Vector3(0.6f, 0.6f, 0.6f);
 
-        Consumable item = new Consumable($"skillbook", $"{skill.skillName} Skillbook", $"Teaches the skill {skill.skillName}", $"{skill.description}", image, 1, skillType);
+        Consumable item = new Consumable($"skillbook", $"{skill.skillName} Skillbook", $"Teaches the skill {skill.skillName}", $"{skill.description}", image, imageIndex, 1, skillType);
 
         consumable.AddComponent<Pickup>();
         consumable.GetComponent<Pickup>().SetItem(item);
