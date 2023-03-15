@@ -141,7 +141,6 @@ public class Player : MovingEntity
             DrawTargetHighlights();
 
             if (TargetSelection()) {
-                PlayerEnd();
                 return; 
             }
 
@@ -442,6 +441,25 @@ public class Player : MovingEntity
                     targetTiles.Clear();
                     activeSkill = null;
                     drawTargets = false;
+
+                    if (castSuccessful)
+                    {
+                        if (clickRow != row || clickCol != col)
+                        {
+                            int rowDiff = Mathf.Abs(clickRow - row);
+                            int colDiff = Mathf.Abs(clickCol - col);
+                            if (rowDiff > colDiff)
+                            {
+                                SetAttackAnimation(clickRow, col);
+                            }
+                            if (colDiff >= rowDiff)
+                            {
+                                SetAttackAnimation(row, clickCol);
+                            }
+                            attacking = true;
+                        }
+                    }
+                    
                     return castSuccessful;
                 }
             }
