@@ -49,7 +49,6 @@ public class Gloves : Equipment
         flavorText = gear.rank;
         spriteIndex = gear.spriteIndex;
         etype = Enum.Parse<EquipType>(gear.equipType);
-        gloveType = Enum.Parse<GloveType>(gear.subType ?? "");
         image = GetImage();
     }
 

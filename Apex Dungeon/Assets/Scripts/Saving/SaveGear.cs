@@ -20,7 +20,7 @@ public class SaveGear
     public bool empty;
     public int spriteIndex;
     public string equipType;
-    public string subType;
+    //public string subType;
 
     public SaveGear(Equipment e)
     {
@@ -43,26 +43,26 @@ public class SaveGear
         spriteIndex = e.spriteIndex;
         equipType = e.etype.ToString();
         
-        if (e.etype == EquipType.HELMET)
-        {
-            subType = ((Helmet)e).helmetType.ToString();
-        }
-        if (e.etype == EquipType.CHESTPLATE)
-        {
-            subType = ((Chestplate)e).chestplateType.ToString();
-        }
-        if (e.etype == EquipType.SHIELD)
-        {
-            subType = ((Shield)e).shieldType.ToString();
-        }
-        if (e.etype == EquipType.BOOTS)
-        {
-            subType = ((Boots)e).bootType.ToString();
-        }
-        if (e.etype == EquipType.GLOVES)
-        {
-            subType = ((Gloves)e).gloveType.ToString();
-        }
+        //if (e.etype == EquipType.HELMET)
+        //{
+        //    subType = ((Helmet)e).helmetType.ToString();
+        //}
+        //if (e.etype == EquipType.CHESTPLATE)
+        //{
+        //    subType = ((Chestplate)e).chestplateType.ToString();
+        //}
+        //if (e.etype == EquipType.SHIELD)
+        //{
+        //    subType = ((Shield)e).shieldType.ToString();
+        //}
+        //if (e.etype == EquipType.BOOTS)
+        //{
+        //    subType = ((Boots)e).bootType.ToString();
+        //}
+        //if (e.etype == EquipType.GLOVES)
+        //{
+        //    subType = ((Gloves)e).gloveType.ToString();
+        //}
         
     }
 }

@@ -63,7 +63,6 @@ public class Chestplate : Equipment
         flavorText = gear.rank;
         spriteIndex = gear.spriteIndex;
         etype = Enum.Parse<EquipType>(gear.equipType);
-        chestplateType = Enum.Parse<ChestplateType>(gear.subType ?? "");
         image = GetImage();
     }
 

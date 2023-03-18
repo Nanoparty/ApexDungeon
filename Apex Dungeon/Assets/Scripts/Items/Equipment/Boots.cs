@@ -47,10 +47,6 @@ public class Boots : Equipment
         flavorText = gear.rank;
         spriteIndex = gear.spriteIndex;
         etype = Enum.Parse<EquipType>(gear.equipType);
-        
-        bootType = Enum.Parse<BootType>(gear.subType ?? "");
-        
-        
         image = GetImage();
     }
 

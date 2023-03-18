@@ -53,7 +53,6 @@ public class Shield : Equipment
         flavorText = gear.rank;
         spriteIndex = gear.spriteIndex;
         etype = Enum.Parse<EquipType>(gear.equipType);
-        shieldType = Enum.Parse<ShieldType>(gear.subType ?? "");
         image = GetImage();
     }
 

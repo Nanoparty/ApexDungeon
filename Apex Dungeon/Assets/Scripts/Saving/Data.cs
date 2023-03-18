@@ -175,32 +175,32 @@ public static class Data
             List<Equipment> equips = new List<Equipment>();
             foreach(SaveGear g in p.equipment)
             {
-                Equipment e = null;
-                EquipType etype = Enum.Parse<EquipType>(g.equipType);
-                if (etype == EquipType.HELMET)
-                {
-                    e = new Helmet(g); 
-                }
-                else if (etype == EquipType.CHESTPLATE)
-                {
-                    e = new Chestplate(g);
-                }
-                else if (etype == EquipType.SHIELD)
-                {
-                    e = new Shield(g);
-                }
-                else if (etype == EquipType.BOOTS)
-                {
-                    e = new Boots(g);
-                }
-                else if (etype == EquipType.GLOVES)
-                {
-                    e = new Gloves(g);
-                }
-                else
-                {
-                    e = new Equipment(g, il);
-                }
+                Equipment e = new Equipment(g, il);
+                //EquipType etype = Enum.Parse<EquipType>(g.equipType);
+                //if (etype == EquipType.HELMET)
+                //{
+                //    e = new Helmet(g); 
+                //}
+                //else if (etype == EquipType.CHESTPLATE)
+                //{
+                //    e = new Chestplate(g);
+                //}
+                //else if (etype == EquipType.SHIELD)
+                //{
+                //    e = new Shield(g);
+                //}
+                //else if (etype == EquipType.BOOTS)
+                //{
+                //    e = new Boots(g);
+                //}
+                //else if (etype == EquipType.GLOVES)
+                //{
+                //    e = new Gloves(g);
+                //}
+                //else
+                //{
+                //    e = new Equipment(g, il);
+                //}
 
                 equips.Add(e);
             }

@@ -1188,7 +1188,7 @@ public class Journal : ScriptableObject
             old = gear.Chestplate;
             gear.Chestplate = e;
         }
-        if (e.type == "gloves")
+        if (e.type == "legs")
         {
             old = gear.Legs;
             gear.Legs = e;

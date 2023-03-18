@@ -368,7 +368,7 @@ public class EquipmentGenerator : ScriptableObject
         if (typeNum == 1) type = "helmet";
         else if (typeNum == 2) type = "chestplate";
         else if (typeNum == 3) type = "boots";
-        else if (typeNum == 4) type = "gloves";
+        else if (typeNum == 4) type = "legs";
         else if (typeNum == 5) type = "weapon";
         else if (typeNum == 6) type = "shield";
         else if (typeNum == 7) type = "necklace";
