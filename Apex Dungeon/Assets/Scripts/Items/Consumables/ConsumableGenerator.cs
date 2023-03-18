@@ -527,7 +527,7 @@ public class ConsumableGenerator : ScriptableObject
             consumable = CreateHealthPotion(level);
         }
 
-        return CreateRandomSkillbook();
+        return consumable;
     }
 
     public GameObject CreateRandomMoney(int level)

@@ -298,8 +298,9 @@ public class Enemy : MovingEntity
 
                 availableSkills.Clear();
 
-                if (success)
+                if (success && s.range != 0)
                 {
+                    SetAttackAnimation(player.GetRow(), player.GetCol());
                     return true;
                 }
                 else

@@ -51,7 +51,7 @@ public class Helmet : Equipment
         flavorText = gear.rank;
         spriteIndex = gear.spriteIndex;
         etype = Enum.Parse<EquipType>(gear.equipType);
-        helmetType = Enum.Parse<HelmetType>(gear.subType);
+        helmetType = Enum.Parse<HelmetType>(gear.subType ?? "");
         image = GetImage();
     }
 

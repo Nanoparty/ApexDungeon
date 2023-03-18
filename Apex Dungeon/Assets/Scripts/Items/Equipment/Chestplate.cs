@@ -39,6 +39,7 @@ public class Chestplate : Equipment
         DyedBreastplate,
         DyedRobe,
         DyedTunic,
+        None,
     }
 
     public Chestplate(int lvl, string type, int tier, Sprite image, string name, string description, int hpBoost, int attackBoost, int critBoost, int evadeBoost, ChestplateType ct, int si)
@@ -62,7 +63,7 @@ public class Chestplate : Equipment
         flavorText = gear.rank;
         spriteIndex = gear.spriteIndex;
         etype = Enum.Parse<EquipType>(gear.equipType);
-        chestplateType = Enum.Parse<ChestplateType>(gear.subType);
+        chestplateType = Enum.Parse<ChestplateType>(gear.subType ?? "");
         image = GetImage();
     }
 

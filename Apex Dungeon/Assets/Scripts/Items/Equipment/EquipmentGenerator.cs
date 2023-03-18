@@ -336,26 +336,26 @@ public class EquipmentGenerator : ScriptableObject
 
         equipment.tag = "Equipment";
 
-        if (type == "shield")
-        {
-            return shieldGenerator.CreateRandomShield(level);
-        }
-        if (type == "boots")
-        {
-            return bootsGenerator.CreateRandomBoots(level);
-        }
-        if (type == "chestplate")
-        {
-            return chestGenerator.CreateRandomChest(level);
-        }
-        if (type == "helmet")
-        {
-            return helmetGenerator.CreateRandomHelmet(level);
-        }
-        if (type == "gloves")
-        {
-            return glovesGenerator.CreateRandomGloves(level);
-        }
+        //if (type == "shield")
+        //{
+        //    return shieldGenerator.CreateRandomShield(level);
+        //}
+        //if (type == "boots")
+        //{
+        //    return bootsGenerator.CreateRandomBoots(level);
+        //}
+        //if (type == "chestplate")
+        //{
+        //    return chestGenerator.CreateRandomChest(level);
+        //}
+        //if (type == "helmet")
+        //{
+        //    return helmetGenerator.CreateRandomHelmet(level);
+        //}
+        //if (type == "gloves")
+        //{
+        //    return glovesGenerator.CreateRandomGloves(level);
+        //}
         //return glovesGenerator.CreateRandomGloves(level);
 
         return equipment;
