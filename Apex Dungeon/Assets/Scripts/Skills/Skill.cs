@@ -84,6 +84,18 @@ public class Skill
         {
             return Resources.Load<GameObject>("Projectiles/Fireball");
         }
+        if (type == SkillType.IceShard)
+        {
+            return Resources.Load<GameObject>("Projectiles/IceShard");
+        }
+        if (type == SkillType.PoisonSpike)
+        {
+            return Resources.Load<GameObject>("Projectiles/PoisonSpike");
+        }
+        if (type == SkillType.LightningBolt)
+        {
+            return Resources.Load<GameObject>("Projectiles/LightningBolt");
+        }
         return null;
     }
 
@@ -112,6 +124,7 @@ public class Skill
                 canTargetSelf = false;
                 skillName = "Ice Shard";
                 description = "Cast ice shard at target. Chance to cause Frostbite.";
+                hasProjectile = true;
                 break;
 
             case SkillType.LightningBolt:
@@ -120,6 +133,7 @@ public class Skill
                 canTargetSelf = false;
                 skillName = "Lightning Bolt";
                 description = "Cast lightning bolt at target. Chance to cause Electrified.";
+                hasProjectile = true;
                 break;
 
             case SkillType.Restore:
@@ -233,6 +247,7 @@ public class Skill
                 range = 3;
                 skillName = "Poison Spike";
                 description = "Fires a poison spike at target. Chance to inflicts Poison.";
+                hasProjectile = true;
                 break;
 
             case SkillType.WhirlwindStrike:

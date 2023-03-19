@@ -293,7 +293,7 @@ public class Enemy : MovingEntity
                 
                 Skill s = availableSkills[Random.Range(0, availableSkills.Count)];
                 
-                bool success = false;
+                bool success;
                 if (s.range == 0)
                 {
                     success = s.Activate(this, row, col);
@@ -305,9 +305,12 @@ public class Enemy : MovingEntity
 
                 availableSkills.Clear();
 
-                if (success && s.range != 0)
+                if (success)
                 {
-                    SetAttackAnimation(player.GetRow(), player.GetCol());
+                    if (s.range != 0)
+                    {
+                        SetAttackAnimation(player.GetRow(), player.GetCol());
+                    }
                     return true;
                 }
                 else

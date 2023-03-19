@@ -297,6 +297,9 @@ public class Player : MovingEntity
 
         skills.Add(GameManager.gmInstance.SkillGenerator.Fireball);
         skills.Add(GameManager.gmInstance.SkillGenerator.Hypnosis);
+        skills.Add(GameManager.gmInstance.SkillGenerator.LightningBolt);
+        skills.Add(GameManager.gmInstance.SkillGenerator.IceShard);
+        skills.Add(GameManager.gmInstance.SkillGenerator.PoisonSpike);
 
 
         // Set ClassType Variables
