@@ -44,7 +44,7 @@ public class Skill
         Plague,
         Stealth,
         Taunt,
-        Invisibility,
+        //Invisibility,
         Teleport,
         Restore,
         Cleanse,
@@ -64,6 +64,7 @@ public class Skill
     public bool canTargetLocation;
     public Sprite projectile;
     public GameObject spawn;
+    public bool hasProjectile;
 
     public Skill(SkillType type, Sprite image, Sprite projectile)
         : this(type, image)
@@ -75,6 +76,15 @@ public class Skill
         : this(type, image)
     {
         this.spawn = spawn;
+    }
+
+    public GameObject GetProjectile()
+    {
+        if (type == SkillType.Fireball)
+        {
+            return Resources.Load<GameObject>("Projectiles/Fireball");
+        }
+        return null;
     }
 
     public Skill(SkillType type, Sprite image)
@@ -93,6 +103,7 @@ public class Skill
                 canTargetSelf = false;
                 skillName = "Fireball";
                 description = "Cast fireball at target. Chance to cause Burn.";
+                hasProjectile = true;
                 break;
 
             case SkillType.IceShard:
@@ -326,12 +337,12 @@ public class Skill
                 description = "Reduces enemy aggro range.";
                 break;
 
-            case SkillType.Invisibility:
-                manaCost = 30;
-                range = 0;
-                skillName = "Invisibility";
-                description = "Prevents enemies from detecting caster. Effect is lost on attacking.";
-                break;
+            //case SkillType.Invisibility:
+            //    manaCost = 30;
+            //    range = 0;
+            //    skillName = "Invisibility";
+            //    description = "Prevents enemies from detecting caster. Effect is lost on attacking.";
+            //    break;
 
             case SkillType.Bash:
                 manaCost = 20;
@@ -641,10 +652,10 @@ public class Skill
                 target.AddStatusEffect(new StatusEffect(EffectType.stealth, 5, EffectOrder.Status));
                 break;
 
-            case SkillType.Invisibility:
-                // Invisibility status effect
-                target.AddStatusEffect(new StatusEffect(EffectType.invisible, 5, EffectOrder.Status));
-                break;
+            //case SkillType.Invisibility:
+            //    // Invisibility status effect
+            //    target.AddStatusEffect(new StatusEffect(EffectType.invisible, 5, EffectOrder.Status));
+            //    break;
 
             case SkillType.Bash:
                 damage = target.GetMaxHP() * 0.2f;

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using UnityEngine.U2D.Animation;
 using static CharacterClass;
 using static StatusEffect;
+using System.Collections;
 
 public class Player : MovingEntity
 {
@@ -41,6 +42,9 @@ public class Player : MovingEntity
     private string playerName;
     private int gold;
 
+    private float skipDelay;
+    private float projectileDelay;
+
     [Header("Flags")]
     public bool openJournal = false;
     public bool openLevel = false;
@@ -52,7 +56,8 @@ public class Player : MovingEntity
     public bool targetMode = false;
     public bool drawTargets = false;
     private bool turnStart = true;
-
+    private bool delayWait = false;
+    private bool delayFinish = false;
 
     [Header("Character Sprite Libraries")]
     [SerializeField] private SpriteLibraryAsset ArcherLibrary;
@@ -95,6 +100,18 @@ public class Player : MovingEntity
         UpdatePlayerStatus();
 
         GameManager.gmInstance.Dungeon.UpdateShadows(row, col);
+
+        if (delayWait)
+        {
+            if (delayFinish)
+            {
+                delayFinish = false;
+                delayWait = false;
+                PlayerEnd();
+                return;
+            }
+            return;
+        }
 
         if (attacking)
         {
@@ -151,6 +168,21 @@ public class Player : MovingEntity
 
         if (moving)
         {
+            if (skipTurn || sleeping)
+            {
+                StartCoroutine(WaitForDelay(skipDelay));
+                skipTurn = false;
+                moving = false;
+                interrupt = false;
+                path = null;
+                return;
+            }
+
+            if (root)
+            {
+                interrupt = true;
+            }
+
             // Look for interrupts
             if (Input.GetButtonDown("Fire1"))
             {
@@ -260,7 +292,11 @@ public class Player : MovingEntity
         hp = baseHp + (int)((float)baseHp * 0.05f * (int)(defense * defenseScale));
         maxHp = hp;
 
+        skipDelay = 1.0f;
+        projectileDelay = 1.5f;
+
         skills.Add(GameManager.gmInstance.SkillGenerator.Fireball);
+        skills.Add(GameManager.gmInstance.SkillGenerator.Hypnosis);
 
 
         // Set ClassType Variables
@@ -419,6 +455,17 @@ public class Player : MovingEntity
         }
     }
 
+    IEnumerator FireProjectile(GameObject projectile, int row, int col)
+    {
+        Debug.Log("Fire projectile");
+        GameObject o = Instantiate(projectile, transform.position, Quaternion.identity);
+        Projectile proj = o.GetComponent<Projectile>();
+        proj.SetTarget(row, col);
+        delayWait = true;
+        yield return new WaitForSeconds(projectileDelay);
+        delayFinish = true;
+    }
+
     bool TargetSelection()
     {
         if (Input.GetButtonDown("Fire1"))
@@ -439,7 +486,7 @@ public class Player : MovingEntity
                         Destroy(o);
                     }
                     targetTiles.Clear();
-                    activeSkill = null;
+                    
                     drawTargets = false;
 
                     if (castSuccessful)
@@ -457,9 +504,15 @@ public class Player : MovingEntity
                                 SetAttackAnimation(row, clickCol);
                             }
                             attacking = true;
+
+                            if (activeSkill.hasProjectile)
+                            {
+                                StartCoroutine(FireProjectile(activeSkill.GetProjectile(), clickRow, clickCol));
+                            }
                         }
                     }
-                    
+                    activeSkill = null;
+
                     return castSuccessful;
                 }
             }
@@ -501,11 +554,15 @@ public class Player : MovingEntity
         }
         if (Input.GetKeyDown("b"))
         {
-            AddStatusEffect(new StatusEffect(EffectType.paralysis, 5, EffectOrder.Start));
+            AddStatusEffect(new StatusEffect(EffectType.sleep, 5, EffectOrder.Status));
         }
         if (Input.GetKeyDown("n"))
         {
-            AddStatusEffect(new StatusEffect(EffectType.defense_down, 5, EffectOrder.Status));
+            AddStatusEffect(new StatusEffect(EffectType.root, 5, EffectOrder.Status));
+        }
+        if (Input.GetKeyDown("m"))
+        {
+            AddStatusEffect(new StatusEffect(EffectType.paralysis, 5, EffectOrder.Start));
         }
     }
 
@@ -958,5 +1015,12 @@ public class Player : MovingEntity
             hp -= diff;
             if (hp > maxHp) hp = maxHp;
         }
+    }
+
+    public IEnumerator WaitForDelay(float delay)
+    {
+        delayWait = true;
+        yield return new WaitForSeconds(delay);
+        delayFinish = true;
     }
 }

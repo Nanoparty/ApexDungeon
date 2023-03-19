@@ -57,6 +57,7 @@ public class Enemy : MovingEntity
         healthBar = this.transform.GetChild(0).GetComponent<SpriteRenderer>();
         path = new Path();
         availableSkills = new List<Skill>();
+        sleepEffectPrefab = Resources.Load<GameObject>("ParticleEffects/SleepEffect");
     }
 
     protected void SetInitialValues()
@@ -244,6 +245,12 @@ public class Enemy : MovingEntity
                 return true;
             }
 
+            if (root)
+            {
+                EndTurn();
+                return true;
+            }
+
             base.AttemptMove<Enemy>(player.GetRow(), player.GetCol());
 
             if (moving)
@@ -399,6 +406,8 @@ public class Enemy : MovingEntity
 
     void MoveRandom()
     {
+        if (root) return;
+
         Vector2 dir;
         float ran = Random.Range(0.0f, 1.0f);
         if (ran < 0.25f)

@@ -78,6 +78,10 @@ public abstract class MovingEntity : MonoBehaviour
     public bool canDisplayPopupText = true;
     [SerializeField] public float popupTextDelay = .4f;
 
+    [Header("Sleep Effect")]
+    public GameObject sleepEffectPrefab;
+    private GameObject sleepInstance;
+
     [Header("Movement")]
     public float moveTime = 0.1f;
     public float speed = 3f;
@@ -89,7 +93,7 @@ public abstract class MovingEntity : MonoBehaviour
 
     protected BoxCollider2D boxCollider;
 
-    private Vector2 target;
+    public Vector2 target;
     protected bool atTarget = true;
 
     protected int row;
@@ -173,6 +177,8 @@ public abstract class MovingEntity : MonoBehaviour
         if (row == r && col == c){
             return false;
         }
+
+        if (root) { return false; }
 
         if (atTarget)
         {
@@ -276,6 +282,9 @@ public abstract class MovingEntity : MonoBehaviour
             MoveToTarget();
         }
 
+        if (sleeping && sleepInstance == null) StartSleep();
+        if (!sleeping && sleepInstance != null) EndSleep();
+
         if (canDisplayPopupText && popupTexts.Count > 0)
         {
             canDisplayPopupText = false;
@@ -342,6 +351,7 @@ public abstract class MovingEntity : MonoBehaviour
 
         if (change < 0)
         {
+            sleeping = false;
             if (critical)
             {
                 AddTextPopup($"CRIT! {(int)change}", color);
@@ -696,5 +706,15 @@ public abstract class MovingEntity : MonoBehaviour
 
     }
 
+    public void StartSleep()
+    {
+        sleepInstance = Instantiate(sleepEffectPrefab, transform.position, Quaternion.identity);
+        sleepInstance.GetComponent<ParticleSystem>().Play();
+    }
+
+    public void EndSleep()
+    {
+        Destroy(sleepInstance);
+    }
 
 }

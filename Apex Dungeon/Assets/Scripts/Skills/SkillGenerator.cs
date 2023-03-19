@@ -85,15 +85,12 @@ public class SkillGenerator : ScriptableObject
         skills[SkillType.Plague] = Plague;
         skills[SkillType.Stealth] = Stealth;
         skills[SkillType.Taunt] = Taunt;
-        skills[SkillType.Invisibility] = Invisibility;
+        //skills[SkillType.Invisibility] = Invisibility;
         skills[SkillType.Teleport] = Teleport;
         skills[SkillType.Restore] = Restore;
         skills[SkillType.Cleanse] = Cleanse;
 
         return skills[st];
-
-        return Fireball;
-        return null;
     }
 
     public Skill Fireball
@@ -244,10 +241,10 @@ public class SkillGenerator : ScriptableObject
     {
         get { return new Skill(Skill.SkillType.Taunt, Taunt_icon); }
     }
-    public Skill Invisibility
-    {
-        get { return new Skill(Skill.SkillType.Invisibility, Invisibility_icon); }
-    }
+    //public Skill Invisibility
+    //{
+    //    get { return new Skill(Skill.SkillType.Invisibility, Invisibility_icon); }
+    //}
 
 
 }
