@@ -84,6 +84,9 @@ public class ImageLookup : ScriptableObject
     public Sprite rope;
     public Sprite heart;
 
+    public Sprite dart;
+    public Sprite stone;
+
     public Sprite[] skillbooks;
 
     public Sprite getImage(string id, int index = 0)
@@ -111,6 +114,8 @@ public class ImageLookup : ScriptableObject
         images["BuffScroll"] = scroll;
         images["ManaPotion"] = bluePotion;
         images["ManaRegenPotion"] = blueFlask;
+        images["Stone"] = stone;
+        images["Dart"] = dart;
         
         return images[id];
     }

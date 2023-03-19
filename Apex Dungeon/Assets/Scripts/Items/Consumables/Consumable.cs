@@ -6,6 +6,8 @@ using static StatusEffect;
 
 public class Consumable : Item
 {
+    public bool throwable;
+
     public Consumable(string id, string name, string flavor, string desc, Sprite img, int level = 1, SkillType st = SkillType.Fireball){
         itemName = name;
         flavorText = flavor;
@@ -26,6 +28,17 @@ public class Consumable : Item
         this.id = id;
         skillType = st;
         this.spriteIndex = spriteIndex;
+    }
+
+    public Consumable(string id, string name, string flavor, string desc, Sprite img, int level, bool throwable)
+    {
+        itemName = name;
+        flavorText = flavor;
+        description = desc;
+        image = img;
+        this.id = id;
+        this.level = level;
+        this.throwable = throwable;
     }
 
     public Consumable() { }
@@ -175,6 +188,20 @@ public class Consumable : Item
         {
             Skill skill = GameManager.gmInstance.SkillGenerator.GetSkill(skillType);
             p.skills.Add(skill);
+        }
+        if (id == "Stone")
+        {
+            Skill stoneSkill = new Skill(SkillType.Rock, "Stone Toss", 3, true);
+            p.activeSkill = stoneSkill;
+            p.targetMode = true;
+            p.CloseJournal();
+        }
+        if (id == "Dart")
+        {
+            Skill dartSkill = new Skill(SkillType.Dart, "Dart Throw", 3, true);
+            p.activeSkill = dartSkill;
+            p.targetMode = true;
+            p.CloseJournal();
         }
     }
 }

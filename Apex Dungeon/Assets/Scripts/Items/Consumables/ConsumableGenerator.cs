@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using static Skill;
 using static StatusEffect;
@@ -41,6 +42,9 @@ public class ConsumableGenerator : ScriptableObject
     public Sprite heart;
     public Sprite dice;
     public Sprite chicken;
+
+    public Sprite dart;
+    public Sprite stone;
 
     public Sprite[] spellbooks;
 
@@ -433,6 +437,50 @@ public class ConsumableGenerator : ScriptableObject
         return item;
     }
 
+    public GameObject CreateDart(int level)
+    {
+        GameObject item = new GameObject("Dart");
+        string id = "Dart";
+
+        item.AddComponent<SpriteRenderer>();
+        item.GetComponent<SpriteRenderer>().sprite = dart;
+        item.GetComponent<SpriteRenderer>().sortingLayerName = "Items";
+
+        item.AddComponent<BoxCollider2D>();
+        item.GetComponent<BoxCollider2D>().isTrigger = true;
+
+        Consumable orb = new Consumable(id, "Throwing Dart", "Aim for the bullseye", "Throw a sharp dart at enemies.", dart, level, true);
+
+        item.AddComponent<Pickup>();
+        item.GetComponent<Pickup>().SetItem(orb);
+
+        item.tag = "Consumable";
+
+        return item;
+    }
+
+    public GameObject CreateStone(int level)
+    {
+        GameObject item = new GameObject("Stone");
+        string id = "Stone";
+
+        item.AddComponent<SpriteRenderer>();
+        item.GetComponent<SpriteRenderer>().sprite = stone;
+        item.GetComponent<SpriteRenderer>().sortingLayerName = "Items";
+
+        item.AddComponent<BoxCollider2D>();
+        item.GetComponent<BoxCollider2D>().isTrigger = true;
+
+        Consumable orb = new Consumable(id, "Jagged Stone", "Fits perfectly in the palm.", "Throw a jagged stone at enemies.", stone, level, true);
+
+        item.AddComponent<Pickup>();
+        item.GetComponent<Pickup>().SetItem(orb);
+
+        item.tag = "Consumable";
+
+        return item;
+    }
+
     public GameObject CreateGold(int level)
     {
         GameObject item = new GameObject("Gold");
@@ -527,7 +575,7 @@ public class ConsumableGenerator : ScriptableObject
             consumable = CreateHealthPotion(level);
         }
 
-        return consumable;
+        return CreateDart(level);
     }
 
     public GameObject CreateRandomMoney(int level)
@@ -584,7 +632,11 @@ public class ConsumableGenerator : ScriptableObject
         Sprite image = spellbooks[imageIndex];
 
         System.Array skills = System.Enum.GetValues(typeof(SkillType));
-        SkillType skillType = (SkillType)skills.GetValue(UnityEngine.Random.Range(0, skills.Length));
+        ArrayList skillList = new ArrayList();
+        skillList.AddRange(skills);
+        skillList.Remove(SkillType.Rock);
+        skillList.Remove(SkillType.Dart);
+        SkillType skillType = (SkillType)skillList[UnityEngine.Random.Range(0, skills.Length)];
 
         Skill skill = GameManager.gmInstance.SkillGenerator.GetSkill(skillType);
 

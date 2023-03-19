@@ -18,11 +18,12 @@ public class Projectile : MonoBehaviour
 
     void Update()
     {
+        
         if (target)
         {
-
-                transform.position =Vector3.Lerp(
-                    transform.position, targetPosition, speed * Time.deltaTime);
+            //this.transform.LookAt(targetPosition);
+            transform.position =Vector3.Lerp(
+                transform.position, targetPosition, speed * Time.deltaTime);
             if (Vector2.Distance(transform.position, targetPosition) < 0.5)
             {
                 Instantiate(explosion, transform.position, Quaternion.identity);

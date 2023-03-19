@@ -76,6 +76,8 @@ public class Player : MovingEntity
     [Header("Status Effects")]
     [SerializeField] private GameObject StatusEffectAlert;
 
+    private CameraShake cameraShake;
+
     protected override void Start()
     {
         base.Start();
@@ -362,6 +364,7 @@ public class Player : MovingEntity
         journal.SetPlayer(this);
 
         sl = transform.GetChild(1).gameObject.GetComponent<SpriteLibrary>();
+        cameraShake = transform.GetComponentInChildren<CameraShake>();
         gear = new PlayerGear();
         targetTiles = new List<GameObject>();
 
@@ -692,8 +695,10 @@ public class Player : MovingEntity
         Furniture f = GameManager.gmInstance.GetFurnitureAtLoc(row, col);
         if (f != null)
         {
+            StartCoroutine(cameraShake.Shake(0.1f, 0.1f));
+            SetAttackAnimation(row, col);
+            attacking = true;
             f.setDamage(-1);
-            PlayerEnd();
             SoundManager.sm.PlayStickSounds();
             return true;
         }
@@ -787,6 +792,7 @@ public class Player : MovingEntity
         Enemy enemy = GameManager.gmInstance.GetEnemyAtLoc(clickRow, clickCol);
         if (enemy != null && attacking == false)
         {
+            StartCoroutine(cameraShake.Shake(0.1f, 0.1f));
             SetAttackAnimation(clickRow, clickCol);
             attacking = true;
             float targetDamage = 0.0f;
@@ -834,6 +840,7 @@ public class Player : MovingEntity
         if (d < 0)
         {
             SoundManager.sm.PlayHitSound();
+            StartCoroutine(cameraShake.Shake(0.1f, 0.1f));
             moving = false;
             AddTextPopup($"{d}", c);
             SpawnBlood();

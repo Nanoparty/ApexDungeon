@@ -50,7 +50,8 @@ public class Skill
         Cleanse,
         
        //Other
-        
+        Rock,
+        Dart
     }
 
     public SkillType type;
@@ -78,6 +79,17 @@ public class Skill
         this.spawn = spawn;
     }
 
+    public Skill(SkillType type, string name, int range, bool hasProjectile)
+    {
+        this.type = type;
+        this.skillName = name;
+        this.range = range;
+        this.hasProjectile = hasProjectile;
+        manaCost = 0;
+        healthCost = 0;
+
+    }
+
     public GameObject GetProjectile()
     {
         if (type == SkillType.Fireball)
@@ -95,6 +107,14 @@ public class Skill
         if (type == SkillType.LightningBolt)
         {
             return Resources.Load<GameObject>("Projectiles/LightningBolt");
+        }
+        if (type == SkillType.Rock)
+        {
+            return Resources.Load<GameObject>("Projectiles/Stone");
+        }
+        if (type == SkillType.Dart)
+        {
+            return Resources.Load<GameObject>("Projectiles/Dart");
         }
         return null;
     }
@@ -697,6 +717,16 @@ public class Skill
 
             case SkillType.BloodCurse:
                 target.AddStatusEffect(new StatusEffect(EffectType.bleed, 5, EffectOrder.End));
+                break;
+
+            case SkillType.Rock:
+                damage = target.GetMaxHP() * 0.2f;
+                target.TakeDamage(-damage, ColorManager.DAMAGE);
+                break;
+
+            case SkillType.Dart:
+                damage = target.GetMaxHP() * 0.2f;
+                target.TakeDamage(-damage, ColorManager.DAMAGE);
                 break;
 
             default: { Debug.Log("Default"); return false; }
