@@ -42,6 +42,8 @@ public class Player : MovingEntity
     private string playerName;
     private int gold;
 
+    public int weaponRange;
+
     private float skipDelay;
     private float projectileDelay;
 
@@ -72,6 +74,8 @@ public class Player : MovingEntity
     [SerializeField] private SpriteLibraryAsset MageLibrary;
     [SerializeField] private SpriteLibraryAsset ThiefLibrary;
     [SerializeField] private SpriteLibraryAsset PriestLibrary;
+
+    private GameObject ArrowPrefab;
 
     [Header("Status Effects")]
     [SerializeField] private GameObject StatusEffectAlert;
@@ -234,15 +238,21 @@ public class Player : MovingEntity
                 {
                     // Attack Furniture
                     if (IsFurniture(clickRow, clickCol)) { return; }
-                    // Open Chest
-                    else if (IsChest(clickRow, clickCol)) { return; }
                     // Attack Enemy
                     else if (AttackController(clickRow, clickCol)) { return; }
                     // Disarm Trap
-                    else if (IsAdjacent(clickRow, clickCol) && GameManager.gmInstance.GetTrapAtLoc(clickRow, clickCol) != null)
+                    else if (IsAdjacent(clickRow, clickCol))
                     {
-                        Trap t = GameManager.gmInstance.GetTrapAtLoc(clickRow, clickCol);
-                        if (t.DisarmTrap(this)) { return; }
+                        // Open Chest
+                        if (IsChest(clickRow, clickCol)) { return; }
+
+                        //Trap
+                        if (GameManager.gmInstance.GetTrapAtLoc(clickRow, clickCol) != null)
+                        {
+                            Trap t = GameManager.gmInstance.GetTrapAtLoc(clickRow, clickCol);
+                            if (t.DisarmTrap(this)) { return; }
+                        }
+                        
                     }
                 }
 
@@ -295,7 +305,7 @@ public class Player : MovingEntity
         maxHp = hp;
 
         skipDelay = 1.0f;
-        projectileDelay = 1.5f;
+        projectileDelay = 0.5f;
 
         skills.Add(GameManager.gmInstance.SkillGenerator.Fireball);
         skills.Add(GameManager.gmInstance.SkillGenerator.Hypnosis);
@@ -385,6 +395,16 @@ public class Player : MovingEntity
         stairsModal.SetActive(false);
         stairsModal.transform.GetChild(2).GetComponent<Button>().onClick.AddListener(StairsReject);
         stairsModal.transform.GetChild(3).GetComponent<Button>().onClick.AddListener(StairsConfirm);
+
+        GameObject g = GameManager.gmInstance.equipmentGenerator.GenerateEquipOfType(1, "weapon", 4, true);
+        journal.addEquipment(g.GetComponent<Pickup>().GetItem());
+
+        GameObject g2 = GameManager.gmInstance.equipmentGenerator.GenerateEquipOfType(1, "weapon", 3, true);
+        Equipment e = (Equipment)g2.GetComponent<Pickup>().GetItem();
+        Debug.Log("Range: " + e.range);
+        journal.addEquipment(g2.GetComponent<Pickup>().GetItem());
+
+        ArrowPrefab = Resources.Load<GameObject>("Projectiles/Arrow");
     }
 
     private void StairsConfirm()
@@ -700,6 +720,10 @@ public class Player : MovingEntity
             attacking = true;
             f.setDamage(-1);
             SoundManager.sm.PlayStickSounds();
+            if (attackRange > 1)
+            {
+                StartCoroutine(FireProjectile(ArrowPrefab, row, col));
+            }
             return true;
         }
         else return false;
@@ -795,6 +819,12 @@ public class Player : MovingEntity
             StartCoroutine(cameraShake.Shake(0.1f, 0.1f));
             SetAttackAnimation(clickRow, clickCol);
             attacking = true;
+
+            if (attackRange > 1)
+            {
+                StartCoroutine(FireProjectile(ArrowPrefab, clickRow, clickCol));
+            }
+
             float targetDamage = 0.0f;
             int dice = Random.Range(0, 100);
             if (dice <= (int)(critical * criticalScale))

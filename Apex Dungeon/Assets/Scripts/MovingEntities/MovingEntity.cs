@@ -33,7 +33,7 @@ public abstract class MovingEntity : MonoBehaviour
     protected int blockStat;
 
     // Combat
-    protected int attackRange;
+    public int attackRange;
 
     // Resistances
     protected float physicalResistance;
@@ -574,6 +574,7 @@ public abstract class MovingEntity : MonoBehaviour
         int cDis = Mathf.Abs(c - col);
         if (rDis + cDis <= attackRange)
         {
+            Debug.Log("Is in attack range");
             return true;
         }
         return false;

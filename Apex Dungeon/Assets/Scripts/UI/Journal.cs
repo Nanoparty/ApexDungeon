@@ -1202,6 +1202,7 @@ public class Journal : ScriptableObject
         {
             old = gear.Weapon;
             gear.Weapon = e;
+            player.attackRange = e.range;
         }
         if (e.type == "shield")
         {
@@ -1266,6 +1267,7 @@ public class Journal : ScriptableObject
         {
             e = gear.Weapon;
             gear.Weapon = null;
+            player.attackRange = 1;
         }
         if (gearSelection == 5)
         {

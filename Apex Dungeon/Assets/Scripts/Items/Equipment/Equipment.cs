@@ -14,6 +14,7 @@ public class Equipment : Item
     public int intelligence;
     public int crit;
     public int evade;
+    public int range;
 
     public string modifier;
 
@@ -47,9 +48,9 @@ public class Equipment : Item
 
     }
 
-    public Equipment(int lvl, string type, int tier, Sprite image, int hpBoost, int attackBoost, int critBoost, int evadeBoost)
+    public Equipment(int lvl, string type, int tier, Sprite image, int hpBoost, int attackBoost, int critBoost, int evadeBoost, int range = 1)
     {
-        setStats(lvl, type, tier, image, hpBoost, attackBoost, critBoost, evadeBoost);
+        setStats(lvl, type, tier, image, hpBoost, attackBoost, critBoost, evadeBoost, range);
     }
 
     public Equipment(int lvl, string type, int tier, Sprite image, string name, string description, int hp, int attack, int crit, int evade)
@@ -104,7 +105,7 @@ public class Equipment : Item
         description = e.description;
     }
 
-    public void setStats(int lvl, string type, int tier, Sprite img, int hpBoost, int attackDamage, int critBoost, int evadeBoost)
+    public void setStats(int lvl, string type, int tier, Sprite img, int hpBoost, int attackDamage, int critBoost, int evadeBoost, int range = 1)
     {
         this.level = lvl;
         this.type = type;
@@ -114,6 +115,7 @@ public class Equipment : Item
         this.intelligence = 0;
         this.crit = critBoost;
         this.evade = evadeBoost;
+        this.range = range;
 
         string nameText = "";
         if(tier == 1)
@@ -122,6 +124,7 @@ public class Equipment : Item
             else if (type == "gloves") nameText = "Leather Gloves";
             else if (type == "legs") nameText = "Leather Greaves";
             else if (type == "boots") nameText = "Leather Boots";
+            else if (type == "weapon" && range > 1) nameText = "Old Slingshot";
             else if (type == "weapon") nameText = "Rusty Dagger";
             else if (type == "shield") nameText = "Leather Shield";
             else if (type == "necklace") nameText = "Copper Necklace";
@@ -133,6 +136,7 @@ public class Equipment : Item
             else if (type == "gloves") nameText = "Iron Gloves";
             else if (type == "legs") nameText = "Iron Greaves";
             else if (type == "boots") nameText = "Iron Boots";
+            else if (type == "weapon" && range > 1) nameText = "Shortbow";
             else if (type == "weapon") nameText = "Long Sword";
             else if (type == "shield") nameText = "Iron Shield";
             else if (type == "necklace") nameText = "Iron Necklace";
@@ -144,6 +148,7 @@ public class Equipment : Item
             else if (type == "gloves") nameText = "Gold Gloves";
             else if (type == "legs") nameText = "Gold Greaves";
             else if (type == "boots") nameText = "Gold Boots";
+            else if (type == "weapon" && range > 1) nameText = "Longbow";
             else if (type == "weapon") nameText = "Battle Hammer";
             else if (type == "shield") nameText = "Gold Shield";
             else if (type == "necklace") nameText = "Gold Necklace";
@@ -154,6 +159,7 @@ public class Equipment : Item
             else if (type == "gloves") nameText = "Diamond Gloves";
             else if (type == "legs") nameText = "Diamond Greaves";
             else if (type == "boots") nameText = "Diamond Boots";
+            else if (type == "weapon" && range > 1) nameText = "Militia Crossbow";
             else if (type == "weapon") nameText = "Great Axe";
             else if (type == "shield") nameText = "Diamond Shield";
             else if (type == "necklace") nameText = "Diamond Necklace";
