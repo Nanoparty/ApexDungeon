@@ -1,6 +1,7 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor.SceneTemplate;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -14,18 +15,32 @@ public class CharacterCreatorManager : MonoBehaviour
 
     // Character Class
     [SerializeField] private Animator ClassAnimator;
-    [SerializeField] private Button ArcherButton;
-    [SerializeField] private Button KnightButton;
-    [SerializeField] private Button WarriorButton;
-    [SerializeField] private Button MonkButton;
-    [SerializeField] private Button PriestButton;
-    [SerializeField] private Button NecromancerButton;
-    [SerializeField] private Button PaladinButton;
-    [SerializeField] private Button MageButton;
-    [SerializeField] private Button DruidButton;
-    [SerializeField] private Button BardButton;
-    [SerializeField] private Button ThiefButton;
-    [SerializeField] private Button SwordsmanButton;
+    //[SerializeField] private Button ArcherButton;
+    //[SerializeField] private Button KnightButton;
+    //[SerializeField] private Button WarriorButton;
+    //[SerializeField] private Button MonkButton;
+    //[SerializeField] private Button PriestButton;
+    //[SerializeField] private Button NecromancerButton;
+    //[SerializeField] private Button PaladinButton;
+    //[SerializeField] private Button MageButton;
+    //[SerializeField] private Button DruidButton;
+    //[SerializeField] private Button BardButton;
+    //[SerializeField] private Button ThiefButton;
+    //[SerializeField] private Button SwordsmanButton;
+
+    [SerializeField] private Button Left;
+    [SerializeField] private Button Right;
+
+    [SerializeField] private Button StrengthInfo;
+    [SerializeField] private Button DefenseInfo;
+    [SerializeField] private Button CriticalInfo;
+    [SerializeField] private Button EvasionInfo;
+
+    [SerializeField] private TMP_Text ClassNameText;
+    [SerializeField] private TMP_Text Stats;
+    
+    [SerializeField] private TMP_Text EquipmentText;
+    [SerializeField] private TMP_Text SkillsText;
 
     // Character Creator Finish Buttons
     [SerializeField] private Button Accept;
@@ -49,6 +64,7 @@ public class CharacterCreatorManager : MonoBehaviour
     private bool done;
     private List<CharacterData> charData;
     private ClassType characterClass;
+    private int numClasses = Enum.GetNames(typeof(ClassType)).Length;
 
     void Start()
     {
@@ -56,89 +72,112 @@ public class CharacterCreatorManager : MonoBehaviour
         done = false;
         charData = Data.charData ?? new List<CharacterData>();
         characterClass = ClassType.Archer;
-        ArcherButton.gameObject.GetComponent<Image>().color = Color.green;
-
+        
         NameError.SetActive(false);
 
         Accept.onClick.AddListener(acceptListener);
         Cancel.onClick.AddListener(cancelListener);
 
-        ArcherButton.onClick.AddListener(() => {
-            ClassAnimator.runtimeAnimatorController = Archer;
-            DisableAllClasses();
-            ArcherButton.gameObject.GetComponent<Image>().color = Color.green;
-            characterClass = ClassType.Archer;
-        });
-        WarriorButton.onClick.AddListener(() => {
-            ClassAnimator.runtimeAnimatorController = Warrior;
-            DisableAllClasses();
-            WarriorButton.gameObject.GetComponent<Image>().color = Color.green;
-            characterClass = ClassType.Warrior;
-        });
-        PaladinButton.onClick.AddListener(() => {
-            ClassAnimator.runtimeAnimatorController = Paladin;
-            DisableAllClasses();
-            PaladinButton.gameObject.GetComponent<Image>().color = Color.green;
-            characterClass = ClassType.Paladin;
-        });
-        ThiefButton.onClick.AddListener(() => {
-            ClassAnimator.runtimeAnimatorController = Thief;
-            DisableAllClasses();
-            ThiefButton.gameObject.GetComponent<Image>().color = Color.green;
-            characterClass = ClassType.Thief;
-        });
-        PriestButton.onClick.AddListener(() => {
-            ClassAnimator.runtimeAnimatorController = Priest;
-            DisableAllClasses();
-            PriestButton.gameObject.GetComponent<Image>().color = Color.green;
-            characterClass = ClassType.Priest;
-        });
-        MageButton.onClick.AddListener(() => {
-            ClassAnimator.runtimeAnimatorController = Mage;
-            DisableAllClasses();
-            MageButton.gameObject.GetComponent<Image>().color = Color.green;
-            characterClass = ClassType.Mage;
-        });
-        MonkButton.onClick.AddListener(() => {
-            ClassAnimator.runtimeAnimatorController = Monk;
-            DisableAllClasses();
-            MonkButton.gameObject.GetComponent<Image>().color = Color.green;
-            characterClass = ClassType.Monk;
-        });
-        NecromancerButton.onClick.AddListener(() => {
-            ClassAnimator.runtimeAnimatorController = Necromancer;
-            DisableAllClasses();
-            NecromancerButton.gameObject.GetComponent<Image>().color = Color.green;
-            characterClass = ClassType.Necromancer;
-        });
-        BardButton.onClick.AddListener(() => {
-            ClassAnimator.runtimeAnimatorController = Bard;
-            DisableAllClasses();
-            BardButton.gameObject.GetComponent<Image>().color = Color.green;
-            characterClass = ClassType.Bard;
-        });
-        KnightButton.onClick.AddListener(() => {
-            ClassAnimator.runtimeAnimatorController = Knight;
-            DisableAllClasses();
-            KnightButton.gameObject.GetComponent<Image>().color = Color.green;
-            characterClass = ClassType.Knight;
-        });
-        DruidButton.onClick.AddListener(() => {
-            ClassAnimator.runtimeAnimatorController = Druid;
-            DisableAllClasses();
-            DruidButton.gameObject.GetComponent<Image>().color = Color.green;
-            characterClass = ClassType.Druid;
-        });
-        SwordsmanButton.onClick.AddListener(() => {
-            ClassAnimator.runtimeAnimatorController = Swordsman;
-            DisableAllClasses();
-            SwordsmanButton.gameObject.GetComponent<Image>().color = Color.green;
-            characterClass = ClassType.Swordsman;
-        });
+        Left.onClick.AddListener(LeftListener);
+        Right.onClick.AddListener(RightListener);
+
+        PopulateClassInfo();
     }
 
     private void Update()
     {
+    }
+
+    private void LeftListener()
+    {
+        int classInt = (int) characterClass - 1;
+        if (classInt < 0) classInt = numClasses - 1;
+        characterClass = (ClassType)(classInt);
+
+        PopulateClassInfo();
+    }
+
+    private void RightListener()
+    {
+        int classInt = (int)characterClass + 1;
+        if (classInt >= numClasses) classInt = 0;
+        characterClass = (ClassType)(classInt);
+
+        PopulateClassInfo();
+    }
+
+    private void PopulateClassInfo()
+    {
+        if (characterClass == ClassType.Archer)
+        {
+            ClassAnimator.runtimeAnimatorController = Archer;
+        }
+        if (characterClass == ClassType.Warrior)
+        {
+            ClassAnimator.runtimeAnimatorController = Warrior;
+        }
+        if (characterClass == ClassType.Priest)
+        {
+            ClassAnimator.runtimeAnimatorController = Priest;
+        }
+        if (characterClass == ClassType.Paladin)
+        {
+            ClassAnimator.runtimeAnimatorController = Paladin;
+        }
+        if (characterClass == ClassType.Necromancer)
+        {
+            ClassAnimator.runtimeAnimatorController = Necromancer;
+        }
+        if (characterClass == ClassType.Thief)
+        {
+            ClassAnimator.runtimeAnimatorController = Thief;
+        }
+        if (characterClass == ClassType.Mage)
+        {
+            ClassAnimator.runtimeAnimatorController = Mage;
+        }
+        if (characterClass == ClassType.Monk)
+        {
+            ClassAnimator.runtimeAnimatorController = Monk;
+        }
+        if (characterClass == ClassType.Druid)
+        {
+            ClassAnimator.runtimeAnimatorController = Druid;
+        }
+        if (characterClass == ClassType.Bard)
+        {
+            ClassAnimator.runtimeAnimatorController = Bard;
+        }
+        if (characterClass == ClassType.Knight)
+        {
+            ClassAnimator.runtimeAnimatorController = Knight;
+        }
+        if (characterClass == ClassType.Swordsman)
+        {
+            ClassAnimator.runtimeAnimatorController = Swordsman;
+        }
+        ClassNameText.text = characterClass.ToString();
+
+        ClassStats stats = CharacterClass.GetClassStats(characterClass);
+
+        Stats.text = $"{stats.strength}\n{stats.defense}\n{stats.critical}\n{stats.evasion}";
+
+        if (stats.equipment == null) return;
+
+        String equipmentText = "";
+        foreach(Equipment e in stats.equipment)
+        {
+            equipmentText += $"-{e.itemName}\n";
+        }
+
+        String skillText = "";
+        foreach(Skill s in stats.skills)
+        {
+            skillText += $"-{s.skillName}\n";
+        }
+
+        EquipmentText.text = equipmentText;
+        SkillsText.text = skillText;
     }
 
     void acceptListener()
@@ -173,19 +212,5 @@ public class CharacterCreatorManager : MonoBehaviour
         SceneManager.LoadScene("Title", LoadSceneMode.Single);
     }
 
-    void DisableAllClasses()
-    {
-        ArcherButton.gameObject.GetComponent<Image>().color = Color.white;
-        WarriorButton.gameObject.GetComponent<Image>().color = Color.white;
-        KnightButton.gameObject.GetComponent<Image>().color = Color.white;
-        MonkButton.gameObject.GetComponent<Image>().color = Color.white;
-        MageButton.gameObject.GetComponent<Image>().color = Color.white;
-        NecromancerButton.gameObject.GetComponent<Image>().color = Color.white;
-        BardButton.gameObject.GetComponent<Image>().color = Color.white;
-        ThiefButton.gameObject.GetComponent<Image>().color = Color.white;
-        PaladinButton.gameObject.GetComponent<Image>().color = Color.white;
-        SwordsmanButton.gameObject.GetComponent<Image>().color = Color.white;
-        DruidButton.gameObject.GetComponent<Image>().color = Color.white;
-        PriestButton.gameObject.GetComponent<Image>().color = Color.white;
-    }
+    
 }
