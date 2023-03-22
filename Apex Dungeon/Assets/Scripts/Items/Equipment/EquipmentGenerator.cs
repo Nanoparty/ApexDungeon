@@ -378,7 +378,7 @@ public class EquipmentGenerator : ScriptableObject
         return equipment;
     }
 
-    public Equipment GenerateEquipOfTypeNoPickup(int inputLevel, string inputType, int inputTier, bool ranged)
+    public Equipment GenerateEquipOfTypeNoPickup(int inputLevel, string inputType, int inputTier, bool ranged = false)
     {
         level = inputLevel;
         type = inputType;
