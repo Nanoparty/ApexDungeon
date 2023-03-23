@@ -36,6 +36,11 @@ public class CharacterCreatorManager : MonoBehaviour
     [SerializeField] private Button CriticalInfo;
     [SerializeField] private Button EvasionInfo;
 
+    [SerializeField] private GameObject StrengthDescription;
+    [SerializeField] private GameObject DefenseDescription;
+    [SerializeField] private GameObject EvasionDescription;
+    [SerializeField] private GameObject CriticalDescription;
+
     [SerializeField] private TMP_Text ClassNameText;
     [SerializeField] private TMP_Text Stats;
     
@@ -68,6 +73,11 @@ public class CharacterCreatorManager : MonoBehaviour
 
     void Start()
     {
+        StrengthDescription.SetActive(false);
+        DefenseDescription.SetActive(false);
+        EvasionDescription.SetActive(false);
+        CriticalDescription.SetActive(false);
+
         taken = Data.names ?? new List<string>();
         done = false;
         charData = Data.charData ?? new List<CharacterData>();
@@ -80,6 +90,11 @@ public class CharacterCreatorManager : MonoBehaviour
 
         Left.onClick.AddListener(LeftListener);
         Right.onClick.AddListener(RightListener);
+
+        StrengthInfo.onClick.AddListener(() => { StrengthDescription.SetActive(true); });
+        DefenseInfo.onClick.AddListener(() => { DefenseDescription.SetActive(true); });
+        CriticalInfo.onClick.AddListener(() => { CriticalDescription.SetActive(true); });
+        EvasionInfo.onClick.AddListener(() => { EvasionDescription.SetActive(true); });
 
         PopulateClassInfo();
     }
@@ -210,6 +225,14 @@ public class CharacterCreatorManager : MonoBehaviour
     {
         SoundManager.sm.PlayMenuSound();
         SceneManager.LoadScene("Title", LoadSceneMode.Single);
+    }
+
+    public void CloseDescriptions()
+    {
+        StrengthDescription.SetActive(false);
+        DefenseDescription.SetActive(false);
+        EvasionDescription.SetActive(false);
+        CriticalDescription.SetActive(false);
     }
 
     

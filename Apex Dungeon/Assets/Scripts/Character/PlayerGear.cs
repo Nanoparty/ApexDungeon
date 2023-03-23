@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using UnityEngine;
 
 public class PlayerGear
@@ -57,6 +58,56 @@ public class PlayerGear
         if (!p.ring.empty) Ring = new Equipment(p.ring, il);
 
 
+    }
+
+    public void EquipGear(Equipment e, Player player)
+    {
+        if (e.type == "helmet")
+        {
+            Helmet = e;
+        }
+        if (e.type == "chestplate")
+        {
+            Chestplate = e;
+        }
+        if (e.type == "legs")
+        {
+            Legs = e;
+        }
+        if (e.type == "boots")
+        {
+            Feet = e;
+        }
+        if (e.type == "weapon")
+        {
+            Weapon = e;
+            player.attackRange = e.range;
+            Debug.Log("Range:" + e.range);
+        }
+        if (e.type == "shield")
+        {
+            Secondary = e;
+        }
+        if (e.type == "necklace")
+        {
+            Necklace = e;
+        }
+        if (e.type == "ring")
+        {
+            Ring = e;
+        }
+
+        int att = e.attack;
+        int hp = e.defense;
+        int crit = e.crit;
+        int intel = e.intelligence;
+        int evade = e.evade;
+
+        player.AddAttack(att);
+        player.AddBaseHP(hp);
+        player.AddCrit(crit);
+        player.AddIntelligence(intel);
+        player.AddEvade(evade);
     }
     
 }

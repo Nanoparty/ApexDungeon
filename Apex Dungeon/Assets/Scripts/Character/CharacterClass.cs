@@ -40,10 +40,10 @@ public class CharacterClass
         {
             return new ClassStats
             {
-                strength = 10,
-                defense = 10,
-                critical = 10,
-                evasion = 10,
+                strength = 12,
+                defense = 12,
+                critical = 8,
+                evasion = 8,
                 equipment = new List<Equipment>() { 
                     eg.GenerateEquipOfTypeNoPickup(1, "weapon", 2),
                     eg.GenerateEquipOfTypeNoPickup(1, "shield", 1)
@@ -59,8 +59,8 @@ public class CharacterClass
             return new ClassStats
             {
                 strength = 10,
-                defense = 10,
-                critical = 10,
+                defense = 8,
+                critical = 12,
                 evasion = 10,
                 equipment = new List<Equipment>() { eg.GenerateEquipOfTypeNoPickup(1, "weapon", 3, true) },
                 skills = new List<Skill>() { 
@@ -73,10 +73,10 @@ public class CharacterClass
         {
             return new ClassStats
             {
-                strength = 10,
-                defense = 10,
-                critical = 10,
-                evasion = 10,
+                strength = 8,
+                defense = 8,
+                critical = 12,
+                evasion = 12,
                 equipment = new List<Equipment>() { eg.GenerateEquipOfTypeNoPickup(1, "weapon", 2, false) },
                 skills = new List<Skill>() { 
                     sg.GetSkill(Skill.SkillType.Slash), 
@@ -88,9 +88,9 @@ public class CharacterClass
         {
             return new ClassStats
             {
-                strength = 10,
+                strength = 8,
                 defense = 10,
-                critical = 10,
+                critical = 12,
                 evasion = 10,
                 equipment = new List<Equipment>() { eg.GenerateEquipOfTypeNoPickup(1, "weapon", 2, false) },
                 skills = new List<Skill>() { 
@@ -104,9 +104,9 @@ public class CharacterClass
             return new ClassStats
             {
                 strength = 10,
-                defense = 10,
-                critical = 10,
-                evasion = 10,
+                defense = 8,
+                critical = 14,
+                evasion = 8,
                 equipment = new List<Equipment>() { eg.GenerateEquipOfTypeNoPickup(1, "weapon", 1, true) },
                 skills = new List<Skill>() { 
                     sg.GetSkill(Skill.SkillType.Hypnosis),
@@ -118,10 +118,10 @@ public class CharacterClass
         {
             return new ClassStats
             {
-                strength = 10,
-                defense = 10,
-                critical = 10,
-                evasion = 10,
+                strength = 12,
+                defense = 4,
+                critical = 12,
+                evasion = 12,
                 equipment = new List<Equipment>() { eg.GenerateEquipOfTypeNoPickup(1, "weapon", 1, false) },
                 skills = new List<Skill>() { 
                     sg.GetSkill(Skill.SkillType.Stealth), 
@@ -134,9 +134,9 @@ public class CharacterClass
             return new ClassStats
             {
                 strength = 10,
-                defense = 10,
+                defense = 8,
                 critical = 10,
-                evasion = 10,
+                evasion = 12,
                 equipment = new List<Equipment>() { eg.GenerateEquipOfTypeNoPickup(1, "weapon", 1, false) },
                 skills = new List<Skill>() { 
                     sg.GetSkill(Skill.SkillType.Bless), 
@@ -148,10 +148,10 @@ public class CharacterClass
         {
             return new ClassStats
             {
-                strength = 10,
-                defense = 10,
-                critical = 10,
-                evasion = 10,
+                strength = 8,
+                defense = 12,
+                critical = 12,
+                evasion = 8,
                 equipment = new List<Equipment>() {
                     eg.GenerateEquipOfTypeNoPickup(1, "weapon", 2),
                     eg.GenerateEquipOfTypeNoPickup(1, "shield", 1)
@@ -166,10 +166,10 @@ public class CharacterClass
         {
             return new ClassStats
             {
-                strength = 10,
-                defense = 10,
-                critical = 10,
-                evasion = 10,
+                strength = 12,
+                defense = 8,
+                critical = 12,
+                evasion = 8,
                 equipment = new List<Equipment>() { eg.GenerateEquipOfTypeNoPickup(1, "weapon", 3) },
                 skills = new List<Skill>() { 
                     sg.GetSkill(Skill.SkillType.Headbutt), 
@@ -181,10 +181,10 @@ public class CharacterClass
         {
             return new ClassStats
             {
-                strength = 10,
-                defense = 10,
-                critical = 10,
-                evasion = 10,
+                strength = 16,
+                defense = 8,
+                critical = 8,
+                evasion = 8,
                 equipment = new List<Equipment>() { eg.GenerateEquipOfTypeNoPickup(1, "weapon", 2, false) },
                 skills = new List<Skill>() { 
                     sg.GetSkill(Skill.SkillType.LifeDrain), 
@@ -195,10 +195,10 @@ public class CharacterClass
         {
             return new ClassStats
             {
-                strength = 10,
-                defense = 10,
+                strength = 14,
+                defense = 8,
                 critical = 10,
-                evasion = 10,
+                evasion = 8,
                 equipment = new List<Equipment>() { eg.GenerateEquipOfTypeNoPickup(1, "weapon", 2, false) },
                 skills = new List<Skill>() { 
                     sg.GetSkill(Skill.SkillType.Teleport), 
@@ -210,10 +210,10 @@ public class CharacterClass
         {
             return new ClassStats
             {
-                strength = 10,
-                defense = 10,
-                critical = 10,
-                evasion = 10,
+                strength = 6,
+                defense = 6,
+                critical = 14,
+                evasion = 14,
                 equipment = new List<Equipment>() { eg.GenerateEquipOfTypeNoPickup(1, "weapon", 2, false) },
                 skills = new List<Skill>() { 
                     sg.GetSkill(Skill.SkillType.WhirlwindStrike), 

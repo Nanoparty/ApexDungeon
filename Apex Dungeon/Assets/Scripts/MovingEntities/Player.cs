@@ -283,17 +283,11 @@ public class Player : MovingEntity
         entityName = playerName;
 
         mp = 100;
-        maxMp = 50;
+        maxMp = 100;
         expLevel = 1;
         exp = 0;
         maxExp = 100;
         attack = 10;
-        strength = 10;
-        attack = 10;
-        defense = 10;
-        intelligence = 10;
-        critical = 10;
-        evade = 10;
         blockStat = 10;
         type = 1;
         gold = 0;
@@ -306,13 +300,6 @@ public class Player : MovingEntity
 
         skipDelay = 1.0f;
         projectileDelay = 0.5f;
-
-        skills.Add(GameManager.gmInstance.SkillGenerator.Fireball);
-        skills.Add(GameManager.gmInstance.SkillGenerator.Hypnosis);
-        skills.Add(GameManager.gmInstance.SkillGenerator.LightningBolt);
-        skills.Add(GameManager.gmInstance.SkillGenerator.IceShard);
-        skills.Add(GameManager.gmInstance.SkillGenerator.PoisonSpike);
-
 
         // Set ClassType Variables
         {
@@ -365,6 +352,23 @@ public class Player : MovingEntity
                 sl.spriteLibraryAsset = PriestLibrary;
             }
         }
+
+        ClassStats classStats = CharacterClass.GetClassStats(Data.characterClass);
+        strength = classStats.strength;
+        defense = classStats.defense;
+        critical = classStats.critical;
+        evade = classStats.evasion;
+
+        foreach(Equipment e in classStats.equipment)
+        {
+            //journal.addEquipment(e);
+            gear.EquipGear(e, this);
+        }
+
+        foreach(Skill s in classStats.skills)
+        {
+            skills.Add(s);
+        }
     }
 
     protected  void InitializeObjects() {
@@ -396,13 +400,13 @@ public class Player : MovingEntity
         stairsModal.transform.GetChild(2).GetComponent<Button>().onClick.AddListener(StairsReject);
         stairsModal.transform.GetChild(3).GetComponent<Button>().onClick.AddListener(StairsConfirm);
 
-        GameObject g = GameManager.gmInstance.equipmentGenerator.GenerateEquipOfType(1, "weapon", 4, true);
-        journal.addEquipment(g.GetComponent<Pickup>().GetItem());
+        //GameObject g = GameManager.gmInstance.equipmentGenerator.GenerateEquipOfType(1, "weapon", 4, true);
+        //journal.addEquipment(g.GetComponent<Pickup>().GetItem());
 
-        GameObject g2 = GameManager.gmInstance.equipmentGenerator.GenerateEquipOfType(1, "weapon", 3, true);
-        Equipment e = (Equipment)g2.GetComponent<Pickup>().GetItem();
-        Debug.Log("Range: " + e.range);
-        journal.addEquipment(g2.GetComponent<Pickup>().GetItem());
+        //GameObject g2 = GameManager.gmInstance.equipmentGenerator.GenerateEquipOfType(1, "weapon", 3, true);
+        //Equipment e = (Equipment)g2.GetComponent<Pickup>().GetItem();
+        //Debug.Log("Range: " + e.range);
+        //journal.addEquipment(g2.GetComponent<Pickup>().GetItem());
 
         ArrowPrefab = Resources.Load<GameObject>("Projectiles/Arrow");
     }
