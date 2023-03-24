@@ -86,7 +86,7 @@ public class Equipment : Item
         spriteIndex = gear.spriteIndex;
         etype = Enum.Parse<EquipType>(gear.equipType);
         image = il.getEquipmentImage(tier, type);
-
+        range = gear.range;
         
     }
 

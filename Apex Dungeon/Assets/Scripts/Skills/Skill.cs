@@ -67,6 +67,9 @@ public class Skill
     public GameObject spawn;
     public bool hasProjectile;
 
+    public MovingEntity caster;
+    public MovingEntity target;
+
     public Skill(SkillType type, Sprite image, Sprite projectile)
         : this(type, image)
     {
@@ -424,6 +427,7 @@ public class Skill
 
     public bool Activate(MovingEntity caster, int row, int col)
     {
+        this.caster = caster;
         if (caster.GetMP() < manaCost)
         {
             return false;
@@ -464,6 +468,8 @@ public class Skill
         {
             GameManager.gmInstance.Log.AddLog($">{caster.entityName} used {skillName} on {target.entityName}.");
         }
+
+        if (target != null) { this.target = target; }
          
 
         caster.AddMp(-manaCost);
@@ -698,10 +704,10 @@ public class Skill
                 // Move target back 1 tile
                 int rdif = target.GetRow() - caster.GetRow();
                 int cdif = target.GetCol() - caster.GetCol();
-                //if (!GameManager.gmInstance.Dungeon.tileMap[rdif, cdif].getBlocked())
-                //{
-                //    target.SetPosition(target.GetRow() + rdif, target.GetCol() + cdif);
-                //}
+                if (!GameManager.gmInstance.Dungeon.tileMap[target.GetRow() + rdif, target.GetCol() + cdif].getBlocked())
+                {
+                    target.SetPosition(target.GetRow() + rdif, target.GetCol() + cdif);
+                }
                 break;
 
             case SkillType.Headbutt:
@@ -733,6 +739,23 @@ public class Skill
         }
         Debug.Log("End of Skill");
         return true;
+    }
+
+    public void OnFailure()
+    {
+        switch (type)
+        {
+            case SkillType.Dart:
+                //Add dart to inventory
+                GameObject dart = GameManager.gmInstance.consumableGenerator.CreateDart(GameManager.gmInstance.level);
+                ((Player)caster).journal.addItem(dart.GetComponent<Pickup>().GetItem());
+                break;
+            case SkillType.Rock:
+                //add stone to inventory
+                GameObject stone = GameManager.gmInstance.consumableGenerator.CreateStone(GameManager.gmInstance.level);
+                ((Player)caster).journal.addItem(stone.GetComponent<Pickup>().GetItem());
+                break;
+        }
     }
 
     IEnumerator ShootProjectile()

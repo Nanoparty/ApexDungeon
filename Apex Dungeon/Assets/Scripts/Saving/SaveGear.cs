@@ -20,6 +20,7 @@ public class SaveGear
     public bool empty;
     public int spriteIndex;
     public string equipType;
+    public int range;
     //public string subType;
 
     public SaveGear(Equipment e)
@@ -42,6 +43,7 @@ public class SaveGear
         description = e.description;
         spriteIndex = e.spriteIndex;
         equipType = e.etype.ToString();
+        range = e.range;
         
         //if (e.etype == EquipType.HELMET)
         //{

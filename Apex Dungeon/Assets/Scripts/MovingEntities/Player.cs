@@ -187,6 +187,7 @@ public class Player : MovingEntity
             if (root)
             {
                 interrupt = true;
+                AddTextPopup("Rooted", ColorManager.ROOT);
             }
 
             // Look for interrupts
@@ -541,6 +542,11 @@ public class Player : MovingEntity
                             }
                         }
                     }
+                    else
+                    {
+                        activeSkill.OnFailure();
+                    }
+
                     activeSkill = null;
 
                     return castSuccessful;
