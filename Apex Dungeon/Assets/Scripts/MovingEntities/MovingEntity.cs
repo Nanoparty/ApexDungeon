@@ -178,7 +178,10 @@ public abstract class MovingEntity : MonoBehaviour
             return false;
         }
 
-        if (root) { return false; }
+        if (root) {
+            AddTextPopup("Rooted", ColorManager.ROOT);
+            return false;
+        }
 
         if (atTarget)
         {
