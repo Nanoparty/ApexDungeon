@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class cloud_scroll : MonoBehaviour
+public class TextureScroller : MonoBehaviour
 {
-    float scrollSpeed = 0.1f;
+    public float scrollSpeed = 0.1f;
     MeshRenderer rend;
 
     void Start()

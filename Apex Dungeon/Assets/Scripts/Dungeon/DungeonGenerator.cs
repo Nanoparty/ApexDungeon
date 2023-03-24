@@ -776,7 +776,7 @@ public class DungeonGenerator : ScriptableObject
         {
             // Spawn Consumable
             float coin = Random.Range(0f, 1f);
-            if (true)//(coin <= .3f)
+            if (coin <= .3f)
             {
                 Room room = rooms[i];
                 bool valid = false;
@@ -797,7 +797,6 @@ public class DungeonGenerator : ScriptableObject
                 {
                     Vector3 position = new Vector3(col, row, 0f);
                     GameObject item = GameManager.gmInstance.consumableGenerator.CreateRandomConsumable(GameManager.gmInstance.level);
-                    //GameObject item = GameManager.gmInstance.consumableGenerator.foodGenerator.CreateRandomFood();
                     item.transform.parent = itemContainer.transform;
                     item.transform.position = position;
                     item.GetComponent<Pickup>().SetLocation(row, col);

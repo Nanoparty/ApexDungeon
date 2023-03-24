@@ -45,6 +45,11 @@ public class ImageLookup : ScriptableObject
     public Sprite Axe;
     public Sprite Hammer;
 
+    public Sprite Slingshot;
+    public Sprite Shortbow;
+    public Sprite Longbow;
+    public Sprite Crossbow;
+
     public Sprite LeatherShield;
     public Sprite IronShield;
     public Sprite GoldShield;
@@ -120,7 +125,7 @@ public class ImageLookup : ScriptableObject
         return images[id];
     }
 
-    public Sprite getEquipmentImage(int tier, string type)
+    public Sprite getEquipmentImage(int tier, string type, int range = 1)
     {
         Sprite image = LeatherBoots;
         switch (type)
@@ -194,21 +199,43 @@ public class ImageLookup : ScriptableObject
                 }
                 break;
             case "weapon":
-                switch (tier)
+                if (range > 1)
                 {
-                    case 1:
-                        image = Dagger;
-                        break;
-                    case 2:
-                        image = Sword;
-                        break;
-                    case 3:
-                        image = Hammer;
-                        break;
-                    case 4:
-                        image = Axe;
-                        break;
+                    switch (tier)
+                    {
+                        case 1:
+                            image = Slingshot;
+                            break;
+                        case 2:
+                            image = Shortbow;
+                            break;
+                        case 3:
+                            image = Longbow;
+                            break;
+                        case 4:
+                            image = Crossbow;
+                            break;
+                    }
                 }
+                else
+                {
+                    switch (tier)
+                    {
+                        case 1:
+                            image = Dagger;
+                            break;
+                        case 2:
+                            image = Sword;
+                            break;
+                        case 3:
+                            image = Hammer;
+                            break;
+                        case 4:
+                            image = Axe;
+                            break;
+                    }
+                }
+                
                 break;
             case "shield":
                 switch (tier)
