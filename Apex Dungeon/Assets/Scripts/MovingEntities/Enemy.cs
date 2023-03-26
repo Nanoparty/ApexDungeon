@@ -73,13 +73,17 @@ public class Enemy : MovingEntity
     {
         if (other.gameObject.CompareTag("Trap"))
         {
-            if (!typeof(MagicTrap).IsInstanceOfType(other.GetComponent<Trap>()))
+            if (typeof(MagicTrap).IsInstanceOfType(other.GetComponent<Trap>()))
             {
                 return;
             }
             if (other.GetComponent<Trap>().canActivate(this))
             {
                 GameManager.gmInstance.Log.AddLog($">{entityName} activates {other.GetComponent<Trap>().trapName}.");
+            }
+            else
+            {
+                Debug.Log("Trap cant trigger");
             }
             
             other.GetComponent<Trap>().TriggerTrap(this);

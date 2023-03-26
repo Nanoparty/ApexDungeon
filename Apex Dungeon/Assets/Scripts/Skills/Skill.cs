@@ -323,7 +323,7 @@ public class Skill
                 canTargetSelf = false;
                 canTargetLocation = true;
                 skillName = "Trap";
-                description = "Place a bear trap at target location.";
+                description = "Place a bear trap at target location. Inflicts Bleed and Root when triggered.";
                 break;
 
             case SkillType.FlamePalm:

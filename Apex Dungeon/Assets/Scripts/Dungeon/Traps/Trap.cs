@@ -54,7 +54,7 @@ public class Trap : MonoBehaviour
 
         me.TakeDamage(-damage, Color.red);
         me.AddStatusEffect(new StatusEffect(StatusEffect.EffectType.bleed, 5, StatusEffect.EffectOrder.End));
-
+        me.AddStatusEffect(new StatusEffect(StatusEffect.EffectType.root, 5, StatusEffect.EffectOrder.Status));
         DestroyTrap();
     }
 
@@ -82,7 +82,6 @@ public class Trap : MonoBehaviour
 
     public virtual bool canActivate(MovingEntity e)
     {
-        
         return true;
     }
 }
