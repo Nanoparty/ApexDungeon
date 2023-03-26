@@ -52,17 +52,8 @@ public class Trap : MonoBehaviour
     {
         if (disarmed) return;
 
-        if (typeof(Player).IsInstanceOfType(me))
-        {
-            Player player = (Player)me;
-            player.TakeDamage(-damage, Color.red);
-            player.AddStatusEffect(new StatusEffect(StatusEffect.EffectType.bleed, 5, StatusEffect.EffectOrder.End));
-        }
-        if (typeof(Enemy).IsInstanceOfType(me)){
-            Enemy enemy = (Enemy)me;
-            enemy.TakeDamage(-damage, Color.red);
-            enemy.AddStatusEffect(new StatusEffect(StatusEffect.EffectType.bleed, 5, StatusEffect.EffectOrder.End));
-        }
+        me.TakeDamage(-damage, Color.red);
+        me.AddStatusEffect(new StatusEffect(StatusEffect.EffectType.bleed, 5, StatusEffect.EffectOrder.End));
 
         DestroyTrap();
     }

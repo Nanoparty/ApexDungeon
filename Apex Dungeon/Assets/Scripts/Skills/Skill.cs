@@ -66,6 +66,7 @@ public class Skill
     public Sprite projectile;
     public GameObject spawn;
     public bool hasProjectile;
+    public int power;
 
     public MovingEntity caster;
     public MovingEntity target;
@@ -90,6 +91,7 @@ public class Skill
         this.hasProjectile = hasProjectile;
         manaCost = 0;
         healthCost = 0;
+        power = 0;
 
     }
 
@@ -139,6 +141,7 @@ public class Skill
                 skillName = "Fireball";
                 description = "Cast fireball at target. Chance to cause Burn.";
                 hasProjectile = true;
+                power = 200;
                 break;
 
             case SkillType.IceShard:
@@ -148,6 +151,7 @@ public class Skill
                 skillName = "Ice Shard";
                 description = "Cast ice shard at target. Chance to cause Frostbite.";
                 hasProjectile = true;
+                power = 200;
                 break;
 
             case SkillType.LightningBolt:
@@ -157,6 +161,7 @@ public class Skill
                 skillName = "Lightning Bolt";
                 description = "Cast lightning bolt at target. Chance to cause Electrified.";
                 hasProjectile = true;
+                power = 200;
                 break;
 
             case SkillType.Restore:
@@ -184,7 +189,8 @@ public class Skill
                 manaCost = 10;
                 range = 1;
                 skillName = "Lacerate";
-                description = "Afflict target with bleeding.";
+                description = "Slice target and afflict target with bleeding.";
+                power = 150;
                 break;
 
             case SkillType.BloodCurse:
@@ -234,6 +240,7 @@ public class Skill
                 range = 1;
                 skillName = "Life Drain";
                 description = "Absorb HP from target.";
+                power = 80;
                 break;
 
             case SkillType.ManaDrain:
@@ -241,6 +248,7 @@ public class Skill
                 range = 1;
                 skillName = "Mana Drain";
                 description = "Absorb MP from target.";
+                power = 80;
                 break;
 
             case SkillType.Hypnosis:
@@ -271,6 +279,7 @@ public class Skill
                 skillName = "Poison Spike";
                 description = "Fires a poison spike at target. Chance to inflicts Poison.";
                 hasProjectile = true;
+                power = 200;
                 break;
 
             case SkillType.WhirlwindStrike:
@@ -278,6 +287,7 @@ public class Skill
                 range = 0;
                 skillName = "Whirlwind Strike";
                 description = "Attack all enemies within 1 tile.";
+                power = 150;
                 break;
 
             case SkillType.Slash:
@@ -286,6 +296,7 @@ public class Skill
                 canTargetSelf = true;
                 skillName = "Slash";
                 description = "Slash target with blade. Chance to bleed.";
+                power = 200;
                 break;
 
             case SkillType.Scratch:
@@ -294,6 +305,7 @@ public class Skill
                 canTargetSelf = false;
                 skillName = "Scratch";
                 description = "Scratch target with claws. Chance to bleed.";
+                power = 200;
                 break;
 
             case SkillType.Pound:
@@ -302,6 +314,7 @@ public class Skill
                 canTargetSelf = false;
                 skillName = "Pound";
                 description = "Pound target with body. Chance to cause paralysis.";
+                power = 200;
                 break;
 
             case SkillType.Trap:
@@ -319,6 +332,7 @@ public class Skill
                 canTargetSelf = false;
                 skillName = "Flame Palm";
                 description = "Attack target with flaming strike. Chance to cause Burn.";
+                power = 250;
                 break;
 
             case SkillType.IcePalm:
@@ -327,6 +341,7 @@ public class Skill
                 canTargetSelf = false;
                 skillName = "Ice Palm";
                 description = "Attack target with freezing strike. Chance to cause Frostbite.";
+                power = 250;
                 break;
 
             case SkillType.StaticPalm:
@@ -335,6 +350,7 @@ public class Skill
                 canTargetSelf = false;
                 skillName = "Static Palm";
                 description = "Attack target with electric strike. Chance to cause Electrified.";
+                power = 250;
                 break;
 
             case SkillType.PoisonPalm:
@@ -343,6 +359,7 @@ public class Skill
                 canTargetSelf = false;
                 skillName = "Poison Palm";
                 description = "Attack target with poison strike. Chance to cause Poison.";
+                power = 250;
                 break;
 
             case SkillType.MagicMissile:
@@ -351,6 +368,7 @@ public class Skill
                 canTargetSelf = false;
                 skillName = "Magic Missile";
                 description = "Fire magical bolt at target.";
+                power = 120;
                 break;
 
             case SkillType.Taunt:
@@ -388,6 +406,7 @@ public class Skill
                 canTargetSelf = false;
                 skillName = "Bash";
                 description = "Bash target with weapon. Knocks target back 1 tile.";
+                power = 200;
                 break;
 
             case SkillType.Headbutt:
@@ -396,6 +415,7 @@ public class Skill
                 canTargetSelf = false;
                 skillName = "Headbutt";
                 description = "Ram target with your head and deal heavy damage. Inflicts recoil on user.";
+                power = 250;
                 break;
 
             case SkillType.Thrust:
@@ -404,6 +424,7 @@ public class Skill
                 canTargetSelf = false;
                 skillName = "Thrust";
                 description = "Thrust weapon at target.";
+                power = 200;
                 break;
 
             case SkillType.Bite:
@@ -412,6 +433,7 @@ public class Skill
                 canTargetSelf = false;
                 skillName = "Bite";
                 description = "Bite target. Chance to cause Poison or Bleed.";
+                power = 200;
                 break;
 
             case SkillType.Stomp:
@@ -420,6 +442,7 @@ public class Skill
                 canTargetSelf = false;
                 skillName = "Stomp";
                 description = "Stomp on target. Chance to cause Paralysis.";
+                power = 200;
                 break;
 
         }
@@ -474,7 +497,26 @@ public class Skill
 
         caster.AddMp(-manaCost);
 
-        
+        float tempTargetDamage = 0f;
+        int dice = Random.Range(0, 100);
+        if (typeof(Player).IsInstanceOfType(caster))
+        {
+            Player p = (Player)caster;
+            if (dice <= (int)(p.GetCritical() * p.GetCriticalScale()))
+            {
+                tempTargetDamage = p.CalculateDamage(3);
+            }
+            else
+            {
+                tempTargetDamage = p.CalculateDamage();
+            }
+        }
+        else
+        {
+            tempTargetDamage = (int)caster.CalculateDamage();
+        }
+        int targetDamage = (int)(tempTargetDamage * (power / 100));
+
 
         switch (type)
         {
@@ -484,22 +526,19 @@ public class Skill
                 break;
 
             case SkillType.Fireball:
-                float damage = target.GetMaxHP() * 0.2f;
-                target.TakeDamage(-damage, ColorManager.FIRE);
+                target.TakeDamage(targetDamage, ColorManager.FIRE);
                 if (Random.Range(0, 100) <= 20)
                     target.AddStatusEffect(new StatusEffect(EffectType.burn, 5, EffectOrder.End));
                 break;
 
             case SkillType.IceShard:
-                damage = target.GetMaxHP() * 0.2f;
-                target.TakeDamage(-damage, ColorManager.ICE);
+                target.TakeDamage(targetDamage, ColorManager.ICE);
                 if (Random.Range(0, 100) <= 20)
                     target.AddStatusEffect(new StatusEffect(EffectType.freeze, 5, EffectOrder.End));
                 break;
 
             case SkillType.LightningBolt:
-                damage = target.GetMaxHP() * 0.2f;
-                target.TakeDamage(-damage, ColorManager.LIGHTNING);
+                target.TakeDamage(targetDamage, ColorManager.LIGHTNING);
                 if (Random.Range(0, 100) <= 20)
                     target.AddStatusEffect(new StatusEffect(EffectType.electric, 5, EffectOrder.End));
                 break;
@@ -517,6 +556,7 @@ public class Skill
                 break;
 
             case SkillType.Lacerate:
+                target.TakeDamage(targetDamage, ColorManager.BLEED);
                 target.AddStatusEffect(new StatusEffect(EffectType.bleed, 5, EffectOrder.End));
                 break;
 
@@ -544,24 +584,22 @@ public class Skill
                 break;
 
             case SkillType.LifeDrain:
-                float amount = target.GetMaxHP() * 0.2f;
-                target.TakeDamage(-amount, ColorManager.DAMAGE);
-                caster.TakeDamage(amount, ColorManager.HEAL);
+                target.TakeDamage(targetDamage, ColorManager.DAMAGE);
+                caster.TakeDamage(-targetDamage, ColorManager.HEAL);
                 break;
 
             case SkillType.ManaDrain:
-                amount = target.GetMaxMP() * 0.2f;
-                if (target.GetMP() < amount)
+                if (target.GetMP() < targetDamage)
                 {
-                    amount = target.GetMP();
+                    targetDamage = target.GetMP();
                 }
                 if (target.GetMP() == 0)
                 {
                     GameManager.gmInstance.Log.AddLog($">{target.entityName} has no MP left.");
                     break;
                 }
-                target.AddMp((int)-amount);
-                caster.AddMp((int)amount);
+                target.AddMp((int)targetDamage);
+                caster.AddMp((int)-targetDamage);
                 break;
 
             case SkillType.Hypnosis:
@@ -577,8 +615,7 @@ public class Skill
                 break;
 
             case SkillType.PoisonSpike:
-                damage = target.GetMaxHP() * 0.2f;
-                target.TakeDamage(-damage, ColorManager.POISON);
+                target.TakeDamage(targetDamage, ColorManager.POISON);
                 if (Random.Range(0, 100) <= 20)
                     target.AddStatusEffect(new StatusEffect(EffectType.poison, 5, EffectOrder.End));
                 break;
@@ -598,35 +635,30 @@ public class Skill
                 // Attack all entities
                 foreach (MovingEntity e in entities)
                 {
-                    damage = e.GetMaxHP() * 0.2f;
-                    e.TakeDamage(-damage, ColorManager.DAMAGE);
+                    e.TakeDamage(targetDamage, ColorManager.DAMAGE);
                 }
                 break;
 
             case SkillType.Slash:
-                damage = target.GetMaxHP() * 0.2f;
-                target.TakeDamage(-damage, ColorManager.DAMAGE);
+                target.TakeDamage(targetDamage, ColorManager.DAMAGE);
                 if (Random.Range(0, 100) <= 20)
                     target.AddStatusEffect(new StatusEffect(EffectType.bleed, 5, EffectOrder.End));
                 break;
 
             case SkillType.Scratch:
-                damage = target.GetMaxHP() * 0.2f;
-                target.TakeDamage(-damage, ColorManager.DAMAGE);
+                target.TakeDamage(targetDamage, ColorManager.DAMAGE);
                 if (Random.Range(0, 100) <= 10)
                     target.AddStatusEffect(new StatusEffect(EffectType.bleed, 5, EffectOrder.End));
                 break;
 
             case SkillType.Stomp:
-                damage = target.GetMaxHP() * 0.2f;
-                target.TakeDamage(-damage, ColorManager.DAMAGE);
+                target.TakeDamage(targetDamage, ColorManager.DAMAGE);
                 if (Random.Range(0, 100) <= 10)
                     target.AddStatusEffect(new StatusEffect(EffectType.paralysis, 5, EffectOrder.End));
                 break;
 
             case SkillType.Bite:
-                damage = target.GetMaxHP() * 0.2f;
-                target.TakeDamage(-damage, ColorManager.DAMAGE);
+                target.TakeDamage(targetDamage, ColorManager.DAMAGE);
                 if (Random.Range(0, 100) <= 10)
                     target.AddStatusEffect(new StatusEffect(EffectType.bleed, 5, EffectOrder.End));
                 else if (Random.Range(0, 100) <= 10)
@@ -634,49 +666,44 @@ public class Skill
                 break;
 
             case SkillType.Pound:
-                damage = target.GetMaxHP() * 0.2f;
-                target.TakeDamage(-damage, ColorManager.DAMAGE);
+                target.TakeDamage(targetDamage, ColorManager.DAMAGE);
                 if (Random.Range(0, 100) <= 10)
                     target.AddStatusEffect(new StatusEffect(EffectType.paralysis, 5, EffectOrder.Start));
                 break;
 
             case SkillType.Trap:
                 // Spawn trap
-                GameObject o = caster.SpawnObject(spawn, new Vector2(col, row));
+                GameObject trapPrefab = Resources.Load<GameObject>("Prefabs/Traps/Bear Trap");
+                GameObject o = caster.SpawnObject(trapPrefab, new Vector2(col, row));
                 o.GetComponent<Trap>().Setup(row, col, GameManager.gmInstance.level);
                 break;
 
             case SkillType.FlamePalm:
-                damage = target.GetMaxHP() * 0.2f;
-                target.TakeDamage(-damage, ColorManager.DAMAGE);
+                target.TakeDamage(targetDamage, ColorManager.DAMAGE);
                 if (Random.Range(0, 100) <= 20)
                     target.AddStatusEffect(new StatusEffect(EffectType.burn, 5, EffectOrder.End));
                 break;
 
             case SkillType.IcePalm:
-                damage = target.GetMaxHP() * 0.2f;
-                target.TakeDamage(-damage, ColorManager.DAMAGE);
+                target.TakeDamage(targetDamage, ColorManager.DAMAGE);
                 if (Random.Range(0, 100) <= 20)
                     target.AddStatusEffect(new StatusEffect(EffectType.freeze, 5, EffectOrder.End));
                 break;
 
             case SkillType.StaticPalm:
-                damage = target.GetMaxHP() * 0.2f;
-                target.TakeDamage(-damage, ColorManager.DAMAGE);
+                target.TakeDamage(targetDamage, ColorManager.DAMAGE);
                 if (Random.Range(0, 100) <= 20)
                     target.AddStatusEffect(new StatusEffect(EffectType.electric, 5, EffectOrder.End));
                 break;
 
             case SkillType.PoisonPalm:
-                damage = target.GetMaxHP() * 0.2f;
-                target.TakeDamage(-damage, ColorManager.DAMAGE);
+                target.TakeDamage(targetDamage, ColorManager.DAMAGE);
                 if (Random.Range(0, 100) <= 20)
                     target.AddStatusEffect(new StatusEffect(EffectType.poison, 5, EffectOrder.End));
                 break;
 
             case SkillType.MagicMissile:
-                damage = target.GetMaxHP() * 0.1f;
-                target.TakeDamage(-damage, ColorManager.DAMAGE);
+                target.TakeDamage(targetDamage, ColorManager.DAMAGE);
                 break;
 
             case SkillType.Taunt:
@@ -699,8 +726,7 @@ public class Skill
             //    break;
 
             case SkillType.Bash:
-                damage = target.GetMaxHP() * 0.2f;
-                target.TakeDamage(-damage, ColorManager.DAMAGE);
+                target.TakeDamage(targetDamage, ColorManager.DAMAGE);
                 // Move target back 1 tile
                 int rdif = target.GetRow() - caster.GetRow();
                 int cdif = target.GetCol() - caster.GetCol();
@@ -711,14 +737,12 @@ public class Skill
                 break;
 
             case SkillType.Headbutt:
-                damage = target.GetMaxHP() * 0.4f;
-                target.TakeDamage(-damage, ColorManager.DAMAGE);
+                target.TakeDamage(targetDamage, ColorManager.DAMAGE);
                 caster.TakeDamage(-((int)(caster.GetMaxHP() * 0.1f)), ColorManager.DAMAGE);
                 break;
 
             case SkillType.Thrust:
-                damage = target.GetMaxHP() * 0.2f;
-                target.TakeDamage(-damage, ColorManager.DAMAGE);
+                target.TakeDamage(targetDamage, ColorManager.DAMAGE);
                 break;
 
             case SkillType.BloodCurse:
@@ -726,13 +750,11 @@ public class Skill
                 break;
 
             case SkillType.Rock:
-                damage = target.GetMaxHP() * 0.2f;
-                target.TakeDamage(-damage, ColorManager.DAMAGE);
+                target.TakeDamage(targetDamage, ColorManager.DAMAGE);
                 break;
 
             case SkillType.Dart:
-                damage = target.GetMaxHP() * 0.2f;
-                target.TakeDamage(-damage, ColorManager.DAMAGE);
+                target.TakeDamage(targetDamage, ColorManager.DAMAGE);
                 break;
 
             default: { Debug.Log("Default"); return false; }

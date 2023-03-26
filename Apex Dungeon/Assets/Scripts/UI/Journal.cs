@@ -903,7 +903,13 @@ public class Journal : ScriptableObject
         Skill i = skills[selected];
         skillName.transform.gameObject.GetComponent<TMP_Text>().text = i.skillName;
         skillDesc.transform.gameObject.GetComponent<TMP_Text>().text = i.description;
-        skillRank.transform.gameObject.GetComponent<TMP_Text>().text = "Range: " + i.range + "\nMP Cost: " + i.manaCost;
+        string skillRankText = "";
+        skillRankText = "Range: " + i.range + "\nMP Cost: " + i.manaCost;
+        if (i.power > 0)
+        {
+            skillRankText += "\nPower: " + i.power;
+        }
+        skillRank.transform.gameObject.GetComponent<TMP_Text>().text = skillRankText;
 
         itemFrame1.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = i.image;
 
