@@ -171,14 +171,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   entityName: 
+  attackRange: 0
   silenced: 0
   stealth: 0
   invisible: 0
   root: 0
+  skipTurn: 0
+  interrupt: 0
+  sleeping: 0
   agro: 0
   agroRange: 0
+  heldMoney: 0
   canDisplayPopupText: 1
   popupTextDelay: 0.4
+  sleepEffectPrefab: {fileID: 0}
   moveTime: 0.1
   speed: 3
   blockingLayer:
@@ -187,6 +193,7 @@ MonoBehaviour:
   blood: {fileID: 6035910965898688361, guid: a4a0b7d015bed704c806ff555bd7f1a3, type: 3}
   damageText: {fileID: 3475315571993695346, guid: 2786e48bb15534cd281c669e73be8cdf,
     type: 3}
+  target: {x: 0, y: 0}
   poisonChance: 0.01
   bleedChance: 0.05
 --- !u!1 &4362196305097765883
@@ -285,8 +292,7 @@ SpriteRenderer:
   m_SortingLayerID: 2101249919
   m_SortingLayer: 8
   m_SortingOrder: 0
-  m_Sprite: {fileID: -1531452646499341357, guid: ad61afe0b8dcf514fa99c6bd5adce9d7,
-    type: 3}
+  m_Sprite: {fileID: 784010200977873938, guid: ad61afe0b8dcf514fa99c6bd5adce9d7, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -326,7 +332,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_CategoryHash: 0
   m_labelHash: 0
-  m_SpriteKey: 0.0015837022
+  m_SpriteKey: 4.441278e-26
 --- !u!1 &6754871517198136099
 GameObject:
   m_ObjectHideFlags: 0

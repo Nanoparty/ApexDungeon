@@ -6,15 +6,15 @@ using static StatusEffect;
 
 public class Enemy : MovingEntity
 {
-    SpriteRenderer sr;
-    SpriteRenderer healthBar;
+    protected SpriteRenderer sr;
+    protected SpriteRenderer healthBar;
 
-    private int pRow;
-    private int pCol;
+    protected int pRow;
+    protected int pCol;
 
-    Player player;
+    protected Player player;
 
-    private int floor;
+    protected int floor;
 
     protected MovingEntity enemyTarget;
 
@@ -207,18 +207,18 @@ public class Enemy : MovingEntity
         Destroy(this.gameObject);
     }
 
-    private void StartTurn()
+    protected void StartTurn()
     {
         ApplyStatusEffects("start");
     }
 
-    private void EndTurn()
+    protected void EndTurn()
     {
         ApplyStatusEffects("end");
         UpdateStatusEffectDuration();
     }
 
-    public bool MoveEnemy()
+    public virtual bool MoveEnemy()
     {
         if (!atTarget) return false;
 
@@ -276,7 +276,7 @@ public class Enemy : MovingEntity
         return true;
     }
 
-    void CheckPlayerMoved(Player player)
+    protected void CheckPlayerMoved(Player player)
     {
         if (player.GetRow() != pRow || player.GetCol() != pCol)
         {
@@ -379,7 +379,7 @@ public class Enemy : MovingEntity
         SetAttackAnimation(player.GetRow(), player.GetCol());
     }
 
-    void CheckAgro()
+    protected void CheckAgro()
     {
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
 
@@ -411,7 +411,7 @@ public class Enemy : MovingEntity
         boxCollider.enabled = true;
     }
 
-    void MoveRandom()
+    protected void MoveRandom()
     {
         if (root) return;
 
