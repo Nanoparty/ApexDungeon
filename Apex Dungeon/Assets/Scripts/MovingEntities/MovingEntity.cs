@@ -91,6 +91,11 @@ public abstract class MovingEntity : MonoBehaviour
     public ParticleSystem blood;
     public GameObject damageText;
 
+    [Header("Projectiles")]
+    protected bool delayWait = false;
+    protected bool delayFinish = false;
+    protected float projectileDelay;
+
     protected BoxCollider2D boxCollider;
 
     public Vector2 target;
@@ -121,6 +126,7 @@ public abstract class MovingEntity : MonoBehaviour
         row = (int)transform.position.y;
         col = (int)transform.position.x;
         canDisplayPopupText = true;
+        projectileDelay = 0.5f;
     }
 
     bool CheckValidPath(Path p)
@@ -719,6 +725,17 @@ public abstract class MovingEntity : MonoBehaviour
     public void EndSleep()
     {
         Destroy(sleepInstance);
+    }
+
+    protected IEnumerator FireProjectile(GameObject projectile, int row, int col)
+    {
+        Debug.Log("Fire projectile");
+        GameObject o = Instantiate(projectile, transform.position, Quaternion.identity);
+        Projectile proj = o.GetComponent<Projectile>();
+        proj.SetTarget(row, col);
+        delayWait = true;
+        yield return new WaitForSeconds(projectileDelay);
+        delayFinish = true;
     }
 
 }

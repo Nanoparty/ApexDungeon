@@ -315,6 +315,12 @@ public class Enemy : MovingEntity
                     {
                         SetAttackAnimation(player.GetRow(), player.GetCol());
                     }
+
+                    if (s.hasProjectile)
+                    {
+                        StartCoroutine(FireProjectile(s.GetProjectile(), player.GetRow(), player.GetCol()));
+                    }
+
                     return true;
                 }
                 else

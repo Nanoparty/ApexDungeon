@@ -45,7 +45,6 @@ public class Player : MovingEntity
     public int weaponRange;
 
     private float skipDelay;
-    private float projectileDelay;
 
     [Header("Flags")]
     public bool openJournal = false;
@@ -58,8 +57,6 @@ public class Player : MovingEntity
     public bool targetMode = false;
     public bool drawTargets = false;
     private bool turnStart = true;
-    private bool delayWait = false;
-    private bool delayFinish = false;
 
     [Header("Character Sprite Libraries")]
     [SerializeField] private SpriteLibraryAsset ArcherLibrary;
@@ -484,17 +481,6 @@ public class Player : MovingEntity
                 }
             }
         }
-    }
-
-    IEnumerator FireProjectile(GameObject projectile, int row, int col)
-    {
-        Debug.Log("Fire projectile");
-        GameObject o = Instantiate(projectile, transform.position, Quaternion.identity);
-        Projectile proj = o.GetComponent<Projectile>();
-        proj.SetTarget(row, col);
-        delayWait = true;
-        yield return new WaitForSeconds(projectileDelay);
-        delayFinish = true;
     }
 
     bool TargetSelection()
