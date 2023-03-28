@@ -32,7 +32,7 @@ public class Mimic : Enemy
         }
     }
 
-    public override void TakeDamage(float change, Color color, bool critical = false, bool canDodge = true)
+    public override bool TakeDamage(float change, Color color, bool critical = false, bool canDodge = true)
     {
         if (hidden)
         {
@@ -40,10 +40,12 @@ public class Mimic : Enemy
             agro = true;
             animator.enabled = true;
             animator.Play("Idle");
-            enemyTarget = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
-            return;
+            Player player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+            enemyTarget = player;
+            GameManager.gmInstance.Log.AddLog($"{player.GetName()} awakens a Mimic.");
+            return false;
         }
-        base.TakeDamage(change, color, critical, canDodge);
+        return base.TakeDamage(change, color, critical, canDodge);
     }
 
     public override bool MoveEnemy()

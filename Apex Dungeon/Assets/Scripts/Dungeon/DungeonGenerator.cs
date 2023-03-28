@@ -47,6 +47,8 @@ public class DungeonGenerator : ScriptableObject
     public GameObject WaterBackground;
     public GameObject CloudBackground;
 
+    public bool RandomBiome = true;
+
     public DungeonObject Initalize()
     {
         maxWidth = 15;
@@ -76,7 +78,7 @@ public class DungeonGenerator : ScriptableObject
         enemyContainer.parent = dungeon.transform;
         furnitureContainer.parent = dungeon.transform;
 
-        //currentBiome = Biomes[Random.Range(0, Biomes.Length)];
+        if (RandomBiome) currentBiome = Biomes[Random.Range(0, Biomes.Length)];
 
         GameObject op = GameObject.Instantiate(Opening, new Vector3(0, 0, 0), Quaternion.identity);
         op.transform.GetChild(0).transform.GetChild(0).gameObject.GetComponent<Text>().text = currentBiome.biomeName;
@@ -828,7 +830,7 @@ public class DungeonGenerator : ScriptableObject
                 {
                     Vector3 position = new Vector3(col, row, 0f);
                     GameObject item = GameManager.gmInstance.equipmentGenerator.GenerateEquipment(GameManager.gmInstance.level);
-                    
+                    //GameObject item = GameManager.gmInstance.equipmentGenerator.GenerateEquipOfType(1, "weapon", 1, true);
                     item.transform.parent = itemContainer.transform;
                     item.transform.position = position;
                     item.GetComponent<Pickup>().SetLocation(row, col);

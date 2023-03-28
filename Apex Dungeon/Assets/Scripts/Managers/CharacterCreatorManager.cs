@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using TMPro;
-using UnityEditor.SceneTemplate;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -198,7 +197,7 @@ public class CharacterCreatorManager : MonoBehaviour
     void acceptListener()
     {
         SoundManager.sm.PlayMenuSound();
-        string name = NameField.text.ToUpper();
+        string name = NameField.text;
 
         if (!(name.Length > 0)) return;
         if (taken.Contains(name) && !done)

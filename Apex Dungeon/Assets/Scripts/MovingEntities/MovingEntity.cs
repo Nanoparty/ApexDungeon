@@ -353,7 +353,7 @@ public abstract class MovingEntity : MonoBehaviour
         return -attackDamage;
     }
 
-    public virtual void TakeDamage(float change, Color color, bool critical = false, bool canDodge = true)
+    public virtual bool TakeDamage(float change, Color color, bool critical = false, bool canDodge = true)
     {
         hp += (int)change;
         change = Mathf.Floor(change);
@@ -389,6 +389,8 @@ public abstract class MovingEntity : MonoBehaviour
         {
             hp = maxHp;
         }
+
+        return true;
     }
 
     public virtual void AddTextPopup(string text, Color color)

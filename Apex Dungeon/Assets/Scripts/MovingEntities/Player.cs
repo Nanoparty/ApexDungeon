@@ -814,28 +814,36 @@ public class Player : MovingEntity
         {
             StartCoroutine(cameraShake.Shake(0.1f, 0.1f));
             SetAttackAnimation(clickRow, clickCol);
-            attacking = true;
+            
 
             if (attackRange > 1)
             {
                 StartCoroutine(FireProjectile(ArrowPrefab, clickRow, clickCol));
             }
+            else
+            {
+                attacking = true;
+            }
 
             float targetDamage = 0.0f;
+            bool attackResult;
             int dice = Random.Range(0, 100);
             if (dice <= (int)(critical * criticalScale))
             {
                 targetDamage = CalculateDamage(3);
-                enemy.TakeDamage(targetDamage, Color.red, true);
+                attackResult = enemy.TakeDamage(targetDamage, Color.red, true);
                 
             }
             else
             {
                 targetDamage = CalculateDamage(3);
-                enemy.TakeDamage(CalculateDamage(), Color.red);
+                attackResult = enemy.TakeDamage(CalculateDamage(), Color.red);
             }
 
-            GameManager.gmInstance.Log.AddLog($">{entityName} attacks {enemy.entityName} for {(int)targetDamage} HP.");
+            if (attackResult)
+            {
+                GameManager.gmInstance.Log.AddLog($">{entityName} attacks {enemy.entityName} for {(int)targetDamage} HP.");
+            }
 
             if (Random.Range(0f, 1f) <= 0.05f)
             {
@@ -848,7 +856,7 @@ public class Player : MovingEntity
         return false;
     }
 
-    public override void TakeDamage(float d, Color c, bool critical = false, bool canDodge = true){
+    public override bool TakeDamage(float d, Color c, bool critical = false, bool canDodge = true){
         if (canDodge)
         {
             int dice = Random.Range(1, 101);
@@ -856,7 +864,7 @@ public class Player : MovingEntity
             {
                 AddTextPopup("Evade", new Color(50f / 255f, 205f / 255f, 50f / 255f));
                 GameManager.gmInstance.Log.AddLog($">{entityName} evades attack.");
-                return;
+                return true;
             }
         }
         
@@ -890,7 +898,7 @@ public class Player : MovingEntity
         {
             hp = maxHp;
         }
-        
+        return true;
     }
 
     public override void AddStatusEffect(StatusEffect se)

@@ -755,6 +755,7 @@ public class Skill
 
             case SkillType.Dart:
                 target.TakeDamage(targetDamage, ColorManager.DAMAGE);
+                target.AddStatusEffect(new StatusEffect(EffectType.sleep, 3, EffectOrder.Start));
                 break;
 
             default: { Debug.Log("Default"); return false; }

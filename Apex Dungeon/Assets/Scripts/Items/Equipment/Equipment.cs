@@ -85,7 +85,7 @@ public class Equipment : Item
         flavorText = gear.rank;
         spriteIndex = gear.spriteIndex;
         etype = Enum.Parse<EquipType>(gear.equipType);
-        image = il.getEquipmentImage(tier, type);
+        image = il.getEquipmentImage(tier, type, gear.range);
         range = gear.range;
         
     }

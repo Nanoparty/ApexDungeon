@@ -449,7 +449,7 @@ public class ConsumableGenerator : ScriptableObject
         item.AddComponent<BoxCollider2D>();
         item.GetComponent<BoxCollider2D>().isTrigger = true;
 
-        Consumable orb = new Consumable(id, "Throwing Dart", "Aim for the bullseye", "Throw a sharp dart at enemies.", dart, level, true);
+        Consumable orb = new Consumable(id, "Sleep Dart", "When a bedtime story just doesn't cut it", "Throw a sharp dart at enemies putting them to sleep.", dart, level, true);
 
         item.AddComponent<Pickup>();
         item.GetComponent<Pickup>().SetItem(orb);

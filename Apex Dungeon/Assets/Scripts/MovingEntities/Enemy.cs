@@ -133,7 +133,7 @@ public class Enemy : MovingEntity
         return 50 + 50 * floor;
     }
 
-    public override void TakeDamage(float d, Color c, bool critical = false, bool canDodge = true){
+    public override bool TakeDamage(float d, Color c, bool critical = false, bool canDodge = true){
         int netDamage = (int)d;
         if (critical)
         {
@@ -150,7 +150,7 @@ public class Enemy : MovingEntity
                 SoundManager.sm.PlayHitSound();
             }
         }
-        base.TakeDamage(netDamage, c, critical);
+        return base.TakeDamage(netDamage, c, critical);
     }
 
     public void Die(){
