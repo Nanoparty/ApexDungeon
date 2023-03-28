@@ -88,6 +88,7 @@ GameObject:
   - component: {fileID: 4708682253073785442}
   - component: {fileID: 8575654698694278573}
   - component: {fileID: 4973522931163275057}
+  - component: {fileID: 5809070264599123120}
   m_Layer: 5
   m_Name: Name
   m_TagString: Untagged
@@ -114,7 +115,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 79}
-  m_SizeDelta: {x: 223, y: 21}
+  m_SizeDelta: {x: 306.94, y: 21}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8575654698694278573
 CanvasRenderer:
@@ -145,7 +146,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_Sprite: {fileID: 21300000, guid: 46250279f5b21054baf3d5dd25dcd697, type: 3}
-  m_Type: 0
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -154,6 +155,20 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &5809070264599123120
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3219132780029098580}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HorizontalFit: 2
+  m_VerticalFit: 0
 --- !u!1 &5032778513341704652
 GameObject:
   m_ObjectHideFlags: 0
@@ -337,6 +352,7 @@ GameObject:
   - component: {fileID: 5032778514630785241}
   - component: {fileID: 5032778514630785247}
   - component: {fileID: 5032778514630785246}
+  - component: {fileID: 5074857187214786756}
   m_Layer: 5
   m_Name: nametext
   m_TagString: Untagged
@@ -361,8 +377,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.1148, y: -1.6}
-  m_SizeDelta: {x: 779.5073, y: 63.8936}
+  m_AnchoredPosition: {x: 0.1148, y: -1.2}
+  m_SizeDelta: {x: 0, y: 63.8936}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5032778514630785247
 CanvasRenderer:
@@ -394,11 +410,11 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: 380c53e8129dd42c689b533f6c88de31, type: 3}
-    m_FontSize: 62
+    m_FontSize: 61
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 6
-    m_MaxSize: 69
+    m_MaxSize: 107
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -406,3 +422,17 @@ MonoBehaviour:
     m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: Misty Dungeon
+--- !u!114 &5074857187214786756
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5032778514630785240}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HorizontalFit: 2
+  m_VerticalFit: 0
