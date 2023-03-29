@@ -515,7 +515,7 @@ public class Skill
         {
             tempTargetDamage = (int)caster.CalculateDamage();
         }
-        int targetDamage = (int)(tempTargetDamage * (power / 100));
+        int targetDamage = (int)(tempTargetDamage * (power / 100.0));
 
 
         switch (type)
@@ -584,14 +584,19 @@ public class Skill
                 break;
 
             case SkillType.LifeDrain:
+                if (target.GetHP() + targetDamage < 0)
+                {
+                    targetDamage = -target.GetHP();
+                }
+                
                 target.TakeDamage(targetDamage, ColorManager.DAMAGE);
                 caster.TakeDamage(-targetDamage, ColorManager.HEAL);
                 break;
 
             case SkillType.ManaDrain:
-                if (target.GetMP() < targetDamage)
+                if (target.GetMP() + targetDamage < 0)
                 {
-                    targetDamage = target.GetMP();
+                    targetDamage = -target.GetMP();
                 }
                 if (target.GetMP() == 0)
                 {

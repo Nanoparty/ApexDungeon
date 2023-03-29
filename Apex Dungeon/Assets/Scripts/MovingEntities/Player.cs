@@ -878,7 +878,7 @@ public class Player : MovingEntity
             moving = false;
             AddTextPopup($"{d}", c);
             SpawnBlood();
-            GameManager.gmInstance.Log.AddLog($">Enemy hits {entityName} for " + (int)d + " damage.");
+            //GameManager.gmInstance.Log.AddLog($">Enemy hits {entityName} for " + (int)d + " damage.");
             path = null;
         }
         else

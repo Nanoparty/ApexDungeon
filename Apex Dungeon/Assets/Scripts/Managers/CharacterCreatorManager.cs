@@ -80,7 +80,7 @@ public class CharacterCreatorManager : MonoBehaviour
         taken = Data.names ?? new List<string>();
         done = false;
         charData = Data.charData ?? new List<CharacterData>();
-        characterClass = ClassType.Archer;
+        characterClass = ClassType.Knight;
         
         NameError.SetActive(false);
 
@@ -104,6 +104,7 @@ public class CharacterCreatorManager : MonoBehaviour
 
     private void LeftListener()
     {
+        SoundManager.sm.PlayMenuSound();
         int classInt = (int) characterClass - 1;
         if (classInt < 0) classInt = numClasses - 1;
         characterClass = (ClassType)(classInt);
@@ -113,6 +114,7 @@ public class CharacterCreatorManager : MonoBehaviour
 
     private void RightListener()
     {
+        SoundManager.sm.PlayMenuSound();
         int classInt = (int)characterClass + 1;
         if (classInt >= numClasses) classInt = 0;
         characterClass = (ClassType)(classInt);

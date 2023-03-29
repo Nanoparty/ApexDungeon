@@ -370,6 +370,7 @@ public class Enemy : MovingEntity
 
     protected void AttackTarget(MovingEntity target)
     {
+        GameManager.gmInstance.Log.AddLog($">{entityName} attacks {target.entityName} for " + (int)-attack + " damage.");
         target.TakeDamage(-attack, Color.red);
 
         // Status Effect Roll
