@@ -523,24 +523,40 @@ public class Skill
             case SkillType.Restore:
                 float restoreAmount = target.GetMaxHP() * 0.5f;
                 target.TakeDamage(restoreAmount, ColorManager.HEAL);
+                if (caster.IsVisible())
+                {
+                    SoundManager.sm.PlayHealSkillSound();
+                }
                 break;
 
             case SkillType.Fireball:
                 target.TakeDamage(targetDamage, ColorManager.FIRE);
                 if (Random.Range(0, 100) <= 20)
                     target.AddStatusEffect(new StatusEffect(EffectType.burn, 5, EffectOrder.End));
+                if (caster.IsVisible())
+                {
+                    SoundManager.sm.PlayFireSound();
+                }
                 break;
 
             case SkillType.IceShard:
                 target.TakeDamage(targetDamage, ColorManager.ICE);
                 if (Random.Range(0, 100) <= 20)
                     target.AddStatusEffect(new StatusEffect(EffectType.freeze, 5, EffectOrder.End));
+                if (caster.IsVisible())
+                {
+                    SoundManager.sm.PlayIceSound();
+                }
                 break;
 
             case SkillType.LightningBolt:
                 target.TakeDamage(targetDamage, ColorManager.LIGHTNING);
                 if (Random.Range(0, 100) <= 20)
                     target.AddStatusEffect(new StatusEffect(EffectType.electric, 5, EffectOrder.End));
+                if (caster.IsVisible())
+                {
+                    SoundManager.sm.PlayLightningSound();
+                }
                 break;
 
             case SkillType.Cleanse:
@@ -549,38 +565,70 @@ public class Skill
                 {
                     target.RemoveAllStatusEffect(effect);
                 }
+                if (caster.IsVisible())
+                {
+                    SoundManager.sm.PlayHealSkillSound();
+                }
                 break;
 
             case SkillType.Plague:
                 target.AddStatusEffect(new StatusEffect(EffectType.poison, 5, EffectOrder.End));
+                if (caster.IsVisible())
+                {
+                    SoundManager.sm.PlayPoisonSound();
+                }
                 break;
 
             case SkillType.Lacerate:
                 target.TakeDamage(targetDamage, ColorManager.BLEED);
                 target.AddStatusEffect(new StatusEffect(EffectType.bleed, 5, EffectOrder.End));
+                if (caster.IsVisible())
+                {
+                    SoundManager.sm.PlaySlashSound();
+                }
                 break;
 
             case SkillType.Bless:
                 target.AddStatusEffect(new StatusEffect(EffectType.health_regen, 5, EffectOrder.Start));
+                if (caster.IsVisible())
+                {
+                    SoundManager.sm.PlayHealSkillSound();
+                }
                 break;
 
             case SkillType.Teleport:
                 Vector2 pos = GameManager.gmInstance.Dungeon.getRandomUnoccupiedTile();
                 target.SetPosition((int)pos.x, (int)pos.y);
                 target.DoneMoving();
+                if (caster.IsVisible())
+                {
+                    SoundManager.sm.PlayTeleportSound();
+                }
                 break;
 
             case SkillType.ArmorPolish:
                 target.AddStatusEffect(new StatusEffect(EffectType.defense_up, 20, EffectOrder.Status));
+                if (caster.IsVisible())
+                {
+                    SoundManager.sm.PlayPolishSound();
+                }
                 break;
 
             case SkillType.Berserk:
                 target.AddStatusEffect(new StatusEffect(EffectType.strength_up, 20, EffectOrder.Status));
+                if (caster.IsVisible())
+                {
+                    SoundManager.sm.PlayBuffSound();
+                }
                 break;
 
             case SkillType.FieldDress:
                 restoreAmount = target.GetMaxHP() * 0.3f;
                 target.TakeDamage(restoreAmount, ColorManager.HEAL);
+                if (caster.IsVisible())
+                {
+                    SoundManager.sm.PlayHealSkillSound();
+                }
                 break;
 
             case SkillType.LifeDrain:
@@ -591,6 +639,10 @@ public class Skill
                 
                 target.TakeDamage(targetDamage, ColorManager.DAMAGE);
                 caster.TakeDamage(-targetDamage, ColorManager.HEAL);
+                if (caster.IsVisible())
+                {
+                    SoundManager.sm.PlayDrainSound();
+                }
                 break;
 
             case SkillType.ManaDrain:
@@ -605,24 +657,44 @@ public class Skill
                 }
                 target.AddMp((int)targetDamage);
                 caster.AddMp((int)-targetDamage);
+                if (caster.IsVisible())
+                {
+                    SoundManager.sm.PlayDrainSound();
+                }
                 break;
 
             case SkillType.Hypnosis:
                 target.AddStatusEffect(new StatusEffect(EffectType.sleep, 3, EffectOrder.Start));
+                if (caster.IsVisible())
+                {
+                    SoundManager.sm.PlayHypnosisSound();
+                }
                 break;
 
             case SkillType.Silence:
                 target.AddStatusEffect(new StatusEffect(EffectType.silence, 5, EffectOrder.Status));
+                if (caster.IsVisible())
+                {
+                    SoundManager.sm.PlayHypnosisSound();
+                }
                 break;
 
             case SkillType.Stun:
                 target.AddStatusEffect(new StatusEffect(EffectType.paralysis, 5, EffectOrder.Start));
+                if (caster.IsVisible())
+                {
+                    SoundManager.sm.PlayLightningSound();
+                }
                 break;
 
             case SkillType.PoisonSpike:
                 target.TakeDamage(targetDamage, ColorManager.POISON);
                 if (Random.Range(0, 100) <= 20)
                     target.AddStatusEffect(new StatusEffect(EffectType.poison, 5, EffectOrder.End));
+                if (caster.IsVisible())
+                {
+                    SoundManager.sm.PlayPoisonSound();
+                }
                 break;
 
             case SkillType.WhirlwindStrike:
@@ -642,24 +714,40 @@ public class Skill
                 {
                     e.TakeDamage(targetDamage, ColorManager.DAMAGE);
                 }
+                if (caster.IsVisible())
+                {
+                    SoundManager.sm.PlaySlashSound();
+                }
                 break;
 
             case SkillType.Slash:
                 target.TakeDamage(targetDamage, ColorManager.DAMAGE);
                 if (Random.Range(0, 100) <= 20)
                     target.AddStatusEffect(new StatusEffect(EffectType.bleed, 5, EffectOrder.End));
+                if (caster.IsVisible())
+                {
+                    SoundManager.sm.PlaySlashSound();
+                }
                 break;
 
             case SkillType.Scratch:
                 target.TakeDamage(targetDamage, ColorManager.DAMAGE);
                 if (Random.Range(0, 100) <= 10)
                     target.AddStatusEffect(new StatusEffect(EffectType.bleed, 5, EffectOrder.End));
+                if (caster.IsVisible())
+                {
+                    SoundManager.sm.PlaySlashSound();
+                }
                 break;
 
             case SkillType.Stomp:
                 target.TakeDamage(targetDamage, ColorManager.DAMAGE);
                 if (Random.Range(0, 100) <= 10)
                     target.AddStatusEffect(new StatusEffect(EffectType.paralysis, 5, EffectOrder.End));
+                if (caster.IsVisible())
+                {
+                    SoundManager.sm.PlayBashSound();
+                }
                 break;
 
             case SkillType.Bite:
@@ -668,12 +756,20 @@ public class Skill
                     target.AddStatusEffect(new StatusEffect(EffectType.bleed, 5, EffectOrder.End));
                 else if (Random.Range(0, 100) <= 10)
                     target.AddStatusEffect(new StatusEffect(EffectType.poison, 5, EffectOrder.End));
+                if (caster.IsVisible())
+                {
+                    SoundManager.sm.PlayBiteSound();
+                }
                 break;
 
             case SkillType.Pound:
                 target.TakeDamage(targetDamage, ColorManager.DAMAGE);
                 if (Random.Range(0, 100) <= 10)
                     target.AddStatusEffect(new StatusEffect(EffectType.paralysis, 5, EffectOrder.Start));
+                if (caster.IsVisible())
+                {
+                    SoundManager.sm.PlayBashSound();
+                }
                 break;
 
             case SkillType.Trap:
@@ -681,48 +777,84 @@ public class Skill
                 GameObject trapPrefab = Resources.Load<GameObject>("Prefabs/Traps/Bear Trap");
                 GameObject o = caster.SpawnObject(trapPrefab, new Vector2(col, row));
                 o.GetComponent<Trap>().Setup(row, col, GameManager.gmInstance.level);
+                if (caster.IsVisible())
+                {
+                    SoundManager.sm.PlayImpactSounds();
+                }
                 break;
 
             case SkillType.FlamePalm:
                 target.TakeDamage(targetDamage, ColorManager.DAMAGE);
                 if (Random.Range(0, 100) <= 20)
                     target.AddStatusEffect(new StatusEffect(EffectType.burn, 5, EffectOrder.End));
+                if (caster.IsVisible())
+                {
+                    SoundManager.sm.PlayFireSound();
+                }
                 break;
 
             case SkillType.IcePalm:
                 target.TakeDamage(targetDamage, ColorManager.DAMAGE);
                 if (Random.Range(0, 100) <= 20)
                     target.AddStatusEffect(new StatusEffect(EffectType.freeze, 5, EffectOrder.End));
+                if (caster.IsVisible())
+                {
+                    SoundManager.sm.PlayIceSound();
+                }
                 break;
 
             case SkillType.StaticPalm:
                 target.TakeDamage(targetDamage, ColorManager.DAMAGE);
                 if (Random.Range(0, 100) <= 20)
                     target.AddStatusEffect(new StatusEffect(EffectType.electric, 5, EffectOrder.End));
+                if (caster.IsVisible())
+                {
+                    SoundManager.sm.PlayLightningSound();
+                }
                 break;
 
             case SkillType.PoisonPalm:
                 target.TakeDamage(targetDamage, ColorManager.DAMAGE);
                 if (Random.Range(0, 100) <= 20)
                     target.AddStatusEffect(new StatusEffect(EffectType.poison, 5, EffectOrder.End));
+                if (caster.IsVisible())
+                {
+                    SoundManager.sm.PlayPoisonSound();
+                }
                 break;
 
             case SkillType.MagicMissile:
                 target.TakeDamage(targetDamage, ColorManager.DAMAGE);
+                if (caster.IsVisible())
+                {
+                    SoundManager.sm.PlayMagicMissileSound();
+                }
                 break;
 
             case SkillType.Taunt:
                 target.agro = true;
+                if (caster.IsVisible())
+                {
+                    SoundManager.sm.PlayHypnosisSound();
+                }
                 break;
 
             case SkillType.Bind:
                 // Root status effect
                 target.AddStatusEffect(new StatusEffect(EffectType.root, 5, EffectOrder.Status));
+                if (caster.IsVisible())
+                {
+                    SoundManager.sm.PlayBindSound();
+                }
                 break;
 
             case SkillType.Stealth:
                 // Stealth status effect
-                target.AddStatusEffect(new StatusEffect(EffectType.stealth, 5, EffectOrder.Status));
+                target.AddStatusEffect(new StatusEffect(EffectType.stealth, 30, EffectOrder.Status));
+                if (caster.IsVisible())
+                {
+                    SoundManager.sm.PlayBuffSound();
+                }
                 break;
 
             //case SkillType.Invisibility:
@@ -739,28 +871,52 @@ public class Skill
                 {
                     target.SetPosition(target.GetRow() + rdif, target.GetCol() + cdif);
                 }
+                if (caster.IsVisible())
+                {
+                    SoundManager.sm.PlayBashSound();
+                }
                 break;
 
             case SkillType.Headbutt:
                 target.TakeDamage(targetDamage, ColorManager.DAMAGE);
                 caster.TakeDamage(-((int)(caster.GetMaxHP() * 0.1f)), ColorManager.DAMAGE);
+                if (caster.IsVisible())
+                {
+                    SoundManager.sm.PlayBashSound();
+                }
                 break;
 
             case SkillType.Thrust:
                 target.TakeDamage(targetDamage, ColorManager.DAMAGE);
+                if (caster.IsVisible())
+                {
+                    SoundManager.sm.PlaySlashSound();
+                }
                 break;
 
             case SkillType.BloodCurse:
                 target.AddStatusEffect(new StatusEffect(EffectType.bleed, 5, EffectOrder.End));
+                if (caster.IsVisible())
+                {
+                    SoundManager.sm.PlaySlashSound();
+                }
                 break;
 
             case SkillType.Rock:
                 target.TakeDamage(targetDamage, ColorManager.DAMAGE);
+                if (caster.IsVisible())
+                {
+                    SoundManager.sm.PlayThrowSound();
+                }
                 break;
 
             case SkillType.Dart:
                 target.TakeDamage(targetDamage, ColorManager.DAMAGE);
                 target.AddStatusEffect(new StatusEffect(EffectType.sleep, 3, EffectOrder.Start));
+                if (caster.IsVisible())
+                {
+                    SoundManager.sm.PlayThrowSound();
+                }
                 break;
 
             default: { Debug.Log("Default"); return false; }

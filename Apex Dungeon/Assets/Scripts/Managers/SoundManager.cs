@@ -32,6 +32,24 @@ public class SoundManager: MonoBehaviour
     public AudioClip magicSound;
     public AudioClip mapSound;
     public AudioClip trapSound;
+    public AudioClip Bow;
+
+    public AudioClip Fireball;
+    public AudioClip IceShard;
+    public AudioClip LightningBolt;
+    public AudioClip PoisonSpike;
+    public AudioClip Slash;
+    public AudioClip Bite;
+    public AudioClip Bash;
+    public AudioClip Drain;
+    public AudioClip MagicMissile;
+    public AudioClip Hypnosis;
+    public AudioClip Polish;
+    public AudioClip Bind;
+    public AudioClip Teleport;
+    public AudioClip Heal;
+    public AudioClip Throw;
+    public AudioClip Buff;
 
     private AudioSource musicSource;
     private AudioSource soundSource;
@@ -230,5 +248,107 @@ public class SoundManager: MonoBehaviour
         int i = Random.Range(0, clips.Length);
         return clips[i];
     }
-    
+
+    public void PlayBowSound()
+    {
+        if (!Data.sound) return;
+        soundSource.PlayOneShot(Bow, 0.3f);
+    }
+
+    public void PlayFireSound()
+    {
+        if (!Data.sound) return;
+        soundSource.PlayOneShot(Fireball, 0.3f);
+    }
+
+    public void PlayIceSound()
+    {
+        if (!Data.sound) return;
+        soundSource.PlayOneShot(IceShard, 0.3f);
+    }
+
+    public void PlayLightningSound()
+    {
+        if (!Data.sound) return;
+        soundSource.PlayOneShot(LightningBolt, 0.3f);
+    }
+
+    public void PlayPoisonSound()
+    {
+        if (!Data.sound) return;
+        soundSource.PlayOneShot(PoisonSpike, 0.3f);
+    }
+
+    public void PlaySlashSound()
+    {
+        if (!Data.sound) return;
+        soundSource.PlayOneShot(Slash, 0.3f);
+    }
+
+    public void PlayBiteSound()
+    {
+        if (!Data.sound) return;
+        soundSource.PlayOneShot(Bite, 0.3f);
+    }
+
+    public void PlayBashSound()
+    {
+        if (!Data.sound) return;
+        soundSource.PlayOneShot(Bash, 0.3f);
+    }
+
+    public void PlayDrainSound()
+    {
+        if (!Data.sound) return;
+        soundSource.PlayOneShot(Drain, 0.3f);
+    }
+
+    public void PlayMagicMissileSound()
+    {
+        if (!Data.sound) return;
+        soundSource.PlayOneShot(MagicMissile, 0.3f);
+    }
+
+    public void PlayHypnosisSound()
+    {
+        if (!Data.sound) return;
+        soundSource.PlayOneShot(Hypnosis, 0.3f);
+    }
+
+    public void PlayPolishSound()
+    {
+        if (!Data.sound) return;
+        soundSource.PlayOneShot(Polish, 0.3f);
+    }
+
+    public void PlayBindSound()
+    {
+        if (!Data.sound) return;
+        soundSource.PlayOneShot(Bind, 0.3f);
+    }
+
+    public void PlayTeleportSound()
+    {
+        if (!Data.sound) return;
+        soundSource.PlayOneShot(Teleport, 0.3f);
+    }
+
+    public void PlayHealSkillSound()
+    {
+        if (!Data.sound) return;
+        soundSource.PlayOneShot(Heal, 0.3f);
+    }
+
+    public void PlayThrowSound()
+    {
+        if (!Data.sound) return;
+        soundSource.PlayOneShot(Throw, 0.3f);
+    }
+
+    public void PlayBuffSound()
+    {
+        if (!Data.sound) return;
+        soundSource.PlayOneShot(Buff, 0.3f);
+    }
+
 }

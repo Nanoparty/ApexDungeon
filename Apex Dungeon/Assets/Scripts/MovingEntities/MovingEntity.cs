@@ -740,4 +740,9 @@ public abstract class MovingEntity : MonoBehaviour
         delayFinish = true;
     }
 
+    public bool IsVisible()
+    {
+        return GameManager.gmInstance.Dungeon.tileMap[row, col].visible;
+    }
+
 }

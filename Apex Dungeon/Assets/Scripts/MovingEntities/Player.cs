@@ -714,6 +714,7 @@ public class Player : MovingEntity
             StartCoroutine(cameraShake.Shake(0.1f, 0.1f));
             SetAttackAnimation(row, col);
             attacking = true;
+            if (attackRange > 1) SoundManager.sm.PlayBowSound();
             f.setDamage(-1);
             SoundManager.sm.PlayStickSounds();
             if (attackRange > 1)
@@ -819,6 +820,7 @@ public class Player : MovingEntity
             if (attackRange > 1)
             {
                 StartCoroutine(FireProjectile(ArrowPrefab, clickRow, clickCol));
+                SoundManager.sm.PlayBowSound();
             }
             else
             {
