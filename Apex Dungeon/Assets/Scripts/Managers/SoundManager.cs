@@ -252,103 +252,103 @@ public class SoundManager: MonoBehaviour
     public void PlayBowSound()
     {
         if (!Data.sound) return;
-        soundSource.PlayOneShot(Bow, 0.3f);
+        soundSource.PlayOneShot(Bow, 0.5f);
     }
 
     public void PlayFireSound()
     {
         if (!Data.sound) return;
-        soundSource.PlayOneShot(Fireball, 0.3f);
+        soundSource.PlayOneShot(Fireball, 0.5f);
     }
 
     public void PlayIceSound()
     {
         if (!Data.sound) return;
-        soundSource.PlayOneShot(IceShard, 0.3f);
+        soundSource.PlayOneShot(IceShard, 0.5f);
     }
 
     public void PlayLightningSound()
     {
         if (!Data.sound) return;
-        soundSource.PlayOneShot(LightningBolt, 0.3f);
+        soundSource.PlayOneShot(LightningBolt, 0.5f);
     }
 
     public void PlayPoisonSound()
     {
         if (!Data.sound) return;
-        soundSource.PlayOneShot(PoisonSpike, 0.3f);
+        soundSource.PlayOneShot(PoisonSpike, 0.5f);
     }
 
     public void PlaySlashSound()
     {
         if (!Data.sound) return;
-        soundSource.PlayOneShot(Slash, 0.3f);
+        soundSource.PlayOneShot(Slash, 0.5f);
     }
 
     public void PlayBiteSound()
     {
         if (!Data.sound) return;
-        soundSource.PlayOneShot(Bite, 0.3f);
+        soundSource.PlayOneShot(Bite, 0.5f);
     }
 
     public void PlayBashSound()
     {
         if (!Data.sound) return;
-        soundSource.PlayOneShot(Bash, 0.3f);
+        soundSource.PlayOneShot(Bash, 0.5f);
     }
 
     public void PlayDrainSound()
     {
         if (!Data.sound) return;
-        soundSource.PlayOneShot(Drain, 0.3f);
+        soundSource.PlayOneShot(Drain, 0.5f);
     }
 
     public void PlayMagicMissileSound()
     {
         if (!Data.sound) return;
-        soundSource.PlayOneShot(MagicMissile, 0.3f);
+        soundSource.PlayOneShot(MagicMissile, 0.5f);
     }
 
     public void PlayHypnosisSound()
     {
         if (!Data.sound) return;
-        soundSource.PlayOneShot(Hypnosis, 0.3f);
+        soundSource.PlayOneShot(Hypnosis, 0.5f);
     }
 
     public void PlayPolishSound()
     {
         if (!Data.sound) return;
-        soundSource.PlayOneShot(Polish, 0.3f);
+        soundSource.PlayOneShot(Polish, 0.5f);
     }
 
     public void PlayBindSound()
     {
         if (!Data.sound) return;
-        soundSource.PlayOneShot(Bind, 0.3f);
+        soundSource.PlayOneShot(Bind, 0.5f);
     }
 
     public void PlayTeleportSound()
     {
         if (!Data.sound) return;
-        soundSource.PlayOneShot(Teleport, 0.3f);
+        soundSource.PlayOneShot(Teleport, 0.5f);
     }
 
     public void PlayHealSkillSound()
     {
         if (!Data.sound) return;
-        soundSource.PlayOneShot(Heal, 0.3f);
+        soundSource.PlayOneShot(Heal, 0.5f);
     }
 
     public void PlayThrowSound()
     {
         if (!Data.sound) return;
-        soundSource.PlayOneShot(Throw, 0.3f);
+        soundSource.PlayOneShot(Throw, 0.5f);
     }
 
     public void PlayBuffSound()
     {
         if (!Data.sound) return;
-        soundSource.PlayOneShot(Buff, 0.3f);
+        soundSource.PlayOneShot(Buff, 0.5f);
     }
 
 }
