@@ -67,6 +67,7 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
+        Debug.Log("Update");
         if (state == "score")
         {
 
@@ -98,8 +99,11 @@ public class GameManager : MonoBehaviour
         Player player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
 
         //updating grid cursor image
-        if (Input.GetButtonDown("Fire1"))
+        if (Input.GetButton("Fire1"))
         {
+            Debug.Log("Mouse Position:" + mRow + " " + mCol);
+            mRow = Mathf.Round(pz.y);
+            mCol = Mathf.Round(pz.x);
             cursor.SetActive(true);
             cursor.transform.position = new Vector3(mCol, mRow, 0f);
             cursorRow = (int)mRow;

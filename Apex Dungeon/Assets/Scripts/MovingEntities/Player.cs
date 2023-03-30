@@ -188,7 +188,7 @@ public class Player : MovingEntity
             }
 
             // Look for interrupts
-            if (Input.GetButtonDown("Fire1"))
+            if (Input.GetButtonUp("Fire1"))
             {
                 int clickRow = (int)GameManager.gmInstance.mRow;
                 int clickCol = (int)GameManager.gmInstance.mCol;
@@ -215,7 +215,7 @@ public class Player : MovingEntity
         if (!moving)
         {
             // Look for inputs
-            if (Input.GetButtonDown("Fire1"))
+            if (Input.GetButtonUp("Fire1"))
             {
                 int clickRow = (int)GameManager.gmInstance.mRow;
                 int clickCol = (int)GameManager.gmInstance.mCol;
@@ -485,7 +485,7 @@ public class Player : MovingEntity
 
     bool TargetSelection()
     {
-        if (Input.GetButtonDown("Fire1"))
+        if (Input.GetButtonUp("Fire1"))
         {
             int clickRow = (int)GameManager.gmInstance.mRow;
             int clickCol = (int)GameManager.gmInstance.mCol;
