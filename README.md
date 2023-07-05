@@ -4,3 +4,5 @@
 ![engine](https://img.shields.io/badge/Engine-Unity-blue)
 
 RPG game
+
+© Nathan Foote | 2020
