@@ -103,8 +103,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6bd366da181072f4c8dc70305e11b0d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  entityName: 
+  attackRange: 0
+  silenced: 0
+  stealth: 0
+  invisible: 0
+  root: 0
+  skipTurn: 0
+  interrupt: 0
+  sleeping: 0
+  agro: 0
+  agroRange: 0
+  heldMoney: 0
   canDisplayPopupText: 1
   popupTextDelay: 0.4
+  sleepEffectPrefab: {fileID: 562393643183663130, guid: a001b0f3acb684542b44f7d4e6ce00c8,
+    type: 3}
   moveTime: 0.1
   speed: 3
   blockingLayer:
@@ -113,6 +127,7 @@ MonoBehaviour:
   blood: {fileID: 6035910965898688361, guid: a4a0b7d015bed704c806ff555bd7f1a3, type: 3}
   damageText: {fileID: 3475315571993695346, guid: 2786e48bb15534cd281c669e73be8cdf,
     type: 3}
+  target: {x: 0, y: 0}
   endingScreen: {fileID: 1026229541841384595, guid: 2a7b55a5d350e4925b41c7d803481f8e,
     type: 3}
   goldText: {fileID: 2879823169315473517, guid: 588f595527b964bd7b2d199e8ec9e512,
@@ -122,14 +137,21 @@ MonoBehaviour:
   journal: {fileID: 11400000, guid: 17df05a7ae0c746d4a6f9d808c25ca91, type: 2}
   journalButton: {fileID: 0}
   pauseButton: {fileID: 0}
+  mapButton: {fileID: 0}
+  skillsButton: {fileID: 0}
+  tileHighlight: {fileID: 7038899118190156508, guid: 832b5872f7d72dd4cb1d3f6bdc5086e6,
+    type: 3}
+  targetTiles: []
+  weaponRange: 0
   openJournal: 0
   openLevel: 0
   openPause: 0
   ending: 0
   fadeIn: 1
-  interrupt: 0
   attacking: 0
   stairsOpen: 0
+  targetMode: 0
+  drawTargets: 0
   ArcherLibrary: {fileID: 7108339969198208228, guid: 888e87777464fbf4086a10498c189b42,
     type: 3}
   WarriorLibrary: {fileID: 7108339969198208228, guid: 0a0d909ff7b4de044a3c748b960c1f9b,
@@ -311,6 +333,7 @@ GameObject:
   - component: {fileID: 1418465858718342502}
   - component: {fileID: 1418465858718342500}
   - component: {fileID: 4063003350723492735}
+  - component: {fileID: 794672580886610630}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -396,7 +419,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a160d838ff8b4b4693ac20007e008c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_AssetsPPU: 32
+  m_AssetsPPU: 30
   m_RefResolutionX: 480
   m_RefResolutionY: 270
   m_UpscaleRT: 0
@@ -404,6 +427,18 @@ MonoBehaviour:
   m_CropFrameX: 0
   m_CropFrameY: 0
   m_StretchFill: 0
+--- !u!114 &794672580886610630
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1418465858718342501}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de495fbc1fada44779f44803d6332506, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7124371321813346127
 GameObject:
   m_ObjectHideFlags: 0

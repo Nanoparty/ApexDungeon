@@ -56,7 +56,7 @@ public class FadeIn : MonoBehaviour
         }
         else if(!done)
         {
-            GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().saveScores();
+            GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().SaveScores();
             done = true;
         }
     }

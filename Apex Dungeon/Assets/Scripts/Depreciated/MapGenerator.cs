@@ -106,8 +106,8 @@ public class MapGenerator : MonoBehaviour
     public void Reset()
     {
         Destroy(dungeon.gameObject);
-        GameManager.gmInstance.clearEnemies();
-        GameManager.gmInstance.clearFurniture();
+        GameManager.gmInstance.ClearEnemies();
+        GameManager.gmInstance.ClearFurniture();
         Start();
     }
 

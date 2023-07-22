@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 2819949229655097187}
   - component: {fileID: 2819949229655097185}
   - component: {fileID: 2819949229655097184}
-  - component: {fileID: 2819949229655097191}
   - component: {fileID: 3234981166550533840}
   - component: {fileID: 3164165580735119703}
+  - component: {fileID: 1561271708164259526}
   m_Layer: 8
   m_Name: Mimic
   m_TagString: Enemy
@@ -111,30 +111,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &2819949229655097191
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2819949229655097186}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 57069bc9e6c5bf94f8a86fa4bd21c13d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  canDisplayPopupText: 1
-  popupTextDelay: 0.4
-  moveTime: 0.1
-  speed: 3
-  blockingLayer:
-    serializedVersion: 2
-    m_Bits: 256
-  blood: {fileID: 6035910965898688361, guid: a4a0b7d015bed704c806ff555bd7f1a3, type: 3}
-  damageText: {fileID: 3475315571993695346, guid: 2786e48bb15534cd281c669e73be8cdf,
-    type: 3}
-  poisonChance: 0.01
-  bleedChance: 0.05
 --- !u!61 &3234981166550533840
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -182,6 +158,44 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!114 &1561271708164259526
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2819949229655097186}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2957eb0dce29ae4449077bf8e4d4bf3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  entityName: 
+  attackRange: 0
+  silenced: 0
+  stealth: 0
+  invisible: 0
+  root: 0
+  skipTurn: 0
+  interrupt: 0
+  sleeping: 0
+  agro: 0
+  agroRange: 0
+  heldMoney: 0
+  canDisplayPopupText: 1
+  popupTextDelay: 0.4
+  sleepEffectPrefab: {fileID: 0}
+  moveTime: 0.1
+  speed: 3
+  blockingLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  blood: {fileID: 6035910965898688361, guid: a4a0b7d015bed704c806ff555bd7f1a3, type: 3}
+  damageText: {fileID: 3475315571993695346, guid: 2786e48bb15534cd281c669e73be8cdf,
+    type: 3}
+  target: {x: 0, y: 0}
+  poisonChance: 0.01
+  bleedChance: 0.05
 --- !u!1 &4362196305097765883
 GameObject:
   m_ObjectHideFlags: 0
@@ -278,8 +292,7 @@ SpriteRenderer:
   m_SortingLayerID: 2101249919
   m_SortingLayer: 8
   m_SortingOrder: 0
-  m_Sprite: {fileID: -1531452646499341357, guid: ad61afe0b8dcf514fa99c6bd5adce9d7,
-    type: 3}
+  m_Sprite: {fileID: 784010200977873938, guid: ad61afe0b8dcf514fa99c6bd5adce9d7, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -319,7 +332,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_CategoryHash: 0
   m_labelHash: 0
-  m_SpriteKey: 0.0015837022
+  m_SpriteKey: 4.441278e-26
 --- !u!1 &6754871517198136099
 GameObject:
   m_ObjectHideFlags: 0

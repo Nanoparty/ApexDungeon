@@ -11,6 +11,9 @@ public class SaveConsumable
     public string rank;
     public string description;
     public string id;
+    public string type;
+    public string skillType;
+    public int spriteIndex;
 
     public SaveConsumable(Consumable e)
     {
@@ -20,5 +23,12 @@ public class SaveConsumable
         rank = e.flavorText;
         description = e.description;
         id = e.id;
+        skillType = e.skillType.ToString();
+        spriteIndex = e.spriteIndex;
+
+        if (id == "food")
+        {
+            type = ((Food)e).foodType.ToString();
+        }
     }
 }

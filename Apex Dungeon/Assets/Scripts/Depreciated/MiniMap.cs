@@ -75,7 +75,6 @@ public class MiniMap
 
     void closeListener()
     {
-        //Debug.Log("CLOSE MAP");
         closeMiniMap();
         closed = true;
     }

@@ -25,7 +25,17 @@ public static class SaveSystem
             BinaryFormatter formatter = new BinaryFormatter();
             FileStream stream = new FileStream(path, FileMode.Open);
 
-            SaveData data = formatter.Deserialize(stream) as SaveData;
+            SaveData data = new SaveData();
+            try
+            {
+                data = formatter.Deserialize(stream) as SaveData;
+            }
+            catch (System.Exception e)
+            {
+                Debug.Log("Exception: Failed to read save -> " + e);
+                return data;
+            }
+            
             stream.Close();
 
             return data;

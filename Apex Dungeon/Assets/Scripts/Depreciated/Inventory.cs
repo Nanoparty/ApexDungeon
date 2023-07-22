@@ -97,7 +97,6 @@ public class Inventory
 
     void trashListener()
     {
-        Debug.Log("TRASH LISTENER");
         if(selected >= 0)
         {
             items.RemoveAt(selected);
@@ -118,9 +117,6 @@ public class Inventory
         
         if (Input.GetKeyDown("b"))
         {
-            //closeInventory();
-            //addItem(new HealthPotion(sprite));
-            Debug.Log(items.Count);
             updateInventory();
         }
         if (Input.GetKeyDown("a"))
@@ -138,7 +134,6 @@ public class Inventory
                 {
                     selected = i;
                     itemSlots[i].GetComponent<Clickable>().setClicked(false);
-                    Debug.Log("Detect select");
                 }
             }
             setInfo();
@@ -164,7 +159,6 @@ public class Inventory
 
             if (i < items.Count)
             {
-                Debug.Log("Update");
                 GameObject icon = itemslot.transform.GetChild(0).gameObject;
                 icon.GetComponent<Image>().sprite = items[i].image;
                 icon.SetActive(true);
@@ -204,7 +198,6 @@ public class Inventory
             Vector3 pos = new Vector3(xOff + x * cellSize, yOff + -1 * y * cellSize, 0);
             GameObject itemslot = GameObject.Instantiate(slot, pos, Quaternion.identity);
             itemslot.transform.SetParent(panelObject.transform, false);
-            //Debug.Log("TEST:" + itemslot + ":" + itemSlots);
             itemSlots.Add(itemslot);
             if(i < items.Count)
             {

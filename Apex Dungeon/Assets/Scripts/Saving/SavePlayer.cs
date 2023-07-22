@@ -26,6 +26,8 @@ public class SavePlayer
     public int maxHp;
     public int exp;
     public int maxExp;
+    public int mp;
+    public int maxMp;
 
     public int gold;
 
@@ -41,6 +43,7 @@ public class SavePlayer
     public List<SaveGear> equipment;
     public List<SaveConsumable> consumables;
     public List<SaveStatusEffect> statusEffects;
+    public List<SaveSkill> skills;
 
     public SavePlayer(CharacterData data)
     {
@@ -65,6 +68,8 @@ public class SavePlayer
         maxHp = data.maxHp;
         exp = data.exp;
         maxExp = data.maxExp;
+        mp = data.mp;
+        maxMp = data.maxMp;
 
         gold = data.gold;
 
@@ -88,9 +93,14 @@ public class SavePlayer
             consumables.Add(new SaveConsumable(c));
         }
         statusEffects = new List<SaveStatusEffect>();
-        foreach (StatusEffect se in data.statusEffects)
+        foreach (StatusEffect se in data.statusEffects ?? new List<StatusEffect>())
         {
             statusEffects.Add(new SaveStatusEffect(se.effectId.ToString(), se.order.ToString(), se.duration));
+        }
+        skills = new List<SaveSkill>();
+        foreach (Skill s in data.skills ?? new List<Skill>())
+        {
+            skills.Add(new SaveSkill(s.type.ToString()));
         }
     }
 }
