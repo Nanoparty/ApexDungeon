@@ -25,6 +25,7 @@ public class Player : MovingEntity
 
     [Header("Active Skill")]
     public Skill activeSkill;
+    private bool castCancelled;
 
     private GameObject hpBar;
     private GameObject mpBar;
@@ -37,6 +38,8 @@ public class Player : MovingEntity
     private PlayerGear gear;
     private SpriteLibrary sl;
     private GameObject stairsModal;
+    private GameObject stairsNoButton;
+    private bool stairsClosed;
     private GameObject endScreenHolder;
 
     private string playerName;
@@ -226,8 +229,15 @@ public class Player : MovingEntity
                 //check for UI Button
                 if (openJournal || openPause ||
                     journalButton.GetComponent<Clickable>().getClicked() ||
-                    pauseButton.GetComponent<Clickable>().getClicked())
+                    pauseButton.GetComponent<Clickable>().getClicked() || castCancelled || stairsNoButton.GetComponent<Clickable>().getClicked()) 
                 {
+                    castCancelled = false;
+                    return;
+                }
+
+                if (stairsClosed)
+                {
+                    stairsClosed = false;
                     return;
                 }
 
@@ -395,6 +405,7 @@ public class Player : MovingEntity
 
         stairsModal = GameObject.FindGameObjectWithTag("stairspopup");
         stairsModal.SetActive(false);
+        stairsNoButton = stairsModal.transform.GetChild(2).gameObject;
         stairsModal.transform.GetChild(2).GetComponent<Button>().onClick.AddListener(StairsReject);
         stairsModal.transform.GetChild(3).GetComponent<Button>().onClick.AddListener(StairsConfirm);
 
@@ -418,6 +429,7 @@ public class Player : MovingEntity
     {
         stairsModal.SetActive(false);
         stairsOpen = false;
+        stairsClosed = true;
     }
 
     public void SaveScores()
@@ -485,7 +497,7 @@ public class Player : MovingEntity
 
     bool TargetSelection()
     {
-        if (Input.GetButtonUp("Fire1"))
+        if (Input.GetButtonDown("Fire1"))
         {
             int clickRow = (int)GameManager.gmInstance.mRow;
             int clickCol = (int)GameManager.gmInstance.mCol;
@@ -547,6 +559,7 @@ public class Player : MovingEntity
             targetTiles.Clear();
             activeSkill = null;
             drawTargets = false;
+            castCancelled = true;
             return false;
         }
         return false;
